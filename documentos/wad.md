@@ -57,7 +57,7 @@
 ### 2.1.2. Análise SWOT do Instituto Ponte
 
 <div align="center">
-  <img src="/documents/assets/analiseSwot.png">
+  <img src="/assets/analiseSwot.png">
 </div>
 
 <div align="center">
