@@ -1,0 +1,10 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig",
+  "display": "Node with TypeScript (TS >=5.8 ONLY)",
+  "_version": "23.6.0",
+  "compilerOptions": {
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true
+  }
+}
