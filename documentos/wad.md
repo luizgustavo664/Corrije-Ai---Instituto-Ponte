@@ -111,7 +111,7 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 ## 3.1. Requisitos do Sistema (sprints 1 a 5)
 
-*Esta seção formaliza o que o sistema deve fazer, sob quais regras e com quais qualidades. Atualize a cada sprint conforme os requisitos evoluem.*
+A plataforma facilitará o acesso e a criação de provas para professores, alunos e coordenadores. Os alunos acessam as provas através de links únicos, identificando-se por nome, CPF e e-mail, e respondem questões objetivas, discursivas ou por upload de imagens. Ao final, recebem feedback por questão atribuído pelo professor. Os professores criam provas com questões de diferentes tipos e com timer opcional, geram links únicos de acesso, corrigem as respostas agrupadas por questão, visualizando todas as respostas de todos os alunos para uma mesma questão de forma sequencial, atribuem feedback e nota por questão, e visualizam relatórios de desempenho por aluno e por questão, além de seu histórico de provas anteriores. Os coordenadores visualizam os relatórios de desempenho e o histórico de provas de todos os professores, organizados por matéria, sem poder criar ou corrigir provas. 
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
