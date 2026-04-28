@@ -121,6 +121,9 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 | RF001 | ...       | Alta       | Implementado |
 | RF002 | ...       | Média      | Planejado    |
 
+### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
+
+*Numere e redija as RN de forma implementável e testável. Toda RN deve ter pelo menos um teste automatizado associado a partir da sprint 3.*
 
 | ID   | Descrição | RF associado |
 |------|-----------|--------------|
@@ -153,16 +156,17 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 *Preencha os 8 eixos. Cada eixo deve ter ao menos um RNF verificável (com métrica, limite ou critério concreto) ou justificativa explícita de ausência. Evolua do conceitual (sprint 1) ao técnico mensurável (sprint 5).*
 
+
 | Eixo                     | Requisito | Métrica / Critério | Como atendido |
 |--------------------------|-----------|--------------------|---------------|
-| USAB — Usabilidade       | ...       | ...                | ...           |
-| CONF — Confiabilidade    | ...       | ...                | ...           |
-| DES — Desempenho         | ...       | p95 < X ms         | ...           |
-| SUP — Suportabilidade    | ...       | ...                | ...           |
-| SEG — Segurança          | ...       | ...                | ...           |
-| CAP — Capacidade         | ...       | ...                | ...           |
-| REST — Restrições Design | ...       | ...                | ...           |
-| ORG — Organizacionais    | ...       | ...                | ...           |
+| USAB — Usabilidade       | A aplicação deve ser utilizável em dispositivos móveis. | Interface funcional em telas ≥ 360px; usuário consegue iniciar a prova sem auxílio. | Uso de design responsivo. |
+| CONF — Confiabilidade    | O sistema deve garantir que respostas não sejam perdidas. | 100% das submissões devem ser armazenadas após confirmação. | Persistência em banco e confirmação ao usuário. |
+| DES — Desempenho         | O sistema deve responder em tempo adequado ao usuário. | Tempo de resposta percebido ≤ 3 segundos em operações principais. | Backend leve e otimização básica de requisições. |
+| SUP — Suportabilidade    | O sistema deve ser fácil de manter e evoluir. | Código organizado em módulos; alterações não devem impactar funcionalidades existentes. | Uso de arquitetura modular. |
+| SEG — Segurança          | O acesso às provas deve ser restrito a usuários com link válido. | Apenas usuários com link ativo conseguem acessar a prova. | Geração de links únicos por prova. |
+| CAP — Capacidade         | O sistema deve suportar múltiplos acessos simultâneos. | Sistema funcional com múltiplos usuários simultâneos (teste inicial ≥ 50 usuários). | Estrutura preparada para múltiplas requisições. |
+| REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Não utilizar login/senha nem APIs externas. | Implementação conforme escopo do projeto. |
+| ORG — Organizacionais    | O projeto deve seguir organização por sprints e versionamento. | Entregas realizadas a cada sprint e código versionado. | Uso de Git e planejamento ágil. |
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
