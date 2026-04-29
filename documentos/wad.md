@@ -92,7 +92,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 ## Matriz de riscos
 
 <div align="center">
-  <img src="/assets/matrizRisco.pdf">
+  <img src="/assets/matrizRisco.jpg">
 </div>
 
 <div align="center">
