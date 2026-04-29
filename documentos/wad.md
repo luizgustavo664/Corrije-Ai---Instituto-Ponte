@@ -70,11 +70,23 @@
 
 *Explique detalhadamente os seguintes aspectos (até 60 palavras por item):*
 1. Problema a ser resolvido
+  A plataformas atual apresenta baixa usabilidade para alunos com letramento digital limitado, ausência de organização para docentes e falhas de persistência de progresso. A navegação é considerada pouco intuitiva, a correção não é estruturada por questão e não há acesso consistente a relatórios e feedbacks, comprometendo equidade, eficiência e confiabilidade do processo avaliativo.
+
 2. Dados disponíveis (mencionar fonte e conteúdo; se não houver, indicar “não se aplica”)
+  É registrado atendimento a 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido (online e presencial) (Fonte: TAPI).
+  
 3. Solução proposta
+  É proposta uma plataforma web com interface simplificada e responsiva, suporte nativo a fórmulas (LaTeX), upload estruturado por questão e salvamento automático de progresso. É implementado painel de correção agrupado por item, além de visualização organizada de provas e geração automática de relatórios e feedbacks, assegurando acessibilidade e padronização avaliativa.
+
 4. Forma de utilização da solução
+  É previsto acesso via link único. Alunos visualizam questões em interface intuitiva, respondem e enviam arquivos. Professores corrigem por questão em ambiente organizado, com navegação eficiente. Coordenadores acessam provas anteriores, relatórios e métricas de desempenho, permitindo acompanhamento estruturado e tomada de decisão baseada em dados.
+
 5. Benefícios esperados
+  São esperadas redução da dificuldade de uso para alunos, redução da insegurança na navegação e eliminação de perda de progresso. Para docentes, são previstos ganhos de eficiência e padronização na correção. Para gestão, é garantido acesso organizado a dados e relatórios.
+
 6. Critério de sucesso e como será avaliado
+  É considerado sucesso quando os alunos concluem provas sem assistência, não há perda de progresso em atualizações, o tempo médio de correção por questão é reduzido e relatórios são gerados automaticamente e utilizados pela gestão. A usabilidade é validada por usuários com diferentes níveis de letramento digital, sem ocorrência de inconsistências nos dados.
+
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 *Sem limite de palavras – usar template do curso*
