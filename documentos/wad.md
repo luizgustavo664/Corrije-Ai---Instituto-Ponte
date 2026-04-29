@@ -131,20 +131,87 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 | RN01 | ...       | RF001        |
 | RN02 | ...       | RF001        |
 
-### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
+###    Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
-*Preencha os 8 eixos. Cada eixo deve ter ao menos um RNF verificável (com métrica, limite ou critério concreto) ou justificativa explícita de ausência. Evolua do conceitual (sprint 1) ao técnico mensurável (sprint 5).*
+<!-- *Preencha os 8 eixos. Cada eixo deve ter ao menos um RNF verificável (com métrica, limite ou critério concreto) ou justificativa explícita de ausência. Evolua do conceitual (sprint 1) ao técnico mensurável (sprint 5).* -->
+
 
 | Eixo                     | Requisito | Métrica / Critério | Como atendido |
 |--------------------------|-----------|--------------------|---------------|
-| USAB — Usabilidade       | ...       | ...                | ...           |
-| CONF — Confiabilidade    | ...       | ...                | ...           |
-| DES — Desempenho         | ...       | p95 < X ms         | ...           |
-| SUP — Suportabilidade    | ...       | ...                | ...           |
-| SEG — Segurança          | ...       | ...                | ...           |
-| CAP — Capacidade         | ...       | ...                | ...           |
-| REST — Restrições Design | ...       | ...                | ...           |
-| ORG — Organizacionais    | ...       | ...                | ...           |
+| USAB — Usabilidade       | O sistema deve ser utilizável em dispositivos móveis e de fácil compreensão para os alunos. | Interface funcional em telas ≥ 360px; ≥ 90% dos usuários conseguem iniciar a prova sem auxílio. | Design responsivo e interface simplificada. |
+| CONF — Confiabilidade    | O sistema deve garantir a integridade das respostas e arquivos enviados. | 100% das submissões confirmadas armazenadas; taxa de falha < 2%. | Persistência em banco e confirmação de envio ao usuário. |
+| DES — Desempenho         | O sistema deve responder de forma eficiente às ações principais do usuário. | Tempo de resposta ≤ 3s nas principais operações. | Otimização de requisições e compressão de imagens. |
+| SUP — Suportabilidade    | O sistema deve permitir manutenção e evolução contínua ao longo das sprints. | Código modular; alterações não devem impactar funcionalidades existentes. | Arquitetura modular e versionamento com Git. |
+| SEG — Segurança          | O sistema deve restringir o acesso às provas e validar os dados fornecidos pelos usuários. | Acesso apenas via link válido; 100% dos inputs validados. | Uso de URLs únicas e validação backend. |
+| CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 50 usuários simultâneos em testes iniciais. | Estrutura preparada para concorrência básica. |
+| REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Não utilizar login/senha nem APIs externas. | Implementação conforme escopo técnico (Node.js + SQLite). |
+| ORG — Organizacionais    | O projeto deve seguir organização por sprints e controle de versão. | Entregas realizadas a cada sprint; versionamento ativo. | Uso de Git e metodologia ágil. |
+
+---
+
+### Explicação dos Requisitos Não Funcionais
+
+#### USAB — Usabilidade
+Este requisito foi definido com base no público-alvo do sistema, composto por alunos que frequentemente utilizam dispositivos móveis.  
+A métrica (tela ≥ 360px e sucesso ≥ 90%) permite verificar objetivamente se a interface é acessível.  
+Relaciona-se com RF008 (acesso via link) e RF010 (portal inicial).  
+**Critério de aceite:** o aluno consegue iniciar a prova sem auxílio.
+
+---
+
+#### CONF — Confiabilidade
+Deriva do problema atual do parceiro, que envolve perda de respostas e arquivos.  
+A métrica garante que todas as submissões confirmadas estejam persistidas.  
+Relaciona-se com RF014 (upload) e RF020 (resultados).  
+**Critério de aceite:** nenhuma submissão confirmada pode ser perdida.
+
+---
+
+#### DES — Desempenho
+Baseado na necessidade de funcionamento em condições de internet limitada.  
+A métrica de tempo de resposta (≤ 3s) é mensurável e pode ser testada.  
+Relaciona-se com RF014 (upload de imagens) e RF015 (compressão).  
+**Critério de aceite:** o sistema responde sem atrasos perceptíveis ao usuário.
+
+---
+
+#### SUP — Suportabilidade
+Reflete a necessidade de evolução contínua do sistema ao longo das sprints.  
+A métrica considera organização do código e impacto de mudanças.  
+Relaciona-se com todos os RF, pois impacta manutenção geral.  
+**Critério de aceite:** alterações não devem quebrar funcionalidades existentes.
+
+---
+
+#### SEG — Segurança
+Deriva da restrição de não utilização de autenticação tradicional.  
+A métrica garante acesso controlado por link e validação de dados.  
+Relaciona-se com RF008 (URL única) e RF009 (identificação do aluno).  
+**Critério de aceite:** apenas usuários com link válido acessam a prova.
+
+---
+
+#### CAP — Capacidade
+Baseado na necessidade de múltiplos alunos realizarem provas simultaneamente.  
+A métrica define um limite inicial de usuários concorrentes.  
+Relaciona-se com RF006 (tempo de prova) e RF014 (uploads simultâneos).  
+**Critério de aceite:** o sistema permanece funcional com múltiplos acessos.
+
+---
+
+#### REST — Restrições de Design
+Deriva diretamente das limitações definidas no escopo do projeto.  
+A métrica é binária (presença/ausência de tecnologias proibidas).  
+Relaciona-se com toda a arquitetura do sistema.  
+**Critério de aceite:** o sistema não utiliza login tradicional nem APIs externas.
+
+---
+
+#### ORG — Organizacionais
+Reflete a necessidade de organização do desenvolvimento no contexto acadêmico.  
+A métrica considera entregas por sprint e uso de versionamento.  
+Relaciona-se com o processo de desenvolvimento do sistema.  
+**Critério de aceite:** entregas contínuas e rastreáveis são realizadas.
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
