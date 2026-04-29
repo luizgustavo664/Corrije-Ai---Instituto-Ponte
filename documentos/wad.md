@@ -55,41 +55,62 @@
 
 *Posicione aqui o modelo de 5 Forças de Porter para sustentar o contexto da indústria.* -->
 
-Rivalidade entre Concorrentes
+<div align="center">
+  <img src="/assets/cincoForcasDePorter.png">
+</div>
+
+<div align="center">
+  <strong>Figura 2 — 5 Forças de Porter do instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+
+### Rivalidade entre Concorrentes
 A rivalidade no setor de organizações sociais focadas em educação é moderada. Há várias ONGs atuando em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas oferecem seleção rigorosa combinada com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação reduz a pressão direta.
-Referências que sustentam isso:
- IDIS – Censo GIFE 2020: Educação é a área mais concorrida na filantropia.
- Transparência Brasil: Grande número de ONGs no setor educacional.
- OECD – “Philanthropy and Education” (2019): Poucos programas têm acompanhamento individual estruturado.
 
-Ameaça de Novos Entrantes
+**Referências que sustentam isso:**
+- IDIS – Censo GIFE 2020: Educação é a área mais concorrida na filantropia.
+- Transparência Brasil: Grande número de ONGs no setor educacional.
+- OECD – "Philanthropy and Education" (2019): Poucos programas têm acompanhamento individual estruturado.
+
+---
+
+### Ameaça de Novos Entrantes
 A ameaça de novos entrantes é moderada. Criar uma ONG é simples, porém alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.
-Referências que sustentam isso:
- ABONG (2021): Muitas OSCs surgem, poucas atingem a sustentabilidade.
- Itaú Social (2020): ONGs novas enfrentam dificuldades de governança.
- McKinsey – “High-Performing NGOs”: Reputação e processos sólidos levam anos para se consolidar.
 
-Ameaça de Produtos Substitutos
+**Referências que sustentam isso:**
+- ABONG (2021): Muitas OSCs surgem, poucas atingem a sustentabilidade.
+- Itaú Social (2020): ONGs novas enfrentam dificuldades de governança.
+- McKinsey – "High-Performing NGOs": Reputação e processos sólidos levam anos para se consolidar.
+
+---
+
+### Ameaça de Produtos Substitutos
 A ameaça de substitutos é alta. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte, funcionam como opções substitutas na disputa por estudantes e recursos.
-Referências que sustentam isso:
- MEC – Prouni, Fies e Escolas Técnicas: Alternativas formais de acesso.
- Fundação Estudar, Lemann, Gerando Falcões: Programas de bolsas e mentoria.
- OECD – “Education at a Glance”: Crescimento de iniciativas público-privadas concorrentes.
 
-Poder de Barganha dos Fornecedores
+**Referências que sustentam isso:**
+- MEC – Prouni, Fies e Escolas Técnicas: Alternativas formais de acesso.
+- Fundação Estudar, Lemann, Gerando Falcões: Programas de bolsas e mentoria.
+- OECD – "Education at a Glance": Crescimento de iniciativas público-privadas concorrentes.
+
+---
+
+### Poder de Barganha dos Fornecedores
 O poder dos fornecedores — principalmente doadores — é alto. Eles podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.
-Referências que sustentam isso:
- IDIS – Doação Brasil (2022): Doadores priorizam métricas e clareza.
- CAF – World Giving Index: Competição intensa entre causas.
- GIFE – Mapeamento ISP: Empresas redirecionam recursos conforme resultados.
 
-Poder de Barganha dos Clientes
+**Referências que sustentam isso:**
+- IDIS – Doação Brasil (2022): Doadores priorizam métricas e clareza.
+- CAF – World Giving Index: Competição intensa entre causas.
+- GIFE – Mapeamento ISP: Empresas redirecionam recursos conforme resultados.
+
+---
+
+### Poder de Barganha dos Clientes
 O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativas gratuitas com suporte prolongado, mentoria e acompanhamento acadêmico. A demanda supera muito a oferta, reduzindo a capacidade de barganha das famílias atendidas.
-Referências que sustentam isso:
- IPEA (2021): Pouco acesso a apoio educacional estruturado.
- UNICEF (2022): Falta de suporte integral para jovens de baixa renda.
- Todos Pela Educação: Escassez de iniciativas de acompanhamento individualizado.
 
+**Referências que sustentam isso:**
+- IPEA (2021): Pouco acesso a apoio educacional estruturado.
+- UNICEF (2022): Falta de suporte integral para jovens de baixa renda.
+- Todos Pela Educação: Escassez de iniciativas de acompanhamento individualizado.
 
 ### 2.1.2. Análise SWOT do Instituto Ponte
 
@@ -98,7 +119,7 @@ Referências que sustentam isso:
 </div>
 
 <div align="center">
-  <strong>Figura 2 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 3 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 &emsp;  Identificou-se no Instituto Ponte um posicionamento diferenciado no terceiro setor educacional brasileiro: a metodologia individualizada e a taxa de aprovação de 92% nos vestibulares consolidam-se como diferenciais competitivos frente a concorrentes como Gerando Falcões e Parceiros da Educação, organizações de maior escala nacional. Constatou-se, contudo, vulnerabilidade financeira pela dependência de doações privadas e concentração regional no Espírito Santo. Verificaram-se oportunidades expressivas na expansão para o Nordeste e no crescimento da agenda ESG corporativa. Como principal ameaça, reconheceu-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
