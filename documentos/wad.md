@@ -50,10 +50,10 @@
 
 ### 2.1.1. Modelo de 5 Forças de Porter (sprint 1)
 
-
+<!-- 
 *Preencha com até 400 palavras*
 
-*Posicione aqui o modelo de 5 Forças de Porter para sustentar o contexto da indústria.*
+*Posicione aqui o modelo de 5 Forças de Porter para sustentar o contexto da indústria.* -->
 
 Rivalidade entre Concorrentes
 A rivalidade no setor de organizações sociais focadas em educação é moderada. Há várias ONGs atuando em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas oferecem seleção rigorosa combinada com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação reduz a pressão direta.
