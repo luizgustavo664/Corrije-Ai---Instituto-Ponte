@@ -123,34 +123,26 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
-*Numere e redija as RN de forma implementável e testável. Toda RN deve ter pelo menos um teste automatizado associado a partir da sprint 3.*
-
 | ID   | Descrição | RF associado |
 |------|-----------|--------------|
-| RN01 | O sistema deve permitir a criação de uma prova contendo pelo menos 1 questão válida, impedindo a publicação caso não haja questões. | RF001 |
-| RN02 | Cada questão deve possuir um tipo definido (múltipla escolha, V/F ou discursiva) e não pode ser salva sem essa definição. | RF001 |
-| RN03 | O sistema deve validar que questões objetivas tenham no mínimo 2 alternativas, sendo obrigatória ao menos 1 correta. | RF002 |
-| RN04 | O sistema deve permitir o uso de LaTeX/MathType nos enunciados e garantir sua renderização correta antes da publicação. | RF003 |
-| RN05 | O sistema deve permitir o upload de arquivos por questão, aceitando apenas formatos de imagem válidos (ex: JPG, PNG). | RF004 |
-| RN06 | O tamanho máximo de cada arquivo enviado pelo aluno deve ser limitado (ex: 5MB), rejeitando uploads acima desse valor. | RF004 |
-| RN07 | O sistema deve permitir o envio de múltiplas imagens por questão, mantendo a associação correta com a questão respondida. | RF004 |
-| RN08 | O aluno só poderá iniciar a prova após preencher nome e e-mail obrigatórios. | RF005 |
-| RN09 | O sistema deve impedir o envio da prova caso existam questões obrigatórias não respondidas (se configurado pelo professor). | RF006 |
-| RN10 | O sistema deve permitir que o aluno revise todas as respostas antes da submissão final. | RF006 |
-| RN11 | Após a submissão final, o aluno não poderá alterar suas respostas. | RF006 |
-| RN12 | O sistema deve respeitar o tempo limite da prova, bloqueando automaticamente novas respostas após o término. | RF007 |
-| RN13 | O sistema deve impedir o acesso à prova fora do período definido (antes da abertura ou após o encerramento). | RF007 |
-| RN14 | O sistema deve permitir embaralhar automaticamente a ordem das questões e/ou alternativas, quando configurado. | RF008 |
-| RN15 | O professor deve visualizar as respostas organizadas por questão, agrupando respostas de todos os alunos. | RF009 |
-| RN16 | O sistema deve permitir atribuição de nota e comentário por questão corrigida. | RF009 |
-| RN17 | O sistema deve calcular automaticamente a nota final do aluno com base na soma das notas por questão. | RF010 |
-| RN18 | O sistema deve gerar relatório contendo desempenho por aluno e por questão. | RF010 |
-| RN19 | O sistema deve permitir exportar os resultados em formato estruturado (ex: planilha). | RF010 |
-| RN20 | O sistema deve garantir que cada submissão de prova esteja vinculada a um único aluno identificado. | RF005 |
-| RN21 | O sistema deve manter integridade dos arquivos enviados, impedindo perda ou desvinculação de anexos. | RF004 |
-| RN22 | O sistema deve permitir compressão automática das imagens no client-side antes do envio. | RF004 |
-| RN23 | O sistema deve garantir que o link de acesso à prova seja único por prova e válido apenas dentro do período ativo. | RF005 |
-| RN24 | O sistema deve registrar data e hora da submissão da prova para controle e auditoria. | RF010 |
+| RN01 | O sistema deve gerenciar provas em estados válidos (rascunho, ativa, encerrada), impedindo edição quando encerradas e permitindo filtragem por status. | RF001, RF025 |
+| RN02 | O sistema deve permitir aplicação de filtros combinados (turma, semestre, disciplina, professor), retornando apenas resultados que atendam a todos os critérios. | RF002 |
+| RN03 | O sistema deve garantir a correta criação de questões, incluindo tipo válido, validação de alternativas e renderização de fórmulas matemáticas. | RF003, RF004 |
+| RN04 | O sistema deve controlar o envio de arquivos, permitindo upload apenas quando habilitado, aceitando formatos válidos, múltiplos arquivos por questão e mantendo vínculo correto. | RF005, RF014 |
+| RN05 | O sistema deve controlar o tempo e acesso à prova, impedindo início fora do período, encerrando automaticamente ao término e respeitando configurações definidas. | RF006 |
+| RN06 | O sistema deve aplicar corretamente o embaralhamento de questões e alternativas quando configurado. | RF007 |
+| RN07 | Cada prova deve possuir acesso único por meio de URL e QR Code vinculados. | RF008 |
+| RN08 | O sistema deve identificar o aluno por nome, e-mail e CPF, impedindo múltiplas submissões para a mesma prova. | RF009 |
+| RN09 | O sistema deve exibir instruções obrigatórias antes do início e permitir controle de exibição do cronômetro durante a prova. | RF010, RF011 |
+| RN10 | O sistema deve garantir a correta visualização de conteúdo, incluindo renderização de fórmulas e ampliação de imagens sem perda relevante de qualidade. | RF012, RF013 |
+| RN11 | O sistema deve otimizar o envio de imagens, aplicando compressão sem comprometer a legibilidade. | RF015 |
+| RN12 | O sistema deve validar a submissão da prova, alertando sobre questões em branco antes do envio final. | RF016 |
+| RN13 | O sistema deve permitir correção por questão, com atribuição de notas e comentários e visualização adequada dos anexos. | RF017, RF018, RF019 |
+| RN14 | O sistema deve processar e disponibilizar resultados, incluindo cálculo automático de notas e geração de relatórios estruturados. | RF020 |
+| RN15 | O sistema deve controlar a divulgação de resultados e feedbacks aos alunos após finalização da correção. | RF021 |
+| RN16 | O sistema deve garantir integridade na exportação de anexos, mantendo correspondência com aluno e questão. | RF022 |
+| RN17 | O sistema deve permitir ao coordenador visualizar, filtrar e gerar relatórios sobre todas as provas do sistema. | RF023, RF024 |
+| RN18 | O sistema deve restringir operações de criação, edição e exclusão a usuários autorizados. | RF026 |
 
 ### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
@@ -159,14 +151,15 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 | Eixo                     | Requisito | Métrica / Critério | Como atendido |
 |--------------------------|-----------|--------------------|---------------|
-| USAB — Usabilidade       | A aplicação deve ser utilizável em dispositivos móveis. | Interface funcional em telas ≥ 360px; usuário consegue iniciar a prova sem auxílio. | Uso de design responsivo. |
-| CONF — Confiabilidade    | O sistema deve garantir que respostas não sejam perdidas. | 100% das submissões devem ser armazenadas após confirmação. | Persistência em banco e confirmação ao usuário. |
-| DES — Desempenho         | O sistema deve responder em tempo adequado ao usuário. | Tempo de resposta percebido ≤ 3 segundos em operações principais. | Backend leve e otimização básica de requisições. |
-| SUP — Suportabilidade    | O sistema deve ser fácil de manter e evoluir. | Código organizado em módulos; alterações não devem impactar funcionalidades existentes. | Uso de arquitetura modular. |
-| SEG — Segurança          | O acesso às provas deve ser restrito a usuários com link válido. | Apenas usuários com link ativo conseguem acessar a prova. | Geração de links únicos por prova. |
-| CAP — Capacidade         | O sistema deve suportar múltiplos acessos simultâneos. | Sistema funcional com múltiplos usuários simultâneos (teste inicial ≥ 50 usuários). | Estrutura preparada para múltiplas requisições. |
-| REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Não utilizar login/senha nem APIs externas. | Implementação conforme escopo do projeto. |
-| ORG — Organizacionais    | O projeto deve seguir organização por sprints e versionamento. | Entregas realizadas a cada sprint e código versionado. | Uso de Git e planejamento ágil. |
+| USAB — Usabilidade       | ...       | ...                | ...           |
+| CONF — Confiabilidade    | ...       | ...                | ...           |
+| DES — Desempenho         | ...       | p95 < X ms         | ...           |
+| SUP — Suportabilidade    | ...       | ...                | ...           |
+| SEG — Segurança          | ...       | ...                | ...           |
+| CAP — Capacidade         | ...       | ...                | ...           |
+| REST — Restrições Design | ...       | ...                | ...           |
+| ORG — Organizacionais    | ...       | ...                | ...           |
+
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
