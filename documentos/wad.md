@@ -162,6 +162,103 @@ O sucesso ocorre quando alunos concluem provas sem assistência, não há perda 
 
 *Posicione aqui suas Personas em forma de texto markdown com imagens, ou como imagem de template preenchido. Atualize esta seção ao longo do módulo se necessário.*
 
+### 2.2.1 Mapa de Empatia de uma persona
+
+#### Mapa de Empatia — Professor do Ensino Médio (Ronaldo Silva)
+
+<div align="center">
+  <img src="/assets/mapaDeEmpatia.png">
+</div>
+
+<div align="center">
+  <strong>Figura 3 — Mapa de sentimento de persona.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+#### Visão Geral
+Este mapa de empatia representa o perfil de Ronaldo Silva, professor do Ensino Médio, e tem como objetivo compreender suas necessidades, dores e comportamentos no processo de correção de provas. A análise auxilia na definição de soluções mais eficientes para plataformas de avaliação.
+
+---
+
+#### Dados Demográficos
+- Idade: 40 anos  
+- Renda: R$ 5.000/mês  
+- Escolaridade: Ensino Superior Completo  
+- Localização: Espírito Santo  
+- Nível de letramento digital: Alto  
+
+---
+
+#### O que pensa?
+Ronaldo frequentemente reflete sobre a eficiência e segurança do processo de correção:
+- Dúvidas sobre a organização das respostas  
+- Preocupação com perda de progresso  
+- Busca por métodos mais rápidos e práticos  
+- Questionamentos sobre justiça na avaliação dos alunos  
+
+---
+
+#### O que sente?
+Durante o processo atual, ele experimenta:
+- Frustração com ferramentas pouco eficientes  
+- Insegurança ao corrigir sem organização clara  
+- Ansiedade devido a prazos e volume de provas  
+- Sobrecarga por tarefas repetitivas  
+
+---
+
+#### O que diz?
+Algumas falas comuns que refletem sua experiência:
+> "O método atual de correção é muito ruim."  
+> "Não tenho acesso às respostas de forma organizada."  
+> "Quando a página atualiza, eu perco meu progresso."  
+> "Corrigir prova assim dá muito trabalho."
+
+---
+
+#### O que faz?
+No cenário atual, Ronaldo:
+- Corrige provas manualmente ou em arquivos digitais  
+- Utiliza planilhas para organizar notas  
+- Revisa respostas múltiplas vezes  
+- Salva frequentemente para evitar perdas  
+- Usa ferramentas externas como WhatsApp e e-mail  
+
+---
+
+#### Objetivos
+Ronaldo busca:
+- Organizar e facilitar a correção das provas  
+- Reduzir o tempo gasto com correções  
+- Ter clareza e estrutura nas respostas dos alunos  
+- Garantir avaliações justas e consistentes  
+- Acessar relatórios detalhados de desempenho  
+
+---
+
+#### Dores
+Os principais problemas enfrentados incluem:
+- Processo de correção pouco prático  
+- Falta de organização das respostas  
+- Risco de perda de progresso  
+- Grande volume de provas para corrigir  
+- Dificuldade em comparar respostas  
+- Uso de múltiplas ferramentas desconectadas  
+
+---
+
+#### Necessidades
+Com base nas dores e objetivos, surgem oportunidades claras:
+- Sistema de correção por questão (visão agrupada)  
+- Salvamento automático de progresso  
+- Interface simples e intuitiva  
+- Centralização de informações em um único sistema  
+- Geração automática de relatórios
+---
+
+#### Conclusão
+O mapa de empatia evidencia que o professor precisa de uma solução que reduza a complexidade operacional, aumente a confiabilidade do sistema e melhore a organização das informações.  
+Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma de avaliação mais eficiente.
+
 ## 2.3. User Stories (sprints 1 a 5)
 
 *Posicione aqui a lista de User Stories levantadas para o projeto. Siga o template de User Stories e utilize a mesma referência USXX no roadmap de seu quadro Kanban. Indique todas as User Stories mapeadas, mesmo aquelas que não forem implementadas ao longo do projeto. Não se esqueça de explicar o INVEST das 5 User Stories prioritárias*
