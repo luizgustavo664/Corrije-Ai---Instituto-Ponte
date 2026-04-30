@@ -113,7 +113,7 @@ Este mapa de empatia representa o perfil de Ronaldo Silva, professor do Ensino M
 - Renda: R$ 5.000/mês  
 - Escolaridade: Ensino Superior Completo  
 - Localização: Espírito Santo  
-- Nível de letramento digital: Adequado/mediano  
+- Nível de letramento digital: Alto  
 
 ---
 
@@ -175,15 +175,13 @@ Os principais problemas enfrentados incluem:
 
 ---
 
-#### Necessidades e Oportunidades
+#### Necessidades
 Com base nas dores e objetivos, surgem oportunidades claras:
 - Sistema de correção por questão (visão agrupada)  
 - Salvamento automático de progresso  
 - Interface simples e intuitiva  
 - Centralização de informações em um único sistema  
-- Ferramentas rápidas de feedback (notas e comentários)  
-- Geração automática de relatórios  
-
+- Geração automática de relatórios
 ---
 
 #### Conclusão
