@@ -78,6 +78,12 @@
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
 
+# VALUE PROPOSITION CANVAS
+
+---
+
+## VPC - Alunos
+
 <div align="center">
   <img src="/assets/vpcalunos.png">
 </div>
@@ -86,35 +92,270 @@
   <strong>Figura 2 — Value Proposition Canvas (Alunos) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
+### A. Perfil do Cliente
+
+#### Tarefas do cliente (Customer Jobs)
+
+No contexto da plataforma de avaliação remota, os alunos assumem o papel de participantes ativos do processo avaliativo digital. Ao longo da experiência, eles precisam:
+
+- acessar provas e materiais de estudo em um ambiente centralizado;
+- responder avaliações diretamente na plataforma;
+- enviar respostas e arquivos de forma correta;
+- acompanhar seu desempenho acadêmico;
+- participar de avaliações organizadas e padronizadas.
+
+Na prática, a plataforma permite que o aluno realize todas as etapas da avaliação em um único ambiente, reduzindo a complexidade e facilitando o processo.
+
 ---
+
+#### Dores (Pains)
+
+Durante o uso de sistemas tradicionais, os alunos enfrentam dificuldades que impactam sua experiência. Entre as principais dores estão:
+
+- dificuldade no envio de arquivos e respostas;
+- insegurança quanto ao sucesso da submissão;
+- uso de múltiplos canais desorganizados;
+- risco de perda de informações;
+- dificuldades tecnológicas;
+- falta de clareza no processo avaliativo.
+
+Essas dores geram ansiedade e prejudicam o desempenho, especialmente em ambientes digitais pouco estruturados.
+
+---
+
+#### Ganhos (Gains)
+
+Com a plataforma, os alunos passam a ter uma experiência mais clara e segura. Entre os principais ganhos estão:
+
+- maior segurança na realização de provas;
+- facilidade no envio de respostas;
+- acesso centralizado a conteúdos;
+- melhor organização das avaliações;
+- maior transparência no processo;
+- inclusão digital.
+
+Ao final, o aluno consegue focar no aprendizado, sem se preocupar com problemas técnicos ou organizacionais.
+
+---
+
+### B. Mapa de Valor
+
+#### Produtos e Serviços
+
+A solução oferece:
+
+- sistema de provas online;
+- envio seguro de respostas;
+- acesso a materiais de estudo;
+- interface simples e intuitiva;
+- acompanhamento de desempenho.
+
+---
+
+#### Aliviadores de Dores (Pain Relievers)
+
+Para reduzir as dificuldades, a plataforma:
+
+- centraliza todas as atividades em um único ambiente;
+- garante armazenamento seguro;
+- reduz falhas no envio de arquivos;
+- simplifica o uso com uma interface intuitiva.
+
+---
+
+#### Criadores de Ganhos (Gain Creators)
+
+A solução gera valor ao:
+
+- melhorar a experiência do aluno;
+- aumentar a confiança no sistema;
+- facilitar o acesso ao conteúdo;
+- promover um ambiente mais organizado e justo.
+
+---
+
+## VPC - Professores
 
 <div align="center">
   <img src="/assets/vpcprof.png">
 </div>
 
 <div align="center">
-  <strong>Figura 3 — Value Proposition Canvas (Professores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 2 — Value Proposition Canvas (Professores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
+### A. Perfil do Cliente
+
+#### Tarefas do cliente (Customer Jobs)
+
+Os professores atuam como responsáveis pela criação e gestão das avaliações. Durante o processo, eles precisam:
+
+- criar provas e atividades avaliativas;
+- organizar e publicar avaliações;
+- corrigir respostas dos alunos;
+- distribuir correções por critérios;
+- acompanhar o desempenho das turmas.
+
+Na prática, a plataforma centraliza essas tarefas, tornando o trabalho mais estruturado e eficiente.
+
 ---
+
+#### Dores (Pains)
+
+Sem uma plataforma adequada, os professores enfrentam diversos problemas, como:
+
+- sobrecarga administrativa;
+- uso de ferramentas dispersas;
+- perda de arquivos;
+- falta de padronização nas correções;
+- dificuldade em organizar avaliações;
+- retrabalho constante.
+
+Essas dificuldades tornam o processo mais lento e menos eficiente.
+
+---
+
+#### Ganhos (Gains)
+
+Com a solução, os professores passam a ter:
+
+- maior organização das avaliações;
+- correção mais eficiente e padronizada;
+- redução de erros operacionais;
+- economia de tempo;
+- melhor acompanhamento dos alunos.
+
+Assim, o professor consegue focar mais no ensino e menos em tarefas operacionais.
+
+---
+
+### B. Mapa de Valor
+
+#### Produtos e Serviços
+
+A plataforma oferece:
+
+- criação e publicação de provas;
+- sistema de correção estruturado;
+- distribuição de correções;
+- armazenamento de avaliações;
+- acompanhamento acadêmico.
+
+---
+
+#### Aliviadores de Dores (Pain Relievers)
+
+A solução reduz problemas ao:
+
+- automatizar processos;
+- centralizar informações;
+- evitar perda de arquivos;
+- padronizar correções;
+- diminuir a sobrecarga.
+
+---
+
+#### Criadores de Ganhos (Gain Creators)
+
+A plataforma gera benefícios ao:
+
+- aumentar a eficiência do trabalho;
+- melhorar a organização;
+- facilitar o acompanhamento pedagógico;
+- reduzir o tempo gasto em tarefas repetitivas.
+
+---
+
+## VPC - Coordenadores
 
 <div align="center">
   <img src="/assets/vpccoord.png">
 </div>
 
 <div align="center">
-  <strong>Figura 4 — Value Proposition Canvas (Coordenadores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 2 — Value Proposition Canvas (Coordenadores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-O Value Proposition Canvas da plataforma de avaliação remota desenvolvida pelo Instituto Ponte demonstra claramente como a solução tecnológica atende estrategicamente às demandas de alunos, professores e coordenadores institucionais.
+### A. Perfil do Cliente
 
-Para os alunos, a plataforma oferece um ambiente acessível, intuitivo e seguro para realização de provas online, envio estruturado de respostas, acesso centralizado a materiais de estudo e participação em avaliações organizadas de forma justa e padronizada. Essa proposta reduz barreiras tecnológicas, amplia a inclusão digital e promove melhores condições de aprendizagem, especialmente para estudantes com recursos limitados.
+#### Tarefas do cliente (Customer Jobs)
 
-Para professores e avaliadores, a solução proporciona ferramentas completas para criação, publicação, aplicação e correção de avaliações, incluindo distribuição padronizada de correções por questão, acompanhamento acadêmico, redução de falhas operacionais e melhoria da eficiência pedagógica. Dessa forma, problemas como perda de arquivos, uso de canais informais e sobrecarga administrativa são significativamente minimizados.
+Os coordenadores possuem um papel estratégico dentro da instituição. Eles precisam:
 
-Para coordenadores institucionais, a plataforma oferece centralização administrativa, monitoramento acadêmico, armazenamento histórico de avaliações, geração automática de relatórios, suporte à tomada de decisões e supervisão pedagógica ampliada. Esses recursos fortalecem a gestão institucional, promovem segurança de dados e garantem maior controle sobre processos seletivos e educacionais.
+- organizar processos avaliativos;
+- supervisionar avaliações;
+- monitorar desempenho acadêmico;
+- acessar relatórios institucionais;
+- apoiar decisões pedagógicas;
+- garantir segurança e padronização.
 
-A proposta de valor é sustentada por uma plataforma web robusta que integra criação de provas, submissão segura de arquivos, correção distribuída, relatórios detalhados, painéis administrativos e armazenamento confiável. Como resultado, espera-se modernizar os processos avaliativos, reduzir erros humanos, promover maior transparência, ampliar a equidade educacional e fortalecer a missão social do Instituto Ponte por meio da inovação tecnológica.
+Na prática, a plataforma permite uma visão ampla e centralizada de toda a operação.
+
+---
+
+#### Dores (Pains)
+
+Entre os principais desafios enfrentados estão:
+
+- falta de centralização de dados;
+- dificuldade de monitoramento;
+- processos manuais e descentralizados;
+- risco de inconsistências;
+- dificuldade na tomada de decisão;
+- baixa visibilidade dos resultados.
+
+Esses problemas dificultam a gestão eficiente da instituição.
+
+---
+
+#### Ganhos (Gains)
+
+Com a plataforma, os coordenadores passam a ter:
+
+- acesso a dados organizados;
+- relatórios automáticos;
+- maior controle dos processos;
+- melhoria na tomada de decisão;
+- aumento da eficiência institucional;
+- maior segurança da informação.
+
+Isso fortalece a gestão e melhora a qualidade dos processos educacionais.
+
+---
+
+### B. Mapa de Valor
+
+#### Produtos e Serviços
+
+A solução inclui:
+
+- painéis administrativos;
+- relatórios automáticos;
+- armazenamento de dados;
+- monitoramento acadêmico;
+- gestão centralizada.
+
+---
+
+#### Aliviadores de Dores (Pain Relievers)
+
+A plataforma ajuda ao:
+
+- centralizar informações;
+- automatizar relatórios;
+- reduzir falhas humanas;
+- melhorar o controle dos processos.
+
+---
+
+#### Criadores de Ganhos (Gain Creators)
+
+A solução agrega valor ao:
+
+- melhorar a gestão institucional;
+- aumentar a transparência;
+- apoiar decisões estratégicas;
+- modernizar processos educacionais.
 
 ---
 
