@@ -186,12 +186,35 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
-*Liste os RF numerados de forma objetiva e verificável. Cada RF deve poder ser convertido em caso de teste.*
+| ID | Descrição | Prioridade | Status |
+|---|---|---|---|
+|RF001 |O sistema deve permitir ao professor gerenciar provas em diferentes estados: ativas, rascunhos e encerradas.|Alta|Planejado|
+|RF002|O sistema deve permitir a filtragem de avaliações por turma, semestre, disciplina ou nome do professor.|Média|Planejado|
+|RF003|O sistema deve permitir a inserção de enunciados com suporte nativo a fórmulas matemáticas via MathType ou LaTeX.|Alta|Planejado|
+|RF004|O sistema deve suportar questões de múltipla escolha, Verdadeiro/Falso ($V/F$) e questões discursivas.|Alta|Planejado|
+|RF005|O professor deve poder habilitar a opção para que o aluno envie fotos de resoluções manuscritas em questões específicas.|Alta|Planejado|
+|RF006|O sistema deve permitir a definição de limites de tempo (duração), datas e horários de início e término da prova.|Alta|Planejado|
+|RF007|O sistema deve oferecer opções para embaralhar automaticamente a ordem das questões e das alternativas.|Média|Planejado|
+|RF008|O sistema deve gerar URLs únicas e QR Codes para o acesso dos alunos às provas.|Alta||Planejado|
+|RF009|O sistema deve realizar a identificação do aluno apenas por nome, e-mail e CPF, sem exigência de senhas complexas.|Alta|Planejado|
+|RF010|O sistema deve exibir um portal de instruções com regras, duração e prazos antes do início da avaliação.|Média|Planejado|
+|RF011|O sistema deve permitir que o aluno escolha exibir ou ocultar o cronômetro (timer) de tempo restante.|Média|Planejado|
+|RF012|O sistema deve permitir que o aluno aplique zoom em imagens contidas nos enunciados para melhor visualização.|Alta|Planejado|
+|RF013|O ambiente do aluno deve renderizar fórmulas matemáticas de forma legível em qualquer dispositivo.|Alta|Planejado|
+|RF014|O aluno deve conseguir realizar o upload de múltiplas imagens ou arquivos por questão.|Alta|Planejado|
+|RF015|O sistema deve realizar a compressão de imagens no lado do cliente (client-side) antes do upload.|Alta|Planejado|
+|RF016|O sistema deve exibir avisos de questões em branco e um resumo de progresso antes do envio final.|Média|Planejado|
+|RF017|O sistema deve permitir a correção isonômica, corrigindo a mesma questão de todos os alunos em sequência.|Alta|Planejado|
+|RF018|O sistema deve disponibilizar campos para atribuição de notas e comentários diretamente na resposta.|Alta|Planejado|
+|RF019|O sistema deve oferecer uma galeria para ampliação instantânea das fotos enviadas durante a correção.|Alta|Planejado|
+|RF020|O sistema deve gerar planilhas em Excel com os resultados detalhados por aluno e por questão.|Alta|Planejado|
+|RF021|O sistema deve ser capaz de enviar o resultado individual e o feedback para o e-mail do aluno.|Média|Planejado|
+|RF022|O sistema deve permitir a exportação de todos os anexos enviados para armazenamento local ou em nuvem.|Baixa|Planejado|
+|RF023|O coordenador deve ter acesso a um painel para visualizar todas as provas criadas por qualquer professor.|Alta|Planejado|
+|RF024|O coordenador deve ser capaz de gerar e visualizar relatórios de desempenho e estatísticas globais.|Alta|Planejado|
+|RF025|O coordenador deve conseguir monitorar e filtrar o status de todas as provas do instituto.|Alta|Planejado|
+|RF026|O sistema deve permitir ao professor as funções de criar, editar e excluir avaliações (CRUD completo).|Alta|Planejado|
 
-| ID    | Descrição | Prioridade | Status       |
-|-------|-----------|------------|--------------|
-| RF001 | ...       | Alta       | Implementado |
-| RF002 | ...       | Média      | Planejado    |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
