@@ -90,7 +90,7 @@
 ## 2.2. Personas (sprint 1)
 
 <div align="center">
-  <img src="/g05/assets/personaAluno.png">
+  <img src="../assets/personaAluno.png">
 </div>
 
 <div align="center">
@@ -100,7 +100,7 @@
 
 
 <div align="center">
-  <img src="/g05/assets/personaProfessor.png">
+  <img src="../assets/personaProfessor.png">
 </div>
 
 <div align="center">
@@ -110,7 +110,7 @@
 
 
 <div align="center">
-  <img src="/g05/assets/personaCoordenadora.png">
+  <img src="../assets/personaCoordenadora.png">
 </div>
 
 <div align="center">
