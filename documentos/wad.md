@@ -111,7 +111,15 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 ## 3.1. Requisitos do Sistema (sprints 1 a 5)
 
-A plataforma facilitará o acesso e a criação de provas para professores, alunos e coordenadores. Os alunos acessam as provas através de links únicos, identificando-se por nome, CPF e e-mail, e respondem questões objetivas, discursivas ou por upload de imagens. Ao final, recebem feedback por questão atribuído pelo professor. Os professores criam provas com questões de diferentes tipos e com timer opcional, geram links únicos de acesso, corrigem as respostas agrupadas por questão, visualizando todas as respostas de todos os alunos para uma mesma questão de forma sequencial, atribuem feedback e nota por questão, e visualizam relatórios de desempenho por aluno e por questão, além de seu histórico de provas anteriores. Os coordenadores visualizam os relatórios de desempenho e o histórico de provas de todos os professores, organizados por matéria, sem poder criar ou corrigir provas. 
+O Instituto Ponte tem um processo de correção de provas informal e descentralizado, os professores enviam provas por WhatsApp ou e-mail, alunos fotografam resoluções manuscritas e devolvem pelos mesmos canais, e a correção ocorre prova a prova, sem isonomia na correção. Isso gera perda de anexos, dificuldade de renderizar equações matemáticas, sobrecarga operacional dos professores e inconsistência nos critérios de correção entre alunos.
+
+Para resolver isso, a nossa equipe irá desenvolver uma aplicação web centralizada de gestão de avaliações remotas. A plataforma atende três perfis de usuário. 
+
+O aluno, que acessa a prova por link único, identificando-se por nome, CPF e e-mail, responde questões objetivas, discursivas ou por upload de imagens, e consulta o feedback após a correção. 
+
+O professor, que cria provas com suporte a equações matemáticas e timer opcional, gera links de acesso, corrige as respostas agrupadas por questão para todos os alunos, e acessa relatórios de desempenho de notas e histórico de provas. 
+
+E o coordenador, que visualiza relatórios e histórico de provas de todos os professores organizados por matéria, sem permissão para criar ou corrigir avaliações.
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
