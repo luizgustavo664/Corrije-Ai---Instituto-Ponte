@@ -77,9 +77,46 @@
 6. Critério de sucesso e como será avaliado
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
-*Sem limite de palavras – usar template do curso*
 
-*Elaborar o Value Proposition Canvas com base na proposta de solução definida.*
+<div align="center">
+  <img src="/assets/vpcalunos.png">
+</div>
+
+<div align="center">
+  <strong>Figura 2 — Value Proposition Canvas (Alunos) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+---
+
+<div align="center">
+  <img src="/assets/vpcprof.png">
+</div>
+
+<div align="center">
+  <strong>Figura 3 — Value Proposition Canvas (Professores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+---
+
+<div align="center">
+  <img src="/assets/vpccoord.png">
+</div>
+
+<div align="center">
+  <strong>Figura 4 — Value Proposition Canvas (Coordenadores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+O Value Proposition Canvas da plataforma de avaliação remota desenvolvida pelo Instituto Ponte demonstra claramente como a solução tecnológica atende estrategicamente às demandas de alunos, professores e coordenadores institucionais.
+
+Para os alunos, a plataforma oferece um ambiente acessível, intuitivo e seguro para realização de provas online, envio estruturado de respostas, acesso centralizado a materiais de estudo e participação em avaliações organizadas de forma justa e padronizada. Essa proposta reduz barreiras tecnológicas, amplia a inclusão digital e promove melhores condições de aprendizagem, especialmente para estudantes com recursos limitados.
+
+Para professores e avaliadores, a solução proporciona ferramentas completas para criação, publicação, aplicação e correção de avaliações, incluindo distribuição padronizada de correções por questão, acompanhamento acadêmico, redução de falhas operacionais e melhoria da eficiência pedagógica. Dessa forma, problemas como perda de arquivos, uso de canais informais e sobrecarga administrativa são significativamente minimizados.
+
+Para coordenadores institucionais, a plataforma oferece centralização administrativa, monitoramento acadêmico, armazenamento histórico de avaliações, geração automática de relatórios, suporte à tomada de decisões e supervisão pedagógica ampliada. Esses recursos fortalecem a gestão institucional, promovem segurança de dados e garantem maior controle sobre processos seletivos e educacionais.
+
+A proposta de valor é sustentada por uma plataforma web robusta que integra criação de provas, submissão segura de arquivos, correção distribuída, relatórios detalhados, painéis administrativos e armazenamento confiável. Como resultado, espera-se modernizar os processos avaliativos, reduzir erros humanos, promover maior transparência, ampliar a equidade educacional e fortalecer a missão social do Instituto Ponte por meio da inovação tecnológica.
+
+---
 
 ### 2.1.5. Matriz de Riscos do Projeto (sprint 1)
 
