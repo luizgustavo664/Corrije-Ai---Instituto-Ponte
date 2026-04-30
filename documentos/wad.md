@@ -301,7 +301,545 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
-*Apresente o diagrama de casos de uso com atores (boneco), casos (elipse) e as relações `<<include>>` / `<<extend>>` com semântica correta. Consulte a notação de referência em `in02/suporte/use-case_3.0_v1.0.pdf`.*
+<div align="center">
+  <img src="/assets/diagrama-casos-usos.png">
+</div>
+
+<div align="center">
+  <strong>Figura 5 — Diagrama Casos de Usos.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+&emsp;  O diagrama apresenta os três atores principais da plataforma — Professor, Coordenador e Aluno — e os dezesseis casos de uso organizados em três grupos funcionais: gestão de provas, aplicação pelo aluno e correção/resultados. Atores externos (Google Auth e Serviço de E-mail) aparecem apenas onde há integração real. A relação `<<include>>` entre UC09 e UC10 explicita que o salvamento automático é comportamento obrigatório embutido na experiência de resposta.
+
+---
+
+### Lista Consolidada de Casos de Uso
+
+| ID | Caso de Uso | Ator Primário | Atores Secundários | Requisitos |
+|---|---|---|---|---|
+| UC01 | Autenticar-se | Professor / Coordenador | Google Auth | T001 |
+| UC02 | Listar e filtrar provas por status | Professor / Coordenador | — | T002, RF001, RF002, RF025 |
+| UC03 | Criar prova a partir da home | Professor | — | T003, RF026 |
+| UC04 | Criar e editar questões com fórmulas e tipos variados | Professor | — | T004, RF003, RF004 |
+| UC05 | Reutilizar questões do banco e detectar duplicidade | Professor | — | T005 |
+| UC06 | Configurar tempo, datas e embaralhamento | Professor | — | T006, RF006, RF007 |
+| UC07 | Publicar prova com URL única e QR Code | Professor | — | T007, RF008 |
+| UC08 | Acessar prova pelo portal do aluno | Aluno | — | T008, RF009, RF010, RF011 |
+| UC09 | Responder prova no mobile com anexos manuscritos | Aluno | — | T009, RF012, RF013, RF014, RF015 |
+| UC10 | Salvar rascunho durante a prova *(included por UC09)* | — | — | T010 |
+| UC11 | Revisar e confirmar envio final | Aluno | — | T011, RF016 |
+| UC12 | Corrigir prova por item | Professor | — | T012, RF017, RF018, RF019 |
+| UC13 | Corrigir questões objetivas automaticamente | Professor | Aluno | T013 |
+| UC14 | Calcular notas e exportar resultados | Coordenador | — | T014, RF020, RF022 |
+| UC15 | Liberar resultados por e-mail | Professor / Coordenador | Serviço de E-mail | T015, RF021 |
+| UC16 | Consultar logs e analytics da avaliação | Coordenador | — | T016 |
+
+---
+
+### Descrições Detalhadas dos Casos de Uso
+
+---
+
+#### UC01 — Autenticar-se
+
+**Descrição:** Permite que usuários internos acessem a plataforma com conta Google, sendo direcionados automaticamente ao painel correspondente ao perfil autorizado.
+
+**Atores:** Professor, Coordenador.
+**Atores secundários:** Google Auth.
+
+**Pré-requisitos:**
+- Usuário possui e-mail cadastrado na lista de autorizados da plataforma.
+- Serviço Google Auth disponível.
+
+**Pós-requisitos:**
+- Sessão autenticada criada.
+- Usuário redirecionado para o painel do seu perfil.
+
+**Fluxo principal:**
+1. Usuário acessa a plataforma e seleciona "Entrar com Google".
+2. Sistema redireciona para o fluxo OAuth 2.0 do Google Auth.
+3. Google Auth retorna a identidade (e-mail) do usuário autenticado.
+4. Sistema valida se o e-mail consta na lista de autorizados.
+5. Sistema identifica o perfil e redireciona para o painel correspondente.
+
+**Fluxos alternativos:**
+- A1: e-mail não autorizado — acesso negado com mensagem de erro.
+- A2: sessão expirada — usuário redirecionado para novo login ao tentar acessar página protegida.
+
+**Relações:**
+- `<<include>>` Validar e-mail autorizado.
+- `<<include>>` Redirecionar por perfil.
+
+---
+
+#### UC02 — Listar e filtrar provas por status
+
+**Descrição:** Exibe as provas agrupadas por status (Rascunho, Publicada, Encerrada, Antiga), com possibilidade opcional de aplicar filtros combinados por turma, semestre, disciplina e professor.
+
+**Atores:** Professor, Coordenador.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Usuário autenticado.
+
+**Pós-requisitos:**
+- Lista exibida conforme critérios aplicados.
+
+**Fluxo principal:**
+1. Usuário acessa a tela inicial de provas.
+2. Sistema carrega e agrupa as provas por status.
+3. Usuário visualiza a listagem completa sem filtros aplicados.
+
+**Fluxos alternativos:**
+- A1: usuário aplica filtros — sistema retorna apenas provas que atendem a todos os critérios combinados *(extend: Filtrar provas)*.
+- A2: nenhum resultado encontrado — sistema exibe mensagem de estado vazio *(extend: Exibir estado vazio)*.
+- A3: prova encerrada — sistema bloqueia a opção de edição para aquela prova.
+
+**Relações:**
+- `<<extend>>` Filtrar provas *(condição: usuário aplica ao menos um filtro)*.
+- `<<extend>>` Exibir estado vazio *(condição: nenhuma prova atende aos critérios)*.
+
+---
+
+#### UC03 — Criar prova a partir da home
+
+**Descrição:** Permite ao professor iniciar rapidamente a criação de uma nova prova pela tela inicial, preenchendo metadados obrigatórios e salvando o registro como rascunho.
+
+**Atores:** Professor.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Professor autenticado.
+
+**Pós-requisitos:**
+- Prova criada em estado Rascunho, disponível para edição posterior.
+
+**Fluxo principal:**
+1. Professor clica em "Criar prova".
+2. Sistema exibe formulário com campos obrigatórios.
+3. Professor preenche: Nome, Modalidade, Disciplina, Turma e Semestre.
+4. Sistema valida os campos preenchidos.
+5. Sistema salva a prova como Rascunho e redireciona para o editor.
+
+**Fluxos alternativos:**
+- A1: campo obrigatório ausente — sistema impede o salvamento e destaca o campo faltante.
+
+**Relações:**
+- `<<include>>` Salvar como rascunho.
+
+---
+
+#### UC04 — Criar e editar questões com fórmulas e tipos variados
+
+**Descrição:** Permite ao professor montar o conteúdo da prova com questões de múltipla escolha, verdadeiro/falso e discursivas. Enunciados com notação LaTeX são renderizados quando presentes.
+
+**Atores:** Professor.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Prova em estado Rascunho aberta no editor.
+
+**Pós-requisitos:**
+- Questões salvas e vinculadas à prova.
+- Gabarito registrado para questões objetivas (usado em UC13).
+
+**Fluxo principal:**
+1. Professor abre o editor da prova.
+2. Sistema exibe interface para adicionar questão e selecionar o tipo.
+3. Professor informa enunciado e, conforme o tipo: alternativas com gabarito (objetivas) ou critérios e limite de caracteres (discursivas).
+4. Sistema valida campos obrigatórios e consistência das alternativas.
+5. Sistema salva a questão vinculada à prova.
+
+**Fluxos alternativos:**
+- A1: questão incompleta — sistema bloqueia o salvamento e indica os campos ausentes.
+- A2: professor tenta publicar prova com questão sem enunciado — sistema bloqueia a publicação.
+
+**Relações:**
+- `<<include>>` Validar alternativas e campos obrigatórios.
+- `<<extend>>` Renderizar fórmulas LaTeX *(condição: enunciado contém notação LaTeX/MathType)*.
+
+---
+
+#### UC05 — Reutilizar questões do banco e detectar duplicidade
+
+**Descrição:** Permite ao professor buscar questões já cadastradas e incorporá-las à prova. O sistema alerta quando a similaridade textual com questão existente atingir o limiar definido.
+
+**Atores:** Professor.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Banco de questões populado.
+- Prova em edição aberta no editor.
+
+**Pós-requisitos:**
+- Questões selecionadas adicionadas ao editor da prova.
+
+**Fluxo principal:**
+1. Professor acessa o banco de questões.
+2. Sistema exibe filtros por disciplina, tema e tipo.
+3. Professor aplica filtros e visualiza questões compatíveis.
+4. Professor seleciona uma ou mais questões para a prova.
+5. Sistema adiciona as questões ao editor.
+
+**Fluxos alternativos:**
+- A1: similaridade textual ≥ 80% detectada — sistema exibe alerta de possível duplicidade antes de confirmar a adição *(extend: Alertar duplicidade)*.
+
+**Relações:**
+- `<<include>>` Buscar por disciplina, tema ou tipo.
+- `<<extend>>` Alertar duplicidade *(condição: similaridade textual ≥ 80% com questão existente, ignorando capitalização e espaços extras)*.
+
+---
+
+#### UC06 — Configurar tempo, datas e embaralhamento
+
+**Descrição:** Permite ao professor definir a janela de disponibilidade da prova, duração máxima e regras de embaralhamento de questões e alternativas.
+
+**Atores:** Professor.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Prova em edição existe.
+
+**Pós-requisitos:**
+- Configurações de execução persistidas, utilizadas pelo sistema no controle de acesso em UC08.
+
+**Fluxo principal:**
+1. Professor acessa as configurações da prova.
+2. Define data e horário de início e término no Horário de Brasília (GMT-3).
+3. Define duração máxima por aluno.
+4. Escolhe embaralhamento de questões e/ou alternativas (opcional).
+5. Sistema valida que o término é posterior ao início e persiste a configuração.
+
+**Fluxos alternativos:**
+- A1: término anterior ao início — sistema rejeita a configuração com mensagem de erro.
+
+**Relações:**
+- `<<include>>` Validar período da prova.
+
+---
+
+#### UC07 — Publicar prova com URL única e QR Code
+
+**Descrição:** Após validação da consistência, o sistema publica a prova e gera link exclusivo e QR Code para distribuição aos candidatos.
+
+**Atores:** Professor.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Prova em estado Rascunho com ao menos uma questão completa e período definido.
+
+**Pós-requisitos:**
+- Prova no estado Publicada.
+- URL única e QR Code disponíveis para compartilhamento.
+
+**Fluxo principal:**
+1. Professor solicita a publicação da prova.
+2. Sistema valida consistência (questões completas, período definido).
+3. Sistema gera URL única para a prova.
+4. Sistema gera QR Code correspondente ao link.
+5. Sistema disponibiliza URL e QR Code para cópia ou download.
+
+**Fluxos alternativos:**
+- A1: prova com inconsistências — sistema bloqueia a publicação e exibe os problemas encontrados.
+
+**Relações:**
+- `<<include>>` Gerar URL única.
+- `<<include>>` Gerar QR Code.
+
+---
+
+#### UC08 — Acessar prova pelo portal do aluno
+
+**Descrição:** Exibe a tela de entrada da prova com orientações e solicita identificação mínima do aluno. Valida período de disponibilidade, coleta consentimento LGPD e impede múltiplas submissões.
+
+**Atores:** Aluno.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Prova no estado Publicada e dentro do período de disponibilidade (Horário de Brasília).
+- Aluno não realizou submissão anterior para esta prova.
+
+**Pós-requisitos:**
+- Aluno identificado por nome, e-mail e CPF.
+- Consentimento LGPD registrado.
+- Prova liberada para início.
+
+**Fluxo principal:**
+1. Aluno acessa o link ou QR Code da prova.
+2. Sistema valida se a prova está dentro do período de disponibilidade.
+3. Sistema exibe título, orientações, duração e regras.
+4. Aluno preenche nome, e-mail e CPF.
+5. Aluno marca o checkbox de aceite dos Termos de Uso e Política de Privacidade.
+6. Sistema valida os campos e habilita o botão "Iniciar Prova".
+7. Sistema registra o consentimento LGPD do aluno.
+
+**Fluxos alternativos:**
+- A1: prova fora do período — sistema exibe mensagem de indisponibilidade e bloqueia o acesso.
+- A2: CPF ausente ou inválido — sistema mantém o botão desabilitado e destaca o campo.
+- A3: checkbox LGPD não marcado — sistema mantém o botão desabilitado.
+- A4: prova em estado Rascunho acessada pelo link — sistema bloqueia o acesso.
+- A5: aluno já realizou submissão anterior — sistema informa que a prova já foi enviada.
+
+**Relações:**
+- `<<include>>` Validar período de disponibilidade.
+- `<<include>>` Registrar consentimento LGPD.
+
+---
+
+#### UC09 — Responder prova no mobile com anexos manuscritos
+
+**Descrição:** Permite ao aluno responder questões em dispositivos móveis com suporte a fórmulas e upload de imagens ou arquivos de resolução manuscrita. O progresso é salvo automaticamente via UC10.
+
+**Atores:** Aluno.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Aluno identificado e prova iniciada (UC08 concluído).
+
+**Pós-requisitos:**
+- Respostas e anexos vinculados corretamente ao aluno e à questão.
+- Progresso salvo automaticamente.
+
+**Fluxo principal:**
+1. Aluno visualiza a questão no dispositivo móvel (layout responsivo ≥ 360 px).
+2. Aluno fornece a resposta (objetiva ou discursiva).
+3. Quando habilitado, aluno anexa imagens ou PDF da resolução manuscrita.
+4. Sistema valida tipo (JPG, PNG, PDF) e tamanho (máximo 5 MB por arquivo).
+5. Sistema comprime imagens no lado do cliente antes do upload.
+6. Sistema salva o vínculo entre arquivo, aluno e questão.
+7. Sistema salva automaticamente o progresso da prova *(include: UC10)*.
+
+**Fluxos alternativos:**
+- A1: arquivo acima de 5 MB — sistema rejeita com mensagem de erro e informa o limite.
+- A2: formato inválido — sistema impede o upload e informa os formatos aceitos.
+
+**Relações:**
+- `<<include>>` Anexar arquivos por questão.
+- `<<include>>` Comprimir imagens no cliente.
+- `<<include>>` UC10 Salvar rascunho durante a prova.
+- `<<extend>>` Renderizar fórmulas LaTeX *(condição: questão contém notação LaTeX)*.
+
+---
+
+#### UC10 — Salvar rascunho durante a prova
+
+**Descrição:** Garante o armazenamento automático e contínuo do progresso do aluno enquanto responde a prova, protegendo contra perda de dados por instabilidade de rede ou recarga de página.
+
+**Atores:** *(nenhum — disparado pelo sistema durante UC09)*.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Prova em andamento (UC09 ativo).
+
+**Pós-requisitos:**
+- Último estado salvo disponível para restauração.
+
+**Fluxo principal:**
+1. Sistema detecta alteração em resposta digitada ou anexo vinculado.
+2. Sistema salva automaticamente o progresso quando há conexão ativa.
+3. Ao recarregar a página dentro do período permitido, sistema restaura o conteúdo salvo.
+4. Ao detectar tentativa de sair com alterações não sincronizadas, sistema exibe aviso.
+
+**Fluxos alternativos:**
+- A1: término do tempo com respostas parcialmente salvas — sistema preserva o último estado salvo.
+
+**Relações:**
+- É `<<include>>` de UC09.
+
+---
+
+#### UC11 — Revisar e confirmar envio final
+
+**Descrição:** Apresenta um resumo do progresso antes do envio definitivo, destaca questões em branco e exige confirmação explícita do aluno.
+
+**Atores:** Aluno.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Prova respondida parcial ou integralmente.
+- Prova dentro do período de disponibilidade.
+
+**Pós-requisitos:**
+- Prova enviada e bloqueada para alterações, com confirmação visual exibida ao aluno. Ou aluno retorna à tela de respostas para continuar o preenchimento.
+
+**Fluxo principal:**
+1. Aluno solicita a revisão final.
+2. Sistema exibe mapa de questões respondidas e em branco.
+3. Sistema destaca questões em branco.
+4. Aluno confirma o envio final.
+5. Sistema registra a submissão, bloqueia alterações e exibe confirmação visual.
+
+**Fluxos alternativos:**
+- A1: aluno cancela a confirmação — sistema mantém a prova aberta.
+- A2: tempo encerrado antes da confirmação — sistema submete automaticamente o último estado salvo.
+
+**Relações:**
+- `<<include>>` Destacar questões em branco.
+- `<<include>>` Confirmar envio final.
+
+---
+
+#### UC12 — Corrigir prova por item
+
+**Descrição:** Permite ao professor corrigir a mesma questão de todos os alunos em sequência, garantindo isonomia na aplicação dos critérios. Suporta visualização de anexos, atribuição de nota e comentário por resposta.
+
+**Atores:** Professor.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Existem submissões registradas para a prova.
+
+**Pós-requisitos:**
+- Notas e comentários salvos por resposta e por questão.
+
+**Fluxo principal:**
+1. Professor acessa o painel de correção e seleciona uma questão.
+2. Sistema lista as respostas daquela questão de todos os alunos em sequência.
+3. Professor visualiza a resposta e, quando houver, abre os anexos.
+4. Professor amplia anexos quando necessário.
+5. Professor atribui nota e, opcionalmente, insere comentário.
+6. Sistema salva e disponibiliza navegação para a próxima resposta.
+
+**Fluxos alternativos:**
+- A1: anexo ilegível — professor registra observação no comentário.
+- A2: retorno a resposta já corrigida — dados persistidos são exibidos e podem ser editados.
+
+**Relações:**
+- `<<include>>` Listar respostas por questão.
+- `<<include>>` Visualizar e ampliar anexos.
+- `<<include>>` Registrar nota e comentário.
+
+---
+
+#### UC13 — Corrigir questões objetivas automaticamente
+
+**Descrição:** Aplica o gabarito registrado às respostas objetivas dos alunos, atribuindo pontuação automaticamente. Permite recálculo caso o gabarito seja alterado antes da liberação das notas.
+
+**Atores:** Professor.
+**Atores secundários:** Aluno *(suas submissões alimentam o processo de correção)*.
+
+**Pré-requisitos:**
+- Questões objetivas com gabarito registrado (configurado em UC04).
+- Alunos realizaram submissão da prova (UC11).
+
+**Pós-requisitos:**
+- Questões objetivas pontuadas automaticamente.
+- Questões discursivas com status "pendente de correção manual".
+
+**Fluxo principal:**
+1. Professor acessa o painel de resultados e inicia a correção automática.
+2. Sistema recupera as respostas objetivas de todos os alunos.
+3. Sistema compara cada resposta com o gabarito registrado.
+4. Sistema atribui pontuação correta; respostas erradas recebem zero.
+5. Questões discursivas permanecem com status "pendente", aguardando UC12.
+
+**Fluxos alternativos:**
+- A1: gabarito alterado antes da liberação — sistema recalcula todas as pontuações objetivas afetadas *(extend: Recalcular resultados)*.
+
+**Relações:**
+- `<<include>>` Aplicar gabarito.
+- `<<extend>>` Recalcular resultados *(condição: gabarito alterado antes da liberação das notas)*.
+
+---
+
+#### UC14 — Calcular notas e exportar resultados
+
+**Descrição:** Consolida correções manuais e automáticas, calcula a nota final de cada aluno e exporta os resultados em planilha Excel, com opção de exportar os anexos organizados por prova, aluno e questão.
+
+**Atores:** Coordenador.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Todas as questões corrigidas, ou coordenador ciente das pendências e confirmando prosseguimento.
+
+**Pós-requisitos:**
+- Nota total calculada por aluno.
+- Resultados exportados em formato estruturado.
+
+**Fluxo principal:**
+1. Coordenador acessa a tela de resultados da prova.
+2. Sistema calcula a nota total de cada aluno.
+3. Sistema exibe a nota total por aluno.
+4. Coordenador solicita exportação para Excel.
+5. Sistema gera planilha com alunos nas linhas e questões/notas nas colunas.
+6. Coordenador solicita exportação de anexos.
+7. Sistema gera pacote organizado por prova, aluno e questão.
+
+**Fluxos alternativos:**
+- A1: questões pendentes de correção — sistema alerta o coordenador antes da exportação final *(extend: Alertar pendências de correção)*; coordenador decide prosseguir ou aguardar.
+
+**Relações:**
+- `<<include>>` Consolidar notas.
+- `<<include>>` Exportar planilha Excel.
+- `<<include>>` Exportar anexos organizados.
+- `<<extend>>` Alertar pendências de correção *(condição: há questões com status "pendente")*.
+
+---
+
+#### UC15 — Liberar resultados por e-mail
+
+**Descrição:** Envia o resultado individual de cada aluno por e-mail quando as notas estiverem validadas. Registra histórico de envios e permite reenvio em caso de falha.
+
+**Atores:** Professor, Coordenador.
+**Atores secundários:** Serviço de E-mail.
+
+**Pré-requisitos:**
+- Notas consolidadas (UC14 concluído).
+- Pendências resolvidas ou confirmação explícita realizada.
+
+**Pós-requisitos:**
+- E-mails enviados individualmente.
+- Envio registrado com data, horário e status.
+
+**Fluxo principal:**
+1. Professor ou coordenador solicita a liberação dos resultados.
+2. Sistema verifica se há questões pendentes de correção.
+3. Sistema envia e-mail individual para cada aluno com seu resultado.
+4. Sistema registra data, horário e status de cada envio.
+
+**Fluxos alternativos:**
+- A1: notas ainda pendentes — sistema bloqueia o envio ou exige confirmação explícita.
+- A2: falha no envio — sistema sinaliza os envios falhos e permite nova tentativa *(extend: Reenviar e-mail falho)*.
+
+**Relações:**
+- `<<include>>` Enviar e-mail individual.
+- `<<include>>` Registrar histórico de envio.
+- `<<extend>>` Reenviar e-mail falho *(condição: envio falhou para ao menos um aluno)*.
+
+---
+
+#### UC16 — Consultar logs e analytics da avaliação
+
+**Descrição:** Permite ao coordenador acessar o painel analítico para monitorar participação, desempenho por questão e identificar problemas operacionais. O registro de eventos ocorre automaticamente pelo sistema em segundo plano durante toda a execução das provas.
+
+**Atores:** Coordenador.
+**Atores secundários:** Nenhum.
+
+**Pré-requisitos:**
+- Sistema em operação com ao menos uma prova em andamento ou encerrada.
+- Coordenador autenticado.
+
+**Pós-requisitos:**
+- Painel analítico exibido com dados atualizados.
+
+**Fluxo principal:**
+1. Coordenador acessa o painel de analytics.
+2. Sistema exibe métricas de participação: acessos, inícios e envios por prova.
+3. Sistema exibe tempo médio de resposta por questão.
+4. Sistema exibe porcentagem de acerto por questão do banco.
+5. Coordenador filtra por prova ou período para análise específica.
+6. Sistema atualiza o painel conforme filtro aplicado.
+
+**Fluxos alternativos:**
+- A1: nenhuma prova no filtro aplicado — sistema exibe estado vazio.
+
+> **Comportamento de infraestrutura:** o sistema registra automaticamente acessos, inícios, submissões e erros operacionais com data e contexto mínimo durante toda a execução das provas. Esses dados alimentam o painel consultado neste caso de uso.
+
+**Relações:**
+- `<<include>>` Exibir métricas de participação.
+- `<<include>>` Exibir desempenho por questão.
+
+---
 
 ### 3.2.3. Diagrama de Classes do Domínio (sprint 2)
 
