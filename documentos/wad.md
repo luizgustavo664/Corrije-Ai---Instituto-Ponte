@@ -1350,7 +1350,15 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 
 ## 3.1. Requisitos do Sistema (sprints 1 a 5)
 
-*Esta seção formaliza o que o sistema deve fazer, sob quais regras e com quais qualidades. Atualize a cada sprint conforme os requisitos evoluem.*
+O Instituto Ponte tem um processo de correção de provas informal e descentralizado, os professores enviam provas por WhatsApp ou e-mail, alunos fotografam resoluções manuscritas e devolvem pelos mesmos canais, e a correção ocorre prova a prova, sem isonomia na correção. Isso gera perda de anexos, dificuldade de renderizar equações matemáticas, sobrecarga operacional dos professores e inconsistência nos critérios de correção entre alunos.
+
+Para resolver isso, a nossa equipe irá desenvolver uma aplicação web centralizada de gestão de avaliações remotas. A plataforma atende três perfis de usuário. 
+
+O aluno, que acessa a prova por link único, identificando-se por nome, CPF e e-mail, responde questões objetivas, discursivas ou por upload de imagens, e consulta o feedback após a correção. 
+
+O professor, que cria provas com suporte a equações matemáticas e timer opcional, gera links de acesso, corrige as respostas agrupadas por questão para todos os alunos, e acessa relatórios de desempenho de notas e histórico de provas. 
+
+E o coordenador, que visualiza relatórios e histórico de provas de todos os professores organizados por matéria, sem permissão para criar ou corrigir avaliações.
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
