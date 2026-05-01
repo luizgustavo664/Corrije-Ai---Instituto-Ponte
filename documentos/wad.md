@@ -85,7 +85,7 @@
 ## VPC - Alunos
 
 <div align="center">
-  <img src="/assets/vpcalunos.png">
+  <img src="../assets/vpcalunos.png">
 </div>
 
 <div align="center">
@@ -98,7 +98,7 @@
 
 No contexto da plataforma de avaliação remota, os alunos assumem o papel de participantes ativos do processo avaliativo digital. Ao longo da experiência, eles precisam:
 
-- acessar provas e materiais de estudo em um ambiente centralizado;
+- acessar provas em um ambiente centralizado;
 - responder avaliações diretamente na plataforma;
 - enviar respostas e arquivos de forma correta;
 - acompanhar seu desempenho acadêmico;
@@ -177,7 +177,7 @@ A solução gera valor ao:
 ## VPC - Professores
 
 <div align="center">
-  <img src="/assets/vpcprof.png">
+  <img src="../assets/vpcprof.png">
 </div>
 
 <div align="center">
