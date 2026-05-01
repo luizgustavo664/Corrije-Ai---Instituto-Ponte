@@ -89,6 +89,15 @@
 
 ## 2.2. Personas (sprint 1)
 
+### Mini descrição das personas
+
+- **Aluno (Edgar Romeo):** Estudante com baixo letramento digital que enfrenta dificuldades para navegar e compreender plataformas de prova online, necessitando de uma interface simples e intuitiva.
+
+- **Professor (Ronaldo Silva):** Docente experiente que realiza correções digitais, mas sofre com falta de organização e risco de perda de progresso, buscando mais eficiência no processo avaliativo.
+
+- **Coordenadora (Valéria dos Santos):** Profissional com alto domínio digital que precisa de acesso estruturado a dados, relatórios e histórico de provas para apoiar a tomada de decisão acadêmica.
+
+
 <div align="center">
   <img src="../assets/personaAluno.png">
 </div>
