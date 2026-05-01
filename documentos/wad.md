@@ -437,7 +437,43 @@ A solução agrega valor ao:
 
 ## 2.2. Personas (sprint 1)
 
-*Posicione aqui suas Personas em forma de texto markdown com imagens, ou como imagem de template preenchido. Atualize esta seção ao longo do módulo se necessário.*
+### Mini descrição das personas
+
+- **Aluno (Edgar Romeo):** Estudante com baixo letramento digital que enfrenta dificuldades para navegar e compreender plataformas de prova online, necessitando de uma interface simples e intuitiva.
+
+- **Professor (Ronaldo Silva):** Docente experiente que realiza correções digitais, mas sofre com falta de organização e risco de perda de progresso, buscando mais eficiência no processo avaliativo.
+
+- **Coordenadora (Valéria dos Santos):** Profissional com alto domínio digital que precisa de acesso estruturado a dados, relatórios e histórico de provas para apoiar a tomada de decisão acadêmica.
+
+
+<div align="center">
+  <img src="../assets/personaAluno.png">
+</div>
+
+<div align="center">
+  <strong>Figura — Persona do Aluno.</strong><br><em>Foto de <a href="https://unsplash.com/pt-br/@sooprun?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Alex Suprun</a> na <a href="https://unsplash.com/pt-br/fotografias/man-in-black-button-up-shirt-ZHvM3XIOHoE?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+      </em>
+</div>
+
+
+<div align="center">
+  <img src="../assets/personaProfessor.png">
+</div>
+
+<div align="center">
+  <strong>Figura — Persona do Professor.</strong><br><em>Foto de <a href="https://unsplash.com/pt-br/@lancereis?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Lance Reis</a> na <a href="https://unsplash.com/pt-br/fotografias/um-homem-com-barba-pp76Y6Fq6xw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+      </em>
+</div>
+
+
+<div align="center">
+  <img src="../assets/personaCoordenadora.png">
+</div>
+
+<div align="center">
+  <strong>Figura — Persona do Coordenadora.</strong><br><em>Fonte: Foto de <a href="https://unsplash.com/pt-br/@ageing_better?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Centre for Ageing Better</a> na <a href="https://unsplash.com/pt-br/fotografias/uma-mulher-sentada-em-uma-cadeira-segurando-uma-xicara-de-cafe--UPMX2uynvA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+      </em>
+</div>
 
 ### 2.2.1 Mapa de Empatia de uma persona
 
