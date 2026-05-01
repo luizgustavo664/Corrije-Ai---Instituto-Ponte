@@ -538,19 +538,813 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 
 ## 2.3. User Stories (sprints 1 a 5)
 
-*Posicione aqui a lista de User Stories levantadas para o projeto. Siga o template de User Stories e utilize a mesma referência USXX no roadmap de seu quadro Kanban. Indique todas as User Stories mapeadas, mesmo aquelas que não forem implementadas ao longo do projeto. Não se esqueça de explicar o INVEST das 5 User Stories prioritárias*
+<table>
+  <tr><td><strong>Número</strong></td><td>T001</td></tr>
+  <tr><td><strong>Título</strong></td><td>Autenticação de professores e coordenadores.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Coordenador ou Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Coordenador ou Professor</strong>, quero utilizar minha conta Google para realizar o Login na plataforma.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - somente usuários internos autorizados podem acessar o sistema.<br>
+      <strong>Validação:</strong> o e-mail autenticado deve pertencer à lista de usuários autorizados.<br><br>
+      <strong>CR-02</strong> - o sistema deve direcionar o usuário para o painel correspondente ao seu perfil.<br>
+      Perfis possíveis: { "Coordenador", "Professor" }.<br><br>
+      <strong>CR-03</strong> - usuários com sessão encerrada não podem acessar páginas protegidas sem novo login.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Professor autorizado faz login com Google.<br>
+      – Acessou o sistema = correto.<br>
+      – Teve acesso negado = errado, deve ser corrigido.<br><br>
+      b. Usuário não autorizado tenta fazer login com Google.<br>
+      – Acessou o sistema = errado, deve ser corrigido.<br>
+      – Teve acesso negado = correto.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Coordenador autorizado realiza login.<br>
+      – Foi direcionado para o painel do coordenador = correto.<br>
+      – Foi direcionado para painel incorreto = errado, deve ser corrigido.<br><br>
+      b. Professor autorizado realiza login.<br>
+      – Foi direcionado para o painel do professor = correto.<br>
+      – Foi direcionado para painel incorreto = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Usuário autenticado encerra a sessão e tenta acessar página protegida.<br>
+      – Foi redirecionado para login = correto.<br>
+      – Acessou a página protegida = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> Pode ser desenvolvida e entregue sem depender de nenhuma outra história; o mecanismo de autenticação OAuth com Google é autocontido.<br><br>
+      <strong>Negociável:</strong> O provedor de autenticação (Google) e o mecanismo de lista de usuários autorizados podem ser renegociados com o time sem alterar o objetivo da história.<br><br>
+      <strong>Valorosa:</strong> Garante que apenas pessoas autorizadas acessem o sistema, protegendo dados sensíveis de avaliação e direcionando cada usuário ao seu contexto correto.<br><br>
+      <strong>Estimável:</strong> O escopo é claro — OAuth2 com Google, validação de e-mail e roteamento por perfil — permitindo estimativa objetiva pelo time.<br><br>
+      <strong>Pequena:</strong> Cobre apenas o fluxo de login e redirecionamento, sem incluir gestão de usuários ou permissões granulares, cabendo em uma sprint.<br><br>
+      <strong>Testável:</strong> Os critérios de aceitação definem cenários objetivos com resultado esperado claro (acesso permitido/negado, painel correto, bloqueio de sessão encerrada).
+    </td>
+  </tr>
+</table>
 
-*ATUALIZE ESTA SEÇÃO SEMPRE QUE ALGUMA DEMANDA MUDAR EM SEU PROJETO*
+---
 
-*Template de User Story*
-Identificação | USXX (troque XX por numeração ordenada das User Stories)
---- | ---
-Persona | nome da Persona
-User Story | "como (papel/perfil), posso (ação/meta), para (benefício/razão)"
-Critério de aceite 1 | CR1: descrever cenário + testes de aceite
-Critério de aceite 2 | CR2: descrever cenário + testes de aceite
-Critério de aceite ... | CR...
-Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que é Valorosa? Por que é Estimável? Por que é Pequena? Por que é Testável?)*
+<table>
+  <tr><td><strong>Número</strong></td><td>T002</td></tr>
+  <tr><td><strong>Título</strong></td><td>Gestão de provas por status e filtros.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero visualizar provas antigas, rascunhos e encerradas com filtros, para encontrar rapidamente avaliações do processo seletivo.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - as provas devem ser exibidas separadas por status.<br>
+      Status possíveis: { "Rascunho", "Publicada", "Encerrada", "Antiga" }.<br><br>
+      <strong>CR-02</strong> - o professor deve conseguir filtrar provas por turma, semestre, disciplina ou professor.<br><br>
+      <strong>CR-03</strong> - quando nenhum resultado for encontrado, o sistema deve exibir uma mensagem de estado vazio.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Professor acessa a home com provas em diferentes status.<br>
+      – Provas aparecem separadas por status = correto.<br>
+      – Provas aparecem misturadas sem identificação = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Professor aplica filtro por disciplina "Matemática".<br>
+      – Sistema exibe apenas provas de Matemática = correto.<br>
+      – Sistema exibe provas de outras disciplinas = errado, deve ser corrigido.<br><br>
+      b. Professor aplica filtro por semestre "2026.1".<br>
+      – Sistema exibe apenas provas do semestre selecionado = correto.<br>
+      – Sistema exibe provas de outros semestres = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Professor aplica filtros sem resultados compatíveis.<br>
+      – Sistema exibe mensagem de estado vazio = correto.<br>
+      – Sistema exibe lista vazia sem explicação = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> A listagem e filtragem de provas não depende de outras histórias; pode ser desenvolvida com dados mockados mesmo antes do editor de provas estar pronto.<br><br>
+      <strong>Negociável:</strong> Os filtros disponíveis (turma, semestre, disciplina, professor) e a forma de exibição por status podem ser ajustados conforme feedback do professor sem alterar o valor central.<br><br>
+      <strong>Valorosa:</strong> Permite ao professor localizar rapidamente qualquer avaliação, reduzindo tempo gasto em navegação e aumentando a produtividade no gerenciamento do processo seletivo.<br><br>
+      <strong>Estimável:</strong> Listagem com agrupamento por status e filtros client/server-side têm complexidade conhecida, possibilitando estimativa pelo time de desenvolvimento.<br><br>
+      <strong>Pequena:</strong> Limita-se à visualização e filtragem, sem edição ou criação de provas, sendo entregável de forma isolada em uma sprint.<br><br>
+      <strong>Testável:</strong> Cada critério possui cenários com entrada e saída definidas, como filtro por disciplina exibindo apenas provas correspondentes ou mensagem de estado vazio.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T003</td></tr>
+  <tr><td><strong>Título</strong></td><td>Criação rápida de prova pela home.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero criar uma nova prova diretamente da home, para iniciar rapidamente uma avaliação do processo seletivo.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - a home deve possuir uma ação visível para criação de nova prova.<br><br>
+      <strong>CR-02</strong> - o professor deve preencher os dados iniciais obrigatórios da prova.<br>
+      Campos obrigatórios: { "Nome", "Modalidade", "Disciplina", "Turma", "Semestre" }.<br><br>
+      <strong>CR-03</strong> - toda prova criada inicialmente deve ser salva como rascunho.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Professor acessa a home e clica em "Criar prova".<br>
+      – Foi levado ao formulário de criação = correto.<br>
+      – Permaneceu na home sem resposta = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Professor preenche todos os campos obrigatórios e salva.<br>
+      – Sistema permite salvar = correto.<br>
+      – Sistema bloqueia sem motivo = errado, deve ser corrigido.<br><br>
+      b. Professor tenta salvar sem preencher disciplina.<br>
+      – Sistema bloqueia e indica campo obrigatório = correto.<br>
+      – Sistema salva a prova incompleta = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Professor cria uma prova e sai antes de publicar.<br>
+      – Prova permanece disponível como rascunho = correto.<br>
+      – Prova desaparece do sistema = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O formulário de criação inicial pode ser desenvolvido antes do editor completo de questões; a prova é salva como rascunho e o editor pode ser implementado em outra história.<br><br>
+      <strong>Negociável:</strong> Os campos obrigatórios e o ponto de entrada (botão na home) podem ser ajustados sem comprometer o objetivo de iniciar a criação de forma rápida.<br><br>
+      <strong>Valorosa:</strong> Reduz o atrito para iniciar uma nova avaliação, permitindo que o professor comece o trabalho sem precisar navegar por menus complexos.<br><br>
+      <strong>Estimável:</strong> Formulário com validação de campos obrigatórios e persistência como rascunho é bem delimitado e estimável pelo time.<br><br>
+      <strong>Pequena:</strong> Cobre apenas a criação dos metadados iniciais da prova (sem editor de questões), entregável em uma única sprint.<br><br>
+      <strong>Testável:</strong> Os cenários validam ausência de campos obrigatórios, fluxo de navegação e persistência como rascunho com resultados binários claros.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T004</td></tr>
+  <tr><td><strong>Título</strong></td><td>Editor de questões com fórmulas e tipos variados.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero criar questões com enunciados, fórmulas e diferentes tipos de resposta, para montar provas adequadas a disciplinas como Matemática e Português.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - o professor deve poder criar questões dos tipos múltipla escolha, verdadeiro/falso e discursiva.<br><br>
+      <strong>CR-02</strong> - enunciados com LaTeX devem ser renderizados corretamente na pré-visualização.<br><br>
+      <strong>CR-03</strong> - questões discursivas devem permitir configuração de limite de palavras ou caracteres.<br><br>
+      <strong>CR-04</strong> - o sistema deve impedir a publicação de provas com questões incompletas.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Professor cria questão de múltipla escolha.<br>
+      – Questão foi criada = correto.<br>
+      – Sistema recusou o tipo válido = errado, deve ser corrigido.<br><br>
+      b. Professor cria questão discursiva.<br>
+      – Questão foi criada = correto.<br>
+      – Sistema recusou o tipo válido = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Professor insere fórmula em LaTeX no enunciado.<br>
+      – Fórmula foi renderizada corretamente = correto.<br>
+      – Fórmula apareceu quebrada ou como texto bruto = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Professor define limite de 500 caracteres em questão discursiva.<br>
+      – Interface do aluno respeita o limite = correto.<br>
+      – Aluno consegue ultrapassar o limite sem aviso = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Professor tenta publicar prova com questão sem enunciado.<br>
+      – Sistema impede publicação e indica o erro = correto.<br>
+      – Sistema publica a prova incompleta = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O editor de questões pode ser construído de forma isolada, sem depender da publicação ou da distribuição da prova, que são histórias separadas.<br><br>
+      <strong>Negociável:</strong> A quantidade de tipos de questão, bibliotecas de renderização LaTeX e regras de limite de caracteres são decisões negociáveis conforme viabilidade técnica.<br><br>
+      <strong>Valorosa:</strong> Permite criar avaliações ricas e adequadas a disciplinas exatas e humanas, sendo o núcleo funcional da plataforma para o professor.<br><br>
+      <strong>Estimável:</strong> Apesar da complexidade do LaTeX, as bibliotecas existentes (ex.: MathJax/KaTeX) têm comportamento previsível, tornando a história estimável.<br><br>
+      <strong>Pequena:</strong> Esta história pode ser dividida caso necessário (ex.: tipos de questão em uma sprint, renderização LaTeX em outra), mas como definida cobre escopo coeso.<br><br>
+      <strong>Testável:</strong> Cada critério tem cenário claro: renderização de fórmula, bloqueio de publicação incompleta e respeito ao limite de caracteres são verificáveis objetivamente.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T005</td></tr>
+  <tr><td><strong>Título</strong></td><td>Banco de questões com detecção de duplicidade.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero reutilizar questões de um banco e ser avisado sobre duplicatas, para montar provas com mais rapidez e consistência.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - o professor deve conseguir buscar questões por disciplina, tema ou tipo.<br><br>
+      <strong>CR-02</strong> - o sistema deve alertar quando uma questão cadastrada possuir mais de 80% de similaridade textual, ignorando apenas espaços extras e capitalização, com outra existente no banco.<br><br>
+      <strong>CR-03</strong> - questões selecionadas do banco devem ser adicionadas ao editor da prova.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Professor filtra questões por disciplina "Matemática".<br>
+      – Sistema exibe questões de Matemática = correto.<br>
+      – Sistema exibe questões de outras disciplinas sem relação = errado, deve ser corrigido.<br><br>
+      b. Professor filtra questões por tipo "Discursiva".<br>
+      – Sistema exibe apenas questões discursivas = correto.<br>
+      – Sistema exibe múltipla escolha ou verdadeiro/falso = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Professor cadastra questão com texto com 80% ou mais semelhante a uma questão existente.<br>
+      – Sistema exibe alerta de possível duplicidade = correto.<br>
+      – Sistema salva sem nenhum aviso = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Professor seleciona questão do banco e adiciona à prova.<br>
+      – Questão aparece no editor da avaliação = correto.<br>
+      – Questão não aparece na prova = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O banco de questões é um módulo separado do editor; pode ser desenvolvido e populado independentemente, com integração ao editor feita por API.<br><br>
+      <strong>Negociável:</strong> O algoritmo de similaridade (limiar de 80%, método de comparação) e os filtros de busca são aspectos técnicos negociáveis sem perda do valor da história.<br><br>
+      <strong>Valorosa:</strong> Economiza tempo do professor ao permitir reaproveitamento de questões já validadas e evita duplicatas que comprometeriam a consistência do banco.<br><br>
+      <strong>Estimável:</strong> Busca com filtros é padrão; a detecção de similaridade textual tem algoritmos conhecidos (ex.: Levenshtein, TF-IDF), tornando a estimativa viável.<br><br>
+      <strong>Pequena:</strong> Cobre apenas busca, alerta de duplicidade e adição ao editor, sem incluir criação ou edição de questões no banco, mantendo o escopo controlado.<br><br>
+      <strong>Testável:</strong> O limiar de 80% de similaridade é mensurável e os cenários de busca por filtro e adição ao editor têm resultados verificáveis objetivamente.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T006</td></tr>
+  <tr><td><strong>Título</strong></td><td>Configuração de tempo, datas e embaralhamento.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero configurar tempo, datas limite e embaralhamento, para controlar a aplicação da prova de forma justa.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - o professor deve definir data e horário de início e término da prova, seguindo obrigatoriamente o Horário de Brasília (GMT-3).<br><br>
+      <strong>CR-02</strong> - o sistema deve respeitar o limite de tempo definido para cada aluno.<br><br>
+      <strong>CR-03</strong> - o sistema deve permitir embaralhamento de questões ou alternativas.<br><br>
+      <strong>CR-04</strong> - provas encerradas não devem aceitar novas submissões.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Aluno tenta acessar a prova antes da data de início.<br>
+      – Sistema bloqueia o acesso ou informa indisponibilidade = correto.<br>
+      – Sistema permite iniciar a prova = errado, deve ser corrigido.<br><br>
+      b. Aluno acessa a prova dentro do período permitido.<br>
+      – Sistema permite iniciar a prova = correto.<br>
+      – Sistema bloqueia o acesso = errado, deve ser corrigido.<br><br>
+      c. Aluno em fuso horário diferente tenta acessar a prova.<br>
+      – Sistema valida o acesso com base no Horário de Brasília configurado no servidor = correto.<br>
+      – Sistema permite acesso antecipado ou tardio baseado no relógio local do dispositivo do aluno = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Professor define limite de 60 minutos e aluno inicia a prova.<br>
+      – Contador inicia em 60 minutos = correto.<br>
+      – Prova inicia sem contador = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Dois alunos acessam prova com embaralhamento ativado.<br>
+      – Ordem das questões ou alternativas pode aparecer diferente = correto.<br>
+      – Ordem permanece fixa mesmo com embaralhamento ativo = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Aluno tenta enviar respostas após encerramento da prova.<br>
+      – Sistema impede nova submissão = correto.<br>
+      – Sistema aceita a submissão atrasada = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> As configurações de tempo e embaralhamento são atributos da prova, independentes do editor de questões e do fluxo do aluno, podendo ser desenvolvidas separadamente.<br><br>
+      <strong>Negociável:</strong> A granularidade do timer, a opção de embaralhar apenas alternativas ou também questões, e o comportamento ao encerrar o tempo são decisões negociáveis.<br><br>
+      <strong>Valorosa:</strong> Garante isonomia na aplicação da prova, impedindo acesso fora do prazo e variando a ordem das questões para reduzir cola entre candidatos.<br><br>
+      <strong>Estimável:</strong> Controle de datas com fuso horário fixo (GMT-3), timer regressivo e lógica de embaralhamento são funcionalidades com complexidade conhecida e estimável.<br><br>
+      <strong>Pequena:</strong> Restringe-se às configurações da prova sem alterar o editor ou o portal do aluno, sendo entregável de forma coesa em uma sprint.<br><br>
+      <strong>Testável:</strong> Todos os cenários têm condições objetivas: bloqueio por data/hora, contagem regressiva iniciada corretamente e ordem variável entre alunos são verificáveis.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T007</td></tr>
+  <tr><td><strong>Título</strong></td><td>Publicação por URL e QR Code.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero gerar uma URL e um QR Code da prova, para distribuir o acesso aos candidatos sem uso de senha.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - ao publicar uma prova válida, o sistema deve gerar um link único de acesso.<br><br>
+      <strong>CR-02</strong> - o sistema deve gerar QR Code correspondente ao link da prova.<br><br>
+      <strong>CR-03</strong> - provas em rascunho não devem permitir submissão por link.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Professor publica uma prova válida.<br>
+      – Sistema gera link único de acesso = correto.<br>
+      – Sistema publica sem gerar link = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Professor solicita QR Code da prova publicada.<br>
+      – Sistema exibe QR Code correspondente ao link = correto.<br>
+      – Sistema não gera QR Code = errado, deve ser corrigido.<br><br>
+      b. Professor copia ou baixa o QR Code.<br>
+      – Sistema permite copiar ou baixar = correto.<br>
+      – Sistema apenas exibe sem opção de uso = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Aluno acessa link de prova ainda em rascunho.<br>
+      – Sistema bloqueia submissão = correto.<br>
+      – Sistema permite responder e enviar = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> A geração de URL e QR Code é um passo pós-publicação que pode ser implementado de forma isolada, sem alterar o editor ou o fluxo do aluno.<br><br>
+      <strong>Negociável:</strong> O formato do link, o padrão do QR Code e as opções de download (PNG, SVG, copiar) são detalhes negociáveis que não afetam o objetivo central.<br><br>
+      <strong>Valorosa:</strong> Simplifica a distribuição da prova, eliminando necessidade de senhas e permitindo que o professor compartilhe o acesso de forma rápida e prática.<br><br>
+      <strong>Estimável:</strong> Geração de UUID para URL e bibliotecas de QR Code são soluções bem estabelecidas, com esforço previsível e estimável pelo time.<br><br>
+      <strong>Pequena:</strong> Cobre apenas a geração e disponibilização do link e QR Code, sem incluir controle de acesso avançado ou analytics de cliques, mantendo o escopo pequeno.<br><br>
+      <strong>Testável:</strong> É possível verificar objetivamente se o link foi gerado, se o QR Code corresponde ao link e se rascunhos bloqueiam submissão ao acessar pelo link.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T008</td></tr>
+  <tr><td><strong>Título</strong></td><td>Portal de entrada do aluno.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Aluno.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Aluno</strong>, quero acessar a prova por link e preencher meus dados, para iniciar a avaliação sem precisar criar conta.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - ao acessar uma prova disponível, o aluno deve visualizar título, orientações, duração e regras.<br><br>
+      <strong>CR-02</strong> - o aluno deve preencher nome, e-mail e CPF antes de iniciar a prova.<br><br>
+      <strong>CR-03</strong> - provas fora do período permitido devem exibir mensagem de indisponibilidade.<br><br>
+      <strong>CR-04</strong> - o aluno deve marcar um checkbox obrigatório de aceite dos Termos de Uso e Política de Privacidade antes do botão "Iniciar Prova" ser habilitado.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Aluno acessa link de prova disponível.<br>
+      – Sistema exibe título, orientações, duração e regras = correto.<br>
+      – Sistema inicia a prova sem mostrar informações = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Aluno preenche nome, e-mail e CPF válidos.<br>
+      – Sistema permite iniciar a prova = correto.<br>
+      – Sistema bloqueia sem justificativa = errado, deve ser corrigido.<br><br>
+      b. Aluno tenta iniciar sem CPF.<br>
+      – Sistema bloqueia e indica campo obrigatório = correto.<br>
+      – Sistema permite iniciar = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Aluno acessa prova fora do período permitido.<br>
+      – Sistema exibe mensagem de indisponibilidade = correto.<br>
+      – Sistema permite iniciar a prova = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Aluno preenche dados mas não marca o aceite da LGPD.<br>
+      – Botão "Iniciar Prova" permanece desabilitado e um aviso solicita o aceite = correto.<br>
+      – Sistema permite iniciar a prova sem o registro do consentimento = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O portal de entrada do aluno pode ser desenvolvido com dados mockados da prova, independentemente do editor de questões ou da interface de correção.<br><br>
+      <strong>Negociável:</strong> Os campos de identificação (nome, e-mail, CPF), o texto dos termos e o layout da tela de entrada são aspectos negociáveis sem comprometer a segurança e rastreabilidade.<br><br>
+      <strong>Valorosa:</strong> Elimina a necessidade de cadastro prévio para o aluno, reduzindo fricção no acesso à prova e garantindo coleta de dados mínimos para identificação e conformidade com a LGPD.<br><br>
+      <strong>Estimável:</strong> Formulário de identificação com validação de CPF, verificação de janela de tempo e checkbox de consentimento têm complexidade conhecida e estimável.<br><br>
+      <strong>Pequena:</strong> Cobre apenas a tela de entrada e identificação do aluno, sem incluir a interface de resposta das questões, que é uma história separada.<br><br>
+      <strong>Testável:</strong> Os cenários validam campos obrigatórios, bloqueio fora do período, exibição das informações da prova e obrigatoriedade do aceite dos termos de forma objetiva.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T009</td></tr>
+  <tr><td><strong>Título</strong></td><td>Interface de resposta mobile-first com anexos manuscritos.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Aluno.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Aluno</strong>, quero responder questões e enviar imagens de cálculos manuscritos pelo celular, para realizar a prova mesmo sem computador.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - o aluno deve conseguir anexar uma ou mais imagens em questões discursivas ou com cálculo.<br><br>
+      <strong>CR-02</strong> - o sistema deve aceitar apenas arquivos JPG, PNG ou PDF com tamanho máximo de 5MB por arquivo.<br><br>
+      <strong>CR-03</strong> - fórmulas devem ser renderizadas corretamente no mobile.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Aluno anexa imagem em uma questão discursiva.<br>
+      – Imagem é salva vinculada à questão correta = correto.<br>
+      – Imagem é perdida ou vinculada à questão errada = errado, deve ser corrigido.<br><br>
+      b. Aluno anexa mais de uma imagem na mesma questão.<br>
+      – Todas as imagens são salvas corretamente = correto.<br>
+      – Apenas uma imagem é salva sem aviso = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Aluno tenta subir uma foto de alta resolução de 15MB.<br>
+      – Sistema exibe erro: "Arquivo muito grande. Limite máximo de 5MB" = correto.<br>
+      – Sistema tenta fazer o upload, trava a interface ou consome todos os dados do aluno = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Aluno visualiza questão com fórmula no celular.<br>
+      – Fórmula aparece corretamente renderizada = correto.<br>
+      – Fórmula aparece quebrada ou cortada = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> A interface de resposta mobile pode ser desenvolvida de forma isolada, com upload de imagens testado por mocks, sem depender do módulo de correção ou exportação.<br><br>
+      <strong>Negociável:</strong> Os tipos de arquivo aceitos, o limite de tamanho e a quantidade máxima de anexos por questão são parâmetros negociáveis conforme restrições de infraestrutura.<br><br>
+      <strong>Valorosa:</strong> Permite que alunos realizem a prova pelo celular e enviem respostas manuscritas, democratizando o acesso à avaliação sem exigir computador.<br><br>
+      <strong>Estimável:</strong> Upload com validação de tipo e tamanho e renderização LaTeX em mobile têm soluções conhecidas, com esforço estimável, embora o mobile-first exija atenção a testes em dispositivos.<br><br>
+      <strong>Pequena:</strong> Foca na experiência de resposta e envio de anexos no mobile, sem incluir salvamento automático (T010) ou revisão final (T011), que são histórias separadas.<br><br>
+      <strong>Testável:</strong> É possível verificar objetivamente se imagens são salvas corretamente, se arquivos grandes são rejeitados com mensagem adequada e se fórmulas renderizam no mobile.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T010</td></tr>
+  <tr><td><strong>Título</strong></td><td>Rascunho e salvamento durante a prova.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Aluno.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Aluno</strong>, quero ter minhas respostas salvas durante o preenchimento, para evitar perda de progresso por instabilidade, recarregamento ou queda de conexão.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - respostas digitadas devem ser salvas automaticamente quando houver conexão.<br><br>
+      <strong>CR-02</strong> - respostas salvas devem ser restauradas após recarregamento da página.<br><br>
+      <strong>CR-03</strong> - o sistema deve avisar quando houver alterações não sincronizadas antes de sair ou recarregar.<br><br>
+      <strong>CR-04</strong> - ao final do tempo, o sistema deve preservar o último estado salvo.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Aluno digita resposta com conexão ativa.<br>
+      – Sistema salva automaticamente o progresso = correto.<br>
+      – Sistema não salva até envio final = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Aluno recarrega a página dentro do tempo permitido.<br>
+      – Respostas salvas são restauradas = correto.<br>
+      – Respostas desaparecem = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Aluno tenta sair da página com alterações não sincronizadas.<br>
+      – Sistema exibe aviso antes da saída = correto.<br>
+      – Sistema permite sair sem aviso = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Tempo da prova termina com respostas parcialmente salvas.<br>
+      – Sistema preserva o último estado salvo = correto.<br>
+      – Sistema apaga respostas recentes = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O salvamento automático é uma camada sobre a interface de resposta; pode ser desenvolvido e testado separadamente com mocks das respostas do aluno.<br><br>
+      <strong>Negociável:</strong> A frequência do autosave, a estratégia de armazenamento local versus servidor e o comportamento offline são aspectos técnicos negociáveis sem alterar o valor da história.<br><br>
+      <strong>Valorosa:</strong> Protege o progresso do aluno em situações de instabilidade de rede ou dispositivo, aumentando a confiabilidade da plataforma e reduzindo retrabalho em provas longas.<br><br>
+      <strong>Estimável:</strong> Autosave com debounce, restore de estado por sessionStorage/servidor e interceptação de beforeunload são padrões conhecidos com esforço estimável.<br><br>
+      <strong>Pequena:</strong> Cobre apenas salvamento e restauração de rascunho durante a prova, sem incluir a submissão final ou revisão, que são histórias distintas.<br><br>
+      <strong>Testável:</strong> É possível verificar se respostas persistem após reload, se o aviso de saída aparece com alterações pendentes e se o estado é preservado ao fim do tempo.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T011</td></tr>
+  <tr><td><strong>Título</strong></td><td>Revisão e confirmação final de envio.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Aluno.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Aluno</strong>, quero revisar meu progresso antes do envio final, para evitar submissões incompletas ou acidentais.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - questões em branco devem ser destacadas na tela de revisão.<br><br>
+      <strong>CR-02</strong> - o sistema deve pedir confirmação antes do envio final.<br><br>
+      <strong>CR-03</strong> - após o envio, o sistema deve bloquear alterações nas respostas.<br><br>
+      <strong>CR-04</strong> - após o envio, o aluno deve receber confirmação visual de submissão.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Aluno abre revisão com questões em branco.<br>
+      – Sistema destaca questões não respondidas = correto.<br>
+      – Sistema não indica pendências = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Aluno clica em "Enviar prova".<br>
+      – Sistema pede confirmação antes da submissão = correto.<br>
+      – Sistema envia imediatamente sem confirmação = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Aluno tenta alterar resposta após envio final.<br>
+      – Sistema bloqueia edição = correto.<br>
+      – Sistema permite alteração = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Aluno finaliza a submissão.<br>
+      – Sistema exibe confirmação visual de envio = correto.<br>
+      – Sistema finaliza sem confirmação = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> A tela de revisão e confirmação é uma etapa final separada da interface de resposta (T009) e do salvamento (T010), podendo ser implementada de forma independente.<br><br>
+      <strong>Negociável:</strong> O formato visual do destaque de questões em branco, o texto do modal de confirmação e o layout da tela de sucesso são detalhes negociáveis sem comprometer o objetivo.<br><br>
+      <strong>Valorosa:</strong> Reduz submissões acidentais ou incompletas, aumentando a qualidade das respostas entregues e a confiança do aluno no processo avaliativo.<br><br>
+      <strong>Estimável:</strong> Tela de revisão com mapeamento de questões respondidas/em branco, modal de confirmação e bloqueio pós-envio são funcionalidades de escopo claro e estimável.<br><br>
+      <strong>Pequena:</strong> Cobre apenas o fluxo de revisão e envio final, sem incluir a interface de resposta ou o salvamento automático, mantendo o escopo coeso e entregável em uma sprint.<br><br>
+      <strong>Testável:</strong> Todos os critérios têm comportamento binário verificável: destaque de questões em branco, exibição do modal, bloqueio de edição pós-envio e confirmação visual.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T012</td></tr>
+  <tr><td><strong>Título</strong></td><td>Correção por item.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero corrigir a mesma questão de todos os alunos em sequência, para aplicar critérios de avaliação com mais isonomia.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - o professor deve conseguir listar as respostas de uma mesma questão para todos os alunos.<br><br>
+      <strong>CR-02</strong> - o professor deve atribuir nota e comentário para respostas abertas.<br><br>
+      <strong>CR-03</strong> - o professor deve conseguir visualizar e ampliar anexos enviados pelo aluno.<br><br>
+      <strong>CR-04</strong> - notas e comentários salvos devem permanecer disponíveis ao retornar para uma resposta.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Professor seleciona a questão 3 de uma prova com submissões.<br>
+      – Sistema lista respostas da questão 3 de todos os alunos = correto.<br>
+      – Sistema mistura respostas de outras questões = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Professor atribui nota e comentário a uma resposta aberta.<br>
+      – Sistema salva nota e comentário = correto.<br>
+      – Sistema perde os dados após avançar = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Professor abre anexo enviado pelo aluno.<br>
+      – Sistema permite ampliar a imagem = correto.<br>
+      – Sistema exibe miniatura sem ampliação = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Professor avança para outra resposta e retorna à anterior.<br>
+      – Nota e comentário permanecem salvos = correto.<br>
+      – Nota ou comentário desaparece = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O módulo de correção por item pode ser desenvolvido após a submissão dos alunos estar implementada, mas é independente do cálculo de notas finais (T014) e da exportação.<br><br>
+      <strong>Negociável:</strong> A interface de navegação entre respostas, os campos do comentário e as opções de visualização de anexo são negociáveis sem afetar o objetivo de isonomia na correção.<br><br>
+      <strong>Valorosa:</strong> Permite que o professor aplique critérios uniformes corrigindo a mesma questão de todos os alunos em sequência, aumentando a justiça e consistência da avaliação.<br><br>
+      <strong>Estimável:</strong> Listagem paginada de respostas por questão, formulário de nota/comentário com persistência e visualizador de imagem são funcionalidades com complexidade estimável.<br><br>
+      <strong>Pequena:</strong> Cobre apenas a correção manual de questões abertas por item, sem incluir correção automática (T013) ou exportação de resultados (T014), mantendo o escopo controlado.<br><br>
+      <strong>Testável:</strong> É possível verificar se a listagem filtra corretamente por questão, se nota e comentário persistem após navegação e se anexos podem ser ampliados.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T013</td></tr>
+  <tr><td><strong>Título</strong></td><td>Correção automática de questões objetivas.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero ter questões objetivas corrigidas automaticamente, para reduzir esforço manual na apuração das notas.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - questões de múltipla escolha com gabarito devem ser corrigidas automaticamente.<br><br>
+      <strong>CR-02</strong> - questões de verdadeiro/falso com gabarito devem receber pontuação automaticamente.<br><br>
+      <strong>CR-03</strong> - alterações no gabarito antes da liberação das notas devem permitir recálculo dos resultados.<br><br>
+      <strong>CR-04</strong> - questões discursivas devem permanecer pendentes de correção manual.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Aluno responde corretamente uma questão de múltipla escolha.<br>
+      – Sistema marca como correta e atribui pontuação = correto.<br>
+      – Sistema deixa pendente de correção manual = errado, deve ser corrigido.<br><br>
+      b. Aluno responde incorretamente uma questão de múltipla escolha.<br>
+      – Sistema marca como incorreta = correto.<br>
+      – Sistema atribui pontuação indevida = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Aluno responde corretamente uma questão verdadeiro/falso.<br>
+      – Sistema atribui pontuação correspondente = correto.<br>
+      – Sistema não calcula pontuação = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Professor altera o gabarito antes da liberação das notas e recalcula.<br>
+      – Sistema atualiza as notas objetivas = correto.<br>
+      – Sistema mantém notas antigas = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Aluno envia questão discursiva.<br>
+      – Sistema mantém questão pendente de correção manual = correto.<br>
+      – Sistema corrige automaticamente sem critério manual = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> A correção automática de objetivas pode ser implementada independentemente da correção manual (T012) e da exportação (T014), sendo acionada no momento da submissão.<br><br>
+      <strong>Negociável:</strong> A política de pontuação parcial, o comportamento do recálculo por gabarito alterado e a forma de exibição do resultado ao professor são aspectos negociáveis.<br><br>
+      <strong>Valorosa:</strong> Elimina o trabalho manual de correção de questões objetivas, acelerando a apuração de notas e permitindo ao professor focar nas questões discursivas.<br><br>
+      <strong>Estimável:</strong> Comparação de resposta com gabarito e atribuição de pontuação são operações simples e bem delimitadas, com esforço facilmente estimável pelo time.<br><br>
+      <strong>Pequena:</strong> Cobre apenas a correção automática de múltipla escolha e verdadeiro/falso, deixando discursivas para a história de correção manual (T012), mantendo o escopo pequeno.<br><br>
+      <strong>Testável:</strong> É possível verificar objetivamente se respostas corretas recebem pontuação, incorretas não recebem, e se o recálculo após mudança de gabarito atualiza as notas.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T014</td></tr>
+  <tr><td><strong>Título</strong></td><td>Cálculo de notas e exportação de resultados.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Coordenador.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Coordenador</strong>, quero visualizar e exportar notas por aluno e por questão, para consolidar os resultados do processo seletivo.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - quando todas as questões estiverem corrigidas, o sistema deve exibir a nota total de cada aluno.<br><br>
+      <strong>CR-02</strong> - a exportação para Excel deve conter alunos nas linhas e questões/notas nas colunas.<br><br>
+      <strong>CR-03</strong> - anexos enviados devem poder ser exportados em pacote organizado por prova, aluno e questão.<br><br>
+      <strong>CR-04</strong> - o sistema deve alertar sobre pendências antes da exportação do resultado final.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Coordenador acessa resultados de prova totalmente corrigida.<br>
+      – Sistema exibe nota total de cada aluno = correto.<br>
+      – Sistema não calcula nota total = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Coordenador exporta resultados para Excel.<br>
+      – Planilha contém alunos nas linhas e questões/notas nas colunas = correto.<br>
+      – Planilha sai sem estrutura por aluno e questão = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Coordenador solicita exportação de anexos.<br>
+      – Sistema gera pacote organizado por prova, aluno e questão = correto.<br>
+      – Sistema exporta anexos sem organização = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Coordenador tenta exportar resultado final com questões pendentes.<br>
+      – Sistema alerta sobre pendências = correto.<br>
+      – Sistema exporta como se estivesse completo = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O módulo de cálculo e exportação depende que as correções (T012 e T013) estejam concluídas, mas pode ser desenvolvido em paralelo usando dados mockados de notas.<br><br>
+      <strong>Negociável:</strong> O formato da planilha Excel, a estrutura do pacote de anexos e o formato do alerta de pendências são detalhes negociáveis sem impactar o objetivo de consolidação dos resultados.<br><br>
+      <strong>Valorosa:</strong> Entrega ao coordenador a visão consolidada dos resultados do processo seletivo em formato exportável, viabilizando a tomada de decisão com base em dados estruturados.<br><br>
+      <strong>Estimável:</strong> Soma de notas por aluno, geração de planilha Excel e compactação de anexos em pacote organizado são operações com bibliotecas maduras e esforço estimável.<br><br>
+      <strong>Pequena:</strong> Cobre visualização de nota total e exportação de resultados e anexos, sem incluir a liberação de resultados por e-mail (T015) ou analytics (T016), que são histórias separadas.<br><br>
+      <strong>Testável:</strong> É possível verificar se a nota total é calculada corretamente, se a planilha segue a estrutura definida, se o pacote de anexos está organizado e se o alerta de pendências é exibido.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T015</td></tr>
+  <tr><td><strong>Título</strong></td><td>Liberação de resultados por e-mail.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Professor ou Coordenador.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor ou Coordenador</strong>, quero liberar individualmente os resultados por e-mail, para comunicar os candidatos somente quando as notas estiverem validadas.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - o sistema deve enviar e-mail individual para cada aluno ao liberar notas.<br><br>
+      <strong>CR-02</strong> - o sistema deve bloquear ou pedir confirmação explícita quando houver notas pendentes.<br><br>
+      <strong>CR-03</strong> - o sistema deve registrar data, horário e status de cada envio.<br><br>
+      <strong>CR-04</strong> - o sistema deve permitir nova tentativa quando um envio falhar.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Coordenador libera notas calculadas.<br>
+      – Sistema envia e-mail individual para cada aluno = correto.<br>
+      – Sistema não envia os e-mails = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Coordenador tenta liberar notas com correções pendentes.<br>
+      – Sistema bloqueia ou pede confirmação explícita = correto.<br>
+      – Sistema libera automaticamente sem aviso = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Coordenador acessa histórico após envio de e-mails.<br>
+      – Sistema exibe data, horário e status do envio = correto.<br>
+      – Sistema não registra histórico = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Um e-mail falha durante o envio.<br>
+      – Sistema permite nova tentativa para aquele aluno = correto.<br>
+      – Sistema não permite reenviar = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O envio de e-mails pode ser desenvolvido com um serviço de e-mail transacional independente (ex.: SendGrid, SES), sem depender da interface de correção ou exportação.<br><br>
+      <strong>Negociável:</strong> O template do e-mail, o conteúdo exibido ao aluno (nota total, detalhamento por questão) e o comportamento de retry são negociáveis conforme requisitos de comunicação.<br><br>
+      <strong>Valorosa:</strong> Garante que os candidatos recebam seus resultados de forma controlada e individual, somente após validação, preservando a integridade do processo seletivo.<br><br>
+      <strong>Estimável:</strong> Envio de e-mail transacional com log de status e mecanismo de reenvio são padrões com bibliotecas e serviços consolidados, tornando a história estimável.<br><br>
+      <strong>Pequena:</strong> Cobre apenas o disparo dos e-mails de resultado e o registro de envios, sem incluir a geração dos resultados (T014) ou os analytics da prova (T016).<br><br>
+      <strong>Testável:</strong> É possível verificar se e-mails individuais são enviados, se o bloqueio com pendências funciona, se o histórico registra data/horário/status e se o reenvio está disponível após falha.
+    </td>
+  </tr>
+</table>
+
+---
+
+<table>
+  <tr><td><strong>Número</strong></td><td>T016</td></tr>
+  <tr><td><strong>Título</strong></td><td>Logs e analytics da avaliação.</td></tr>
+  <tr><td><strong>Persona</strong></td><td>Coordenador.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Coordenador</strong>, quero acompanhar logs e métricas da prova, para monitorar participação, desempenho e possíveis problemas operacionais.</td></tr>
+  <tr>
+    <td><strong>Critérios de Aceitação</strong></td>
+    <td>
+      <strong>CR-01</strong> - o painel deve exibir quantidade de acessos, inícios e envios por prova.<br><br>
+      <strong>CR-02</strong> - o sistema deve registrar o tempo de resposta por questão.<br><br>
+      <strong>CR-03</strong> - o sistema deve calcular porcentagem de acerto por questão do banco.<br><br>
+      <strong>CR-04</strong> - erros de upload, submissão ou acesso devem gerar logs com data e contexto mínimo.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Testes de Aceitação</strong></td>
+    <td>
+      <strong>Critério de aceitação: CR-01</strong><br>
+      a. Coordenador acessa painel de uma prova com alunos ativos.<br>
+      – Sistema exibe acessos, inícios e envios = correto.<br>
+      – Sistema não exibe métricas de participação = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-02</strong><br>
+      a. Aluno responde uma questão durante a prova.<br>
+      – Sistema registra tempo de resposta da questão = correto.<br>
+      – Sistema não registra tempo = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Questão do banco é usada em uma prova com resultados.<br>
+      – Sistema calcula porcentagem de acerto da questão = correto.<br>
+      – Sistema não calcula desempenho por questão = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Ocorre erro de upload durante a prova.<br>
+      – Sistema registra log com data e contexto mínimo = correto.<br>
+      – Sistema ignora o erro sem registro = errado, deve ser corrigido.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Critérios INVEST</strong></td>
+    <td>
+      <strong>Independente:</strong> O painel de logs e analytics pode ser desenvolvido após as histórias de participação do aluno estarem em produção, consumindo dados já registrados, sem bloquear outras entregas.<br><br>
+      <strong>Negociável:</strong> As métricas exibidas, a granularidade dos logs de erro e o formato do painel (gráficos, tabelas) são negociáveis conforme prioridade do coordenador e capacidade do time.<br><br>
+      <strong>Valorosa:</strong> Fornece ao coordenador visibilidade operacional e pedagógica da prova, permitindo identificar problemas técnicos e analisar o desempenho dos candidatos por questão.<br><br>
+      <strong>Estimável:</strong> Contadores de acesso/início/envio, registro de tempo por questão e cálculo de porcentagem de acerto são operações analíticas com complexidade bem definida e estimável.<br><br>
+      <strong>Pequena:</strong> Cobre métricas de participação, tempo de resposta, acerto por questão e logs de erro, sem incluir relatórios avançados ou exportação analítica, mantendo o escopo manejável.<br><br>
+      <strong>Testável:</strong> É possível verificar se os contadores refletem eventos reais, se o tempo de resposta é registrado por questão, se a porcentagem de acerto é calculada corretamente e se erros geram logs com data e contexto.
+    </td>
+  </tr>
+</table>
 
 # <a name="c3"></a>3. Projeto da Aplicação Web (sprints 1 a 5)
 
