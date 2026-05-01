@@ -52,9 +52,8 @@ Portanto, com essa implementação, espera-se reduzir falhas operacionais, otimi
 *Preencha com até 400 palavras*
 
 *Posicione aqui o modelo de 5 Forças de Porter para sustentar o contexto da indústria.* -->
-
 <div align="center">
-  <img src="/assets/cincoForcasDePorter.png">
+  <img src="../assets/cincoForcasDePorter.jpg" width="850">
 </div>
 
 <div align="center">
