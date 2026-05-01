@@ -1,6 +1,5 @@
 <img src="../assets/logointeli.png">
 
-
 # WAD - Web Application Document - Módulo 2 - Inteli
 
 **_Os trechos em itálico servem apenas como guia para o preenchimento da seção. Por esse motivo, não devem fazer parte da documentação final_**
@@ -36,23 +35,80 @@
 
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
-*Preencha com até 300 palavras – sem necessidade de fonte*
+## Introdução
 
-*Contextualize aqui a problemática trazida pelo parceiro de projeto.*
+O Instituto Ponte enfrenta desafios significativos na realização, organização e correção de avaliações remotas devido à utilização de métodos descentralizados e informais, como WhatsApp, e-mails e outros canais não estruturados. Embora essas ferramentas permitam a continuidade de processos avaliativos, elas apresentam limitações importantes, como perda de arquivos, dificuldade de organização das submissões e sobrecarga operacional para professores. Além disso, a inexistência de mecanismos específicos para correção distribuída por questão compromete a isonomia avaliativa, dificultando a aplicação de critérios uniformes, transparentes e justos para todos os alunos.
 
-*Descreva brevemente a solução desenvolvida para o parceiro de negócios. Descreva os aspectos essenciais para a criação de valor do produto, com o objetivo de ajudar a entender melhor a realidade do cliente e entregar uma solução que está alinhado com o que ele espera.*
+Diante desse cenário, propõe-se o desenvolvimento de uma aplicação web especializada na criação, publicação, aplicação e correção de avaliações remotas, projetada para atender às necessidades operacionais, pedagógicas e sociais do Instituto Ponte. A solução centralizará todos os processos avaliativos em uma única plataforma digital, proporcionando maior estabilidade, segurança e acessibilidade. Alunos poderão realizar provas e enviar respostas de maneira estruturada, inclusive por dispositivos com recursos limitados. Professores e gestores contarão com ferramentas para elaboração de avaliações, gerenciamento de submissões, correção padronizada e geração de relatórios detalhados de desempenho.
 
-*Observe a seção 2 e verifique que ali é possível trazer mais detalhes, portanto seja objetivo aqui. Atualize esta descrição até a entrega final, conforme desenvolvimento.*
-
+Portanto, com essa implementação, espera-se reduzir falhas operacionais, otimizar processos institucionais, fortalecer a integridade dos dados e promover maior equidade no processo avaliativo, utilizando a tecnologia como instrumento estratégico para inovação educacional e inclusão social.
 # <a name="c2"></a>2. Visão Geral da Aplicação Web (sprint 1)
 
 ## 2.1. Escopo do Projeto (sprints 1 e 4)
 
 ### 2.1.1. Modelo de 5 Forças de Porter (sprint 1)
 
+<!-- 
 *Preencha com até 400 palavras*
 
-*Posicione aqui o modelo de 5 Forças de Porter para sustentar o contexto da indústria.*
+*Posicione aqui o modelo de 5 Forças de Porter para sustentar o contexto da indústria.* -->
+
+<div align="center">
+  <img src="/assets/cincoForcasDePorter.png">
+</div>
+
+<div align="center">
+  <strong>Figura 2 — 5 Forças de Porter do instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+
+### Rivalidade entre Concorrentes
+A rivalidade no setor de organizações sociais focadas em educação é moderada. Há várias ONGs atuando em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas oferecem seleção rigorosa combinada com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação reduz a pressão direta.
+
+**Referências que sustentam isso:**
+- IDIS – Censo GIFE 2020: Educação é a área mais concorrida na filantropia.
+- Transparência Brasil: Grande número de ONGs no setor educacional.
+- OECD – "Philanthropy and Education" (2019): Poucos programas têm acompanhamento individual estruturado.
+
+---
+
+### Ameaça de Novos Entrantes
+A ameaça de novos entrantes é moderada. Criar uma ONG é simples, porém alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.
+
+**Referências que sustentam isso:**
+- ABONG (2021): Muitas OSCs surgem, poucas atingem a sustentabilidade.
+- Itaú Social (2020): ONGs novas enfrentam dificuldades de governança.
+- McKinsey – "High-Performing NGOs": Reputação e processos sólidos levam anos para se consolidar.
+
+---
+
+### Ameaça de Produtos Substitutos
+A ameaça de substitutos é alta. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte, funcionam como opções substitutas na disputa por estudantes e recursos.
+
+**Referências que sustentam isso:**
+- MEC – Prouni, Fies e Escolas Técnicas: Alternativas formais de acesso.
+- Fundação Estudar, Lemann, Gerando Falcões: Programas de bolsas e mentoria.
+- OECD – "Education at a Glance": Crescimento de iniciativas público-privadas concorrentes.
+
+---
+
+### Poder de Barganha dos Fornecedores
+O poder dos fornecedores — principalmente doadores — é alto. Eles podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.
+
+**Referências que sustentam isso:**
+- IDIS – Doação Brasil (2022): Doadores priorizam métricas e clareza.
+- CAF – World Giving Index: Competição intensa entre causas.
+- GIFE – Mapeamento ISP: Empresas redirecionam recursos conforme resultados.
+
+---
+
+### Poder de Barganha dos Clientes
+O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativas gratuitas com suporte prolongado, mentoria e acompanhamento acadêmico. A demanda supera muito a oferta, reduzindo a capacidade de barganha das famílias atendidas.
+
+**Referências que sustentam isso:**
+- IPEA (2021): Pouco acesso a apoio educacional estruturado.
+- UNICEF (2022): Falta de suporte integral para jovens de baixa renda.
+- Todos Pela Educação: Escassez de iniciativas de acompanhamento individualizado.
 
 ### 2.1.2. Análise SWOT do Instituto Ponte
 
@@ -61,25 +117,317 @@
 </div>
 
 <div align="center">
-  <strong>Figura 2 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 3 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 &emsp;  Identificou-se no Instituto Ponte um posicionamento diferenciado no terceiro setor educacional brasileiro: a metodologia individualizada e a taxa de aprovação de 92% nos vestibulares consolidam-se como diferenciais competitivos frente a concorrentes como Gerando Falcões e Parceiros da Educação, organizações de maior escala nacional. Constatou-se, contudo, vulnerabilidade financeira pela dependência de doações privadas e concentração regional no Espírito Santo. Verificaram-se oportunidades expressivas na expansão para o Nordeste e no crescimento da agenda ESG corporativa. Como principal ameaça, reconheceu-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
-*Explique detalhadamente os seguintes aspectos (até 60 palavras por item):*
-1. Problema a ser resolvido
-2. Dados disponíveis (mencionar fonte e conteúdo; se não houver, indicar “não se aplica”)
-3. Solução proposta
-4. Forma de utilização da solução
-5. Benefícios esperados
-6. Critério de sucesso e como será avaliado
+<!-- *Explique detalhadamente os seguintes aspectos (até 60 palavras por item):* -->
+### 2.1.3 Solução (sprints 1 a 5)
+
+1. **Problema a ser resolvido**  
+A plataforma atual apresenta baixa usabilidade para alunos com letramento digital limitado, ausência de organização para docentes e falhas de persistência de progresso. A navegação é pouco intuitiva, a correção não é estruturada por questão e há inconsistências no acesso a relatórios e feedbacks, comprometendo equidade, eficiência e confiabilidade do processo avaliativo.
+
+2. **Dados disponíveis**  
+O Instituto atende 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido (online e presencial) <br>
+(Fonte: Tapi)
+
+3. **Solução proposta**  
+Propõe-se uma plataforma web com interface simplificada e responsiva, suporte nativo a fórmulas (LaTeX), upload estruturado por questão e salvamento automático de progresso. Inclui painel de correção por item, visualização organizada de provas e geração automática de relatórios e feedbacks, garantindo acessibilidade e padronização avaliativa.
+
+4. **Forma de utilização da solução**  
+O acesso ocorre via link único. Alunos visualizam e respondem questões em interface intuitiva com envio de arquivos. Professores corrigem por questão em ambiente organizado. Coordenadores acessam histórico, relatórios e métricas, permitindo acompanhamento estruturado e tomada de decisão baseada em dados.
+
+5. **Benefícios esperados**  
+Redução da dificuldade de uso para alunos, eliminação da perda de progresso e maior segurança na navegação. Para docentes, aumento de eficiência e padronização na correção. Para gestão, acesso centralizado e organizado a dados e relatórios.
+
+6. **Critério de sucesso e avaliação**  
+O sucesso ocorre quando alunos concluem provas sem assistência, não há perda de progresso, o tempo médio de correção por questão é reduzido e relatórios são gerados automaticamente e utilizados pela gestão. A usabilidade é validada por usuários com diferentes níveis de letramento digital, sem inconsistências nos dados.
 
 ### 2.1.4. Value Proposition Canvas (sprint 1): 
-*Sem limite de palavras – usar template do curso*
 
-*Elaborar o Value Proposition Canvas com base na proposta de solução definida.*
+# VALUE PROPOSITION CANVAS
+
+---
+
+## VPC - Alunos
+
+<div align="center">
+  <img src="../assets/vpcalunos.png">
+</div>
+
+<div align="center">
+  <strong>Figura 2 — Value Proposition Canvas (Alunos) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+### A. Perfil do Cliente
+
+#### Tarefas do cliente (Customer Jobs)
+
+No contexto da plataforma de avaliação remota, os alunos assumem o papel de participantes ativos do processo avaliativo digital. Ao longo da experiência, eles precisam:
+
+- acessar provas em um ambiente centralizado;
+- responder avaliações diretamente na plataforma;
+- enviar respostas e arquivos de forma correta;
+- acompanhar seu desempenho acadêmico;
+- participar de avaliações organizadas e padronizadas.
+
+Na prática, a plataforma permite que o aluno realize todas as etapas da avaliação em um único ambiente, reduzindo a complexidade e facilitando o processo.
+
+---
+
+#### Dores (Pains)
+
+Durante o uso de sistemas tradicionais, os alunos enfrentam dificuldades que impactam sua experiência. Entre as principais dores estão:
+
+- dificuldade no envio de arquivos e respostas;
+- insegurança quanto ao sucesso da submissão;
+- uso de múltiplos canais desorganizados;
+- risco de perda de informações;
+- dificuldades tecnológicas;
+- falta de clareza no processo avaliativo.
+
+Essas dores geram ansiedade e prejudicam o desempenho, especialmente em ambientes digitais pouco estruturados.
+
+---
+
+#### Ganhos (Gains)
+
+Com a plataforma, os alunos passam a ter uma experiência mais clara e segura. Entre os principais ganhos estão:
+
+- maior segurança na realização de provas;
+- facilidade no envio de respostas;
+- acesso centralizado a conteúdos;
+- melhor organização das avaliações;
+- maior transparência no processo;
+- inclusão digital.
+
+Ao final, o aluno consegue focar no aprendizado, sem se preocupar com problemas técnicos ou organizacionais.
+
+---
+
+### B. Mapa de Valor
+
+#### Produtos e Serviços
+
+A solução oferece:
+
+- sistema de provas online;
+- envio seguro de respostas;
+- acesso a materiais de estudo;
+- interface simples e intuitiva;
+- acompanhamento de desempenho.
+
+---
+
+#### Aliviadores de Dores (Pain Relievers)
+
+Para reduzir as dificuldades, a plataforma:
+
+- centraliza todas as atividades em um único ambiente;
+- garante armazenamento seguro;
+- reduz falhas no envio de arquivos;
+- simplifica o uso com uma interface intuitiva.
+
+---
+
+#### Criadores de Ganhos (Gain Creators)
+
+A solução gera valor ao:
+
+- melhorar a experiência do aluno;
+- aumentar a confiança no sistema;
+- facilitar o acesso ao conteúdo;
+- promover um ambiente mais organizado e justo.
+
+---
+
+## VPC - Professores
+
+<div align="center">
+  <img src="../assets/vpcprof.png">
+</div>
+
+<div align="center">
+  <strong>Figura 2 — Value Proposition Canvas (Professores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+### A. Perfil do Cliente
+
+#### Tarefas do cliente (Customer Jobs)
+
+Os professores atuam como responsáveis pela criação e gestão das avaliações. Durante o processo, eles precisam:
+
+- criar provas e atividades avaliativas;
+- organizar e publicar avaliações;
+- corrigir respostas dos alunos;
+- distribuir correções por critérios;
+- acompanhar o desempenho das turmas.
+
+Na prática, a plataforma centraliza essas tarefas, tornando o trabalho mais estruturado e eficiente.
+
+---
+
+#### Dores (Pains)
+
+Sem uma plataforma adequada, os professores enfrentam diversos problemas, como:
+
+- sobrecarga administrativa;
+- uso de ferramentas dispersas;
+- perda de arquivos;
+- falta de padronização nas correções;
+- dificuldade em organizar avaliações;
+- retrabalho constante.
+
+Essas dificuldades tornam o processo mais lento e menos eficiente.
+
+---
+
+#### Ganhos (Gains)
+
+Com a solução, os professores passam a ter:
+
+- maior organização das avaliações;
+- correção mais eficiente e padronizada;
+- redução de erros operacionais;
+- economia de tempo;
+- melhor acompanhamento dos alunos.
+
+Assim, o professor consegue focar mais no ensino e menos em tarefas operacionais.
+
+---
+
+### B. Mapa de Valor
+
+#### Produtos e Serviços
+
+A plataforma oferece:
+
+- criação e publicação de provas;
+- sistema de correção estruturado;
+- distribuição de correções;
+- armazenamento de avaliações;
+- acompanhamento acadêmico.
+
+---
+
+#### Aliviadores de Dores (Pain Relievers)
+
+A solução reduz problemas ao:
+
+- automatizar processos;
+- centralizar informações;
+- evitar perda de arquivos;
+- padronizar correções;
+- diminuir a sobrecarga.
+
+---
+
+#### Criadores de Ganhos (Gain Creators)
+
+A plataforma gera benefícios ao:
+
+- aumentar a eficiência do trabalho;
+- melhorar a organização;
+- facilitar o acompanhamento pedagógico;
+- reduzir o tempo gasto em tarefas repetitivas.
+
+---
+
+## VPC - Coordenadores
+
+<div align="center">
+  <img src="/assets/vpccoord.png">
+</div>
+
+<div align="center">
+  <strong>Figura 2 — Value Proposition Canvas (Coordenadores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+### A. Perfil do Cliente
+
+#### Tarefas do cliente (Customer Jobs)
+
+Os coordenadores possuem um papel estratégico dentro da instituição. Eles precisam:
+
+- organizar processos avaliativos;
+- supervisionar avaliações;
+- monitorar desempenho acadêmico;
+- acessar relatórios institucionais;
+- apoiar decisões pedagógicas;
+- garantir segurança e padronização.
+
+Na prática, a plataforma permite uma visão ampla e centralizada de toda a operação.
+
+---
+
+#### Dores (Pains)
+
+Entre os principais desafios enfrentados estão:
+
+- falta de centralização de dados;
+- dificuldade de monitoramento;
+- processos manuais e descentralizados;
+- risco de inconsistências;
+- dificuldade na tomada de decisão;
+- baixa visibilidade dos resultados.
+
+Esses problemas dificultam a gestão eficiente da instituição.
+
+---
+
+#### Ganhos (Gains)
+
+Com a plataforma, os coordenadores passam a ter:
+
+- acesso a dados organizados;
+- relatórios automáticos;
+- maior controle dos processos;
+- melhoria na tomada de decisão;
+- aumento da eficiência institucional;
+- maior segurança da informação.
+
+Isso fortalece a gestão e melhora a qualidade dos processos educacionais.
+
+---
+
+### B. Mapa de Valor
+
+#### Produtos e Serviços
+
+A solução inclui:
+
+- painéis administrativos;
+- relatórios automáticos;
+- armazenamento de dados;
+- monitoramento acadêmico;
+- gestão centralizada.
+
+---
+
+#### Aliviadores de Dores (Pain Relievers)
+
+A plataforma ajuda ao:
+
+- centralizar informações;
+- automatizar relatórios;
+- reduzir falhas humanas;
+- melhorar o controle dos processos.
+
+---
+
+#### Criadores de Ganhos (Gain Creators)
+
+A solução agrega valor ao:
+
+- melhorar a gestão institucional;
+- aumentar a transparência;
+- apoiar decisões estratégicas;
+- modernizar processos educacionais.
+
+---
 
 ### 2.1.5. Matriz de Riscos do Projeto (sprint 1)
 
@@ -90,6 +438,103 @@
 ## 2.2. Personas (sprint 1)
 
 *Posicione aqui suas Personas em forma de texto markdown com imagens, ou como imagem de template preenchido. Atualize esta seção ao longo do módulo se necessário.*
+
+### 2.2.1 Mapa de Empatia de uma persona
+
+#### Mapa de Empatia — Professor do Ensino Médio (Ronaldo Silva)
+
+<div align="center">
+  <img src="/assets/mapaDeEmpatia.png">
+</div>
+
+<div align="center">
+  <strong>Figura 3 — Mapa de sentimento de persona.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+#### Visão Geral
+Este mapa de empatia representa o perfil de Ronaldo Silva, professor do Ensino Médio, e tem como objetivo compreender suas necessidades, dores e comportamentos no processo de correção de provas. A análise auxilia na definição de soluções mais eficientes para plataformas de avaliação.
+
+---
+
+#### Dados Demográficos
+- Idade: 40 anos  
+- Renda: R$ 5.000/mês  
+- Escolaridade: Ensino Superior Completo  
+- Localização: Espírito Santo  
+- Nível de letramento digital: Alto  
+
+---
+
+#### O que pensa?
+Ronaldo frequentemente reflete sobre a eficiência e segurança do processo de correção:
+- Dúvidas sobre a organização das respostas  
+- Preocupação com perda de progresso  
+- Busca por métodos mais rápidos e práticos  
+- Questionamentos sobre justiça na avaliação dos alunos  
+
+---
+
+#### O que sente?
+Durante o processo atual, ele experimenta:
+- Frustração com ferramentas pouco eficientes  
+- Insegurança ao corrigir sem organização clara  
+- Ansiedade devido a prazos e volume de provas  
+- Sobrecarga por tarefas repetitivas  
+
+---
+
+#### O que diz?
+Algumas falas comuns que refletem sua experiência:
+> "O método atual de correção é muito ruim."  
+> "Não tenho acesso às respostas de forma organizada."  
+> "Quando a página atualiza, eu perco meu progresso."  
+> "Corrigir prova assim dá muito trabalho."
+
+---
+
+#### O que faz?
+No cenário atual, Ronaldo:
+- Corrige provas manualmente ou em arquivos digitais  
+- Utiliza planilhas para organizar notas  
+- Revisa respostas múltiplas vezes  
+- Salva frequentemente para evitar perdas  
+- Usa ferramentas externas como WhatsApp e e-mail  
+
+---
+
+#### Objetivos
+Ronaldo busca:
+- Organizar e facilitar a correção das provas  
+- Reduzir o tempo gasto com correções  
+- Ter clareza e estrutura nas respostas dos alunos  
+- Garantir avaliações justas e consistentes  
+- Acessar relatórios detalhados de desempenho  
+
+---
+
+#### Dores
+Os principais problemas enfrentados incluem:
+- Processo de correção pouco prático  
+- Falta de organização das respostas  
+- Risco de perda de progresso  
+- Grande volume de provas para corrigir  
+- Dificuldade em comparar respostas  
+- Uso de múltiplas ferramentas desconectadas  
+
+---
+
+#### Necessidades
+Com base nas dores e objetivos, surgem oportunidades claras:
+- Sistema de correção por questão (visão agrupada)  
+- Salvamento automático de progresso  
+- Interface simples e intuitiva  
+- Centralização de informações em um único sistema  
+- Geração automática de relatórios
+---
+
+#### Conclusão
+O mapa de empatia evidencia que o professor precisa de uma solução que reduza a complexidade operacional, aumente a confiabilidade do sistema e melhore a organização das informações.  
+Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma de avaliação mais eficiente.
 
 ## 2.3. User Stories (sprints 1 a 5)
 
@@ -147,16 +592,31 @@ Critérios INVEST | *(Por que é Independente? Por que é Negociável? Por que �
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
-*Numere e redija as RN de forma implementável e testável. Toda RN deve ter pelo menos um teste automatizado associado a partir da sprint 3.*
-
 | ID   | Descrição | RF associado |
 |------|-----------|--------------|
-| RN01 | ...       | RF001        |
-| RN02 | ...       | RF001        |
+| RN01 | O sistema deve gerenciar provas em estados válidos (rascunho, ativa, encerrada), impedindo edição quando encerradas e permitindo filtragem por status. | RF001, RF025 |
+| RN02 | O sistema deve permitir aplicação de filtros combinados (turma, semestre, disciplina, professor), retornando apenas resultados que atendam a todos os critérios. | RF002 |
+| RN03 | O sistema deve garantir a correta criação de questões, incluindo tipo válido, validação de alternativas e renderização de fórmulas matemáticas. | RF003, RF004 |
+| RN04 | O sistema deve controlar o envio de arquivos, permitindo upload apenas quando habilitado, aceitando formatos válidos, múltiplos arquivos por questão e mantendo vínculo correto. | RF005, RF014 |
+| RN05 | O sistema deve controlar o tempo e acesso à prova, impedindo início fora do período, encerrando automaticamente ao término e respeitando configurações definidas. | RF006 |
+| RN06 | O sistema deve aplicar corretamente o embaralhamento de questões e alternativas quando configurado. | RF007 |
+| RN07 | Cada prova deve possuir acesso único por meio de URL e QR Code vinculados. | RF008 |
+| RN08 | O sistema deve identificar o aluno por nome, e-mail e CPF, impedindo múltiplas submissões para a mesma prova. | RF009 |
+| RN09 | O sistema deve exibir instruções obrigatórias antes do início e permitir controle de exibição do cronômetro durante a prova. | RF010, RF011 |
+| RN10 | O sistema deve garantir a correta visualização de conteúdo, incluindo renderização de fórmulas e ampliação de imagens sem perda relevante de qualidade. | RF012, RF013 |
+| RN11 | O sistema deve otimizar o envio de imagens, aplicando compressão sem comprometer a legibilidade. | RF015 |
+| RN12 | O sistema deve validar a submissão da prova, alertando sobre questões em branco antes do envio final. | RF016 |
+| RN13 | O sistema deve permitir correção por questão, com atribuição de notas e comentários e visualização adequada dos anexos. | RF017, RF018, RF019 |
+| RN14 | O sistema deve processar e disponibilizar resultados, incluindo cálculo automático de notas e geração de relatórios estruturados. | RF020 |
+| RN15 | O sistema deve controlar a divulgação de resultados e feedbacks aos alunos após finalização da correção. | RF021 |
+| RN16 | O sistema deve garantir integridade na exportação de anexos, mantendo correspondência com aluno e questão. | RF022 |
+| RN17 | O sistema deve permitir ao coordenador visualizar, filtrar e gerar relatórios sobre todas as provas do sistema. | RF023, RF024 |
+| RN18 | O sistema deve restringir operações de criação, edição e exclusão a usuários autorizados. | RF026 |
 
 ###    Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
 <!-- *Preencha os 8 eixos. Cada eixo deve ter ao menos um RNF verificável (com métrica, limite ou critério concreto) ou justificativa explícita de ausência. Evolua do conceitual (sprint 1) ao técnico mensurável (sprint 5).* -->
+
 
 
 | Eixo                     | Requisito | Métrica / Critério | Como atendido |
@@ -235,6 +695,7 @@ Reflete a necessidade de organização do desenvolvimento no contexto acadêmico
 A métrica considera entregas por sprint e uso de versionamento.  
 Relaciona-se com o processo de desenvolvimento do sistema.  
 **Critério de aceite:** entregas contínuas e rastreáveis são realizadas.
+
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
