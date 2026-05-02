@@ -37,11 +37,11 @@
 
 ## Introdução
 
-&emsp;O Instituto Ponte é uma Organização da Sociedade Civil de Interesse Público (OSCIP) fundada em setembro de 2014, com a missão de ser "a Ponte para a ascensão social em uma geração" por meio da educação de qualidade para jovens em situação de vulnerabilidade social. Atualmente, a organização atende 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido de ensino (INSTITUTO PONTE, 2024). Nesse contexto, a equidade do processo avaliativo não é apenas uma questão de eficiência operacional — é um imperativo ético da própria missão institucional.
+&emsp;O Instituto Ponte é uma Organização da Sociedade Civil de Interesse Público (OSCIP), fundada em setembro de 2014, com a missão de ser “a Ponte para a ascensão social em uma geração” por meio da educação de qualidade para jovens em situação de vulnerabilidade social. Atualmente, a organização atende 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido de ensino (INSTITUTO PONTE, 2024). Nesse contexto, a equidade do processo avaliativo é central à missão institucional.
 
-&emsp;Identificou-se, contudo, que o processo de realização e correção de avaliações remotas é conduzido de maneira descentralizada e informal, mediante o uso de canais como WhatsApp, e-mail e outras ferramentas não estruturadas. Verificou-se que essa abordagem gera consequências diretas sobre a integridade dos dados — como perda de arquivos e dificuldade de organização das submissões —, além de sobrecarga operacional para professores e ausência de mecanismos para correção isonômica distribuída por questão. A inexistência de critérios uniformes e transparentes compromete a justiça avaliativa para todos os alunos atendidos.
+&emsp;Foi identificado que a realização e a correção de avaliações remotas ocorrem de forma descentralizada, com uso de WhatsApp, e-mail e outras ferramentas não estruturadas. Isso gera perda de arquivos, dificuldade de organização das submissões, sobrecarga para professores e ausência de mecanismos para correção isonômica por questão. A falta de critérios uniformes e transparentes compromete a justiça avaliativa para os alunos atendidos.
 
-&emsp;Diante desse cenário, propõe-se o desenvolvimento de uma aplicação web especializada na criação, publicação, aplicação e correção de avaliações remotas, projetada para atender às necessidades operacionais, pedagógicas e sociais do Instituto Ponte. A solução centralizará todos os processos avaliativos em uma única plataforma digital, garantindo três vetores essenciais de criação de valor: (a) equidade para os alunos, mediante interface acessível em dispositivos com recursos limitados; (b) eficiência para os professores, por meio de correção padronizada por questão; e (c) inteligência institucional para coordenadores, com geração automatizada de relatórios de desempenho. Espera-se, com essa implementação, reduzir falhas operacionais, fortalecer a integridade dos dados e promover maior equidade no processo avaliativo, utilizando a tecnologia como instrumento estratégico de inovação educacional e inclusão social.
+&emsp;Diante disso, propõe-se o desenvolvimento de uma aplicação web para criar, publicar, aplicar e corrigir avaliações remotas no Instituto Ponte. A solução centraliza o processo em uma única plataforma, promovendo três resultados principais: equidade para os alunos, com interface acessível em dispositivos limitados; eficiência para os professores, com correção padronizada por questão; e inteligência institucional para os coordenadores, com relatórios automáticos de desempenho. Com isso, espera-se reduzir falhas operacionais, fortalecer a integridade dos dados e ampliar a inclusão social por meio da tecnologia.
 # <a name="c2"></a>2. Visão Geral da Aplicação Web
 
 ## 2.1. Escopo do Projeto (sprints 1 e 4)
@@ -56,55 +56,33 @@
   <strong>Figura 1 — 5 Forças de Porter do instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-
 ### Rivalidade entre Concorrentes
-A rivalidade no setor de organizações sociais focadas em educação é moderada. Há várias ONGs atuando em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas oferecem seleção rigorosa combinada com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação reduz a pressão direta.
-
-**Referências que sustentam isso:**
-- IDIS – Instituto para o Desenvolvimento do Investimento Social. Censo GIFE 2020. São Paulo: IDIS, 2020.
-- TRANSPARÊNCIA BRASIL. Organizações da Sociedade Civil: dados e transparência. São Paulo: Transparência Brasil, 2022.
-- OECD. Philanthropy and Education: Harnessing the Potential for Learning. Paris: OECD Publishing, 2019.
+A rivalidade no setor de organizações sociais voltadas à educação é moderada. Observa-se a atuação de diversas ONGs em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas combinam seleção rigorosa com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação tende a reduzir a pressão direta.  
+Referências-base: IDIS (2020), Transparência Brasil (2022), OECD (2019).
 
 ---
 
 ### Ameaça de Novos Entrantes
-A ameaça de novos entrantes é moderada. Criar uma ONG é simples, porém alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.
-
-**Referências que sustentam isso:**
-- ABONG – Associação Brasileira de Organizações Não Governamentais. Panorama das Associações Brasileiras de Organizações da Sociedade Civil. São Paulo: ABONG, 2021.
-- ITAÚ SOCIAL. Avaliação de Impacto em Educação: desafios e perspectivas. São Paulo: Fundação Itaú Social, 2020.
-- MCKINSEY & COMPANY. High-performing NGOs: unlocking their potential. Nova York: McKinsey, 2022.
+A ameaça de novos entrantes é moderada. A criação de uma ONG é simples, mas alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.  
+Referências-base: ABONG (2021), Itaú Social (2020), McKinsey (2022).
 
 ---
 
 ### Ameaça de Produtos Substitutos
-&emsp;A ameaça de substitutos é **alta**. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte — seleção rigorosa, acompanhamento individualizado e suporte prolongado —, funcionam como opções substitutas na disputa por estudantes e por recursos financeiros. A plataforma desenvolvida neste projeto fortalece a diferenciação do Instituto ao evidenciar, por meio de dados e relatórios estruturados, o valor do seu processo avaliativo rigoroso frente a alternativas menos estruturadas.
-
-**Referências que sustentam isso:**
-- MEC. Programa Universidade para Todos (ProUni); Fundo de Financiamento Estudantil (FIES); Escolas Técnicas Federais (REDE E-TEC). Brasília: MEC, 2023.
-- FUNDAÇÃO ESTUDAR. Relatório de Impacto 2023. São Paulo: Fundação Estudar, 2023.
-- FUNDAÇÃO LEMANN. Relatório Anual 2022. São Paulo: Fundação Lemann, 2022.
-- OECD. Education at a Glance 2023: OECD Indicators. Paris: OECD Publishing, 2023.
+A ameaça de substitutos é alta. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte, funcionam como opções substitutas na disputa por estudantes e recursos.  
+Referências-base: MEC (2023), Fundação Estudar (2023), Fundação Lemann (2022), OECD (2023).
 
 ---
 
 ### Poder de Barganha dos Fornecedores
-O poder dos fornecedores — principalmente doadores — é alto. Eles podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.
-
-**Referências que sustentam isso:**
-- IDIS – Instituto para o Desenvolvimento do Investimento Social. Doação Brasil 2022. São Paulo: IDIS, 2022.
-- CAF. World Giving Index 2022. West Malling: Charities Aid Foundation, 2022.
-- GIFE. Mapeamento do Investimento Social Privado no Brasil. São Paulo: GIFE, 2021.
+O poder de barganha dos fornecedores — principalmente dos doadores — é alto. Esses agentes podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como as ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.  
+Referências-base: IDIS (2022), CAF (2022), GIFE (2021).
 
 ---
 
 ### Poder de Barganha dos Clientes
-O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativas gratuitas com suporte prolongado, mentoria e acompanhamento acadêmico. A demanda supera muito a oferta, reduzindo a capacidade de barganha das famílias atendidas.
-
-**Referências que sustentam isso:**
-- IPEA – Instituto de Pesquisa Econômica Aplicada. Atlas da Violência 2021. Brasília: IPEA, 2021.
-- UNICEF. Relatório Situação da Infância e Adolescência Brasileira 2022. Brasília: UNICEF, 2022.
-- TODOS PELA EDUCAÇÃO. Anuário Brasileiro da Educação Básica 2023. São Paulo: Todos Pela Educação, 2023.
+O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativas gratuitas com suporte prolongado, mentoria e acompanhamento acadêmico. A demanda supera muito a oferta, reduzindo a capacidade de barganha das famílias atendidas.  
+Referências-base: IPEA (2021), UNICEF (2022), Todos Pela Educação (2023).
 
 ### 2.1.2. Análise SWOT do Instituto Ponte
 
@@ -116,31 +94,28 @@ O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativa
   <strong>Figura 2 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-&emsp;Identificou-se no Instituto Ponte um posicionamento diferenciado no terceiro setor educacional brasileiro: a metodologia individualizada e a taxa de aprovação de 92% nos vestibulares consolidam-se como diferenciais competitivos frente a concorrentes como Gerando Falcões e Parceiros da Educação, organizações de maior escala nacional (dados obtidos a partir de informações divulgadas pela própria instituição e verificados durante o workshop do parceiro). Constatou-se, contudo, vulnerabilidade financeira pela dependência de doações privadas e concentração histórica no Espírito Santo. Importa esclarecer que os aproximadamente 2.375 inscritos anuais mencionados no diagrama correspondem ao volume de candidatos no processo seletivo, enquanto os 440 alunos ativos referem-se ao corpo discente efetivamente matriculado — distinção que caracteriza alta demanda reprimida, e não limitação de alcance operacional. Verificaram-se oportunidades expressivas na expansão para o Nordeste e no crescimento da agenda ESG corporativa. Como principal ameaça, reconheceu-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
-
+Verificam-se, como forças, a metodologia individualizada e a taxa de aprovação de 92% nos vestibulares. Como fraquezas, destacam-se a dependência de doações privadas e a concentração histórica no Espírito Santo. Como oportunidades, apontam-se a expansão para o Nordeste e o crescimento da agenda ESG corporativa. Como ameaça, registra-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
 ### 2.1.3. Solução (sprints 1 a 5)
 
-A solução baseia-se no desenvolvimento de uma aplicação web para o Instituto Ponte, voltada à criação, aplicação e correção de avaliações remotas. A plataforma prioriza acessibilidade e usabilidade, permitindo que professores gerenciem provas de forma centralizada e que alunos realizem avaliações com facilidade, incluindo envio de respostas e arquivos. O sistema também busca garantir maior organização, eficiência operacional e isonomia no processo avaliativo.
+A solução é baseada no desenvolvimento de uma aplicação web para o Instituto Ponte, voltada à criação, aplicação e correção de avaliações remotas. Priorizam-se acessibilidade, organização e isonomia no processo avaliativo.
 
 1. **Problema a ser resolvido**  
-Constatou-se a ausência de uma plataforma centralizada para avaliações remotas no Instituto Ponte. O processo atual, conduzido via WhatsApp e e-mail, gera perda de arquivos, ausência de organização das submissões, correção não estruturada por questão e inconsistências no acesso a feedbacks, comprometendo equidade, eficiência e confiabilidade do processo avaliativo para os 440 alunos atendidos.
+Verifica-se que o Instituto Ponte não possui uma plataforma centralizada para avaliações remotas. O processo atual, realizado por WhatsApp e e-mail, gera perda de arquivos, desorganização das submissões, correção pouco estruturada e inconsistências no acesso a feedbacks.
 
 2. **Dados disponíveis**  
-O Instituto atende 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido (online e presencial) <br>
-(Fonte: Tapi)
+São atendidos 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido. Esses dados ajudam a dimensionar o público atendido e reforçam a necessidade de uma solução simples e escalável.
 
 3. **Solução proposta**  
-Propõe-se uma plataforma web com interface simplificada e responsiva, suporte nativo a fórmulas matemáticas via LaTeX (renderizado com KaTeX ou MathJax), upload estruturado por questão e salvamento automático de progresso. A solução inclui painel de correção isonômica por item, visualização organizada de provas e geração automatizada de relatórios de desempenho e feedbacks individuais.
+Propõe-se uma plataforma web responsiva com interface simplificada, suporte a fórmulas matemáticas via LaTeX, upload estruturado por questão, salvamento automático e painel de correção por item. A solução também gera relatórios de desempenho e feedbacks individuais.
 
 4. **Forma de utilização da solução**  
-O acesso ocorre via link único. Alunos visualizam e respondem questões em interface intuitiva com envio de arquivos. Professores corrigem por questão em ambiente organizado. Coordenadores acessam histórico, relatórios e métricas, permitindo acompanhamento estruturado e tomada de decisão baseada em dados.
+O acesso ocorre por link único. As questões são respondidas e os arquivos são enviados pelos alunos na própria plataforma. A correção é realizada por questão em um ambiente organizado. O histórico, os relatórios e as métricas são acompanhados pelos coordenadores para apoiar decisões pedagógicas.
 
 5. **Benefícios esperados**  
-Redução da dificuldade de uso para alunos, eliminação da perda de progresso e maior segurança na navegação. Para docentes, aumento de eficiência e padronização na correção. Para gestão, acesso centralizado e organizado a dados e relatórios.
+Espera-se que a dificuldade de uso para alunos seja reduzida, que a perda de progresso seja evitada e que a segurança na navegação seja ampliada. Para docentes, a solução traz mais eficiência e padronização. Para a gestão, garantem-se dados centralizados e relatórios organizados.
 
 6. **Critério de sucesso e avaliação**  
-Considera-se a solução bem-sucedida quando: (a) ≥ 90% dos alunos concluem a prova sem acionar suporte técnico em testes de usabilidade com diferentes perfis de letramento digital; (b) 100% das submissões confirmadas são persistidas sem perda de dados; (c) o coordenador acessa relatório automatizado em 100% das provas encerradas; e (d) o tempo médio de correção por questão é reduzido em relação ao processo manual anterior, medido por feedback do parceiro ao final do projeto.
-
+A solução será considerada bem-sucedida se: 90% dos alunos concluírem a prova sem suporte técnico; 100% das submissões forem persistidas sem perda; o coordenador acessar relatórios automatizados em todas as provas encerradas; e o tempo médio de correção por questão diminuir em relação ao processo manual.
 ### 2.1.4. Value Proposition Canvas
 
 ## VALUE PROPOSITION CANVAS
