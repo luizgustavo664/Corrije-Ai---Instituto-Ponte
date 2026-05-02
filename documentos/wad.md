@@ -1579,7 +1579,7 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 ### 3.2.2. Diagrama de Casos de Uso (sprint 1)
 
 <div align="center">
-  <img src="/assets/diagrama-casos-usos.png">
+  <img src="/assets/diagramaCasosDeUso.png">
 </div>
 
 <div align="center">
