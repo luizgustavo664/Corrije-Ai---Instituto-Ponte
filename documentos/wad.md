@@ -8,6 +8,14 @@
 
 #### Nomes dos integrantes do grupo
 
+Álvaro Leme de Toledo Almeida <br>
+Heloísa Noda Kadota <br>
+Joana Auriemo Racy <br>
+Luiz Gustavo Campos Cazelatto <br>
+Matheus Viana de Almeida <br>
+Pablo Marchina <br>
+Rafael Morgado Ferreira <br>
+
 
 
 ## Sumário
