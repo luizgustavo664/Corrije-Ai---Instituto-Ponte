@@ -8,6 +8,14 @@
 
 #### Nomes dos integrantes do grupo
 
+- Álvaro Leme de Toledo Almeida <br>
+- Heloísa Noda Kadota <br>
+- Joana Auriemo Racy <br>
+- Luiz Gustavo Campos Cazelatto <br>
+- Matheus Viana de Almeida <br>
+- Pablo Marchina <br>
+- Rafael Morgado Ferreira <br>
+
 
 
 ## Sumário
@@ -1392,6 +1400,7 @@ O Instituto Ponte tem um processo de correção de provas informal e descentrali
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
+<!-- *Liste os RF numerados de forma objetiva e verificável. Cada RF deve poder ser convertido em caso de teste.* -->
 | ID | Descrição | Prioridade | Status |
 |---|---|---|---|
 | RF001 | O sistema deve permitir ao professor gerenciar provas em diferentes estados: rascunho, publicada, encerrada e antiga. | Alta | Planejado |
@@ -1575,7 +1584,7 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 ### 3.2.2. Diagrama de Casos de Uso
 
 <div align="center">
-  <img src="/assets/diagrama-casos-usos.png">
+  <img src="/assets/diagramaCasosDeUso.png">
 </div>
 
 <div align="center">
