@@ -34,7 +34,7 @@
 
 [7. Conclusões e trabalhos futuros](#c7)
 
-[8. Referências](c#8)
+[8. Referências](#c8)
 
 [Anexos](#c9)
 
@@ -43,13 +43,12 @@
 
 # <a name="c1"></a>1. Introdução (sprints 1 a 5)
 
-## Introdução
-
 &emsp;O Instituto Ponte é uma Organização da Sociedade Civil de Interesse Público (OSCIP), fundada em setembro de 2014, com a missão de ser “a Ponte para a ascensão social em uma geração” por meio da educação de qualidade para jovens em situação de vulnerabilidade social. Atualmente, a organização atende 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido de ensino (INSTITUTO PONTE, 2024). Nesse contexto, a equidade do processo avaliativo é central à missão institucional.
 
 &emsp;Foi identificado que a realização e a correção de avaliações remotas ocorrem de forma descentralizada, com uso de WhatsApp, e-mail e outras ferramentas não estruturadas. Isso gera perda de arquivos, dificuldade de organização das submissões, sobrecarga para professores e ausência de mecanismos para correção isonômica por questão. A falta de critérios uniformes e transparentes compromete a justiça avaliativa para os alunos atendidos.
 
 &emsp;Diante disso, propõe-se o desenvolvimento de uma aplicação web para criar, publicar, aplicar e corrigir avaliações remotas no Instituto Ponte. A solução centraliza o processo em uma única plataforma, promovendo três resultados principais: equidade para os alunos, com interface acessível em dispositivos limitados; eficiência para os professores, com correção padronizada por questão; e inteligência institucional para os coordenadores, com relatórios automáticos de desempenho. Com isso, espera-se reduzir falhas operacionais, fortalecer a integridade dos dados e ampliar a inclusão social por meio da tecnologia.
+
 # <a name="c2"></a>2. Visão Geral da Aplicação Web
 
 ## 2.1. Escopo do Projeto (sprints 1 e 4)
@@ -64,31 +63,31 @@
   <strong>Figura 1 — 5 Forças de Porter do instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-### Rivalidade entre Concorrentes
+#### Rivalidade entre Concorrentes
 A rivalidade no setor de organizações sociais voltadas à educação é moderada. Observa-se a atuação de diversas ONGs em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas combinam seleção rigorosa com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação tende a reduzir a pressão direta.  
 Referências-base: IDIS (2020), Transparência Brasil (2022), OECD (2019).
 
 ---
 
-### Ameaça de Novos Entrantes
+#### Ameaça de Novos Entrantes
 A ameaça de novos entrantes é moderada. A criação de uma ONG é simples, mas alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.  
 Referências-base: ABONG (2021), Itaú Social (2020), McKinsey (2022).
 
 ---
 
-### Ameaça de Produtos Substitutos
+#### Ameaça de Produtos Substitutos
 A ameaça de substitutos é alta. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte, funcionam como opções substitutas na disputa por estudantes e recursos.  
 Referências-base: MEC (2023), Fundação Estudar (2023), Fundação Lemann (2022), OECD (2023).
 
 ---
 
-### Poder de Barganha dos Fornecedores
-O poder de barganha dos fornecedores — principalmente dos doadores — é alto. Esses agentes podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como as ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.  
+#### Poder de Barganha dos Fornecedores
+No contexto de uma OSCIP, os fornecedores primários são os doadores institucionais e empresariais, cujo financiamento constitui o principal insumo operacional da organização. O poder de barganha desses fornecedores é alto. Esses agentes podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como as ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.  
 Referências-base: IDIS (2022), CAF (2022), GIFE (2021).
 
 ---
 
-### Poder de Barganha dos Clientes
+#### Poder de Barganha dos Clientes
 O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativas gratuitas com suporte prolongado, mentoria e acompanhamento acadêmico. A demanda supera muito a oferta, reduzindo a capacidade de barganha das famílias atendidas.  
 Referências-base: IPEA (2021), UNICEF (2022), Todos Pela Educação (2023).
 
@@ -102,16 +101,17 @@ Referências-base: IPEA (2021), UNICEF (2022), Todos Pela Educação (2023).
   <strong>Figura 2 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-Verificam-se, como forças, a metodologia individualizada e a taxa de aprovação de 92% nos vestibulares. Como fraquezas, destacam-se a dependência de doações privadas e a concentração histórica no Espírito Santo. Como oportunidades, apontam-se a expansão para o Nordeste e o crescimento da agenda ESG corporativa. Como ameaça, registra-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
+&emsp;Identificou-se no Instituto Ponte posicionamento diferenciado no terceiro setor educacional: a taxa de aprovação de 92% nos vestibulares (INSTITUTO PONTE, 2024) — e o acompanhamento individualizado consolidam-se como diferenciais frente a organizações de maior escala, como Gerando Falcões e Parceiros da Educação. Os 2.375 inscritos anuais no processo seletivo, ante 440 alunos ativos, evidenciam alta demanda reprimida. Constatou-se vulnerabilidade financeira pela dependência de doações privadas e concentração no Espírito Santo. Verificaram-se oportunidades na expansão regional e na agenda ESG corporativa. Como ameaça central, reconheceu-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
+
 ### 2.1.3. Solução (sprints 1 a 5)
 
-A solução é baseada no desenvolvimento de uma aplicação web para o Instituto Ponte, voltada à criação, aplicação e correção de avaliações remotas. Priorizam-se acessibilidade, organização e isonomia no processo avaliativo.
+&emsp;A solução é baseada no desenvolvimento de uma aplicação web para o Instituto Ponte, voltada à criação, aplicação e correção de avaliações remotas. Priorizam-se acessibilidade, organização e isonomia no processo avaliativo.
 
 1. **Problema a ser resolvido**  
 Verifica-se que o Instituto Ponte não possui uma plataforma centralizada para avaliações remotas. O processo atual, realizado por WhatsApp e e-mail, gera perda de arquivos, desorganização das submissões, correção pouco estruturada e inconsistências no acesso a feedbacks.
 
 2. **Dados disponíveis**  
-São atendidos 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido. Esses dados ajudam a dimensionar o público atendido e reforçam a necessidade de uma solução simples e escalável.
+São atendidos 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido (INSTITUTO PONTE, 2024). Esses dados ajudam a dimensionar o público atendido e reforçam a necessidade de uma solução simples e escalável.
 
 3. **Solução proposta**  
 Propõe-se uma plataforma web responsiva com interface simplificada, suporte a fórmulas matemáticas via LaTeX, upload estruturado por questão, salvamento automático e painel de correção por item. A solução também gera relatórios de desempenho e feedbacks individuais.
@@ -123,14 +123,15 @@ O acesso ocorre por link único. As questões são respondidas e os arquivos sã
 Espera-se que a dificuldade de uso para alunos seja reduzida, que a perda de progresso seja evitada e que a segurança na navegação seja ampliada. Para docentes, a solução traz mais eficiência e padronização. Para a gestão, garantem-se dados centralizados e relatórios organizados.
 
 6. **Critério de sucesso e avaliação**  
-A solução será considerada bem-sucedida se: 90% dos alunos concluírem a prova sem suporte técnico; 100% das submissões forem persistidas sem perda; o coordenador acessar relatórios automatizados em todas as provas encerradas; e o tempo médio de correção por questão diminuir em relação ao processo manual.
+A solução será considerada bem-sucedida se: ≥ 90% dos alunos concluírem a prova sem suporte técnico; 100% das submissões forem persistidas sem perda; o coordenador acessar relatórios automatizados em todas as provas encerradas; e o tempo médio de correção por questão diminuir em relação ao processo manual.
+
 ### 2.1.4. Value Proposition Canvas
 
-## VALUE PROPOSITION CANVAS
+&emsp;Elaboraram-se três Value Proposition Canvas (VPC), um para cada perfil de usuário do sistema — Alunos, Professores e Coordenadores. Para cada segmento, analisaram-se as tarefas (Customer Jobs), dores (Pains) e ganhos (Gains) do cliente, e mapearam-se os produtos e serviços, aliviadores de dores (Pain Relievers) e criadores de ganhos (Gain Creators) da proposta de valor. O fit entre proposta e perfil é explicitado ao final de cada segmento.
 
 ---
 
-## VPC - Alunos
+#### VPC — Alunos
 
 <div align="center">
   <img src="../assets/vpcalunos.png">
@@ -140,11 +141,11 @@ A solução será considerada bem-sucedida se: 90% dos alunos concluírem a prov
   <strong>Figura 3 — Value Proposition Canvas (Alunos) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-### A. Perfil do Cliente
+##### A. Perfil do Cliente
 
-#### Tarefas do cliente (Customer Jobs)
+###### Tarefas do cliente (Customer Jobs)
 
-No contexto da plataforma de avaliação remota, os alunos assumem o papel de participantes ativos do processo avaliativo digital. Ao longo da experiência, eles precisam:
+No contexto da plataforma de avaliação remota, os alunos assumem o papel de participantes ativos do processo avaliativo digital. Ao longo da experiência, as seguintes tarefas são realizadas:
 
 - acessar provas em um ambiente centralizado;
 - responder avaliações diretamente na plataforma;
@@ -152,11 +153,11 @@ No contexto da plataforma de avaliação remota, os alunos assumem o papel de pa
 - acompanhar seu desempenho acadêmico;
 - participar de avaliações organizadas e padronizadas.
 
-Na prática, a plataforma permite que o aluno realize todas as etapas da avaliação em um único ambiente, reduzindo a complexidade e facilitando o processo.
+Na prática, todas as etapas da avaliação são realizadas em um único ambiente, reduzindo a complexidade e facilitando o processo.
 
 ---
 
-#### Dores (Pains)
+###### Dores (Pains)
 
 Durante o uso de sistemas tradicionais, os alunos enfrentam dificuldades que impactam sua experiência. Entre as principais dores estão:
 
@@ -167,11 +168,11 @@ Durante o uso de sistemas tradicionais, os alunos enfrentam dificuldades que imp
 - dificuldades tecnológicas;
 - falta de clareza no processo avaliativo.
 
-Essas dores geram ansiedade e prejudicam o desempenho, especialmente em ambientes digitais pouco estruturados.
+Essas dores são geradoras de ansiedade e prejudicam o desempenho, especialmente em ambientes digitais pouco estruturados.
 
 ---
 
-#### Ganhos (Gains)
+###### Ganhos (Gains)
 
 Com a plataforma, os alunos passam a ter uma experiência mais clara e segura. Entre os principais ganhos estão:
 
@@ -186,21 +187,21 @@ Ao final, o aluno consegue focar no aprendizado, sem se preocupar com problemas 
 
 ---
 
-### B. Mapa de Valor
+##### B. Mapa de Valor
 
-#### Produtos e Serviços
+###### Produtos e Serviços
 
 A solução oferece:
 
 - sistema de provas online;
-- envio seguro de respostas;
-- acesso a materiais de estudo;
+- envio seguro de respostas e arquivos;
 - interface simples e intuitiva;
-- acompanhamento de desempenho.
+- confirmação visual de submissão;
+- acompanhamento de resultados e feedbacks.
 
 ---
 
-#### Aliviadores de Dores (Pain Relievers)
+###### Aliviadores de Dores (Pain Relievers)
 
 Para reduzir as dificuldades, a plataforma:
 
@@ -211,7 +212,7 @@ Para reduzir as dificuldades, a plataforma:
 
 ---
 
-#### Criadores de Ganhos (Gain Creators)
+###### Criadores de Ganhos (Gain Creators)
 
 A solução gera valor ao:
 
@@ -220,9 +221,11 @@ A solução gera valor ao:
 - facilitar o acesso ao conteúdo;
 - promover um ambiente mais organizado e justo.
 
+&emsp;**Fit entre proposta e perfil:** A dor de insegurança quanto ao sucesso da submissão é diretamente aliviada pela confirmação visual de envio (US11) e pelo salvamento automático de progresso (US10). A dificuldade tecnológica é reduzida pela interface mobile-first (US09) e pelo acesso sem cadastro por link único (US08). O ganho de inclusão digital é criado pela renderização de fórmulas em qualquer dispositivo (RF011) e pelo suporte a uploads de resoluções manuscritas (RF006).
+
 ---
 
-## VPC - Professores
+#### VPC — Professores
 
 <div align="center">
   <img src="../assets/vpcprof.png">
@@ -232,23 +235,23 @@ A solução gera valor ao:
   <strong>Figura 4 — Value Proposition Canvas (Professores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-### A. Perfil do Cliente
+##### A. Perfil do Cliente
 
-#### Tarefas do cliente (Customer Jobs)
+###### Tarefas do cliente (Customer Jobs)
 
-Os professores atuam como responsáveis pela criação e gestão das avaliações. Durante o processo, eles precisam:
+Os professores são responsáveis pela criação e gestão das avaliações. Durante o processo, as seguintes atividades são desempenhadas:
 
 - criar provas e atividades avaliativas;
 - organizar e publicar avaliações;
 - corrigir respostas dos alunos;
-- distribuir correções por critérios;
+- corrigir avaliações por questão, garantindo isonomia;
 - acompanhar o desempenho das turmas.
 
-Na prática, a plataforma centraliza essas tarefas, tornando o trabalho mais estruturado e eficiente.
+Na prática, essas tarefas são centralizadas na plataforma, tornando o trabalho mais estruturado e eficiente.
 
 ---
 
-#### Dores (Pains)
+###### Dores (Pains)
 
 Sem uma plataforma adequada, os professores enfrentam diversos problemas, como:
 
@@ -259,11 +262,11 @@ Sem uma plataforma adequada, os professores enfrentam diversos problemas, como:
 - dificuldade em organizar avaliações;
 - retrabalho constante.
 
-Essas dificuldades tornam o processo mais lento e menos eficiente.
+Essas dificuldades resultam em um processo mais lento e menos eficiente.
 
 ---
 
-#### Ganhos (Gains)
+###### Ganhos (Gains)
 
 Com a solução, os professores passam a ter:
 
@@ -277,21 +280,20 @@ Assim, o professor consegue focar mais no ensino e menos em tarefas operacionais
 
 ---
 
-### B. Mapa de Valor
+##### B. Mapa de Valor
 
-#### Produtos e Serviços
+###### Produtos e Serviços
 
 A plataforma oferece:
 
 - criação e publicação de provas;
-- sistema de correção estruturado;
-- distribuição de correções;
+- sistema de correção estruturado por questão;
 - armazenamento de avaliações;
 - acompanhamento acadêmico.
 
 ---
 
-#### Aliviadores de Dores (Pain Relievers)
+###### Aliviadores de Dores (Pain Relievers)
 
 A solução reduz problemas ao:
 
@@ -303,7 +305,7 @@ A solução reduz problemas ao:
 
 ---
 
-#### Criadores de Ganhos (Gain Creators)
+###### Criadores de Ganhos (Gain Creators)
 
 A plataforma gera benefícios ao:
 
@@ -312,9 +314,11 @@ A plataforma gera benefícios ao:
 - facilitar o acompanhamento pedagógico;
 - reduzir o tempo gasto em tarefas repetitivas.
 
+&emsp;**Fit entre proposta e perfil:** A dor de falta de padronização nas correções é aliviada pelo módulo de correção por questão (US12), que agrupa todas as respostas de uma mesma questão em sequência. A sobrecarga administrativa é reduzida pela correção automática de questões objetivas (US13) e pela geração de planilhas de resultados (US14). O ganho de eficiência é criado pelo banco de questões reutilizáveis (US05) e pelo editor com suporte a LaTeX (US04).
+
 ---
 
-## VPC - Coordenadores
+#### VPC — Coordenadores
 
 <div align="center">
   <img src="/assets/vpccoord.png">
@@ -324,11 +328,11 @@ A plataforma gera benefícios ao:
   <strong>Figura 5 — Value Proposition Canvas (Coordenadores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-### A. Perfil do Cliente
+##### A. Perfil do Cliente
 
-#### Tarefas do cliente (Customer Jobs)
+###### Tarefas do cliente (Customer Jobs)
 
-Os coordenadores possuem um papel estratégico dentro da instituição. Eles precisam:
+Aos coordenadores é atribuído um papel estratégico dentro da instituição. As seguintes responsabilidades são exercidas:
 
 - organizar processos avaliativos;
 - supervisionar avaliações;
@@ -337,11 +341,11 @@ Os coordenadores possuem um papel estratégico dentro da instituição. Eles pre
 - apoiar decisões pedagógicas;
 - garantir segurança e padronização.
 
-Na prática, a plataforma permite uma visão ampla e centralizada de toda a operação.
+Na prática, uma visão ampla e centralizada de toda a operação é proporcionada pela plataforma.
 
 ---
 
-#### Dores (Pains)
+###### Dores (Pains)
 
 Entre os principais desafios enfrentados estão:
 
@@ -352,11 +356,11 @@ Entre os principais desafios enfrentados estão:
 - dificuldade na tomada de decisão;
 - baixa visibilidade dos resultados.
 
-Esses problemas dificultam a gestão eficiente da instituição.
+Esses problemas resultam em dificuldades para a gestão eficiente da instituição.
 
 ---
 
-#### Ganhos (Gains)
+###### Ganhos (Gains)
 
 Com a plataforma, os coordenadores passam a ter:
 
@@ -367,13 +371,13 @@ Com a plataforma, os coordenadores passam a ter:
 - aumento da eficiência institucional;
 - maior segurança da informação.
 
-Isso fortalece a gestão e melhora a qualidade dos processos educacionais.
+Com isso, a gestão é fortalecida e a qualidade dos processos educacionais é melhorada.
 
 ---
 
-### B. Mapa de Valor
+##### B. Mapa de Valor
 
-#### Produtos e Serviços
+###### Produtos e Serviços
 
 A solução inclui:
 
@@ -385,7 +389,7 @@ A solução inclui:
 
 ---
 
-#### Aliviadores de Dores (Pain Relievers)
+###### Aliviadores de Dores (Pain Relievers)
 
 A plataforma ajuda ao:
 
@@ -396,7 +400,7 @@ A plataforma ajuda ao:
 
 ---
 
-#### Criadores de Ganhos (Gain Creators)
+###### Criadores de Ganhos (Gain Creators)
 
 A solução agrega valor ao:
 
@@ -405,17 +409,19 @@ A solução agrega valor ao:
 - apoiar decisões estratégicas;
 - modernizar processos educacionais.
 
+&emsp;**Fit entre proposta e perfil:** A dor de falta de centralização de dados é aliviada pelo painel de visualização de todas as provas (RF018) e pelos relatórios automáticos de desempenho (RF019). A dificuldade de monitoramento é reduzida pelo módulo de logs e analytics (US16), que oferece métricas de participação e desempenho por questão. O ganho de eficiência institucional é criado pela exportação estruturada de resultados em Excel (US14) e pelo histórico de envios de e-mail com status (US15).
+
 ---
 
 ### 2.1.5. Matriz de Riscos do Projeto
 
-A seção foi estruturada com base em três fundamentos permitidos pelos anexos: o contexto do Instituto Ponte, o escopo da solução e as restrições formais do TAPI.
+A seção foi estruturada com base no contexto do Instituto Ponte, no escopo da solução e nas restrições formais do TAPI.
 
-### Critério de classificação
+#### Critério de classificação
 
 A classificação foi definida pela combinação entre probabilidade e impacto, priorizando os riscos mais prováveis e com maior efeito sobre o cumprimento do escopo, do prazo e da qualidade da solução. Foram considerados os tipos esperados para este projeto: tecnológicos, de usuário, de negócio, de conteúdo e ético/regulatórios. A resposta foi descrita em três frentes: mitigação, prevenção e plano contingencial.
 
-### Matriz de riscos
+#### Matriz de riscos
 
 <div align="center">
   <img src="/assets/matrizRisco.jpg">
@@ -432,7 +438,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 | **A03 — Falhas no fluxo de submissão de respostas e anexos** | Tecnológico | Como a solução depende do envio de respostas e arquivos de resolução, qualquer falha nesse fluxo pode comprometer a integridade da prova e gerar retrabalho para o aluno e para o professor. | 50 | Muito Alto | Alta prioridade | **Mitigação:** validações de formulário e confirmação explícita de envio; **Prevenção:** testes do fluxo completo de submissão; **Contingência:** registro de falhas e reenvio orientado pelo sistema. | Equipe de back-end |
 | **A04 — Dificuldade na correção por item** | Negócio / usuário | A proposta inclui organização da correção por itens da avaliação. Se a navegação entre questões não for clara, o ganho de padronização da correção pode ser reduzido. | 50 | Alto | Média-alta prioridade | **Mitigação:** arquitetura de navegação simples entre itens; **Prevenção:** revisão do fluxo com o parceiro antes da entrega final; **Contingência:** ajustes no agrupamento das respostas conforme o uso real. | Equipe de produto e validação com o parceiro |
 | **A05 — Atraso na entrega das funcionalidades centrais** | Negócio / tecnológico | O projeto reúne criação de prova, submissão do aluno e painel de correção em um único produto, o que pode pressionar o cronograma e afetar a conclusão das entregas prioritárias. | 50 | Moderado | Média prioridade | **Mitigação:** divisão do escopo em incrementos; **Prevenção:** priorização do MVP e controle das sprints; **Contingência:** corte controlado de funcionalidades não essenciais. | Gestão do grupo |
-| **A06 — Fragilidade no controle de acesso em razão da ausência de autenticação** | Ético/regulatório / negócio | O TAPI estabelece que não haverá sistema de login e senha, prevendo apenas identificação simples. Essa decisão simplifica o acesso, mas reduz o controle de identidade no fluxo da aplicação. | 50 | Alto | Média-alta prioridade | **Mitigação:** registrar o acesso de forma transparente dentro do fluxo definido; **Prevenção:** documentar claramente o procedimento de uso; **Contingência:** adotar conferência manual quando o parceiro julgar necessário. | Equipe de produto e parceiro |
+| **A06 — Identificação não autenticada no fluxo do aluno** | Ético/regulatório / negócio | O acesso dos alunos ocorre por identificação simples (nome, CPF e e-mail), sem autenticação forte. Embora professores e coordenadores utilizem OAuth2 Google, o fluxo do aluno permanece sem verificação de identidade robusta, o que pode permitir submissões com dados falsos ou acesso não autorizado a provas por link. | 50 | Alto | Média-alta prioridade | **Mitigação:** registrar o acesso de forma transparente dentro do fluxo definido; **Prevenção:** documentar claramente o procedimento de uso; **Contingência:** adotar conferência manual quando o parceiro julgar necessário. | Equipe de produto e parceiro |
 | **A07 — Limitação de expansão por ausência de APIs externas** | Negócio | Como o projeto não contempla integração com WebAPIs externas, a evolução futura da solução pode ficar limitada a funcionalidades internas da própria aplicação. | 50 | Moderado | Média prioridade | **Mitigação:** organizar a arquitetura com contratos internos bem definidos; **Prevenção:** documentar pontos de extensão; **Contingência:** tratar integrações futuras como evolução fora do escopo atual. | Equipe de back-end |
 | **A08 — Ausência de mecanismos de proctoring** | Ético/regulatório | O TAPI exclui bloqueio de navegador e monitoramento por câmera. A solução, portanto, prioriza acessibilidade, mas não oferece meios de supervisão avançada durante a aplicação da prova. | 50 | Moderado | Média prioridade | **Mitigação:** reforçar a clareza das regras de aplicação com o parceiro; **Prevenção:** manter o escopo aderente ao TAPI; **Contingência:** eventual adoção de procedimentos manuais de supervisão pela instituição. | Parceiro e equipe de alinhamento |
 | **O01 — Ampliação do alcance da solução para contextos semelhantes** | Negócio | A estrutura do Instituto Ponte e o problema enfrentado pelo parceiro indicam uma demanda que pode ser compartilhada por outras organizações com realidade educacional parecida. | 50 | Alto | Alta oportunidade | **Aproveitamento:** manter a solução simples, adaptável e documentada para facilitar futuras adaptações. | Equipe de produto |
@@ -442,13 +448,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 
 ## 2.2. Personas
 
-### Mini descrição das personas
-
-- **Aluno (Edgar Romeo):** Estudante com baixo letramento digital que enfrenta dificuldades para navegar e compreender plataformas de prova online, necessitando de uma interface simples e intuitiva.
-
-- **Professor (Ronaldo Silva):** Docente experiente que realiza correções digitais, mas sofre com falta de organização e risco de perda de progresso, buscando mais eficiência no processo avaliativo.
-
-- **Coordenadora (Valéria dos Santos):** Profissional com alto domínio digital que precisa de acesso estruturado a dados, relatórios e histórico de provas para apoiar a tomada de decisão acadêmica.
+&emsp;Foram elaboradas três proto-personas representando os perfis de usuários do sistema: Edgar Romeo (aluno), estudante com baixo letramento digital que necessita de interface simples e intuitiva; Ronaldo Silva (professor), docente experiente que busca eficiência e organização no processo de correção; e Valéria dos Santos (coordenadora), profissional com alto domínio digital que depende de dados estruturados para apoiar decisões pedagógicas. As personas são hipotéticas e foram construídas a partir do contexto institucional do Instituto Ponte e dos dados do TAPI (INSTITUTO PONTE, 2024).
 
 
 <div align="center">
@@ -571,6 +571,7 @@ Com base nas dores e objetivos, surgem oportunidades claras:
 - Interface simples e intuitiva  
 - Centralização de informações em um único sistema  
 - Geração automática de relatórios
+
 ---
 
 #### Conclusão
@@ -1388,7 +1389,9 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 
 ## 3.1. Requisitos do Sistema (sprints 1 a 5)
 
-O Instituto Ponte tem um processo de correção de provas informal e descentralizado, os professores enviam provas por WhatsApp ou e-mail, alunos fotografam resoluções manuscritas e devolvem pelos mesmos canais, e a correção ocorre prova a prova, sem isonomia na correção. Isso gera perda de anexos, dificuldade de renderizar equações matemáticas, sobrecarga operacional dos professores e inconsistência nos critérios de correção entre alunos.
+#### Minimundo do Sistema
+
+Identificou-se que o processo de correção de provas do Instituto Ponte é informal e descentralizado: as provas são enviadas por WhatsApp ou e-mail, as resoluções manuscritas são fotografadas pelos alunos e devolvidas pelos mesmos canais, e a correção é realizada prova a prova, sem isonomia entre questões. Isso resulta em perda de anexos, dificuldade de renderização de equações matemáticas, sobrecarga operacional dos professores e inconsistência nos critérios de correção aplicados aos alunos.
 
 &emsp;Para resolver esse problema, desenvolveu-se uma aplicação web centralizada de gestão de avaliações remotas. A plataforma atende três perfis de usuário, com responsabilidades e permissões distintas.
 
@@ -1400,83 +1403,83 @@ O Instituto Ponte tem um processo de correção de provas informal e descentrali
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
-<!-- *Liste os RF numerados de forma objetiva e verificável. Cada RF deve poder ser convertido em caso de teste.* -->
 | ID | Descrição | Prioridade | Status |
 |---|---|---|---|
 | RF001 | O sistema deve permitir ao professor gerenciar provas em diferentes estados: rascunho, publicada, encerrada e antiga. | Alta | Planejado |
-| RF027 | O sistema deve autenticar professores e coordenadores via OAuth2 Google, validando o e-mail na lista de usuários autorizados e redirecionando para o painel correspondente ao perfil. | Alta | Planejado |
-| RF028 | O sistema deve manter um banco de questões pesquisável por disciplina, tema e tipo. | Alta | Planejado |
-| RF003 | O sistema deve permitir a inserção de enunciados com suporte nativo a fórmulas matemáticas via LaTeX, renderizadas por KaTeX ou MathJax. | Alta | Planejado |
-| RF004 | O sistema deve suportar questões de múltipla escolha, Verdadeiro/Falso (V/F) e questões discursivas. | Alta | Planejado |
-| RF005 | O professor deve poder habilitar a opção para que o aluno envie fotos de resoluções manuscritas em questões específicas. | Alta | Planejado |
-| RF006 | O sistema deve permitir a definição de limites de tempo (duração), datas e horários de início e término da prova. | Alta | Planejado |
+| RF002 | O sistema deve autenticar professores e coordenadores via OAuth2 Google, validando o e-mail na lista de usuários autorizados e redirecionando para o painel correspondente ao perfil. | Alta | Planejado |
+| RF003 | O sistema deve manter um banco de questões pesquisável por disciplina, tema e tipo. | Alta | Planejado |
+| RF004 | O sistema deve permitir a inserção de enunciados com suporte nativo a fórmulas matemáticas via LaTeX, renderizadas por KaTeX ou MathJax. | Alta | Planejado |
+| RF005 | O sistema deve suportar questões de múltipla escolha, Verdadeiro/Falso (V/F) e questões discursivas. | Alta | Planejado |
+| RF006 | O professor deve poder habilitar a opção para que o aluno envie fotos de resoluções manuscritas em questões específicas. | Alta | Planejado |
+| RF007 | O sistema deve permitir a definição de limites de tempo (duração), datas e horários de início e término da prova. | Alta | Planejado |
 | RF008 | O sistema deve gerar URLs únicas e QR Codes para o acesso dos alunos às provas. | Alta | Planejado |
 | RF009 | O sistema deve realizar a identificação do aluno apenas por nome, e-mail e CPF, sem exigência de senhas complexas. | Alta | Planejado |
-| RF012 | O sistema deve permitir que o aluno aplique zoom em imagens contidas nos enunciados para melhor visualização. | Alta | Planejado |
-| RF013 | O ambiente do aluno deve renderizar fórmulas matemáticas de forma legível em qualquer dispositivo. | Alta | Planejado |
-| RF014 | O aluno deve conseguir realizar o upload de múltiplas imagens ou arquivos por questão. | Alta | Planejado |
-| RF015 | O sistema deve realizar a compressão de imagens no lado do cliente (client-side) antes do upload. | Alta | Planejado |
-| RF017 | O sistema deve permitir a correção isonômica, corrigindo a mesma questão de todos os alunos em sequência. | Alta | Planejado |
-| RF018 | O sistema deve disponibilizar campos para atribuição de notas e comentários diretamente na resposta. | Alta | Planejado |
-| RF019 | O sistema deve oferecer uma galeria para ampliação instantânea das fotos enviadas durante a correção. | Alta | Planejado |
-| RF020 | O sistema deve gerar planilhas em Excel com os resultados detalhados por aluno e por questão. | Alta | Planejado |
-| RF023 | O coordenador deve ter acesso a um painel para visualizar todas as provas criadas por qualquer professor. | Alta | Planejado |
-| RF024 | O coordenador deve ser capaz de gerar e visualizar relatórios de desempenho e estatísticas globais. | Alta | Planejado |
-| RF025 | O coordenador deve conseguir monitorar e filtrar o status de todas as provas do instituto. | Alta | Planejado |
-| RF026 | O sistema deve permitir ao professor as funções de criar, editar e excluir avaliações (CRUD completo). | Alta | Planejado |
-| RF002 | O sistema deve permitir a filtragem de avaliações por turma, semestre, disciplina ou nome do professor. | Média | Planejado |
-| RF007 | O sistema deve oferecer opções para embaralhar automaticamente a ordem das questões e das alternativas. | Média | Planejado |
-| RF010 | O sistema deve exibir um portal de instruções com regras, duração e prazos antes do início da avaliação. | Média | Planejado |
-| RF011 | O sistema deve permitir que o aluno escolha exibir ou ocultar o cronômetro (timer) de tempo restante. | Média | Planejado |
-| RF016 | O sistema deve exibir avisos de questões em branco e um resumo de progresso antes do envio final. | Média | Planejado |
-| RF021 | O sistema deve ser capaz de enviar o resultado individual e o feedback para o e-mail do aluno. | Média | Planejado |
-| RF022 | O sistema deve permitir a exportação de todos os anexos enviados para armazenamento local ou em nuvem. | Baixa | Planejado |
+| RF010 | O sistema deve permitir que o aluno aplique zoom em imagens contidas nos enunciados para melhor visualização. | Alta | Planejado |
+| RF011 | O ambiente do aluno deve renderizar fórmulas matemáticas de forma legível em qualquer dispositivo. | Alta | Planejado |
+| RF012 | O aluno deve conseguir realizar o upload de múltiplas imagens ou arquivos por questão. | Alta | Planejado |
+| RF013 | O sistema deve realizar a compressão de imagens no lado do cliente (client-side) antes do upload. | Alta | Planejado |
+| RF014 | O sistema deve permitir a correção isonômica, corrigindo a mesma questão de todos os alunos em sequência. | Alta | Planejado |
+| RF015 | O sistema deve disponibilizar campos para atribuição de notas e comentários diretamente na resposta. | Alta | Planejado |
+| RF016 | O sistema deve oferecer uma galeria para ampliação instantânea das fotos enviadas durante a correção. | Alta | Planejado |
+| RF017 | O sistema deve gerar planilhas em Excel com os resultados detalhados por aluno e por questão. | Alta | Planejado |
+| RF018 | O coordenador deve ter acesso a um painel para visualizar todas as provas criadas por qualquer professor. | Alta | Planejado |
+| RF019 | O coordenador deve ser capaz de gerar e visualizar relatórios de desempenho e estatísticas globais. | Alta | Planejado |
+| RF020 | O coordenador deve conseguir monitorar e filtrar o status de todas as provas do instituto. | Alta | Planejado |
+| RF021 | O sistema deve permitir ao professor as funções de criar, editar e excluir avaliações (CRUD completo). | Alta | Planejado |
+| RF022 | O sistema deve permitir a filtragem de avaliações por turma, semestre, disciplina ou nome do professor. | Média | Planejado |
+| RF023 | O sistema deve oferecer opções para embaralhar automaticamente a ordem das questões e das alternativas. | Média | Planejado |
+| RF024 | O sistema deve exibir um portal de instruções com regras, duração e prazos antes do início da avaliação. | Média | Planejado |
+| RF025 | O sistema deve permitir que o aluno escolha exibir ou ocultar o cronômetro (timer) de tempo restante. | Média | Planejado |
+| RF026 | O sistema deve exibir avisos de questões em branco e um resumo de progresso antes do envio final. | Média | Planejado |
+| RF027 | O sistema deve ser capaz de enviar o resultado individual e o feedback para o e-mail do aluno. | Média | Planejado |
+| RF028 | O sistema deve permitir a exportação de todos os anexos enviados para armazenamento local ou em nuvem. | Baixa | Planejado |
 
 ### 3.1.2. Regras de Negócio (sprint 1, refinar até sprint 5)
 
 | ID   | Descrição | RF associado |
 |------|-----------|--------------|
-| RN01 | O sistema deve gerenciar provas em estados válidos (rascunho, ativa, encerrada), impedindo edição quando encerradas e permitindo filtragem por status. | RF001, RF025 |
-| RN02 | O sistema deve permitir aplicação de filtros combinados (turma, semestre, disciplina, professor), retornando apenas resultados que atendam a todos os critérios. | RF002 |
-| RN03 | O sistema deve garantir a correta criação de questões, incluindo tipo válido, validação de alternativas e renderização de fórmulas matemáticas. | RF003, RF004 |
-| RN04 | O sistema deve controlar o envio de arquivos, permitindo upload apenas quando habilitado, aceitando formatos válidos, múltiplos arquivos por questão e mantendo vínculo correto. | RF005, RF014 |
-| RN05 | O sistema deve controlar o tempo e acesso à prova, impedindo início fora do período, encerrando automaticamente ao término e respeitando configurações definidas. | RF006 |
-| RN06 | O sistema deve aplicar corretamente o embaralhamento de questões e alternativas quando configurado. | RF007 |
+| RN01 | O sistema deve gerenciar provas em estados válidos (rascunho, publicada, encerrada, antiga), impedindo edição quando encerradas ou antigas e permitindo filtragem por status. | RF001, RF020 |
+| RN02 | O sistema deve permitir aplicação de filtros combinados (turma, semestre, disciplina, professor), retornando apenas resultados que atendam a todos os critérios. | RF022 |
+| RN03 | O sistema deve garantir a correta criação de questões, incluindo tipo válido, validação de alternativas e renderização de fórmulas matemáticas. | RF004, RF005 |
+| RN04 | O sistema deve controlar o envio de arquivos, permitindo upload apenas quando habilitado, aceitando formatos válidos, múltiplos arquivos por questão e mantendo vínculo correto. | RF006, RF012 |
+| RN05 | O sistema deve controlar o tempo e acesso à prova, impedindo início fora do período, encerrando automaticamente ao término e respeitando configurações definidas. | RF007 |
+| RN06 | O sistema deve aplicar corretamente o embaralhamento de questões e alternativas quando configurado. | RF023 |
 | RN07 | Cada prova deve possuir acesso único por meio de URL e QR Code vinculados. | RF008 |
 | RN08 | O sistema deve identificar o aluno por nome, e-mail e CPF, impedindo múltiplas submissões para a mesma prova. | RF009 |
-| RN09 | O sistema deve exibir instruções obrigatórias antes do início e permitir controle de exibição do cronômetro durante a prova. | RF010, RF011 |
-| RN10 | O sistema deve garantir a correta visualização de conteúdo, incluindo renderização de fórmulas e ampliação de imagens sem perda relevante de qualidade. | RF012, RF013 |
-| RN11 | O sistema deve otimizar o envio de imagens, aplicando compressão sem comprometer a legibilidade. | RF015 |
-| RN12 | O sistema deve validar a submissão da prova, alertando sobre questões em branco antes do envio final. | RF016 |
-| RN13 | O sistema deve permitir correção por questão, com atribuição de notas e comentários e visualização adequada dos anexos. | RF017, RF018, RF019 |
-| RN14 | O sistema deve processar e disponibilizar resultados, incluindo cálculo automático de notas e geração de relatórios estruturados. | RF020 |
-| RN15 | O sistema deve controlar a divulgação de resultados e feedbacks aos alunos após finalização da correção. | RF021 |
-| RN16 | O sistema deve garantir integridade na exportação de anexos, mantendo correspondência com aluno e questão. | RF022 |
-| RN17 | O sistema deve permitir ao coordenador visualizar, filtrar e gerar relatórios sobre todas as provas do sistema. | RF023, RF024 |
-| RN18 | Somente usuários com perfil Professor, autenticados via OAuth2, podem criar, editar e excluir avaliações. Coordenadores têm acesso somente de leitura a todas as provas e relatórios. Alunos não têm acesso a nenhum painel de gestão. A verificação de autorização deve ocorrer no backend em todas as rotas protegidas. | RF026, RF027 |
-| RN19 | O sistema deve verificar se o e-mail retornado pelo Google OAuth2 consta na lista de usuários autorizados antes de criar a sessão. Caso o e-mail não esteja autorizado, o acesso deve ser negado com mensagem informativa. A sessão deve expirar após período de inatividade, bloqueando o acesso a páginas protegidas. | RF027 |
+| RN09 | O sistema deve exibir instruções obrigatórias antes do início e permitir controle de exibição do cronômetro durante a prova. | RF024, RF025 |
+| RN10 | O sistema deve garantir a correta visualização de conteúdo, incluindo renderização de fórmulas e ampliação de imagens sem perda relevante de qualidade. | RF010, RF011 |
+| RN11 | O sistema deve otimizar o envio de imagens, aplicando compressão sem comprometer a legibilidade. | RF013 |
+| RN12 | O sistema deve validar a submissão da prova, alertando sobre questões em branco antes do envio final. | RF026 |
+| RN13 | O sistema deve permitir correção por questão, com atribuição de notas e comentários e visualização adequada dos anexos. | RF014, RF015, RF016 |
+| RN14 | O sistema deve processar e disponibilizar resultados, incluindo cálculo automático de notas e geração de relatórios estruturados. | RF017 |
+| RN15 | O sistema deve controlar a divulgação de resultados e feedbacks aos alunos após finalização da correção. | RF027 |
+| RN16 | O sistema deve garantir integridade na exportação de anexos, mantendo correspondência com aluno e questão. | RF028 |
+| RN17 | O sistema deve permitir ao coordenador visualizar, filtrar e gerar relatórios sobre todas as provas do sistema. | RF018, RF019 |
+| RN18 | Somente usuários com perfil Professor, autenticados via OAuth2, podem criar, editar e excluir avaliações. Coordenadores têm acesso somente de leitura a todas as provas e relatórios. Alunos não têm acesso a nenhum painel de gestão. A verificação de autorização deve ocorrer no backend em todas as rotas protegidas. | RF021, RF002 |
+| RN19 | O sistema deve verificar se o e-mail retornado pelo Google OAuth2 consta na lista de usuários autorizados antes de criar a sessão. Caso o e-mail não esteja autorizado, o acesso deve ser negado com mensagem informativa. A sessão deve expirar após período de inatividade, bloqueando o acesso a páginas protegidas. | RF002 |
+| RN20 | O sistema deve permitir ao professor buscar questões no banco por disciplina, tema e tipo, exibindo apenas questões compatíveis com os critérios informados. Questões selecionadas devem ser vinculadas ao editor da prova em edição sem duplicação no banco. | RF003 |
 
-###    Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
+### 3.1.3. Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
 
 
 | Eixo                     | Requisito | Métrica / Critério | Como atendido |
 |--------------------------|-----------|--------------------|---------------|
 | USAB — Usabilidade       | O sistema deve ser utilizável em dispositivos móveis e de fácil compreensão para alunos com baixo letramento digital, observando diretrizes de acessibilidade. | Interface funcional em telas ≥ 360px; ≥ 90% dos usuários conseguem iniciar a prova sem auxílio em testes com perfis de baixo letramento digital; conformidade parcial com WCAG 2.1 nível AA para elementos críticos do fluxo do aluno. | Design responsivo, interface simplificada com fluxo de no máximo 3 passos até iniciar a prova, e contraste de cores conforme WCAG 2.1. |
-| CONF — Confiabilidade    | O sistema deve garantir a integridade das respostas e arquivos enviados. | 100% das submissões confirmadas armazenadas; taxa de falha < 2%. | Persistência em banco e confirmação de envio ao usuário. |
+| CONF — Confiabilidade    | O sistema deve garantir a integridade das respostas e arquivos enviados. | 100% das submissões confirmadas armazenadas; taxa de falha < 2%. | Salvamento automático de progresso (US10), confirmação visual de envio (US11), persistência transacional em banco e validação de integridade na exportação de anexos (RN16). |
 | DES — Desempenho         | O sistema deve responder de forma eficiente às ações principais do usuário, mesmo em conexões de baixa velocidade. | Endpoints de leitura (listagem de provas, questões) respondem em p95 < 500ms com até 200 registros; endpoints de escrita (submissão de prova) confirmam persistência em p95 < 1s; uploads de imagem processados com compressão client-side antes do envio. | Otimização de requisições, compressão de imagens client-side e cache de respostas frequentes. |
 | SUP — Suportabilidade    | O sistema deve permitir manutenção e evolução contínua ao longo das sprints, com cobertura de testes que proteja funcionalidades existentes contra regressões. | Cobertura de testes automatizados ≥ 60% nas camadas de serviço ao final da Sprint 4; tempo de onboarding de novo desenvolvedor ≤ 2h seguindo o README; nenhuma alteração em sprint posterior deve quebrar testes existentes aprovados. | Arquitetura modular em camadas (Controller/Service/Repository), versionamento Git com branches por funcionalidade e suite de testes Jest. |
 | SEG — Segurança          | O sistema deve restringir o acesso às provas, proteger dados pessoais dos alunos (CPF, e-mail) em conformidade com a LGPD, e validar todos os dados de entrada. | Acesso de alunos apenas via link UUID válido; 100% dos inputs validados no backend; tráfego obrigatoriamente via HTTPS; dados pessoais não armazenados em texto plano; consentimento LGPD registrado com timestamp por aluno. | URLs únicas por UUID, validação backend em todas as rotas, HTTPS obrigatório, hash de dados sensíveis e registro de consentimento explícito. |
-| CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 50 usuários simultâneos em testes iniciais. | Estrutura preparada para concorrência básica. |
-| REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Não utilizar login/senha nem APIs externas. | Implementação conforme escopo técnico (Node.js + SQLite). |
+| CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 50 usuários simultâneos em testes iniciais; taxa de erros 5xx < 1% e p95 < 1s sob essa carga. | Arquitetura Node.js com I/O não-bloqueante; uploads com compressão client-side reduzem carga no servidor; testável com k6 ou Artillery. |
+| REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Ausência de sistema de login/senha para alunos; ausência de chamadas a WebAPIs externas não autorizadas; verificável por revisão de código. | Fluxo do aluno via link UUID sem senha; OAuth2 apenas para usuários internos; nenhuma dependência de API externa no package.json além das bibliotecas autorizadas (KaTeX, MathJax). |
 | ORG — Organizacionais    | O sistema deve ser documentado e entregável de forma reproduzível, com README atualizado a cada sprint e instruções de instalação executáveis em ambiente limpo. | README com instruções de instalação executáveis em ambiente limpo Ubuntu/Node.js sem etapas adicionais; documentação sincronizada com o código a cada sprint; todas as variáveis de ambiente externalizadas em `.env.example`. | Documentação versionada junto ao código, variáveis de ambiente separadas e README com passo a passo de instalação verificado por membro externo ao time. |
 
 ---
 
-### Explicação dos Requisitos Não Funcionais
+#### Explicação dos Requisitos Não Funcionais
 
 #### USAB — Usabilidade
 &emsp;Este requisito foi derivado diretamente do perfil de Edgar Romeo (persona do aluno), que possui baixo letramento digital e utiliza dispositivos com telas pequenas. A conformidade parcial com WCAG 2.1 AA garante acessibilidade mínima para usuários com necessidades especiais, alinhando-se ao compromisso institucional do Instituto Ponte com a inclusão.  
-Relaciona-se com RF008 (acesso via link único), RF010 (portal inicial de instruções) e RF013 (renderização de fórmulas em mobile).  
+Relaciona-se com RF008 (acesso via link único), RF024 (portal inicial de instruções) e RF011 (renderização de fórmulas em mobile).  
 **Mensurabilidade:** testes de usabilidade com 5 usuários do perfil-alvo, registrando taxa de conclusão sem auxílio.  
 **Conexão com contexto do parceiro:** alunos em 18 estados com condições heterogêneas de acesso exigem interface mínima e robusta.  
 **Critério de aceite:** ≥ 90% dos participantes do teste iniciam a prova sem assistência técnica.
@@ -1484,18 +1487,19 @@ Relaciona-se com RF008 (acesso via link único), RF010 (portal inicial de instru
 ---
 
 #### CONF — Confiabilidade
-Deriva do problema atual do parceiro, que envolve perda de respostas e arquivos.  
-A métrica garante que todas as submissões confirmadas estejam persistidas.  
-Relaciona-se com RF014 (upload) e RF020 (resultados).  
-**Critério de aceite:** nenhuma submissão confirmada pode ser perdida.
+&emsp;Este requisito deriva diretamente do problema central do parceiro: no processo atual, respostas e arquivos são perdidos ao serem trocados por WhatsApp e e-mail — exatamente o problema que a solução se propõe a eliminar. A confiabilidade não é apenas um requisito técnico; é o compromisso mais fundamental da plataforma com os alunos e professores do Instituto Ponte.  
+Relaciona-se com RF012 (upload de múltiplas imagens), RF013 (compressão client-side), RF017 (geração de planilhas de resultados) e com o critério de aceite CR-01 da US10 (salvamento automático).  
+**Mensurabilidade:** log de submissões comparado ao banco de dados após testes de carga; taxa de falha calculada como (submissões perdidas / submissões confirmadas) × 100.  
+**Conexão com contexto do parceiro:** perda de provas em processo seletivo tem impacto direto na vida dos estudantes atendidos — nenhuma submissão confirmada pode ser descartada.  
+**Critério de aceite:** taxa de falha < 2% em testes com 50 submissões simultâneas; 100% das submissões com confirmação visual armazenadas no banco.
 
 ---
 
 #### DES — Desempenho
 &emsp;Este requisito deriva diretamente do contexto do parceiro: alunos em situação de vulnerabilidade social com frequência utilizam conexões instáveis ou de baixa largura de banda. A métrica de p95 < 500ms para leituras e < 1s para escritas é mensurável por ferramentas de teste de carga (ex.: k6, Artillery) e alinhada com padrões de qualidade de APIs REST.  
-Relaciona-se com RF014 (upload de imagens) e RF015 (compressão client-side).  
+Relaciona-se com RF012 (upload de imagens) e RF013 (compressão client-side).  
 **Mensurabilidade:** testável por ferramentas de carga com relatório de percentis.  
-**Conexão com RF:** RF015 (compressão client-side) é o principal mecanismo de atendimento a este RNF.  
+**Conexão com RF:** RF013 (compressão client-side) é o principal mecanismo de atendimento a este RNF.  
 **Critério de aceite:** em teste com carga de 50 usuários simultâneos, 95% das requisições de leitura completam em < 500ms.
 
 ---
@@ -1511,25 +1515,27 @@ Relaciona-se com todos os RF, pois impacta a manutenibilidade geral da base de c
 
 #### SEG — Segurança
 &emsp;Este requisito foi derivado de duas fontes: (a) a restrição do TAPI quanto à ausência de login/senha para alunos, que exige controle de acesso alternativo via link UUID; e (b) a coleta de dados pessoais (CPF, e-mail) dos alunos, que impõe conformidade obrigatória com a Lei Geral de Proteção de Dados Pessoais (LGPD — Lei nº 13.709/2018).  
-Relaciona-se com RF008 (URL única), RF009 (identificação do aluno), RF027 (OAuth2 para usuários internos) e com o critério de aceite CR-04 da US08 (consentimento LGPD).  
+Relaciona-se com RF008 (URL única), RF009 (identificação do aluno), RF002 (OAuth2 para usuários internos) e com o critério de aceite CR-04 da US08 (consentimento LGPD).  
 **Mensurabilidade:** auditoria de código para verificação de HTTPS, ausência de dados em texto plano e presença de registro de consentimento.  
 **Critério de aceite:** nenhum dado pessoal armazenado em texto plano; consentimento LGPD registrado com timestamp; acesso ao painel interno apenas via sessão autenticada por OAuth2.
 
 ---
 
 #### CAP — Capacidade
-Baseado na necessidade de múltiplos alunos realizarem provas simultaneamente.  
-A métrica define um limite inicial de usuários concorrentes.  
-Relaciona-se com RF006 (tempo de prova) e RF014 (uploads simultâneos).  
-**Critério de aceite:** o sistema permanece funcional com múltiplos acessos.
+&emsp;Este requisito foi derivado do contexto operacional do Instituto Ponte: 440 alunos distribuídos em 18 estados podem realizar provas em janelas de tempo sobrepostas, gerando acessos simultâneos ao sistema. A métrica de 50 usuários simultâneos representa o cenário realista de uma aplicação de prova de processo seletivo, testável por ferramentas como k6 ou Artillery.  
+Relaciona-se com RF007 (controle de tempo de prova) e RF012 (uploads simultâneos de imagens).  
+**Mensurabilidade:** teste de carga com 50 usuários virtuais simultâneos, verificando ausência de erros 5xx e tempo de resposta dentro dos limites do eixo DES.  
+**Conexão com contexto do parceiro:** o sistema precisa suportar todos os candidatos de uma turma realizando o processo seletivo ao mesmo tempo.  
+**Critério de aceite:** o sistema permanece funcional com taxa de erros < 1% e p95 < 1s sob carga de 50 usuários simultâneos.
 
 ---
 
 #### REST — Restrições de Design
-Deriva diretamente das limitações definidas no escopo do projeto.  
-A métrica é binária (presença/ausência de tecnologias proibidas).  
-Relaciona-se com toda a arquitetura do sistema.  
-**Critério de aceite:** o sistema não utiliza login tradicional nem APIs externas.
+&emsp;Este requisito deriva diretamente das restrições impostas pelo TAPI: ausência de sistema de login/senha para alunos e ausência de integração com WebAPIs externas (como Canvas ou Google Drive). Essas restrições foram definidas pelo parceiro para garantir simplicidade de acesso e controle total do código pelo time de desenvolvimento, sem dependências externas que possam introduzir falhas ou custos adicionais.  
+Relaciona-se com toda a arquitetura do sistema, especialmente com RF002 (OAuth2 apenas para usuários internos), RF008 (link único para alunos) e RF009 (identificação sem senha).  
+**Mensurabilidade:** verificação binária — o sistema não pode conter chamadas a WebAPIs externas não autorizadas; o acesso do aluno não pode exigir senha.  
+**Conexão com restrição do parceiro:** explicitado no TAPI como "Restrições / O Projeto Não Contempla" (INSTITUTO PONTE, 2024).  
+**Critério de aceite:** revisão de código confirma ausência de dependências externas não autorizadas; fluxo do aluno não exige criação de conta ou senha.
 
 ---
 
@@ -1548,32 +1554,33 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 | RF | RN associadas | Endpoint | Método |
 |----|---------------|----------|--------|
 | RF001 | RN01 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF027 | RN19 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF002 | RN02 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF003 | RN03 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF002 | RN19 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF003 | RN20 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF022 | RN02 | *(a definir — Sprint 3)* | *(a definir)* |
 | RF004 | RN03 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF005 | RN04 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF006 | RN05 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF007 | RN06 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF005 | RN03 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF006 | RN04 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF007 | RN05 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF023 | RN06 | *(a definir — Sprint 3)* | *(a definir)* |
 | RF008 | RN07 | *(a definir — Sprint 3)* | *(a definir)* |
 | RF009 | RN08 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF010 | RN09 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF011 | RN09 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF012 | RN10 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF013 | RN10 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF014 | RN04 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF015 | RN11 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF016 | RN12 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF017 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF018 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF019 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF020 | RN14 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF021 | RN15 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF022 | RN16 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF023 | RN17 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF024 | RN17 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF025 | RN01 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF026 | RN18 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF024 | RN09 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF025 | RN09 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF010 | RN10 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF011 | RN10 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF012 | RN04 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF013 | RN11 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF026 | RN12 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF014 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF015 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF016 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF017 | RN14 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF027 | RN15 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF028 | RN16 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF018 | RN17 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF019 | RN17 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF020 | RN01 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF021 | RN18 | *(a definir — Sprint 3)* | *(a definir)* |
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
@@ -1595,30 +1602,30 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ---
 
-### Lista Consolidada de Casos de Uso
+#### Lista Consolidada de Casos de Uso
 
 | ID | Caso de Uso | Ator Primário | Atores Secundários | Requisitos |
 |---|---|---|---|---|
 | UC01 | Autenticar-se | Professor / Coordenador | Google Auth | US01 |
-| UC02 | Listar e filtrar provas por status | Professor / Coordenador | — | US02, RF001, RF002, RF025 |
-| UC03 | Criar prova a partir da home | Professor | — | US03, RF026 |
-| UC04 | Criar e editar questões com fórmulas e tipos variados | Professor | — | US04, RF003, RF004 |
-| UC05 | Reutilizar questões do banco | Professor | — | US05 |
-| UC06 | Configurar tempo, datas e embaralhamento | Professor | — | US06, RF006, RF007 |
+| UC02 | Listar e filtrar provas por status | Professor / Coordenador | — | US02, RF001, RF022, RF020 |
+| UC03 | Criar prova a partir da home | Professor | — | US03, RF021 |
+| UC04 | Criar e editar questões com fórmulas e tipos variados | Professor | — | US04, RF004, RF005 |
+| UC05 | Reutilizar questões do banco | Professor | — | US05, RF003 |
+| UC06 | Configurar tempo, datas e embaralhamento | Professor | — | US06, RF007, RF023 |
 | UC07 | Publicar prova com URL única e QR Code | Professor | — | US07, RF008 |
-| UC08 | Acessar prova pelo portal do aluno | Aluno | — | US08, RF009, RF010, RF011 |
-| UC09 | Responder prova no mobile com anexos manuscritos | Aluno | — | US09, RF012, RF013, RF014, RF015 |
+| UC08 | Acessar prova pelo portal do aluno | Aluno | — | US08, RF009, RF024, RF025 |
+| UC09 | Responder prova no mobile com anexos manuscritos | Aluno | — | US09, RF010, RF011, RF012, RF013 |
 | UC10 | Salvar rascunho durante a prova *(included por UC09)* | — | — | US10 |
-| UC11 | Revisar e confirmar envio final | Aluno | — | US11, RF016 |
-| UC12 | Corrigir prova por item | Professor | — | US12, RF017, RF018, RF019 |
+| UC11 | Revisar e confirmar envio final | Aluno | — | US11, RF026 |
+| UC12 | Corrigir prova por item | Professor | — | US12, RF014, RF015, RF016 |
 | UC13 | Corrigir questões objetivas automaticamente | Professor | Aluno | US13 |
-| UC14 | Calcular notas e exportar resultados | Coordenador | — | US14, RF020, RF022 |
-| UC15 | Liberar resultados por e-mail | Professor / Coordenador | Serviço de E-mail | US15, RF021 |
+| UC14 | Calcular notas e exportar resultados | Coordenador | — | US14, RF017, RF028 |
+| UC15 | Liberar resultados por e-mail | Professor / Coordenador | Serviço de E-mail | US15, RF027 |
 | UC16 | Consultar logs e analytics da avaliação | Coordenador | — | US16 |
 
 ---
 
-### Descrições Detalhadas dos Casos de Uso
+#### Descrições Detalhadas dos Casos de Uso
 
 ---
 
@@ -2475,7 +2482,7 @@ IDIS – Instituto para o Desenvolvimento do Investimento Social. **Censo GIFE 2
 
 INSTITUTO PONTE. **TAPI – Termo de Abertura do Projeto Inteli**. Vitória: Instituto Ponte, 2024. (Documento interno fornecido pelo parceiro ao Inteli.)
 
-IPEA – Instituto de Pesquisa Econômica Aplicada. **Atlas da Violência 2021**. Brasília: IPEA, 2021. Disponível em: https://www.ipea.gov.br/atlasviolencia. Acesso em: 1 mai. 2025.
+IPEA – Instituto de Pesquisa Econômica Aplicada. **Desigualdades socioeducacionais no Brasil: acesso, permanência e aprendizado**. Brasília: IPEA, 2021. (Texto para Discussão, n. 2644). Disponível em: https://repositorio.ipea.gov.br. Acesso em: 1 mai. 2025.
 
 ISO/IEC 25010:2011. **Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models**. Geneva: ISO, 2011.
 
