@@ -45,21 +45,17 @@
 
 ## Introdução
 
-&emsp; O Instituto Ponte enfrenta desafios significativos na realização, organização e correção de avaliações remotas devido à utilização de métodos descentralizados e informais, como WhatsApp, e-mails e outros canais não estruturados. Embora essas ferramentas permitam a continuidade de processos avaliativos, elas apresentam limitações importantes, como perda de arquivos, dificuldade de organização das submissões e sobrecarga operacional para professores. Além disso, a inexistência de mecanismos específicos para correção distribuída por questão compromete a isonomia avaliativa, dificultando a aplicação de critérios uniformes, transparentes e justos para todos os alunos.
+&emsp;O Instituto Ponte é uma Organização da Sociedade Civil de Interesse Público (OSCIP), fundada em setembro de 2014, com a missão de ser “a Ponte para a ascensão social em uma geração” por meio da educação de qualidade para jovens em situação de vulnerabilidade social. Atualmente, a organização atende 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido de ensino (INSTITUTO PONTE, 2024). Nesse contexto, a equidade do processo avaliativo é central à missão institucional.
 
-&emsp; Diante desse cenário, propõe-se o desenvolvimento de uma aplicação web especializada na criação, publicação, aplicação e correção de avaliações remotas, projetada para atender às necessidades operacionais, pedagógicas e sociais do Instituto Ponte. A solução centralizará todos os processos avaliativos em uma única plataforma digital, proporcionando maior estabilidade, segurança e acessibilidade. Alunos poderão realizar provas e enviar respostas de maneira estruturada, inclusive por dispositivos com recursos limitados. Professores e gestores contarão com ferramentas para elaboração de avaliações, gerenciamento de submissões, correção padronizada e geração de relatórios detalhados de desempenho.
+&emsp;Foi identificado que a realização e a correção de avaliações remotas ocorrem de forma descentralizada, com uso de WhatsApp, e-mail e outras ferramentas não estruturadas. Isso gera perda de arquivos, dificuldade de organização das submissões, sobrecarga para professores e ausência de mecanismos para correção isonômica por questão. A falta de critérios uniformes e transparentes compromete a justiça avaliativa para os alunos atendidos.
 
-&emsp; Portanto, com essa implementação, espera-se reduzir falhas operacionais, otimizar processos institucionais, fortalecer a integridade dos dados e promover maior equidade no processo avaliativo, utilizando a tecnologia como instrumento estratégico para inovação educacional e inclusão social.
-# <a name="c2"></a>2. Visão Geral da Aplicação Web (sprint 1)
+&emsp;Diante disso, propõe-se o desenvolvimento de uma aplicação web para criar, publicar, aplicar e corrigir avaliações remotas no Instituto Ponte. A solução centraliza o processo em uma única plataforma, promovendo três resultados principais: equidade para os alunos, com interface acessível em dispositivos limitados; eficiência para os professores, com correção padronizada por questão; e inteligência institucional para os coordenadores, com relatórios automáticos de desempenho. Com isso, espera-se reduzir falhas operacionais, fortalecer a integridade dos dados e ampliar a inclusão social por meio da tecnologia.
+# <a name="c2"></a>2. Visão Geral da Aplicação Web
 
 ## 2.1. Escopo do Projeto (sprints 1 e 4)
 
-### 2.1.1. Modelo de 5 Forças de Porter (sprint 1)
+### 2.1.1. Modelo de 5 Forças de Porter
 
-<!-- 
-*Preencha com até 400 palavras*
-
-*Posicione aqui o modelo de 5 Forças de Porter para sustentar o contexto da indústria.* -->
 <div align="center">
   <img src="../assets/cincoForcasDePorter.jpg" width="850">
 </div>
@@ -68,54 +64,33 @@
   <strong>Figura 1 — 5 Forças de Porter do instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-
 ### Rivalidade entre Concorrentes
-A rivalidade no setor de organizações sociais focadas em educação é moderada. Há várias ONGs atuando em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas oferecem seleção rigorosa combinada com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação reduz a pressão direta.
-
-**Referências que sustentam isso:**
-- IDIS – Censo GIFE 2020: Educação é a área mais concorrida na filantropia.
-- Transparência Brasil: Grande número de ONGs no setor educacional.
-- OECD – "Philanthropy and Education" (2019): Poucos programas têm acompanhamento individual estruturado.
+A rivalidade no setor de organizações sociais voltadas à educação é moderada. Observa-se a atuação de diversas ONGs em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas combinam seleção rigorosa com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação tende a reduzir a pressão direta.  
+Referências-base: IDIS (2020), Transparência Brasil (2022), OECD (2019).
 
 ---
 
 ### Ameaça de Novos Entrantes
-A ameaça de novos entrantes é moderada. Criar uma ONG é simples, porém alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.
-
-**Referências que sustentam isso:**
-- ABONG (2021): Muitas OSCs surgem, poucas atingem a sustentabilidade.
-- Itaú Social (2020): ONGs novas enfrentam dificuldades de governança.
-- McKinsey – "High-Performing NGOs": Reputação e processos sólidos levam anos para se consolidar.
+A ameaça de novos entrantes é moderada. A criação de uma ONG é simples, mas alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.  
+Referências-base: ABONG (2021), Itaú Social (2020), McKinsey (2022).
 
 ---
 
 ### Ameaça de Produtos Substitutos
-A ameaça de substitutos é alta. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte, funcionam como opções substitutas na disputa por estudantes e recursos.
-
-**Referências que sustentam isso:**
-- MEC – Prouni, Fies e Escolas Técnicas: Alternativas formais de acesso.
-- Fundação Estudar, Lemann, Gerando Falcões: Programas de bolsas e mentoria.
-- OECD – "Education at a Glance": Crescimento de iniciativas público-privadas concorrentes.
+A ameaça de substitutos é alta. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte, funcionam como opções substitutas na disputa por estudantes e recursos.  
+Referências-base: MEC (2023), Fundação Estudar (2023), Fundação Lemann (2022), OECD (2023).
 
 ---
 
 ### Poder de Barganha dos Fornecedores
-O poder dos fornecedores — principalmente doadores — é alto. Eles podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.
-
-**Referências que sustentam isso:**
-- IDIS – Doação Brasil (2022): Doadores priorizam métricas e clareza.
-- CAF – World Giving Index: Competição intensa entre causas.
-- GIFE – Mapeamento ISP: Empresas redirecionam recursos conforme resultados.
+O poder de barganha dos fornecedores — principalmente dos doadores — é alto. Esses agentes podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como as ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.  
+Referências-base: IDIS (2022), CAF (2022), GIFE (2021).
 
 ---
 
 ### Poder de Barganha dos Clientes
-O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativas gratuitas com suporte prolongado, mentoria e acompanhamento acadêmico. A demanda supera muito a oferta, reduzindo a capacidade de barganha das famílias atendidas.
-
-**Referências que sustentam isso:**
-- IPEA (2021): Pouco acesso a apoio educacional estruturado.
-- UNICEF (2022): Falta de suporte integral para jovens de baixa renda.
-- Todos Pela Educação: Escassez de iniciativas de acompanhamento individualizado.
+O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativas gratuitas com suporte prolongado, mentoria e acompanhamento acadêmico. A demanda supera muito a oferta, reduzindo a capacidade de barganha das famílias atendidas.  
+Referências-base: IPEA (2021), UNICEF (2022), Todos Pela Educação (2023).
 
 ### 2.1.2. Análise SWOT do Instituto Ponte
 
@@ -127,36 +102,31 @@ O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativa
   <strong>Figura 2 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-&emsp;  Identificou-se no Instituto Ponte um posicionamento diferenciado no terceiro setor educacional brasileiro: a metodologia individualizada e a taxa de aprovação de 92% nos vestibulares consolidam-se como diferenciais competitivos frente a concorrentes como Gerando Falcões e Parceiros da Educação, organizações de maior escala nacional. Constatou-se, contudo, vulnerabilidade financeira pela dependência de doações privadas e concentração regional no Espírito Santo. Verificaram-se oportunidades expressivas na expansão para o Nordeste e no crescimento da agenda ESG corporativa. Como principal ameaça, reconheceu-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
-
+Verificam-se, como forças, a metodologia individualizada e a taxa de aprovação de 92% nos vestibulares. Como fraquezas, destacam-se a dependência de doações privadas e a concentração histórica no Espírito Santo. Como oportunidades, apontam-se a expansão para o Nordeste e o crescimento da agenda ESG corporativa. Como ameaça, registra-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
 ### 2.1.3. Solução (sprints 1 a 5)
 
-A solução baseia-se no desenvolvimento de uma aplicação web para o Instituto Ponte, voltada à criação, aplicação e correção de avaliações remotas. A plataforma prioriza acessibilidade e usabilidade, permitindo que professores gerenciem provas de forma centralizada e que alunos realizem avaliações com facilidade, incluindo envio de respostas e arquivos. O sistema também busca garantir maior organização, eficiência operacional e isonomia no processo avaliativo.
-
-<!-- *Explique detalhadamente os seguintes aspectos (até 60 palavras por item):* -->
+A solução é baseada no desenvolvimento de uma aplicação web para o Instituto Ponte, voltada à criação, aplicação e correção de avaliações remotas. Priorizam-se acessibilidade, organização e isonomia no processo avaliativo.
 
 1. **Problema a ser resolvido**  
-A plataforma atual apresenta baixa usabilidade para alunos com letramento digital limitado, ausência de organização para docentes e falhas de persistência de progresso. A navegação é pouco intuitiva, a correção não é estruturada por questão e há inconsistências no acesso a relatórios e feedbacks, comprometendo equidade, eficiência e confiabilidade do processo avaliativo.
+Verifica-se que o Instituto Ponte não possui uma plataforma centralizada para avaliações remotas. O processo atual, realizado por WhatsApp e e-mail, gera perda de arquivos, desorganização das submissões, correção pouco estruturada e inconsistências no acesso a feedbacks.
 
 2. **Dados disponíveis**  
-O Instituto atende 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido (online e presencial) <br>
-(Fonte: Tapi)
+São atendidos 440 estudantes distribuídos em 18 estados do Brasil, em modelo híbrido. Esses dados ajudam a dimensionar o público atendido e reforçam a necessidade de uma solução simples e escalável.
 
 3. **Solução proposta**  
-Propõe-se uma plataforma web com interface simplificada e responsiva, suporte nativo a fórmulas (LaTeX), upload estruturado por questão e salvamento automático de progresso. Inclui painel de correção por item, visualização organizada de provas e geração automática de relatórios e feedbacks, garantindo acessibilidade e padronização avaliativa.
+Propõe-se uma plataforma web responsiva com interface simplificada, suporte a fórmulas matemáticas via LaTeX, upload estruturado por questão, salvamento automático e painel de correção por item. A solução também gera relatórios de desempenho e feedbacks individuais.
 
 4. **Forma de utilização da solução**  
-O acesso ocorre via link único. Alunos visualizam e respondem questões em interface intuitiva com envio de arquivos. Professores corrigem por questão em ambiente organizado. Coordenadores acessam histórico, relatórios e métricas, permitindo acompanhamento estruturado e tomada de decisão baseada em dados.
+O acesso ocorre por link único. As questões são respondidas e os arquivos são enviados pelos alunos na própria plataforma. A correção é realizada por questão em um ambiente organizado. O histórico, os relatórios e as métricas são acompanhados pelos coordenadores para apoiar decisões pedagógicas.
 
 5. **Benefícios esperados**  
-Redução da dificuldade de uso para alunos, eliminação da perda de progresso e maior segurança na navegação. Para docentes, aumento de eficiência e padronização na correção. Para gestão, acesso centralizado e organizado a dados e relatórios.
+Espera-se que a dificuldade de uso para alunos seja reduzida, que a perda de progresso seja evitada e que a segurança na navegação seja ampliada. Para docentes, a solução traz mais eficiência e padronização. Para a gestão, garantem-se dados centralizados e relatórios organizados.
 
 6. **Critério de sucesso e avaliação**  
-O sucesso ocorre quando alunos concluem provas sem assistência, não há perda de progresso, o tempo médio de correção por questão é reduzido e relatórios são gerados automaticamente e utilizados pela gestão. A usabilidade é validada por usuários com diferentes níveis de letramento digital, sem inconsistências nos dados.
+A solução será considerada bem-sucedida se: 90% dos alunos concluírem a prova sem suporte técnico; 100% das submissões forem persistidas sem perda; o coordenador acessar relatórios automatizados em todas as provas encerradas; e o tempo médio de correção por questão diminuir em relação ao processo manual.
+### 2.1.4. Value Proposition Canvas
 
-### 2.1.4. Value Proposition Canvas (sprint 1): 
-
-# VALUE PROPOSITION CANVAS
+## VALUE PROPOSITION CANVAS
 
 ---
 
@@ -441,11 +411,11 @@ A solução agrega valor ao:
 
 A seção foi estruturada com base em três fundamentos permitidos pelos anexos: o contexto do Instituto Ponte, o escopo da solução e as restrições formais do TAPI.
 
-## Critério de classificação
+### Critério de classificação
 
 A classificação foi definida pela combinação entre probabilidade e impacto, priorizando os riscos mais prováveis e com maior efeito sobre o cumprimento do escopo, do prazo e da qualidade da solução. Foram considerados os tipos esperados para este projeto: tecnológicos, de usuário, de negócio, de conteúdo e ético/regulatórios. A resposta foi descrita em três frentes: mitigação, prevenção e plano contingencial.
 
-## Matriz de riscos
+### Matriz de riscos
 
 <div align="center">
   <img src="/assets/matrizRisco.jpg">
@@ -470,7 +440,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 | **O03 — Melhoria da experiência avaliativa com suporte a equações e uploads** | Tecnológico / conteúdo | O suporte a equações e anexos permite uma prova mais próxima das necessidades reais de avaliação do parceiro e amplia a utilidade pedagógica da solução. | 50 | Moderado | Média oportunidade | **Aproveitamento:** integrar os recursos de forma estável e com linguagem visual consistente. | Equipe de front-end |
 | **O04 — Ganho reputacional pela entrega de uma solução aderente ao contexto social do parceiro** | Negócio / ético | Uma solução coerente com acessibilidade, simplicidade e equidade pode reforçar o valor institucional do projeto junto ao parceiro. | 50 | Moderado | Média oportunidade | **Aproveitamento:** registrar as decisões de projeto e os resultados obtidos para uso em documentação e apresentação final. | Gestão do grupo |
 
-## 2.2. Personas (sprint 1)
+## 2.2. Personas
 
 ### Mini descrição das personas
 
@@ -506,7 +476,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 </div>
 
 <div align="center">
-  <strong>Figura 9 — Persona do Coordenadora.</strong><br><em>Fonte: Foto de <a href="https://unsplash.com/pt-br/@ageing_better?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Centre for Ageing Better</a> na <a href="https://unsplash.com/pt-br/fotografias/uma-mulher-sentada-em-uma-cadeira-segurando-uma-xicara-de-cafe--UPMX2uynvA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+  <strong>Figura 9 — Persona da Coordenadora.</strong><br><em>Fonte: Foto de <a href="https://unsplash.com/pt-br/@ageing_better?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Centre for Ageing Better</a> na <a href="https://unsplash.com/pt-br/fotografias/uma-mulher-sentada-em-uma-cadeira-segurando-uma-xicara-de-cafe--UPMX2uynvA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
       </em>
 </div>
 
@@ -610,9 +580,10 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ## 2.3. User Stories (sprints 1 a 5)
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T001</td></tr>
+  <tr><td><strong>Número</strong></td><td>US01</td></tr>
   <tr><td><strong>Título</strong></td><td>Autenticação de professores e coordenadores.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Coordenador ou Professor.</td></tr>
+  <tr><td><strong>Nota técnica</strong></td><td>O TAPI estabelece ausência de login/senha para acesso à plataforma. Essa restrição aplica-se ao fluxo do <strong>aluno</strong>, que acessa via link único sem credenciais. Para <strong>Professor e Coordenador</strong> — usuários internos com acesso a dados avaliativos sensíveis — optou-se pela autenticação OAuth2 via Google, que não constitui sistema de login/senha tradicional e atende à restrição de acessibilidade do TAPI ao eliminar o gerenciamento de senhas.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Coordenador ou Professor</strong>, quero utilizar minha conta Google para realizar o Login na plataforma.</td></tr>
   <tr>
     <td><strong>Critérios de Aceitação</strong></td>
@@ -663,7 +634,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T002</td></tr>
+  <tr><td><strong>Número</strong></td><td>US02</td></tr>
   <tr><td><strong>Título</strong></td><td>Gestão de provas por status e filtros.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero visualizar provas antigas, rascunhos e encerradas com filtros, para encontrar rapidamente avaliações do processo seletivo.</td></tr>
@@ -712,7 +683,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T003</td></tr>
+  <tr><td><strong>Número</strong></td><td>US03</td></tr>
   <tr><td><strong>Título</strong></td><td>Criação rápida de prova pela home.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero criar uma nova prova diretamente da home, para iniciar rapidamente uma avaliação do processo seletivo.</td></tr>
@@ -761,7 +732,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T004</td></tr>
+  <tr><td><strong>Número</strong></td><td>US04</td></tr>
   <tr><td><strong>Título</strong></td><td>Editor de questões com fórmulas e tipos variados.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero criar questões com enunciados, fórmulas e diferentes tipos de resposta, para montar provas adequadas a disciplinas como Matemática e Português.</td></tr>
@@ -814,16 +785,15 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T005</td></tr>
-  <tr><td><strong>Título</strong></td><td>Banco de questões com detecção de duplicidade.</td></tr>
+  <tr><td><strong>Número</strong></td><td>US05</td></tr>
+  <tr><td><strong>Título</strong></td><td>Banco de questões.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
-  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero reutilizar questões de um banco e ser avisado sobre duplicatas, para montar provas com mais rapidez e consistência.</td></tr>
+  <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero reutilizar questões de um banco, para montar provas com mais rapidez e consistência.</td></tr>
   <tr>
     <td><strong>Critérios de Aceitação</strong></td>
     <td>
       <strong>CR-01</strong> - o professor deve conseguir buscar questões por disciplina, tema ou tipo.<br><br>
-      <strong>CR-02</strong> - o sistema deve alertar quando uma questão cadastrada possuir mais de 80% de similaridade textual, ignorando apenas espaços extras e capitalização, com outra existente no banco.<br><br>
-      <strong>CR-03</strong> - questões selecionadas do banco devem ser adicionadas ao editor da prova.
+      <strong>CR-02</strong> - questões selecionadas do banco devem ser adicionadas ao editor da prova.
     </td>
   </tr>
   <tr>
@@ -837,10 +807,6 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
       – Sistema exibe apenas questões discursivas = correto.<br>
       – Sistema exibe múltipla escolha ou verdadeiro/falso = errado, deve ser corrigido.<br><br>
       <strong>Critério de aceitação: CR-02</strong><br>
-      a. Professor cadastra questão com texto com 80% ou mais semelhante a uma questão existente.<br>
-      – Sistema exibe alerta de possível duplicidade = correto.<br>
-      – Sistema salva sem nenhum aviso = errado, deve ser corrigido.<br><br>
-      <strong>Critério de aceitação: CR-03</strong><br>
       a. Professor seleciona questão do banco e adiciona à prova.<br>
       – Questão aparece no editor da avaliação = correto.<br>
       – Questão não aparece na prova = errado, deve ser corrigido.
@@ -850,11 +816,11 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
     <td><strong>Critérios INVEST</strong></td>
     <td>
       <strong>Independente:</strong> O banco de questões é um módulo separado do editor; pode ser desenvolvido e populado independentemente, com integração ao editor feita por API.<br><br>
-      <strong>Negociável:</strong> O algoritmo de similaridade (limiar de 80%, método de comparação) e os filtros de busca são aspectos técnicos negociáveis sem perda do valor da história.<br><br>
-      <strong>Valorosa:</strong> Economiza tempo do professor ao permitir reaproveitamento de questões já validadas e evita duplicatas que comprometeriam a consistência do banco.<br><br>
-      <strong>Estimável:</strong> Busca com filtros é padrão; a detecção de similaridade textual tem algoritmos conhecidos (ex.: Levenshtein, TF-IDF), tornando a estimativa viável.<br><br>
-      <strong>Pequena:</strong> Cobre apenas busca, alerta de duplicidade e adição ao editor, sem incluir criação ou edição de questões no banco, mantendo o escopo controlado.<br><br>
-      <strong>Testável:</strong> O limiar de 80% de similaridade é mensurável e os cenários de busca por filtro e adição ao editor têm resultados verificáveis objetivamente.
+      <strong>Negociável:</strong> Os filtros de busca (disciplina, tema, tipo) e a forma de exibição das questões são aspectos negociáveis sem perda do valor da história.<br><br>
+      <strong>Valorosa:</strong> Economiza tempo do professor ao permitir reaproveitamento de questões já validadas, aumentando a consistência e agilidade na montagem de provas.<br><br>
+      <strong>Estimável:</strong> Busca com filtros é padrão e com complexidade bem conhecida, tornando a estimativa viável pelo time.<br><br>
+      <strong>Pequena:</strong> Cobre apenas busca e adição de questões ao editor, sem incluir criação ou edição de questões no banco, mantendo o escopo controlado.<br><br>
+      <strong>Testável:</strong> Os cenários de busca por filtro e adição ao editor têm resultados verificáveis objetivamente.
     </td>
   </tr>
 </table>
@@ -862,7 +828,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T006</td></tr>
+  <tr><td><strong>Número</strong></td><td>US06</td></tr>
   <tr><td><strong>Título</strong></td><td>Configuração de tempo, datas e embaralhamento.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero configurar tempo, datas limite e embaralhamento, para controlar a aplicação da prova de forma justa.</td></tr>
@@ -918,7 +884,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T007</td></tr>
+  <tr><td><strong>Número</strong></td><td>US07</td></tr>
   <tr><td><strong>Título</strong></td><td>Publicação por URL e QR Code.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero gerar uma URL e um QR Code da prova, para distribuir o acesso aos candidatos sem uso de senha.</td></tr>
@@ -966,7 +932,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T008</td></tr>
+  <tr><td><strong>Número</strong></td><td>US08</td></tr>
   <tr><td><strong>Título</strong></td><td>Portal de entrada do aluno.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Aluno.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Aluno</strong>, quero acessar a prova por link e preencher meus dados, para iniciar a avaliação sem precisar criar conta.</td></tr>
@@ -975,6 +941,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
     <td>
       <strong>CR-01</strong> - ao acessar uma prova disponível, o aluno deve visualizar título, orientações, duração e regras.<br><br>
       <strong>CR-02</strong> - o aluno deve preencher nome, e-mail e CPF antes de iniciar a prova.<br><br>
+      <em>(Nota: o TAPI menciona "nome e e-mail" como identificação mínima. O CPF foi adicionado para garantir unicidade de identificação — impedindo múltiplas submissões — e para conformidade com a LGPD, cujo tratamento é explicitado no CR-04 por meio do checkbox de consentimento.)</em><br><br>
       <strong>CR-03</strong> - provas fora do período permitido devem exibir mensagem de indisponibilidade.<br><br>
       <strong>CR-04</strong> - o aluno deve marcar um checkbox obrigatório de aceite dos Termos de Uso e Política de Privacidade antes do botão "Iniciar Prova" ser habilitado.
     </td>
@@ -1019,7 +986,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T009</td></tr>
+  <tr><td><strong>Número</strong></td><td>US09</td></tr>
   <tr><td><strong>Título</strong></td><td>Interface de resposta mobile-first com anexos manuscritos.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Aluno.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Aluno</strong>, quero responder questões e enviar imagens de cálculos manuscritos pelo celular, para realizar a prova mesmo sem computador.</td></tr>
@@ -1058,7 +1025,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
       <strong>Negociável:</strong> Os tipos de arquivo aceitos, o limite de tamanho e a quantidade máxima de anexos por questão são parâmetros negociáveis conforme restrições de infraestrutura.<br><br>
       <strong>Valorosa:</strong> Permite que alunos realizem a prova pelo celular e enviem respostas manuscritas, democratizando o acesso à avaliação sem exigir computador.<br><br>
       <strong>Estimável:</strong> Upload com validação de tipo e tamanho e renderização LaTeX em mobile têm soluções conhecidas, com esforço estimável, embora o mobile-first exija atenção a testes em dispositivos.<br><br>
-      <strong>Pequena:</strong> Foca na experiência de resposta e envio de anexos no mobile, sem incluir salvamento automático (T010) ou revisão final (T011), que são histórias separadas.<br><br>
+      <strong>Pequena:</strong> Foca na experiência de resposta e envio de anexos no mobile, sem incluir salvamento automático (US10) ou revisão final (US11), que são histórias separadas.<br><br>
       <strong>Testável:</strong> É possível verificar objetivamente se imagens são salvas corretamente, se arquivos grandes são rejeitados com mensagem adequada e se fórmulas renderizam no mobile.
     </td>
   </tr>
@@ -1067,7 +1034,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T010</td></tr>
+  <tr><td><strong>Número</strong></td><td>US10</td></tr>
   <tr><td><strong>Título</strong></td><td>Rascunho e salvamento durante a prova.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Aluno.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Aluno</strong>, quero ter minhas respostas salvas durante o preenchimento, para evitar perda de progresso por instabilidade, recarregamento ou queda de conexão.</td></tr>
@@ -1117,7 +1084,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T011</td></tr>
+  <tr><td><strong>Número</strong></td><td>US11</td></tr>
   <tr><td><strong>Título</strong></td><td>Revisão e confirmação final de envio.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Aluno.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Aluno</strong>, quero revisar meu progresso antes do envio final, para evitar submissões incompletas ou acidentais.</td></tr>
@@ -1154,7 +1121,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
   <tr>
     <td><strong>Critérios INVEST</strong></td>
     <td>
-      <strong>Independente:</strong> A tela de revisão e confirmação é uma etapa final separada da interface de resposta (T009) e do salvamento (T010), podendo ser implementada de forma independente.<br><br>
+      <strong>Independente:</strong> A tela de revisão e confirmação é uma etapa final separada da interface de resposta (US09) e do salvamento (US10), podendo ser implementada de forma independente.<br><br>
       <strong>Negociável:</strong> O formato visual do destaque de questões em branco, o texto do modal de confirmação e o layout da tela de sucesso são detalhes negociáveis sem comprometer o objetivo.<br><br>
       <strong>Valorosa:</strong> Reduz submissões acidentais ou incompletas, aumentando a qualidade das respostas entregues e a confiança do aluno no processo avaliativo.<br><br>
       <strong>Estimável:</strong> Tela de revisão com mapeamento de questões respondidas/em branco, modal de confirmação e bloqueio pós-envio são funcionalidades de escopo claro e estimável.<br><br>
@@ -1167,7 +1134,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T012</td></tr>
+  <tr><td><strong>Número</strong></td><td>US12</td></tr>
   <tr><td><strong>Título</strong></td><td>Correção por item.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero corrigir a mesma questão de todos os alunos em sequência, para aplicar critérios de avaliação com mais isonomia.</td></tr>
@@ -1204,11 +1171,11 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
   <tr>
     <td><strong>Critérios INVEST</strong></td>
     <td>
-      <strong>Independente:</strong> O módulo de correção por item pode ser desenvolvido após a submissão dos alunos estar implementada, mas é independente do cálculo de notas finais (T014) e da exportação.<br><br>
+      <strong>Independente:</strong> O módulo de correção por item pode ser desenvolvido após a submissão dos alunos estar implementada, mas é independente do cálculo de notas finais (US14) e da exportação.<br><br>
       <strong>Negociável:</strong> A interface de navegação entre respostas, os campos do comentário e as opções de visualização de anexo são negociáveis sem afetar o objetivo de isonomia na correção.<br><br>
       <strong>Valorosa:</strong> Permite que o professor aplique critérios uniformes corrigindo a mesma questão de todos os alunos em sequência, aumentando a justiça e consistência da avaliação.<br><br>
       <strong>Estimável:</strong> Listagem paginada de respostas por questão, formulário de nota/comentário com persistência e visualizador de imagem são funcionalidades com complexidade estimável.<br><br>
-      <strong>Pequena:</strong> Cobre apenas a correção manual de questões abertas por item, sem incluir correção automática (T013) ou exportação de resultados (T014), mantendo o escopo controlado.<br><br>
+      <strong>Pequena:</strong> Cobre apenas a correção manual de questões abertas por item, sem incluir correção automática (US13) ou exportação de resultados (US14), mantendo o escopo controlado.<br><br>
       <strong>Testável:</strong> É possível verificar se a listagem filtra corretamente por questão, se nota e comentário persistem após navegação e se anexos podem ser ampliados.
     </td>
   </tr>
@@ -1217,7 +1184,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T013</td></tr>
+  <tr><td><strong>Número</strong></td><td>US13</td></tr>
   <tr><td><strong>Título</strong></td><td>Correção automática de questões objetivas.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor</strong>, quero ter questões objetivas corrigidas automaticamente, para reduzir esforço manual na apuração das notas.</td></tr>
@@ -1257,11 +1224,11 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
   <tr>
     <td><strong>Critérios INVEST</strong></td>
     <td>
-      <strong>Independente:</strong> A correção automática de objetivas pode ser implementada independentemente da correção manual (T012) e da exportação (T014), sendo acionada no momento da submissão.<br><br>
+      <strong>Independente:</strong> A correção automática de objetivas pode ser implementada independentemente da correção manual (US12) e da exportação (US14), sendo acionada no momento da submissão.<br><br>
       <strong>Negociável:</strong> A política de pontuação parcial, o comportamento do recálculo por gabarito alterado e a forma de exibição do resultado ao professor são aspectos negociáveis.<br><br>
       <strong>Valorosa:</strong> Elimina o trabalho manual de correção de questões objetivas, acelerando a apuração de notas e permitindo ao professor focar nas questões discursivas.<br><br>
       <strong>Estimável:</strong> Comparação de resposta com gabarito e atribuição de pontuação são operações simples e bem delimitadas, com esforço facilmente estimável pelo time.<br><br>
-      <strong>Pequena:</strong> Cobre apenas a correção automática de múltipla escolha e verdadeiro/falso, deixando discursivas para a história de correção manual (T012), mantendo o escopo pequeno.<br><br>
+      <strong>Pequena:</strong> Cobre apenas a correção automática de múltipla escolha e verdadeiro/falso, deixando discursivas para a história de correção manual (US12), mantendo o escopo pequeno.<br><br>
       <strong>Testável:</strong> É possível verificar objetivamente se respostas corretas recebem pontuação, incorretas não recebem, e se o recálculo após mudança de gabarito atualiza as notas.
     </td>
   </tr>
@@ -1270,7 +1237,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T014</td></tr>
+  <tr><td><strong>Número</strong></td><td>US14</td></tr>
   <tr><td><strong>Título</strong></td><td>Cálculo de notas e exportação de resultados.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Coordenador.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Coordenador</strong>, quero visualizar e exportar notas por aluno e por questão, para consolidar os resultados do processo seletivo.</td></tr>
@@ -1307,11 +1274,11 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
   <tr>
     <td><strong>Critérios INVEST</strong></td>
     <td>
-      <strong>Independente:</strong> O módulo de cálculo e exportação depende que as correções (T012 e T013) estejam concluídas, mas pode ser desenvolvido em paralelo usando dados mockados de notas.<br><br>
+      <strong>Independente:</strong> O módulo de cálculo e exportação depende que as correções (US12 e US13) estejam concluídas, mas pode ser desenvolvido em paralelo usando dados mockados de notas.<br><br>
       <strong>Negociável:</strong> O formato da planilha Excel, a estrutura do pacote de anexos e o formato do alerta de pendências são detalhes negociáveis sem impactar o objetivo de consolidação dos resultados.<br><br>
       <strong>Valorosa:</strong> Entrega ao coordenador a visão consolidada dos resultados do processo seletivo em formato exportável, viabilizando a tomada de decisão com base em dados estruturados.<br><br>
       <strong>Estimável:</strong> Soma de notas por aluno, geração de planilha Excel e compactação de anexos em pacote organizado são operações com bibliotecas maduras e esforço estimável.<br><br>
-      <strong>Pequena:</strong> Cobre visualização de nota total e exportação de resultados e anexos, sem incluir a liberação de resultados por e-mail (T015) ou analytics (T016), que são histórias separadas.<br><br>
+      <strong>Pequena:</strong> Cobre visualização de nota total e exportação de resultados e anexos, sem incluir a liberação de resultados por e-mail (US15) ou analytics (US16), que são histórias separadas.<br><br>
       <strong>Testável:</strong> É possível verificar se a nota total é calculada corretamente, se a planilha segue a estrutura definida, se o pacote de anexos está organizado e se o alerta de pendências é exibido.
     </td>
   </tr>
@@ -1320,7 +1287,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T015</td></tr>
+  <tr><td><strong>Número</strong></td><td>US15</td></tr>
   <tr><td><strong>Título</strong></td><td>Liberação de resultados por e-mail.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Professor ou Coordenador.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Professor ou Coordenador</strong>, quero liberar individualmente os resultados por e-mail, para comunicar os candidatos somente quando as notas estiverem validadas.</td></tr>
@@ -1361,7 +1328,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
       <strong>Negociável:</strong> O template do e-mail, o conteúdo exibido ao aluno (nota total, detalhamento por questão) e o comportamento de retry são negociáveis conforme requisitos de comunicação.<br><br>
       <strong>Valorosa:</strong> Garante que os candidatos recebam seus resultados de forma controlada e individual, somente após validação, preservando a integridade do processo seletivo.<br><br>
       <strong>Estimável:</strong> Envio de e-mail transacional com log de status e mecanismo de reenvio são padrões com bibliotecas e serviços consolidados, tornando a história estimável.<br><br>
-      <strong>Pequena:</strong> Cobre apenas o disparo dos e-mails de resultado e o registro de envios, sem incluir a geração dos resultados (T014) ou os analytics da prova (T016).<br><br>
+      <strong>Pequena:</strong> Cobre apenas o disparo dos e-mails de resultado e o registro de envios, sem incluir a geração dos resultados (US14) ou os analytics da prova (US16).<br><br>
       <strong>Testável:</strong> É possível verificar se e-mails individuais são enviados, se o bloqueio com pendências funciona, se o histórico registra data/horário/status e se o reenvio está disponível após falha.
     </td>
   </tr>
@@ -1370,7 +1337,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 ---
 
 <table>
-  <tr><td><strong>Número</strong></td><td>T016</td></tr>
+  <tr><td><strong>Número</strong></td><td>US16</td></tr>
   <tr><td><strong>Título</strong></td><td>Logs e analytics da avaliação.</td></tr>
   <tr><td><strong>Persona</strong></td><td>Coordenador.</td></tr>
   <tr><td><strong>História</strong></td><td>Eu, enquanto <strong>Coordenador</strong>, quero acompanhar logs e métricas da prova, para monitorar participação, desempenho e possíveis problemas operacionais.</td></tr>
@@ -1423,21 +1390,23 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
 
 O Instituto Ponte tem um processo de correção de provas informal e descentralizado, os professores enviam provas por WhatsApp ou e-mail, alunos fotografam resoluções manuscritas e devolvem pelos mesmos canais, e a correção ocorre prova a prova, sem isonomia na correção. Isso gera perda de anexos, dificuldade de renderizar equações matemáticas, sobrecarga operacional dos professores e inconsistência nos critérios de correção entre alunos.
 
-Para resolver isso, a nossa equipe irá desenvolver uma aplicação web centralizada de gestão de avaliações remotas. A plataforma atende três perfis de usuário. 
+&emsp;Para resolver esse problema, desenvolveu-se uma aplicação web centralizada de gestão de avaliações remotas. A plataforma atende três perfis de usuário, com responsabilidades e permissões distintas.
 
-O aluno, que acessa a prova por link único, identificando-se por nome, CPF e e-mail, responde questões objetivas, discursivas ou por upload de imagens, e consulta o feedback após a correção. 
+&emsp;O **aluno** acessa a prova por link único, identificando-se por nome, CPF e e-mail, aceita os Termos de Uso e Política de Privacidade conforme a LGPD, responde questões objetivas e discursivas ou realiza upload de imagens de resoluções manuscritas, e consulta o feedback individual após a correção.
 
-O professor, que cria provas com suporte a equações matemáticas e timer opcional, gera links de acesso, corrige as respostas agrupadas por questão para todos os alunos, e acessa relatórios de desempenho de notas e histórico de provas. 
+&emsp;O **professor** autentica-se via OAuth2 Google, cria provas com suporte a fórmulas matemáticas em LaTeX e timer opcional, reutiliza questões de um banco centralizado, gera links e QR Codes de acesso, corrige respostas agrupadas por questão para todos os alunos (correção isonômica), e acessa relatórios de desempenho e histórico de provas.
 
-E o coordenador, que visualiza relatórios e histórico de provas de todos os professores organizados por matéria, sem permissão para criar ou corrigir avaliações.
+&emsp;O **coordenador**, também autenticado via OAuth2 Google, visualiza relatórios e histórico de provas de todos os professores, organizados por disciplina e período, monitora métricas de participação e desempenho, e exporta resultados em planilhas Excel — sem permissão para criar ou corrigir avaliações.
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
 <!-- *Liste os RF numerados de forma objetiva e verificável. Cada RF deve poder ser convertido em caso de teste.* -->
 | ID | Descrição | Prioridade | Status |
 |---|---|---|---|
-| RF001 | O sistema deve permitir ao professor gerenciar provas em diferentes estados: ativas, rascunhos e encerradas. | Alta | Planejado |
-| RF003 | O sistema deve permitir a inserção de enunciados com suporte nativo a fórmulas matemáticas via MathType ou LaTeX. | Alta | Planejado |
+| RF001 | O sistema deve permitir ao professor gerenciar provas em diferentes estados: rascunho, publicada, encerrada e antiga. | Alta | Planejado |
+| RF027 | O sistema deve autenticar professores e coordenadores via OAuth2 Google, validando o e-mail na lista de usuários autorizados e redirecionando para o painel correspondente ao perfil. | Alta | Planejado |
+| RF028 | O sistema deve manter um banco de questões pesquisável por disciplina, tema e tipo. | Alta | Planejado |
+| RF003 | O sistema deve permitir a inserção de enunciados com suporte nativo a fórmulas matemáticas via LaTeX, renderizadas por KaTeX ou MathJax. | Alta | Planejado |
 | RF004 | O sistema deve suportar questões de múltipla escolha, Verdadeiro/Falso (V/F) e questões discursivas. | Alta | Planejado |
 | RF005 | O professor deve poder habilitar a opção para que o aluno envie fotos de resoluções manuscritas em questões específicas. | Alta | Planejado |
 | RF006 | O sistema deve permitir a definição de limites de tempo (duração), datas e horários de início e término da prova. | Alta | Planejado |
@@ -1484,34 +1453,33 @@ E o coordenador, que visualiza relatórios e histórico de provas de todos os pr
 | RN15 | O sistema deve controlar a divulgação de resultados e feedbacks aos alunos após finalização da correção. | RF021 |
 | RN16 | O sistema deve garantir integridade na exportação de anexos, mantendo correspondência com aluno e questão. | RF022 |
 | RN17 | O sistema deve permitir ao coordenador visualizar, filtrar e gerar relatórios sobre todas as provas do sistema. | RF023, RF024 |
-| RN18 | O sistema deve restringir operações de criação, edição e exclusão a usuários autorizados. | RF026 |
+| RN18 | Somente usuários com perfil Professor, autenticados via OAuth2, podem criar, editar e excluir avaliações. Coordenadores têm acesso somente de leitura a todas as provas e relatórios. Alunos não têm acesso a nenhum painel de gestão. A verificação de autorização deve ocorrer no backend em todas as rotas protegidas. | RF026, RF027 |
+| RN19 | O sistema deve verificar se o e-mail retornado pelo Google OAuth2 consta na lista de usuários autorizados antes de criar a sessão. Caso o e-mail não esteja autorizado, o acesso deve ser negado com mensagem informativa. A sessão deve expirar após período de inatividade, bloqueando o acesso a páginas protegidas. | RF027 |
 
 ###    Requisitos Não Funcionais — 8 Eixos ISO/IEC 25010 (sprints 1 a 5)
-
-<!-- *Preencha os 8 eixos. Cada eixo deve ter ao menos um RNF verificável (com métrica, limite ou critério concreto) ou justificativa explícita de ausência. Evolua do conceitual (sprint 1) ao técnico mensurável (sprint 5).* -->
-
 
 
 | Eixo                     | Requisito | Métrica / Critério | Como atendido |
 |--------------------------|-----------|--------------------|---------------|
-| USAB — Usabilidade       | O sistema deve ser utilizável em dispositivos móveis e de fácil compreensão para os alunos. | Interface funcional em telas ≥ 360px; ≥ 90% dos usuários conseguem iniciar a prova sem auxílio. | Design responsivo e interface simplificada. |
+| USAB — Usabilidade       | O sistema deve ser utilizável em dispositivos móveis e de fácil compreensão para alunos com baixo letramento digital, observando diretrizes de acessibilidade. | Interface funcional em telas ≥ 360px; ≥ 90% dos usuários conseguem iniciar a prova sem auxílio em testes com perfis de baixo letramento digital; conformidade parcial com WCAG 2.1 nível AA para elementos críticos do fluxo do aluno. | Design responsivo, interface simplificada com fluxo de no máximo 3 passos até iniciar a prova, e contraste de cores conforme WCAG 2.1. |
 | CONF — Confiabilidade    | O sistema deve garantir a integridade das respostas e arquivos enviados. | 100% das submissões confirmadas armazenadas; taxa de falha < 2%. | Persistência em banco e confirmação de envio ao usuário. |
-| DES — Desempenho         | O sistema deve responder de forma eficiente às ações principais do usuário. | Tempo de resposta ≤ 3s nas principais operações. | Otimização de requisições e compressão de imagens. |
-| SUP — Suportabilidade    | O sistema deve permitir manutenção e evolução contínua ao longo das sprints. | Código modular; alterações não devem impactar funcionalidades existentes. | Arquitetura modular e versionamento com Git. |
-| SEG — Segurança          | O sistema deve restringir o acesso às provas e validar os dados fornecidos pelos usuários. | Acesso apenas via link válido; 100% dos inputs validados. | Uso de URLs únicas e validação backend. |
+| DES — Desempenho         | O sistema deve responder de forma eficiente às ações principais do usuário, mesmo em conexões de baixa velocidade. | Endpoints de leitura (listagem de provas, questões) respondem em p95 < 500ms com até 200 registros; endpoints de escrita (submissão de prova) confirmam persistência em p95 < 1s; uploads de imagem processados com compressão client-side antes do envio. | Otimização de requisições, compressão de imagens client-side e cache de respostas frequentes. |
+| SUP — Suportabilidade    | O sistema deve permitir manutenção e evolução contínua ao longo das sprints, com cobertura de testes que proteja funcionalidades existentes contra regressões. | Cobertura de testes automatizados ≥ 60% nas camadas de serviço ao final da Sprint 4; tempo de onboarding de novo desenvolvedor ≤ 2h seguindo o README; nenhuma alteração em sprint posterior deve quebrar testes existentes aprovados. | Arquitetura modular em camadas (Controller/Service/Repository), versionamento Git com branches por funcionalidade e suite de testes Jest. |
+| SEG — Segurança          | O sistema deve restringir o acesso às provas, proteger dados pessoais dos alunos (CPF, e-mail) em conformidade com a LGPD, e validar todos os dados de entrada. | Acesso de alunos apenas via link UUID válido; 100% dos inputs validados no backend; tráfego obrigatoriamente via HTTPS; dados pessoais não armazenados em texto plano; consentimento LGPD registrado com timestamp por aluno. | URLs únicas por UUID, validação backend em todas as rotas, HTTPS obrigatório, hash de dados sensíveis e registro de consentimento explícito. |
 | CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 50 usuários simultâneos em testes iniciais. | Estrutura preparada para concorrência básica. |
 | REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Não utilizar login/senha nem APIs externas. | Implementação conforme escopo técnico (Node.js + SQLite). |
-| ORG — Organizacionais    | O projeto deve seguir organização por sprints e controle de versão. | Entregas realizadas a cada sprint; versionamento ativo. | Uso de Git e metodologia ágil. |
+| ORG — Organizacionais    | O sistema deve ser documentado e entregável de forma reproduzível, com README atualizado a cada sprint e instruções de instalação executáveis em ambiente limpo. | README com instruções de instalação executáveis em ambiente limpo Ubuntu/Node.js sem etapas adicionais; documentação sincronizada com o código a cada sprint; todas as variáveis de ambiente externalizadas em `.env.example`. | Documentação versionada junto ao código, variáveis de ambiente separadas e README com passo a passo de instalação verificado por membro externo ao time. |
 
 ---
 
 ### Explicação dos Requisitos Não Funcionais
 
 #### USAB — Usabilidade
-Este requisito foi definido com base no público-alvo do sistema, composto por alunos que frequentemente utilizam dispositivos móveis.  
-A métrica (tela ≥ 360px e sucesso ≥ 90%) permite verificar objetivamente se a interface é acessível.  
-Relaciona-se com RF008 (acesso via link) e RF010 (portal inicial).  
-**Critério de aceite:** o aluno consegue iniciar a prova sem auxílio.
+&emsp;Este requisito foi derivado diretamente do perfil de Edgar Romeo (persona do aluno), que possui baixo letramento digital e utiliza dispositivos com telas pequenas. A conformidade parcial com WCAG 2.1 AA garante acessibilidade mínima para usuários com necessidades especiais, alinhando-se ao compromisso institucional do Instituto Ponte com a inclusão.  
+Relaciona-se com RF008 (acesso via link único), RF010 (portal inicial de instruções) e RF013 (renderização de fórmulas em mobile).  
+**Mensurabilidade:** testes de usabilidade com 5 usuários do perfil-alvo, registrando taxa de conclusão sem auxílio.  
+**Conexão com contexto do parceiro:** alunos em 18 estados com condições heterogêneas de acesso exigem interface mínima e robusta.  
+**Critério de aceite:** ≥ 90% dos participantes do teste iniciam a prova sem assistência técnica.
 
 ---
 
@@ -1524,26 +1492,28 @@ Relaciona-se com RF014 (upload) e RF020 (resultados).
 ---
 
 #### DES — Desempenho
-Baseado na necessidade de funcionamento em condições de internet limitada.  
-A métrica de tempo de resposta (≤ 3s) é mensurável e pode ser testada.  
-Relaciona-se com RF014 (upload de imagens) e RF015 (compressão).  
-**Critério de aceite:** o sistema responde sem atrasos perceptíveis ao usuário.
+&emsp;Este requisito deriva diretamente do contexto do parceiro: alunos em situação de vulnerabilidade social com frequência utilizam conexões instáveis ou de baixa largura de banda. A métrica de p95 < 500ms para leituras e < 1s para escritas é mensurável por ferramentas de teste de carga (ex.: k6, Artillery) e alinhada com padrões de qualidade de APIs REST.  
+Relaciona-se com RF014 (upload de imagens) e RF015 (compressão client-side).  
+**Mensurabilidade:** testável por ferramentas de carga com relatório de percentis.  
+**Conexão com RF:** RF015 (compressão client-side) é o principal mecanismo de atendimento a este RNF.  
+**Critério de aceite:** em teste com carga de 50 usuários simultâneos, 95% das requisições de leitura completam em < 500ms.
 
 ---
 
 #### SUP — Suportabilidade
-Reflete a necessidade de evolução contínua do sistema ao longo das sprints.  
-A métrica considera organização do código e impacto de mudanças.  
-Relaciona-se com todos os RF, pois impacta manutenção geral.  
-**Critério de aceite:** alterações não devem quebrar funcionalidades existentes.
+&emsp;Este requisito reflete a necessidade de evolução contínua do sistema ao longo de 5 sprints com times rotativos de desenvolvimento. A métrica de cobertura de testes ≥ 60% nas camadas de serviço garante proteção contra regressões, enquanto o critério de onboarding em ≤ 2h é verificável por qualquer membro novo do grupo.  
+Relaciona-se com todos os RF, pois impacta a manutenibilidade geral da base de código.  
+**Mensurabilidade:** relatório de cobertura Jest (comando `jest --coverage`) e registro de tempo de setup por novo colaborador.  
+**Conexão com restrição organizacional:** o projeto será mantido por estudantes de semestres distintos — simplicidade de setup é essencial.  
+**Critério de aceite:** `npm install && npm start` executa o projeto sem erros em ambiente limpo com Node.js LTS.
 
 ---
 
 #### SEG — Segurança
-Deriva da restrição de não utilização de autenticação tradicional.  
-A métrica garante acesso controlado por link e validação de dados.  
-Relaciona-se com RF008 (URL única) e RF009 (identificação do aluno).  
-**Critério de aceite:** apenas usuários com link válido acessam a prova.
+&emsp;Este requisito foi derivado de duas fontes: (a) a restrição do TAPI quanto à ausência de login/senha para alunos, que exige controle de acesso alternativo via link UUID; e (b) a coleta de dados pessoais (CPF, e-mail) dos alunos, que impõe conformidade obrigatória com a Lei Geral de Proteção de Dados Pessoais (LGPD — Lei nº 13.709/2018).  
+Relaciona-se com RF008 (URL única), RF009 (identificação do aluno), RF027 (OAuth2 para usuários internos) e com o critério de aceite CR-04 da US08 (consentimento LGPD).  
+**Mensurabilidade:** auditoria de código para verificação de HTTPS, ausência de dados em texto plano e presença de registro de consentimento.  
+**Critério de aceite:** nenhum dado pessoal armazenado em texto plano; consentimento LGPD registrado com timestamp; acesso ao painel interno apenas via sessão autenticada por OAuth2.
 
 ---
 
@@ -1564,19 +1534,46 @@ Relaciona-se com toda a arquitetura do sistema.
 ---
 
 #### ORG — Organizacionais
-Reflete a necessidade de organização do desenvolvimento no contexto acadêmico.  
-A métrica considera entregas por sprint e uso de versionamento.  
-Relaciona-se com o processo de desenvolvimento do sistema.  
-**Critério de aceite:** entregas contínuas e rastreáveis são realizadas.
+&emsp;Este requisito foi derivado da necessidade do parceiro de receber uma solução documentada, reproduzível e mantida mesmo após o encerramento do projeto acadêmico. Ao contrário dos demais RNFs, este foca na documentação e entregabilidade do sistema como artefato, não apenas no seu comportamento em execução.  
+Conecta-se ao processo de desenvolvimento e à sustentabilidade do sistema como produto entregue ao Instituto Ponte.  
+**Mensurabilidade:** verificação do README por membro externo ao time, lista de variáveis de ambiente documentadas e histórico de commits no repositório.  
+**Restrição organizacional do parceiro:** o Instituto Ponte não possui equipe técnica interna — a documentação precisa ser suficiente para onboarding de um fornecedor externo futuro.  
+**Critério de aceite:** README atualizado a cada sprint; instalação reproduzível em ambiente limpo; variáveis de ambiente separadas em `.env.example`.
 
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
-*Matriz de cobertura mostrando quais RN e endpoints implementam cada RF.*
+Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preenchidas a partir da Sprint 3. A seguir, apresentam-se as colunas RF e RN para os fluxos priorizados.
 
-| RF    | RN associadas | Endpoint    | Método |
-|-------|---------------|-------------|--------|
-| RF001 | RN01, RN02    | `/usuarios` | POST   |
+| RF | RN associadas | Endpoint | Método |
+|----|---------------|----------|--------|
+| RF001 | RN01 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF027 | RN19 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF002 | RN02 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF003 | RN03 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF004 | RN03 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF005 | RN04 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF006 | RN05 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF007 | RN06 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF008 | RN07 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF009 | RN08 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF010 | RN09 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF011 | RN09 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF012 | RN10 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF013 | RN10 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF014 | RN04 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF015 | RN11 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF016 | RN12 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF017 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF018 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF019 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF020 | RN14 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF021 | RN15 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF022 | RN16 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF023 | RN17 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF024 | RN17 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF025 | RN01 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF026 | RN18 | *(a definir — Sprint 3)* | *(a definir)* |
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
@@ -1584,7 +1581,7 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 
 *Posicione aqui o diagrama de arquitetura da solução, indicando as camadas principais (Controller, Service, Repository, Model) e suas responsabilidades. Atualize sempre que necessário.*
 
-### 3.2.2. Diagrama de Casos de Uso (sprint 1)
+### 3.2.2. Diagrama de Casos de Uso
 
 <div align="center">
   <img src="/assets/diagramaCasosDeUso.png">
@@ -1602,22 +1599,22 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 
 | ID | Caso de Uso | Ator Primário | Atores Secundários | Requisitos |
 |---|---|---|---|---|
-| UC01 | Autenticar-se | Professor / Coordenador | Google Auth | T001 |
-| UC02 | Listar e filtrar provas por status | Professor / Coordenador | — | T002, RF001, RF002, RF025 |
-| UC03 | Criar prova a partir da home | Professor | — | T003, RF026 |
-| UC04 | Criar e editar questões com fórmulas e tipos variados | Professor | — | T004, RF003, RF004 |
-| UC05 | Reutilizar questões do banco e detectar duplicidade | Professor | — | T005 |
-| UC06 | Configurar tempo, datas e embaralhamento | Professor | — | T006, RF006, RF007 |
-| UC07 | Publicar prova com URL única e QR Code | Professor | — | T007, RF008 |
-| UC08 | Acessar prova pelo portal do aluno | Aluno | — | T008, RF009, RF010, RF011 |
-| UC09 | Responder prova no mobile com anexos manuscritos | Aluno | — | T009, RF012, RF013, RF014, RF015 |
-| UC10 | Salvar rascunho durante a prova *(included por UC09)* | — | — | T010 |
-| UC11 | Revisar e confirmar envio final | Aluno | — | T011, RF016 |
-| UC12 | Corrigir prova por item | Professor | — | T012, RF017, RF018, RF019 |
-| UC13 | Corrigir questões objetivas automaticamente | Professor | Aluno | T013 |
-| UC14 | Calcular notas e exportar resultados | Coordenador | — | T014, RF020, RF022 |
-| UC15 | Liberar resultados por e-mail | Professor / Coordenador | Serviço de E-mail | T015, RF021 |
-| UC16 | Consultar logs e analytics da avaliação | Coordenador | — | T016 |
+| UC01 | Autenticar-se | Professor / Coordenador | Google Auth | US01 |
+| UC02 | Listar e filtrar provas por status | Professor / Coordenador | — | US02, RF001, RF002, RF025 |
+| UC03 | Criar prova a partir da home | Professor | — | US03, RF026 |
+| UC04 | Criar e editar questões com fórmulas e tipos variados | Professor | — | US04, RF003, RF004 |
+| UC05 | Reutilizar questões do banco | Professor | — | US05 |
+| UC06 | Configurar tempo, datas e embaralhamento | Professor | — | US06, RF006, RF007 |
+| UC07 | Publicar prova com URL única e QR Code | Professor | — | US07, RF008 |
+| UC08 | Acessar prova pelo portal do aluno | Aluno | — | US08, RF009, RF010, RF011 |
+| UC09 | Responder prova no mobile com anexos manuscritos | Aluno | — | US09, RF012, RF013, RF014, RF015 |
+| UC10 | Salvar rascunho durante a prova *(included por UC09)* | — | — | US10 |
+| UC11 | Revisar e confirmar envio final | Aluno | — | US11, RF016 |
+| UC12 | Corrigir prova por item | Professor | — | US12, RF017, RF018, RF019 |
+| UC13 | Corrigir questões objetivas automaticamente | Professor | Aluno | US13 |
+| UC14 | Calcular notas e exportar resultados | Coordenador | — | US14, RF020, RF022 |
+| UC15 | Liberar resultados por e-mail | Professor / Coordenador | Serviço de E-mail | US15, RF021 |
+| UC16 | Consultar logs e analytics da avaliação | Coordenador | — | US16 |
 
 ---
 
@@ -1655,6 +1652,14 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 - `<<include>>` Validar e-mail autorizado.
 - `<<include>>` Redirecionar por perfil.
 
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 3 | Google Auth retorna erro ou está indisponível. | Sistema exibe mensagem de indisponibilidade temporária e orienta o usuário a tentar novamente. |
+| 4 | E-mail retornado não consta na lista de autorizados. | Sistema nega o acesso, exibe mensagem informativa e não cria sessão. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar à tela inicial. |
+
 ---
 
 #### UC02 — Listar e filtrar provas por status
@@ -1684,6 +1689,13 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 - `<<extend>>` Filtrar provas *(condição: usuário aplica ao menos um filtro)*.
 - `<<extend>>` Exibir estado vazio *(condição: nenhuma prova atende aos critérios)*.
 
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 2 | Falha na comunicação com o banco de dados ao carregar provas. | Sistema exibe mensagem de erro genérica e orienta o usuário a recarregar a página. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar à tela anterior. |
+
 ---
 
 #### UC03 — Criar prova a partir da home
@@ -1711,6 +1723,14 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 
 **Relações:**
 - `<<include>>` Salvar como rascunho.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 4 | Campo obrigatório ausente ou inválido. | Sistema destaca o campo e bloqueia o salvamento até que seja preenchido corretamente. |
+| 5 | Falha de persistência no banco de dados. | Sistema exibe mensagem de erro e mantém os dados no formulário para nova tentativa. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar à tela inicial sem salvar. |
 
 ---
 
@@ -1741,13 +1761,21 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 
 **Relações:**
 - `<<include>>` Validar alternativas e campos obrigatórios.
-- `<<extend>>` Renderizar fórmulas LaTeX *(condição: enunciado contém notação LaTeX/MathType)*.
+- `<<extend>>` Renderizar fórmulas LaTeX *(condição: enunciado contém notação LaTeX)*.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 4 | Alternativas de questão objetiva sem gabarito marcado. | Sistema bloqueia o salvamento e indica a ausência do gabarito. |
+| 4 | Sintaxe LaTeX inválida no enunciado. | Sistema exibe aviso de renderização incorreta; o salvamento é permitido, mas o professor é alertado. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar ao editor sem salvar a questão. |
 
 ---
 
-#### UC05 — Reutilizar questões do banco e detectar duplicidade
+#### UC05 — Reutilizar questões do banco
 
-**Descrição:** Permite ao professor buscar questões já cadastradas e incorporá-las à prova. O sistema alerta quando a similaridade textual com questão existente atingir o limiar definido.
+**Descrição:** Permite ao professor buscar questões já cadastradas e incorporá-las à prova.
 
 **Atores:** Professor.
 **Atores secundários:** Nenhum.
@@ -1767,11 +1795,17 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 5. Sistema adiciona as questões ao editor.
 
 **Fluxos alternativos:**
-- A1: similaridade textual ≥ 80% detectada — sistema exibe alerta de possível duplicidade antes de confirmar a adição *(extend: Alertar duplicidade)*.
+- Nenhum.
 
 **Relações:**
 - `<<include>>` Buscar por disciplina, tema ou tipo.
-- `<<extend>>` Alertar duplicidade *(condição: similaridade textual ≥ 80% com questão existente, ignorando capitalização e espaços extras)*.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 3 | Nenhuma questão encontrada com os filtros aplicados. | Sistema exibe mensagem de estado vazio e sugere ampliar os filtros. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar ao editor da prova sem adicionar questões. |
 
 ---
 
@@ -1800,6 +1834,14 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 
 **Relações:**
 - `<<include>>` Validar período da prova.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 5 | Data/horário de término anterior ao de início. | Sistema rejeita a configuração, exibe mensagem de erro e mantém os campos para correção. |
+| 5 | Duração máxima zerada ou negativa. | Sistema bloqueia o salvamento e indica o campo inválido. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar ao editor da prova sem salvar configurações. |
 
 ---
 
@@ -1830,6 +1872,14 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 **Relações:**
 - `<<include>>` Gerar URL única.
 - `<<include>>` Gerar QR Code.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 2 | Prova sem questões completas ou sem período definido. | Sistema bloqueia a publicação e lista as inconsistências encontradas para correção. |
+| 3–4 | Falha na geração do UUID ou do QR Code. | Sistema exibe mensagem de erro e permite nova tentativa de publicação. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; prova permanece em estado Rascunho. |
 
 ---
 
@@ -1869,6 +1919,16 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 - `<<include>>` Validar período de disponibilidade.
 - `<<include>>` Registrar consentimento LGPD.
 
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 4 | CPF informado em formato inválido. | Sistema destaca o campo e bloqueia o avanço até o CPF ser corrigido. |
+| 4 | E-mail informado em formato inválido. | Sistema destaca o campo e bloqueia o avanço até o e-mail ser corrigido. |
+| 6 | Checkbox LGPD não marcado. | Sistema mantém o botão "Iniciar Prova" desabilitado e exibe aviso de obrigatoriedade. |
+| 7 | Falha ao registrar consentimento no banco. | Sistema exibe mensagem de erro e não permite o início da prova. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar à tela de entrada sem iniciar a prova. |
+
 ---
 
 #### UC09 — Responder prova no mobile com anexos manuscritos
@@ -1904,6 +1964,15 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 - `<<include>>` UC10 Salvar rascunho durante a prova.
 - `<<extend>>` Renderizar fórmulas LaTeX *(condição: questão contém notação LaTeX)*.
 
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 4 | Arquivo com formato inválido (não JPG, PNG ou PDF). | Sistema rejeita o upload, exibe mensagem indicando os formatos aceitos. |
+| 4 | Arquivo acima de 5 MB. | Sistema rejeita o upload antes do envio ao servidor, exibe mensagem com o limite. |
+| 7 | Falha no salvamento automático por ausência de conexão. | Sistema exibe indicador de pendência de sincronização; progresso é preservado no armazenamento local. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar à tela de provas; respostas salvas até o momento são preservadas. |
+
 ---
 
 #### UC10 — Salvar rascunho durante a prova
@@ -1930,6 +1999,13 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 
 **Relações:**
 - É `<<include>>` de UC09.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 2 | Falha na comunicação com o servidor ao tentar sincronizar. | Sistema preserva o estado localmente e exibe indicador de pendência; tenta sincronizar novamente quando a conexão for restaurada. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; último estado salvo é preservado. |
 
 ---
 
@@ -1961,6 +2037,13 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 **Relações:**
 - `<<include>>` Destacar questões em branco.
 - `<<include>>` Confirmar envio final.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 5 | Falha na persistência da submissão final (erro de rede ou servidor). | Sistema exibe mensagem de erro, mantém a prova aberta e permite nova tentativa de envio. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar à tela de respostas com o progresso preservado. |
 
 ---
 
@@ -1994,6 +2077,14 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 - `<<include>>` Visualizar e ampliar anexos.
 - `<<include>>` Registrar nota e comentário.
 
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 5 | Nota informada fora do intervalo permitido (ex.: valor negativo ou acima do máximo). | Sistema bloqueia o salvamento e destaca o campo com o intervalo válido. |
+| 6 | Falha ao salvar nota/comentário no banco de dados. | Sistema exibe mensagem de erro; nota e comentário permanecem no formulário para nova tentativa. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar à listagem de questões. |
+
 ---
 
 #### UC13 — Corrigir questões objetivas automaticamente
@@ -2024,6 +2115,13 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 **Relações:**
 - `<<include>>` Aplicar gabarito.
 - `<<extend>>` Recalcular resultados *(condição: gabarito alterado antes da liberação das notas)*.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 3–4 | Gabarito não registrado para questão objetiva. | Sistema ignora a questão no cálculo automático e a mantém com status "pendente de correção manual". |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; pontuações automáticas calculadas até o momento são preservadas. |
 
 ---
 
@@ -2059,6 +2157,14 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 - `<<include>>` Exportar anexos organizados.
 - `<<extend>>` Alertar pendências de correção *(condição: há questões com status "pendente")*.
 
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 5 | Falha na geração da planilha Excel. | Sistema exibe mensagem de erro e permite nova tentativa de exportação. |
+| 7 | Falha na geração do pacote de anexos. | Sistema exibe mensagem de erro parcial; exportação da planilha permanece disponível. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar à tela de resultados. |
+
 ---
 
 #### UC15 — Liberar resultados por e-mail
@@ -2090,6 +2196,14 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 - `<<include>>` Enviar e-mail individual.
 - `<<include>>` Registrar histórico de envio.
 - `<<extend>>` Reenviar e-mail falho *(condição: envio falhou para ao menos um aluno)*.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 3 | Serviço de e-mail transacional indisponível. | Sistema marca todos os envios como falhos e notifica o usuário; permite nova tentativa individual ou em lote. |
+| 3 | E-mail do aluno inválido ou inexistente. | Sistema marca o envio específico como falho e registra o erro no histórico. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; e-mails já enviados permanecem registrados. |
 
 ---
 
@@ -2123,6 +2237,13 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 **Relações:**
 - `<<include>>` Exibir métricas de participação.
 - `<<include>>` Exibir desempenho por questão.
+
+**Fluxos de exceção:**
+
+| Passo | Situação | Solução |
+|-------|----------|---------|
+| 2–4 | Nenhum dado disponível para as métricas solicitadas. | Sistema exibe mensagem de estado vazio e indica que os dados serão gerados à medida que as provas forem realizadas. |
+| Todos | O ator deseja cancelar a operação. | Cancelar operação; retornar ao painel do coordenador. |
 
 ---
 
@@ -2336,13 +2457,45 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
-_Incluir as principais referências de seu projeto, para que seu parceiro possa consultar caso ele se interessar em aprofundar. Um exemplo de referência de livro e de site:_<br>
+ABONG – Associação Brasileira de Organizações Não Governamentais. **Panorama das Associações Brasileiras de Organizações da Sociedade Civil**. São Paulo: ABONG, 2021. Disponível em: https://www.abong.org.br. Acesso em: 1 mai. 2025.
 
-LUCK, Heloisa. Liderança em gestão escolar. 4. ed. Petrópolis: Vozes, 2010. <br>
-SOBRENOME, Nome. Título do livro: subtítulo do livro. Edição. Cidade de publicação: Nome da editora, Ano de publicação. <br>
+CAF – Charities Aid Foundation. **World Giving Index 2022**. West Malling: CAF, 2022. Disponível em: https://www.cafonline.org/docs/default-source/about-us-publications/caf_world_giving_index_2022_210922-final.pdf. Acesso em: 1 mai. 2025.
 
-INTELI. Adalove. Disponível em: https://adalove.inteli.edu.br/feed. Acesso em: 1 out. 2023 <br>
-SOBRENOME, Nome. Título do site. Disponível em: link do site. Acesso em: Dia Mês Ano
+BRASIL. Lei nº 13.709, de 14 de agosto de 2018. **Lei Geral de Proteção de Dados Pessoais (LGPD)**. Brasília: Presidência da República, 2018. Disponível em: http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm. Acesso em: 1 mai. 2025.
+
+FUNDAÇÃO ESTUDAR. **Relatório de Impacto 2023**. São Paulo: Fundação Estudar, 2023. Disponível em: https://www.estudar.org.br/relatorio-de-impacto. Acesso em: 1 mai. 2025.
+
+FUNDAÇÃO LEMANN. **Relatório Anual 2022**. São Paulo: Fundação Lemann, 2022. Disponível em: https://fundacaolemann.org.br/relatorio-anual. Acesso em: 1 mai. 2025.
+
+GIFE – Grupo de Institutos, Fundações e Empresas. **Mapeamento do Investimento Social Privado no Brasil**. São Paulo: GIFE, 2021. Disponível em: https://gife.org.br/publicacoes. Acesso em: 1 mai. 2025.
+
+IDIS – Instituto para o Desenvolvimento do Investimento Social. **Doação Brasil 2022**. São Paulo: IDIS, 2022. Disponível em: https://idis.org.br/pesquisa/doacao-brasil. Acesso em: 1 mai. 2025.
+
+IDIS – Instituto para o Desenvolvimento do Investimento Social. **Censo GIFE 2020**. São Paulo: IDIS/GIFE, 2020. Disponível em: https://idis.org.br. Acesso em: 1 mai. 2025.
+
+INSTITUTO PONTE. **TAPI – Termo de Abertura do Projeto Inteli**. Vitória: Instituto Ponte, 2024. (Documento interno fornecido pelo parceiro ao Inteli.)
+
+IPEA – Instituto de Pesquisa Econômica Aplicada. **Atlas da Violência 2021**. Brasília: IPEA, 2021. Disponível em: https://www.ipea.gov.br/atlasviolencia. Acesso em: 1 mai. 2025.
+
+ISO/IEC 25010:2011. **Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models**. Geneva: ISO, 2011.
+
+ITAÚ SOCIAL. **Avaliação de Impacto em Educação: desafios e perspectivas**. São Paulo: Fundação Itaú Social, 2020. Disponível em: https://www.itausocial.org.br/publicacoes. Acesso em: 1 mai. 2025.
+
+MCKINSEY & COMPANY. **High-performing NGOs: unlocking their potential**. Nova York: McKinsey, 2022. Disponível em: https://www.mckinsey.com/featured-insights/social-sector. Acesso em: 1 mai. 2025.
+
+MINISTÉRIO DA EDUCAÇÃO. **Programa Universidade para Todos (ProUni)**. Brasília: MEC, 2023. Disponível em: http://prouniportal.mec.gov.br. Acesso em: 1 mai. 2025.
+
+OECD. **Education at a Glance 2023: OECD Indicators**. Paris: OECD Publishing, 2023. Disponível em: https://doi.org/10.1787/e13bef63-en. Acesso em: 1 mai. 2025.
+
+OECD. **Philanthropy and Education: Harnessing the Potential for Learning**. Paris: OECD Publishing, 2019. Disponível em: https://doi.org/10.1787/000e0c1e-en. Acesso em: 1 mai. 2025.
+
+TODOS PELA EDUCAÇÃO. **Anuário Brasileiro da Educação Básica 2023**. São Paulo: Todos Pela Educação, 2023. Disponível em: https://todospelaeducacao.org.br/anuario. Acesso em: 1 mai. 2025.
+
+TRANSPARÊNCIA BRASIL. **Organizações da Sociedade Civil: dados e transparência**. São Paulo: Transparência Brasil, 2022. Disponível em: https://www.transparencia.org.br. Acesso em: 1 mai. 2025.
+
+UNICEF – United Nations Children's Fund. **Relatório Situação da Infância e Adolescência Brasileira 2022**. Brasília: UNICEF, 2022. Disponível em: https://www.unicef.org/brazil/relatorios. Acesso em: 1 mai. 2025.
+
+W3C – World Wide Web Consortium. **Web Content Accessibility Guidelines (WCAG) 2.1**. W3C Recommendation, 5 June 2018. Disponível em: https://www.w3.org/TR/WCAG21. Acesso em: 1 mai. 2025.
 
 # <a name="c9"></a>Anexos
 
