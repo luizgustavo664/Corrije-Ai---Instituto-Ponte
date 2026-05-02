@@ -2,7 +2,7 @@
 
 # WAD - Web Application Document - Módulo 2 - Inteli
 
-**_Os trechos em itálico servem apenas como guia para o preenchimento da seção. Por esse motivo, não devem fazer parte da documentação final_**
+<!-- **_Os trechos em itálico servem apenas como guia para o preenchimento da seção. Por esse motivo, não devem fazer parte da documentação final_** -->
 
 ## Nome do Grupo
 
@@ -57,7 +57,7 @@ Portanto, com essa implementação, espera-se reduzir falhas operacionais, otimi
 </div>
 
 <div align="center">
-  <strong>Figura 2 — 5 Forças de Porter do instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 1 — 5 Forças de Porter do instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 
@@ -116,15 +116,16 @@ O poder dos beneficiários é baixo. Jovens vulneráveis têm poucas alternativa
 </div>
 
 <div align="center">
-  <strong>Figura 3 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 2 — Matriz SWOT do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 &emsp;  Identificou-se no Instituto Ponte um posicionamento diferenciado no terceiro setor educacional brasileiro: a metodologia individualizada e a taxa de aprovação de 92% nos vestibulares consolidam-se como diferenciais competitivos frente a concorrentes como Gerando Falcões e Parceiros da Educação, organizações de maior escala nacional. Constatou-se, contudo, vulnerabilidade financeira pela dependência de doações privadas e concentração regional no Espírito Santo. Verificaram-se oportunidades expressivas na expansão para o Nordeste e no crescimento da agenda ESG corporativa. Como principal ameaça, reconheceu-se a disputa crescente por doadores institucionais em cenários de instabilidade econômica.
 
 ### 2.1.3. Solução (sprints 1 a 5)
 
+A solução baseia-se no desenvolvimento de uma aplicação web para o Instituto Ponte, voltada à criação, aplicação e correção de avaliações remotas. A plataforma prioriza acessibilidade e usabilidade, permitindo que professores gerenciem provas de forma centralizada e que alunos realizem avaliações com facilidade, incluindo envio de respostas e arquivos. O sistema também busca garantir maior organização, eficiência operacional e isonomia no processo avaliativo.
+
 <!-- *Explique detalhadamente os seguintes aspectos (até 60 palavras por item):* -->
-### 2.1.3 Solução (sprints 1 a 5)
 
 1. **Problema a ser resolvido**  
 A plataforma atual apresenta baixa usabilidade para alunos com letramento digital limitado, ausência de organização para docentes e falhas de persistência de progresso. A navegação é pouco intuitiva, a correção não é estruturada por questão e há inconsistências no acesso a relatórios e feedbacks, comprometendo equidade, eficiência e confiabilidade do processo avaliativo.
@@ -158,7 +159,7 @@ O sucesso ocorre quando alunos concluem provas sem assistência, não há perda 
 </div>
 
 <div align="center">
-  <strong>Figura 2 — Value Proposition Canvas (Alunos) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 3 — Value Proposition Canvas (Alunos) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 ### A. Perfil do Cliente
@@ -250,7 +251,7 @@ A solução gera valor ao:
 </div>
 
 <div align="center">
-  <strong>Figura 2 — Value Proposition Canvas (Professores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 4 — Value Proposition Canvas (Professores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 ### A. Perfil do Cliente
@@ -342,7 +343,7 @@ A plataforma gera benefícios ao:
 </div>
 
 <div align="center">
-  <strong>Figura 2 — Value Proposition Canvas (Coordenadores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 5 — Value Proposition Canvas (Coordenadores) do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 ### A. Perfil do Cliente
@@ -443,7 +444,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 </div>
 
 <div align="center">
-  <strong>Figura 4 — Matriz de Risco do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 6 — Matriz de Risco do Instituto Ponte.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 | Risco | Tipo | Descrição | Probabilidade | Impacto | Classificação | Plano de resposta | Responsável |
@@ -477,7 +478,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 </div>
 
 <div align="center">
-  <strong>Figura — Persona do Aluno.</strong><br><em>Foto de <a href="https://unsplash.com/pt-br/@sooprun?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Alex Suprun</a> na <a href="https://unsplash.com/pt-br/fotografias/man-in-black-button-up-shirt-ZHvM3XIOHoE?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+  <strong>Figura 7 — Persona do Aluno.</strong><br><em>Foto de <a href="https://unsplash.com/pt-br/@sooprun?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Alex Suprun</a> na <a href="https://unsplash.com/pt-br/fotografias/man-in-black-button-up-shirt-ZHvM3XIOHoE?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
       </em>
 </div>
 
@@ -487,7 +488,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 </div>
 
 <div align="center">
-  <strong>Figura — Persona do Professor.</strong><br><em>Foto de <a href="https://unsplash.com/pt-br/@lancereis?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Lance Reis</a> na <a href="https://unsplash.com/pt-br/fotografias/um-homem-com-barba-pp76Y6Fq6xw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+  <strong>Figura 8 — Persona do Professor.</strong><br><em>Foto de <a href="https://unsplash.com/pt-br/@lancereis?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Lance Reis</a> na <a href="https://unsplash.com/pt-br/fotografias/um-homem-com-barba-pp76Y6Fq6xw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
       </em>
 </div>
 
@@ -497,7 +498,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 </div>
 
 <div align="center">
-  <strong>Figura — Persona do Coordenadora.</strong><br><em>Fonte: Foto de <a href="https://unsplash.com/pt-br/@ageing_better?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Centre for Ageing Better</a> na <a href="https://unsplash.com/pt-br/fotografias/uma-mulher-sentada-em-uma-cadeira-segurando-uma-xicara-de-cafe--UPMX2uynvA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+  <strong>Figura 9 — Persona do Coordenadora.</strong><br><em>Fonte: Foto de <a href="https://unsplash.com/pt-br/@ageing_better?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Centre for Ageing Better</a> na <a href="https://unsplash.com/pt-br/fotografias/uma-mulher-sentada-em-uma-cadeira-segurando-uma-xicara-de-cafe--UPMX2uynvA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
       </em>
 </div>
 
@@ -510,7 +511,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 </div>
 
 <div align="center">
-  <strong>Figura 3 — Mapa de sentimento de persona.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 10 — Mapa de sentimento de persona.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 #### Visão Geral
@@ -1582,7 +1583,7 @@ Relaciona-se com o processo de desenvolvimento do sistema.
 </div>
 
 <div align="center">
-  <strong>Figura 5 — Diagrama Casos de Usos.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 11 — Diagrama Casos de Usos.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 &emsp;  O diagrama apresenta os três atores principais da plataforma — Professor, Coordenador e Aluno — e os dezesseis casos de uso organizados em três grupos funcionais: gestão de provas, aplicação pelo aluno e correção/resultados. Atores externos (Google Auth e Serviço de E-mail) aparecem apenas onde há integração real. A relação `<<include>>` entre UC09 e UC10 explicita que o salvamento automático é comportamento obrigatório embutido na experiência de resposta.
