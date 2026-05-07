@@ -1,36 +1,40 @@
-Drive com as fotos do rascunho da diagramação de classes UML da prova:
-https://drive.google.com/drive/folders/10WWE-NGI_FWsrd9DImUuJKm3mLXaZSVB?usp=drive_link
+# Relatório Diário do Processo de Composição de Wireframes
 
-Documento com as telas que vão ser criadas dentro do wireframe da visualização do professor:
-Link: https://docs.google.com/document/d/17ugWiNUdEXpgIERscrRcl4eRig97YaL5LyF2QrLrwDo/edit?usp=sharing
+Este documento registra, por dia, as alterações realizadas no processo de composição de múltiplos wireframes, acompanhando contribuições individuais, decisões tomadas, problemas encontrados e próximos passos.
 
-Documento com as UMLs do Aluno:
-https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D 
+## Equipe
 
-Pablo Marchina: feat(#60): adiciona diagrama de classes do módulo do professor
-Link: https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?usp=sharing
+- Pablo
 
-Documento com as telas que vão ser criadas dentro do wireframe da visualização do Coordenador:
-Link: https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0
+## Como Registrar
 
-Joana: link do Figma - utilizado para fazer o Wireframe do aluno:
-https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
+Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspondentes. Sempre que possível, descreva as alterações de forma objetiva, indicando o wireframe afetado, o motivo da mudança e o impacto esperado no fluxo ou na experiência do usuário.
 
+---
 
-# Relatório diário do processo de criação do diagrama de classes do sistema de banco de dados
-
-## Registro diário:
+## Modelo de Registro Diário
 
 ### Data: 07/05/2026
 
-### Desenvolvedora: Heloisa Kadota
+### Objetivo do Dia
 
-### Objetivo do dia:
+Descrever o foco principal do trabalho no dia, como composição de telas, revisão de fluxos, integração de wireframes, ajustes visuais ou validação de navegação.
 
-Terminar o planejamento das interações das tabelas UMLs do banco de dados e validar com a equipe e professor.
+### Artefaros Trabalhados
 
-### Adições feitas:
+- Artefato 5: Diagrama de Classes do Domínio
 
-Foi finalizada a imagem para ser utilizada de referência para o resto do banco de dados do projeto.
+### Alterações Realizadas
 
-https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=drive_link
+#### Pablo Marchina
+
+- Alteração: Criação da modelagem UML do domínio e estrutura relacional da aplicação.
+- Wireframe ou tela impactada: Fluxos de criação de prova, resolução de prova, correção, banco de questões e relatórios.
+- Justificativa: Estruturar corretamente as entidades, relacionamentos e regras de negócio do sistema antes do desenvolvimento do backend e integração com o banco de dados.
+- Observações: SQL incluindo PKs, FKs e relacionamentos principais do sistema.
+
+## Link para o que foi desenvolvido:
+
+https://drawsql.app/teams/pablo-marchina/diagrams/diagrama-classe
+
+---
