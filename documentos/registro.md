@@ -4,3 +4,6 @@ glpat-ndANRSncp0qah68rzsdW0286MQp1OjF1CA.01.0y1lhg8lw
 
 Documento com as UMLs do Aluno:
 https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D 
+
+Pablo Marchina: feat(#60): adiciona diagrama de classes do módulo do professor
+Link: https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?usp=sharing
