@@ -22,3 +22,8 @@ Link: https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoES
 
 Joana: link do Figma - utilizado para fazer o Wireframe do aluno:
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
+
+
+
+Matheus Almeida - Aqui segue o link do figma no qual eu fiz a criação dos componentes que serão utilziados ao longo de todo o wireframe do professor, além de criar a base das telas:
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
