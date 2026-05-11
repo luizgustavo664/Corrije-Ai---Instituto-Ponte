@@ -34,3 +34,19 @@ Terminar o planejamento das interações das tabelas UMLs do banco de dados e va
 Foi finalizada a imagem para ser utilizada de referência para o resto do banco de dados do projeto.
 
 https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=drive_link
+
+# Relatório diário do processo de criação do modelo entidade-relacionamento
+
+## Registro diário:
+
+### Data: 11/05/2026
+
+### Desenvolvedora: Heloisa Kadota
+
+### Objetivo do dia:
+
+Criar e colocar no WAD o modelo entidade-relacionamento seguindo as instruções de formatação informadas pelo professor.
+
+### Adições feitas:
+
+Foi criado o modelo entidade-relacionamento do projeto, com notação de crows foot consistente e com atribuião de atributos e outros detalhes no código plantUML.
