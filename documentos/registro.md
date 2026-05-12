@@ -22,6 +22,10 @@ Link: https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoES
 
 Joana: link do Figma - utilizado para fazer o Wireframe do aluno:
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
+
+Luiz: registro atualização do wireframe do coordenador:
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=tcRVxu1x8gxAtsTc-0
+
 07/05 - Criação de telas
 <div align="center">
   <img src="../assets/wireframeAluno.png">
