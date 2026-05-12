@@ -5,6 +5,9 @@ https://drive.google.com/drive/folders/10WWE-NGI_FWsrd9DImUuJKm3mLXaZSVB?usp=dri
 
 # Relatório diário do processo de criação do wireframe do projeto
 
+Matheus Almeida - Aqui segue o link do figma no qual eu fiz a criação dos componentes que serão utilziados ao longo de todo o wireframe do professor, além de criar a base das telas:
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
+
 Documento com as telas que vão ser criadas dentro do wireframe da visualização do professor:
 Link: https://docs.google.com/document/d/17ugWiNUdEXpgIERscrRcl4eRig97YaL5LyF2QrLrwDo/edit?usp=sharing
 
