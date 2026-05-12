@@ -22,6 +22,22 @@ Link: https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoES
 
 Joana: link do Figma - utilizado para fazer o Wireframe do aluno:
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
+07/05 - Criação de telas
+<div align="center">
+  <img src="../assets/wireframeAluno.png">
+</div>
+
+11/05 - Criação da tela de revisão, de envio, e edição da tela de instruções
+<div align="center">
+  <img src="../assets/telaDeRevisao.png">
+</div>
+<div align="center">
+  <img src="../assets/telaDeEnvioConcluido.png">
+</div>
+<div align="center">
+  <img src="../assets/telaDeInstrucoes.png">
+</div>
+
 
 # Relatório diário do processo de criação do diagrama de classes do sistema de banco de dados
 
