@@ -728,5 +728,3 @@ Jona: Continuar fazendo as telas do wireframe do aluno
 
 ## Link para onde estão as estruturas do Wireframe
 
-
-
