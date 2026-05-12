@@ -2304,7 +2304,222 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
 
-*Apresente o modelo ER conceitual com entidades, atributos e relacionamentos. Use notação consistente (Chen ou Crow's Foot — não misture).*
+## 3.2.3 Diagrama de Classes do Domínio
+
+## 3.6.2 Modelo Entidade-Relacionamento — Notação de Chen
+
+
+## 3.2.3 Diagrama de Classes do Domínio
+
+```plantuml
+@startuml
+title Modelo Entidade-Relacionamento - Crow's Foot
+
+hide circle
+skinparam linetype ortho
+
+entity "Pessoa" as pessoa {
+  * id : BIGSERIAL <<PK>>
+  --
+  nome : VARCHAR(150)
+  email : VARCHAR(255) <<UNIQUE>>
+  ativo : BOOLEAN
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Aluno" as aluno {
+  * id : BIGINT <<PK, FK>>
+  --
+  cpf : VARCHAR(14) <<UNIQUE>>
+}
+
+entity "Professor" as professor {
+  * id : BIGINT <<PK, FK>>
+}
+
+entity "Coordenador" as coordenador {
+  * id : BIGINT <<PK, FK>>
+}
+
+entity "Materia" as materia {
+  * id : BIGSERIAL <<PK>>
+  --
+  nome : VARCHAR(120) <<UNIQUE>>
+  codigo : VARCHAR(30) <<UNIQUE>>
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Professor_Materia" as professor_materia {
+  * professor_id : BIGINT <<PK, FK>>
+  * materia_id : BIGINT <<PK, FK>>
+  --
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Prova" as prova {
+  * id : BIGSERIAL <<PK>>
+  --
+  professor_id : BIGINT <<FK>>
+  titulo : VARCHAR(180)
+  descricao : TEXT
+  modalidade : VARCHAR(60)
+  turma : VARCHAR(80)
+  semestre : VARCHAR(20)
+  status : VARCHAR(20)
+  duracao_minutos : INTEGER
+  inicio_agendado : TIMESTAMPTZ
+  fim_agendado : TIMESTAMPTZ
+  embaralhar_questoes : BOOLEAN
+  embaralhar_alternativas : BOOLEAN
+  link_publicacao : UUID <<UNIQUE>>
+  qr_code_url : TEXT
+  publicada_em : TIMESTAMPTZ
+  encerrada_em : TIMESTAMPTZ
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Prova_Materia" as prova_materia {
+  * prova_id : BIGINT <<PK, FK>>
+  * materia_id : BIGINT <<PK, FK>>
+  --
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Enunciado" as enunciado {
+  * id : BIGSERIAL <<PK>>
+  --
+  materia_id : BIGINT <<FK>>
+  tipo : VARCHAR(30)
+  texto : TEXT
+  pontos : DECIMAL(6,2)
+  ordem_banco : INTEGER
+  limite_caracteres : INTEGER
+  limite_palavras : INTEGER
+  ativo : BOOLEAN
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Alternativa" as alternativa {
+  * id : BIGSERIAL <<PK>>
+  --
+  enunciado_id : BIGINT <<FK>>
+  texto : TEXT
+  correta : BOOLEAN
+  ordem : INTEGER
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Prova_Enunciado" as prova_enunciado {
+  * prova_id : BIGINT <<PK, FK>>
+  * enunciado_id : BIGINT <<PK, FK>>
+  --
+  ordem : INTEGER
+  pontos : DECIMAL(6,2)
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Prova_Aluno" as prova_aluno {
+  * id : BIGSERIAL <<PK>>
+  --
+  prova_id : BIGINT <<FK>>
+  aluno_id : BIGINT <<FK>>
+  status : VARCHAR(20)
+  iniciado_em : TIMESTAMPTZ
+  enviado_em : TIMESTAMPTZ
+  nota_total : DECIMAL(6,2)
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Resposta_Aluno" as resposta_aluno {
+  * id : BIGSERIAL <<PK>>
+  --
+  prova_aluno_id : BIGINT <<FK>>
+  enunciado_id : BIGINT <<FK>>
+  alternativa_id : BIGINT <<FK>>
+  texto_resposta : TEXT
+  arquivo_url : TEXT
+  rascunho : BOOLEAN
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+entity "Correcao" as correcao {
+  * id : BIGSERIAL <<PK>>
+  --
+  resposta_aluno_id : BIGINT <<FK, UNIQUE>>
+  professor_id : BIGINT <<FK>>
+  nota : DECIMAL(6,2)
+  observacao : TEXT
+  status : VARCHAR(20)
+  corrigida_em : TIMESTAMPTZ
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Feedback" as feedback {
+  * id : BIGSERIAL <<PK>>
+  --
+  correcao_id : BIGINT <<FK>>
+  professor_id : BIGINT <<FK>>
+  mensagem : TEXT
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Relatorio" as relatorio {
+  * id : BIGSERIAL <<PK>>
+  --
+  coordenador_id : BIGINT <<FK>>
+  prova_id : BIGINT <<FK>>
+  titulo : VARCHAR(180)
+  conteudo : TEXT
+  arquivo_url : TEXT
+  gerado_em : TIMESTAMPTZ
+}
+
+' =========================
+' Generalização Pessoa
+' =========================
+
+pessoa ||--o| aluno : "especializa"
+pessoa ||--o| professor : "especializa"
+pessoa ||--o| coordenador : "especializa"
+
+' =========================
+' Relacionamentos principais
+' =========================
+
+professor ||--o{ prova : "elabora"
+
+professor ||--o{ professor_materia : "leciona"
+materia ||--o{ professor_materia : "é lecionada por"
+
+prova ||--o{ prova_materia : "aborda"
+materia ||--o{ prova_materia : "está em"
+
+materia ||--o{ enunciado : "possui"
+
+enunciado ||--o{ alternativa : "possui"
+
+prova ||--o{ prova_enunciado : "contém"
+enunciado ||--o{ prova_enunciado : "compõe"
+
+prova ||--o{ prova_aluno : "é aplicada"
+aluno ||--o{ prova_aluno : "realiza"
+
+prova_aluno ||--o{ resposta_aluno : "gera"
+enunciado ||--o{ resposta_aluno : "é respondido"
+alternativa |o--o{ resposta_aluno : "é marcada"
+
+resposta_aluno ||--o| correcao : "recebe"
+professor ||--o{ correcao : "corrige"
+
+correcao ||--o{ feedback : "possui"
+professor ||--o{ feedback : "escreve"
+
+coordenador ||--o{ relatorio : "gera"
+prova |o--o{ relatorio : "baseia"
+
+@enduml
+```
 
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
