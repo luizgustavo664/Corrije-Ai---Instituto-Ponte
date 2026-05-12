@@ -1,81 +1,113 @@
+# Relatório Diário
 
-Drive com as fotos do rascunho da diagramação de classes UML da prova:
+Drive com as fotos do rascunho da diagramação de classes UML da prova:  
 https://drive.google.com/drive/folders/10WWE-NGI_FWsrd9DImUuJKm3mLXaZSVB?usp=drive_link
 
-Documento com as telas que vão ser criadas dentro do wireframe da visualização do professor:
-Link: https://docs.google.com/document/d/17ugWiNUdEXpgIERscrRcl4eRig97YaL5LyF2QrLrwDo/edit?usp=sharing
+Este documento registra, por dia, as alterações realizadas no processo de composição dos bancos de dados e wireframes, acompanhando contribuições individuais, decisões tomadas, problemas encontrados e próximos passos.
 
-Repositório do GitHub com o pacote CLI feito para otimizar o fluxo de criação de issues -> commits -> merge requests:
-Através dele é possível realizar todo o fluxo de trabalho sem sair do VSCODE
-https://github.com/misareverberate/gitlab-flow-cli
+---
 
-Documento com o UML do coordenador:
-Link: https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D
+## Banco de Dados — Artefato 5
 
+### Data: 06/05/2026
 
-Estou fazendo estudo sobre Diagramas UML e aqui está minha conversa com a IA Chat GPT que me ajudou a ter um maior entendimento do assunto:
-https://chatgpt.com/share/69fccf6f-4e34-83e9-a05d-78fc0ff365ff  
-Documento com as UMLs do Aluno:
+### Objetivo do Dia
+
+- Álvaro: desenvolver a UML do aluno
+- Heloísa: desenvolver a UML da prova
+- Pablo: desenvolver a UML do professor
+- Rafael: desenvolver a UML do coordenador
+
+### Banco de Dados
+
+Colocar fotos se for preciso.
+
+### Alterações Realizadas
+
+#### Álvaro
+
+- Alteração: realizou parte do diagrama do aluno no modelo UML.
+
+#### Heloísa
+
+- Alteração: finalizou o diagrama da prova no modelo UML.
+
+#### Pablo
+
+- Alteração: finalizou o diagrama do professor no modelo UML.
+
+#### Rafael
+
+- Alteração: realizou parte do diagrama do coordenador no modelo UML.
+
+### Links para as estruturas do Banco de Dados
+
+Álvaro: Documento com a estrutura UML do aluno.  
 https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D
 
-Pablo Marchina: feat(#60): adiciona diagrama de classes do módulo do professor
-Link: https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?usp=sharing
+Rafael: Documento com a estrutura UML do coordenador.
 
-Documento com as telas que vão ser criadas dentro do wireframe da visualização do Coordenador:
-Link: https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0
+---
 
-Joana: link do Figma - utilizado para fazer o Wireframe do aluno:
-https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
-07/05 - Criação de telas
-<div align="center">
-  <img src="../assets/wireframeAluno.png">
-</div>
+## Wireframe
 
-11/05 - Criação da tela de revisão, de envio, e edição da tela de instruções
-<div align="center">
-  <img src="../assets/telaDeRevisao.png">
-</div>
-<div align="center">
-  <img src="../assets/telaDeEnvioConcluido.png">
-</div>
-<div align="center">
-  <img src="../assets/telaDeInstrucoes.png">
-</div>
+### Data: 06/05/2026
 
+### Objetivo do Dia
 
-# Relatório diário do processo de criação do diagrama de classes do sistema de banco de dados
+- Matheus: criar componentes e desenvolver telas do wireframe do professor.
+- Luíz: desenvolver telas do wireframe do coordenador.
+- Joana: desenvolver telas do wireframe do aluno.
 
-## Registro diário:
+### Alterações Realizadas
 
-### Data: 07/05/2026
+#### Matheus
 
-### Desenvolvedora: Heloisa Kadota
+- Alteração: criou componentes no Figma e desenvolveu mais telas do wireframe do professor.
 
-### Objetivo do dia:
+#### Luíz
 
-Terminar o planejamento das interações das tabelas UMLs do banco de dados e validar com a equipe e professor.
+- Alteração: desenvolveu mais telas do wireframe do coordenador.
 
-### Adições feitas:
+#### Joana
 
-Foi finalizada a imagem para ser utilizada de referência para o resto do banco de dados do projeto.
+- Alteração: desenvolveu mais telas do wireframe do aluno.
 
-https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=drive_link
+### Links para as estruturas do Wireframe
 
-# Relatório diário do processo de criação do modelo entidade-relacionamento
-
-## Registro diário:
-
-### Data: 11/05/2026
-
-### Desenvolvedora: Heloisa Kadota
-
-### Objetivo do dia:
-
-Criar e colocar no WAD o modelo entidade-relacionamento seguindo as instruções de formatação informadas pelo professor.
-
-### Adições feitas:
-
-Foi criado o modelo entidade-relacionamento do projeto, com notação de crows foot consistente e com atribuição de atributos e outros detalhes no código PlantUML.
-
-Matheus Almeida - Aqui segue o link do figma no qual eu fiz a criação dos componentes que serão utilizados ao longo de todo o wireframe do professor, além de criar a base das telas:
+Matheus: Figma utilizado para criação dos componentes e base das telas do professor.  
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
+
+Luíz: Documento com as telas do wireframe da visualização do coordenador.  
+https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0
+
+Joana: Figma utilizado para o wireframe do aluno.  
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
+
+---
+
+## Outro Dia
+
+### Data: 12/05/2026
+
+### Objetivo do Dia
+
+- Matheus: continuar desenvolvendo as telas do wireframe do professor.
+- Luíz: continuar desenvolvendo as telas do wireframe do coordenador.
+- Joana: continuar desenvolvendo as telas do wireframe do aluno.
+
+### Alterações Realizadas
+
+#### Matheus
+
+- Alteração:
+
+#### Luíz
+
+- Alteração:
+
+#### Joana
+
+- Alteração:
+
+### Links para as estruturas do Wireframe
