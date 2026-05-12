@@ -16,6 +16,10 @@ Link: https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?usp
 
 ### ~ Luiz Gustavo
 
+Matheus Almeida - Aqui segue o link do figma no qual eu fiz a criação dos componentes que serão utilziados ao longo de todo o wireframe do professor, além de criar a base das telas:
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
+
+
 #### Data: 06/05/2026
 Documento com as telas que vão ser criadas dentro do wireframe da visualização do Coordenador: <br>
 Link: [Docs](https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0)
