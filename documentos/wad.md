@@ -2304,16 +2304,133 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
 
-## 3.2.3 Diagrama de Classes do Domínio
+```plantuml
+@startuml
+title Modelo Entidade-Relacionamento Conceitual - MER
 
-## 3.6.2 Modelo Entidade-Relacionamento — Notação de Chen
+hide circle
+skinparam linetype ortho
 
+entity "Pessoa" as pessoa {
+  * id
+  --
+  nome
+  email
+  ativo
+}
 
-## 3.2.3 Diagrama de Classes do Domínio
+entity "Aluno" as aluno {
+  * id
+  --
+  cpf
+}
+
+entity "Professor" as professor {
+  * id
+}
+
+entity "Coordenador" as coordenador {
+  * id
+}
+
+entity "Matéria" as materia {
+  * id
+  --
+  nome
+  codigo
+}
+
+entity "Prova" as prova {
+  * id
+  --
+  titulo
+  descrição
+  status
+  duração
+}
+
+entity "Enunciado" as enunciado {
+  * id
+  --
+  tipo
+  texto
+  pontos
+}
+
+entity "Alternativa" as alternativa {
+  * id
+  --
+  texto
+  correta
+}
+
+entity "Resposta do Aluno" as resposta {
+  * id
+  --
+  texto_resposta
+  arquivo
+  rascunho
+}
+
+entity "Correção" as correcao {
+  * id
+  --
+  nota
+  observação
+  status
+}
+
+entity "Feedback" as feedback {
+  * id
+  --
+  mensagem
+}
+
+entity "Relatório" as relatorio {
+  * id
+  --
+  título
+  conteúdo
+  arquivo
+}
+
+pessoa ||--o| aluno : "1 Pessoa pode ser 0..1 Aluno"
+pessoa ||--o| professor : "1 Pessoa pode ser 0..1 Professor"
+pessoa ||--o| coordenador : "1 Pessoa pode ser 0..1 Coordenador"
+
+professor }o--o{ materia : "0..N Professores lecionam 0..N Matérias"
+professor ||--o{ prova : "1 Professor elabora 0..N Provas"
+
+prova }o--o{ materia : "0..N Provas abordam 0..N Matérias"
+materia ||--o{ enunciado : "1 Matéria possui 0..N Enunciados"
+
+prova }o--o{ enunciado : "0..N Provas contêm 0..N Enunciados"
+enunciado ||--o{ alternativa : "1 Enunciado possui 0..N Alternativas"
+
+aluno }o--o{ prova : "0..N Alunos realizam 0..N Provas"
+
+aluno ||--o{ resposta : "1 Aluno produz 0..N Respostas"
+prova ||--o{ resposta : "1 Prova possui 0..N Respostas"
+enunciado ||--o{ resposta : "1 Enunciado recebe 0..N Respostas"
+alternativa |o--o{ resposta : "0..1 Alternativa aparece em 0..N Respostas"
+
+resposta ||--o| correcao : "1 Resposta recebe 0..1 Correção"
+professor ||--o{ correcao : "1 Professor realiza 0..N Correções"
+
+correcao ||--o{ feedback : "1 Correção possui 0..N Feedbacks"
+professor ||--o{ feedback : "1 Professor escreve 0..N Feedbacks"
+
+coordenador ||--o{ relatorio : "1 Coordenador gera 0..N Relatórios"
+prova ||--o{ relatorio : "1 Prova baseia 0..N Relatórios"
+
+@enduml
+```
+
+### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
 ```plantuml
 @startuml
-title Modelo Entidade-Relacionamento - Crow's Foot
+title Diagrama Entidade-Relacionamento - DER
 
 hide circle
 skinparam linetype ortho
@@ -2476,54 +2593,50 @@ entity "Relatorio" as relatorio {
 }
 
 ' =========================
-' Generalização Pessoa
+' Especialização de Pessoa
 ' =========================
 
-pessoa ||--o| aluno : "especializa"
-pessoa ||--o| professor : "especializa"
-pessoa ||--o| coordenador : "especializa"
+pessoa ||--o| aluno : "possui dados de aluno"
+pessoa ||--o| professor : "possui dados de professor"
+pessoa ||--o| coordenador : "possui dados de coordenador"
 
 ' =========================
-' Relacionamentos principais
+' Relacionamentos do DER
 ' =========================
 
 professor ||--o{ prova : "elabora"
 
 professor ||--o{ professor_materia : "leciona"
-materia ||--o{ professor_materia : "é lecionada por"
+materia ||--o{ professor_materia : "é lecionada"
 
 prova ||--o{ prova_materia : "aborda"
-materia ||--o{ prova_materia : "está em"
+materia ||--o{ prova_materia : "aparece em"
 
 materia ||--o{ enunciado : "possui"
 
 enunciado ||--o{ alternativa : "possui"
 
 prova ||--o{ prova_enunciado : "contém"
-enunciado ||--o{ prova_enunciado : "compõe"
+enunciado ||--o{ prova_enunciado : "é utilizado em"
 
-prova ||--o{ prova_aluno : "é aplicada"
+prova ||--o{ prova_aluno : "é aplicada para"
 aluno ||--o{ prova_aluno : "realiza"
 
 prova_aluno ||--o{ resposta_aluno : "gera"
-enunciado ||--o{ resposta_aluno : "é respondido"
-alternativa |o--o{ resposta_aluno : "é marcada"
+enunciado ||--o{ resposta_aluno : "é respondido em"
+alternativa |o--o{ resposta_aluno : "é marcada em"
 
 resposta_aluno ||--o| correcao : "recebe"
-professor ||--o{ correcao : "corrige"
+professor ||--o{ correcao : "realiza"
 
 correcao ||--o{ feedback : "possui"
 professor ||--o{ feedback : "escreve"
 
 coordenador ||--o{ relatorio : "gera"
-prova |o--o{ relatorio : "baseia"
+prova ||--o{ relatorio : "baseia"
 
 @enduml
 ```
-
-### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
-
-*Posicione aqui o DER com cardinalidades explícitas em ambos os lados de cada relação e identificação de PK/FK. O DER deve ser coerente com o diagrama de classes (3.2.3).*
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
