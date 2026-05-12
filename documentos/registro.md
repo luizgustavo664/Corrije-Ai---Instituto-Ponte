@@ -61,3 +61,5 @@ Foi finalizada a imagem para ser utilizada de referência para o resto do banco 
 https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=drive_link
 
 
+Matheus Almeida (11/05/2026) - Foi criada toda a interface da sidebar e a configuração do modelo de colunas no wireframe do professor:
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
