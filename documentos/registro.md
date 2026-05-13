@@ -283,7 +283,7 @@ Colocar fotos se for preciso
 
 
 #### Heloísa:
-- Alteração:
+- Alteração: Foi criado o arquivo migration.sql na pasta migrations e toda a sua documentação no WAD
 
 
 #### Pablo:
