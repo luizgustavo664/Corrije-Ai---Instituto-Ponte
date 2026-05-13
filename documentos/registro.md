@@ -526,7 +526,8 @@ Colocar fotos se for preciso
 #### Rafael:
 
 
-- Alteração:
+- Alteração: Foi realizado o aprimoramento no roteiro da apresentação da sprint 2 parte 1
+https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/edit?tab=t.0#heading=h.awm2upmu5j2o
 
 
 
