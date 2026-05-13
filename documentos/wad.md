@@ -2304,11 +2304,339 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
 
-*Apresente o modelo ER conceitual com entidades, atributos e relacionamentos. Use notação consistente (Chen ou Crow's Foot — não misture).*
+```plantuml
+@startuml
+title Modelo Entidade-Relacionamento Conceitual - MER
+
+hide circle
+skinparam linetype ortho
+
+entity "Pessoa" as pessoa {
+  * id
+  --
+  nome
+  email
+  ativo
+}
+
+entity "Aluno" as aluno {
+  * id
+  --
+  cpf
+}
+
+entity "Professor" as professor {
+  * id
+}
+
+entity "Coordenador" as coordenador {
+  * id
+}
+
+entity "Matéria" as materia {
+  * id
+  --
+  nome
+  codigo
+}
+
+entity "Prova" as prova {
+  * id
+  --
+  titulo
+  descrição
+  status
+  duração
+}
+
+entity "Enunciado" as enunciado {
+  * id
+  --
+  tipo
+  texto
+  pontos
+}
+
+entity "Alternativa" as alternativa {
+  * id
+  --
+  texto
+  correta
+}
+
+entity "Resposta do Aluno" as resposta {
+  * id
+  --
+  texto_resposta
+  arquivo
+  rascunho
+}
+
+entity "Correção" as correcao {
+  * id
+  --
+  nota
+  observação
+  status
+}
+
+entity "Feedback" as feedback {
+  * id
+  --
+  mensagem
+}
+
+entity "Relatório" as relatorio {
+  * id
+  --
+  título
+  conteúdo
+  arquivo
+}
+
+pessoa ||--o| aluno : "1 Pessoa pode ser 0..1 Aluno"
+pessoa ||--o| professor : "1 Pessoa pode ser 0..1 Professor"
+pessoa ||--o| coordenador : "1 Pessoa pode ser 0..1 Coordenador"
+
+professor }o--o{ materia : "0..N Professores lecionam 0..N Matérias"
+professor ||--o{ prova : "1 Professor elabora 0..N Provas"
+
+prova }o--o{ materia : "0..N Provas abordam 0..N Matérias"
+materia ||--o{ enunciado : "1 Matéria possui 0..N Enunciados"
+
+prova }o--o{ enunciado : "0..N Provas contêm 0..N Enunciados"
+enunciado ||--o{ alternativa : "1 Enunciado possui 0..N Alternativas"
+
+aluno }o--o{ prova : "0..N Alunos realizam 0..N Provas"
+
+aluno ||--o{ resposta : "1 Aluno produz 0..N Respostas"
+prova ||--o{ resposta : "1 Prova possui 0..N Respostas"
+enunciado ||--o{ resposta : "1 Enunciado recebe 0..N Respostas"
+alternativa |o--o{ resposta : "0..1 Alternativa aparece em 0..N Respostas"
+
+resposta ||--o| correcao : "1 Resposta recebe 0..1 Correção"
+professor ||--o{ correcao : "1 Professor realiza 0..N Correções"
+
+correcao ||--o{ feedback : "1 Correção possui 0..N Feedbacks"
+professor ||--o{ feedback : "1 Professor escreve 0..N Feedbacks"
+
+coordenador ||--o{ relatorio : "1 Coordenador gera 0..N Relatórios"
+prova ||--o{ relatorio : "1 Prova baseia 0..N Relatórios"
+
+@enduml
+```
 
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
-*Posicione aqui o DER com cardinalidades explícitas em ambos os lados de cada relação e identificação de PK/FK. O DER deve ser coerente com o diagrama de classes (3.2.3).*
+```plantuml
+@startuml
+title Diagrama Entidade-Relacionamento - DER
+
+hide circle
+skinparam linetype ortho
+
+entity "Pessoa" as pessoa {
+  * id : BIGSERIAL <<PK>>
+  --
+  nome : VARCHAR(150)
+  email : VARCHAR(255) <<UNIQUE>>
+  ativo : BOOLEAN
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Aluno" as aluno {
+  * id : BIGINT <<PK, FK>>
+  --
+  cpf : VARCHAR(14) <<UNIQUE>>
+}
+
+entity "Professor" as professor {
+  * id : BIGINT <<PK, FK>>
+}
+
+entity "Coordenador" as coordenador {
+  * id : BIGINT <<PK, FK>>
+}
+
+entity "Materia" as materia {
+  * id : BIGSERIAL <<PK>>
+  --
+  nome : VARCHAR(120) <<UNIQUE>>
+  codigo : VARCHAR(30) <<UNIQUE>>
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Professor_Materia" as professor_materia {
+  * professor_id : BIGINT <<PK, FK>>
+  * materia_id : BIGINT <<PK, FK>>
+  --
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Prova" as prova {
+  * id : BIGSERIAL <<PK>>
+  --
+  professor_id : BIGINT <<FK>>
+  titulo : VARCHAR(180)
+  descricao : TEXT
+  modalidade : VARCHAR(60)
+  turma : VARCHAR(80)
+  semestre : VARCHAR(20)
+  status : VARCHAR(20)
+  duracao_minutos : INTEGER
+  inicio_agendado : TIMESTAMPTZ
+  fim_agendado : TIMESTAMPTZ
+  embaralhar_questoes : BOOLEAN
+  embaralhar_alternativas : BOOLEAN
+  link_publicacao : UUID <<UNIQUE>>
+  qr_code_url : TEXT
+  publicada_em : TIMESTAMPTZ
+  encerrada_em : TIMESTAMPTZ
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Prova_Materia" as prova_materia {
+  * prova_id : BIGINT <<PK, FK>>
+  * materia_id : BIGINT <<PK, FK>>
+  --
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Enunciado" as enunciado {
+  * id : BIGSERIAL <<PK>>
+  --
+  materia_id : BIGINT <<FK>>
+  tipo : VARCHAR(30)
+  texto : TEXT
+  pontos : DECIMAL(6,2)
+  ordem_banco : INTEGER
+  limite_caracteres : INTEGER
+  limite_palavras : INTEGER
+  ativo : BOOLEAN
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Alternativa" as alternativa {
+  * id : BIGSERIAL <<PK>>
+  --
+  enunciado_id : BIGINT <<FK>>
+  texto : TEXT
+  correta : BOOLEAN
+  ordem : INTEGER
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Prova_Enunciado" as prova_enunciado {
+  * prova_id : BIGINT <<PK, FK>>
+  * enunciado_id : BIGINT <<PK, FK>>
+  --
+  ordem : INTEGER
+  pontos : DECIMAL(6,2)
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Prova_Aluno" as prova_aluno {
+  * id : BIGSERIAL <<PK>>
+  --
+  prova_id : BIGINT <<FK>>
+  aluno_id : BIGINT <<FK>>
+  status : VARCHAR(20)
+  iniciado_em : TIMESTAMPTZ
+  enviado_em : TIMESTAMPTZ
+  nota_total : DECIMAL(6,2)
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Resposta_Aluno" as resposta_aluno {
+  * id : BIGSERIAL <<PK>>
+  --
+  prova_aluno_id : BIGINT <<FK>>
+  enunciado_id : BIGINT <<FK>>
+  alternativa_id : BIGINT <<FK>>
+  texto_resposta : TEXT
+  arquivo_url : TEXT
+  rascunho : BOOLEAN
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+entity "Correcao" as correcao {
+  * id : BIGSERIAL <<PK>>
+  --
+  resposta_aluno_id : BIGINT <<FK, UNIQUE>>
+  professor_id : BIGINT <<FK>>
+  nota : DECIMAL(6,2)
+  observacao : TEXT
+  status : VARCHAR(20)
+  corrigida_em : TIMESTAMPTZ
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Feedback" as feedback {
+  * id : BIGSERIAL <<PK>>
+  --
+  correcao_id : BIGINT <<FK>>
+  professor_id : BIGINT <<FK>>
+  mensagem : TEXT
+  criado_em : TIMESTAMPTZ
+}
+
+entity "Relatorio" as relatorio {
+  * id : BIGSERIAL <<PK>>
+  --
+  coordenador_id : BIGINT <<FK>>
+  prova_id : BIGINT <<FK>>
+  titulo : VARCHAR(180)
+  conteudo : TEXT
+  arquivo_url : TEXT
+  gerado_em : TIMESTAMPTZ
+}
+
+' =========================
+' Especialização de Pessoa
+' =========================
+
+pessoa ||--o| aluno : "possui dados de aluno"
+pessoa ||--o| professor : "possui dados de professor"
+pessoa ||--o| coordenador : "possui dados de coordenador"
+
+' =========================
+' Relacionamentos do DER
+' =========================
+
+professor ||--o{ prova : "elabora"
+
+professor ||--o{ professor_materia : "leciona"
+materia ||--o{ professor_materia : "é lecionada"
+
+prova ||--o{ prova_materia : "aborda"
+materia ||--o{ prova_materia : "aparece em"
+
+materia ||--o{ enunciado : "possui"
+
+enunciado ||--o{ alternativa : "possui"
+
+prova ||--o{ prova_enunciado : "contém"
+enunciado ||--o{ prova_enunciado : "é utilizado em"
+
+prova ||--o{ prova_aluno : "é aplicada para"
+aluno ||--o{ prova_aluno : "realiza"
+
+prova_aluno ||--o{ resposta_aluno : "gera"
+enunciado ||--o{ resposta_aluno : "é respondido em"
+alternativa |o--o{ resposta_aluno : "é marcada em"
+
+resposta_aluno ||--o| correcao : "recebe"
+professor ||--o{ correcao : "realiza"
+
+correcao ||--o{ feedback : "possui"
+professor ||--o{ feedback : "escreve"
+
+coordenador ||--o{ relatorio : "gera"
+prova ||--o{ relatorio : "baseia"
+
+@enduml
+```
 
 ### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
 
