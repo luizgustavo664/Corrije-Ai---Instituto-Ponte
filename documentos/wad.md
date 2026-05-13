@@ -2638,9 +2638,88 @@ prova ||--o{ relatorio : "baseia"
 @enduml
 ```
 
-### 3.6.3. Modelo Relacional e Modelo Físico (sprints 2 e 4)
+### 3.6.3. Modelo Relacional e Modelo Físico
 
-*Posicione aqui os diagramas de modelos relacionais do banco de dados, apresentando todos os esquemas de tabelas e suas relações. Inclua as migrations DDL numeradas e reproduzíveis (`CREATE TABLE`, `CREATE INDEX`, constraints `NOT NULL`, `UNIQUE`, `FOREIGN KEY`, `CHECK`). Utilize texto para complementar suas explicações quando necessário.*
+Esta seção apresenta a modelagem física do banco de dados do projeto. O modelo foi estruturado para utilização com PostgreSQL/Supabase, contemplando as tabelas principais do sistema, seus atributos, tipos de dados, chaves primárias, chaves estrangeiras, restrições e índices.
+
+
+#### Modelo Físico
+
+O modelo físico descreve como o banco será implementado no PostgreSQL/Supabase, incluindo tipos de dados, constraints e relacionamentos.
+
+As principais decisões adotadas foram:
+
+- Utilização de `UUID` como chave primária nas tabelas principais;
+- Uso de `gen_random_uuid()` para geração automática dos identificadores;
+- Definição de campos obrigatórios com `NOT NULL`;
+- Uso de `FOREIGN KEY` para garantir integridade entre tabelas relacionadas;
+- Uso de `UNIQUE` para impedir duplicidade em campos como e-mail;
+- Uso de `TIMESTAMPTZ` para armazenar datas e horários com fuso;
+- Uso de tabelas associativas para representar relacionamentos muitos-para-muitos.
+
+#### Principais Tabelas
+
+##### Tabela `pessoa`
+
+A tabela `pessoa` armazena os dados básicos compartilhados por usuários do sistema, como alunos, professores e coordenadores.
+
+Principais atributos:
+
+- `id`: identificador único da pessoa;
+- `nome`: nome completo;
+- `email`: e-mail único;
+- `created_at`: data de criação do registro.
+
+##### Tabela `aluno`
+
+A tabela `aluno` representa os estudantes cadastrados no sistema. Ela se relaciona com `pessoa`, herdando seus dados básicos.
+
+Principais atributos:
+
+- `id`: identificador único do aluno;
+- `pessoa_id`: referência à tabela `pessoa`;
+- demais campos específicos do aluno.
+
+##### Tabela `professor`
+
+A tabela `professor` representa os professores cadastrados no sistema.
+
+Principais atributos:
+
+- `id`: identificador único do professor;
+- `pessoa_id`: referência à tabela `pessoa`;
+- demais campos específicos do professor.
+
+##### Tabela `materia`
+
+A tabela `materia` armazena as disciplinas disponíveis no sistema.
+
+Principais atributos:
+
+- `id`: identificador único da matéria;
+- `nome`: nome da matéria;
+- demais campos relacionados à disciplina.
+
+##### Tabela `materia_professor`
+
+A tabela `materia_professor` representa o relacionamento muitos-para-muitos entre matérias e professores.
+
+Principais atributos:
+
+- `materia_id`: referência à matéria;
+- `professor_id`: referência ao professor.
+
+A chave primária composta é formada por `materia_id` e `professor_id`, evitando que o mesmo professor seja associado à mesma matéria mais de uma vez.
+
+#### Migrations DDL
+
+As migrations DDL são os arquivos SQL responsáveis por criar a estrutura do banco de dados de forma reproduzível.
+
+A migration principal do projeto está localizada em:
+
+```text
+g05\src\backend\migrations\migration.sql
+```
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
