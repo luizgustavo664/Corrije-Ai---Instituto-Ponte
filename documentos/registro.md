@@ -24,7 +24,6 @@ Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspond
 
 ### Modelo de Registro Diário
 
-
 ### Data: DD/MM/AAAA
 
 
@@ -33,86 +32,22 @@ Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspond
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Banco de dados
 Colocar fotos se for preciso
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Alterações Realizadas
 
-
 #### Nome da pessoa:
-
-
 - Alteração:
 
 
-
-
-
-
-
-
-
-
 #### Nome da pessoa:
-
-
 - Alteração:
 
 
-
-
-
-
-
-
-
-
 #### Nome da pessoa:
-
-
 - Alteração:
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -124,12 +59,9 @@ Colocar fotos se for preciso
 
 ### Banco De Dados artefato 5
 
-
 ### Data: 06/05/2026
 
-
 ### Objetivo do Dia
-
 
 Álvaro: os UML do aluno
 Heloísa: os UML da prova
@@ -137,82 +69,26 @@ Pablo: os UML do professor
 Rafael: os UML do coordenador
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### Banco de dados
 Colocar fotos se for preciso
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Alterações Realizadas
 
-
 #### Álvaro:
-
-
-- Alteração:
-fiz parte do diagrama do aluno no modelo UML
-
-
-
-
-
-
+- Alteração: fiz parte do diagrama do aluno no modelo UML
 
 
 #### Heloísa:
-
-
-- Alteração:
-Terminei o diagrama da prava no modelo UML
-
-
-
-
-
-
+- Alteração: Terminei o diagrama da prava no modelo UML
 
 
 #### Pablo:
-
-
-- Alteração:
-Terminei o diagrama do Professor no modelo UML
-
-
+- Alteração: Terminei o diagrama do Professor no modelo UML
 
 
 #### Rafael:
-
-
-- Alteração:
-fiz parte do diagrama do cordenador no modelo UML
-
+- Alteração: fiz parte do diagrama do cordenador no modelo UML
 
 
 
@@ -251,84 +127,26 @@ Pablo: começar o diagrama de classes
 Rafael: estudar a estrutura de classes UML
 
 
-
-
-
-
-
-
-
-
 ## Banco de dados
 Colocar fotos se for preciso
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Alterações Realizadas
 
-
 #### Álvaro
-
-
-- Alteração:
-fiz o estudo e a alteração no diagrama
-
-
-
-
-
-
-
-
+- Alteração: fiz o estudo e a alteração no diagrama
 
 
 #### Heloísa
-
-
-- Alteração:
-Foi finalizada a imagem para ser utilizada de referência para o resto do banco de dados do projeto.
-
-
-
-
-
-
-
-
+- Alteração: Foi finalizada a imagem para ser utilizada de referência para o resto do banco de dados do projeto.
 
 
 #### Rafael:
-
-
-- Alteração:
-fiz o estudo e a alteração no diagrama
-
-
-
-
-
-
+- Alteração: fiz o estudo e a alteração no diagrama
 
 
 #### Pablo:
-
-
-- Alteração:
-terminei o diagrama de classes
-
+- Alteração: terminei o diagrama de classes
 
 
 
@@ -353,70 +171,28 @@ Colocar fotos se for preciso
 
 
 ### Objetivo do dia:
-
-
 Álvaro: diagrama de sequências/ User Stories 03
 Heloísa: Modelo Entidade-Relacionamento
 Pablo: Arrumar Diagrama de classe
 Rafael: fazer os slides
 
 
-
-
 ### Alterações Realizadas
 
-
 #### Álvaro
-
-
-- Alteração:
-Já preparei o prompt do diagrama e comecei escrever nele
-
-
-
-
-
-
-
-
+- Alteração: Já preparei o prompt do diagrama e comecei escrever nele
 
 
 #### Heloísa
-
-
-- Alteração:
-Foi criado o modelo entidade-relacionamento do projeto, com notação de crows foot consistente e com atribuição de atributos e outros detalhes no código PlantUML.
-
-
-
-
-
-
-
-
+- Alteração: Foi criado o modelo entidade-relacionamento do projeto, com notação de crows foot consistente e com atribuição de atributos e outros detalhes no código PlantUML.
 
 
 #### Rafael:
-
-
-- Alteração:
-Fiz o roteiro da apresentação parte 1 da sprint 2
-
-
-
-
-
-
+- Alteração: Fiz o roteiro da apresentação parte 1 da sprint 2
 
 
 #### Pablo:
-
-
-- Alteração:
-Arrumei o Diagrama de classe
-
-
-
+- Alteração: Arrumei o Diagrama de classe
 
 
 
@@ -450,87 +226,27 @@ Pablo: diagrama de sequências/ User Stories 01 e 02
 Rafael: continuar a apresentação
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### Banco de dados
 Colocar fotos se for preciso
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Alterações Realizadas
 
-
 #### Álvaro:
-
-
 - Alteração:
-
-
-
-
-
-
-
-
 
 
 #### Heloísa:
-
-
 - Alteração:
-
-
-
-
-
-
-
-
 
 
 #### Pablo:
-
-
 - Alteração:
 
 
-
-
-
-
 #### Rafael:
-
-
 - Alteração: Foi realizado o aprimoramento no roteiro da apresentação da sprint 2 parte 1
 https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/edit?tab=t.0#heading=h.awm2upmu5j2o
-
-
-
 
 
 
@@ -539,88 +255,15 @@ https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## ------------------Outro Dia--------------------------
-
-
-
-
-
-
 
 
 ### Banco De Dados artefato 5
 
 
-
-
-
-
-
-
 ### Data: 13/05/2026
 
-
-
-
-
-
-
-
 ### Objetivo do Dia
-
-
-
-
-
-
-
 
 Álvaro:
 Heloísa:
@@ -629,303 +272,26 @@ Rafael: Realizar design da apresentação
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Banco de dados
 Colocar fotos se for preciso
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Alterações Realizadas
 
-
-
-
-
-
-
-
 #### Álvaro:
-
-
-
-
-
-
-
-
 - Alteração:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #### Heloísa:
-
-
-
-
-
-
-
-
 - Alteração:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #### Pablo:
-
-
-
-
-
-
-
-
 - Alteração:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #### Rafael:
-
-
-
-
-
-
-
-
 - Alteração: Realização do design da apresentação da sprint 2 parte 1.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -939,148 +305,45 @@ https://www.canva.com/design/DAHJecT2L6E/6AQ_vpT8poFMLhKRodBHKg/edit
 # Relatório Diário do Wireframe
 
 
-
-
 Este documento registra, por dia, as alterações realizadas no processo de composição de múltiplos Wireframe, acompanhando contribuições individuais, decisões tomadas, problemas encontrados e próximos passos.
 
 
-
-
 ## Equipe
-
-
-
-
 - Luíz
 - Matheus
 - Joana
 
 
-
-
-
-
-
-
 ## Como Registrar
 
-
-
-
 Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspondentes. Sempre que possível, descreva as alterações de forma objetiva, indicando o wireframe afetado, o motivo da mudança e o impacto esperado no fluxo ou na experiência do usuário.
-
-
 
 
 ----
 
 
-
-
 ## Modelo de Registro Diário
-
-
 
 
 ### Data: DD/MM/AAAA
 
 
-
-
 ### Objetivo do Dia
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ### Alterações Realizadas
 
 
-
-
 #### Nome da pessoa:
-
-
-
-
 - Alteração:
 
 
-
-
-
-
-
-
-
-
-
-
 #### Nome da pessoa:
-
-
-
-
 - Alteração:
 
 
-
-
-
-
-
-
-
-
-
-
 #### Nome da pessoa:
-
-
-
-
 - Alteração:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ## Link para onde estão as estruturas do Wireframe
@@ -1092,100 +355,28 @@ Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspond
 ## Modelo de registro do Wireframe
 
 
-
-
 ### Data: 06/05/AAAA
-
-
-
 
 ### Objetivo do Dia
 
-
 Matheus: estrutura e pesquisa do template do wireframe do professor:
 Luíz: estrutura e pesquisa do template do wireframe do coordenador
-Jona: estrutura e pesquisa do template do wireframe do aluno
-
-
-
-
-
-
-
-
-
+Joana: estrutura e pesquisa do template do wireframe do aluno
 
 
 
 ### Alterações Realizadas
 
-
-
-
 #### Joana:
-
-
-
-
-- Alteração:
-
-
-Terminei a estrutura e pesquisa do template do wireframe do aluno
-
-
-
-
-
-
+- Alteração: Terminei a estrutura e pesquisa do template do wireframe do aluno
 
 
 #### Matheus:
-
-
-
-
-- Alteração:
-
-
-
-
-Terminei a estrutura e pesquisa do template do wireframe do professor
-
-
-
-
+- Alteração: Terminei a estrutura e pesquisa do template do wireframe do professor
 
 
 #### Luíz:
-
-
-
-
-- Alteração:
-
-
-Terminei a estrutura e pesquisa do template do wireframe do coordenador
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- Alteração: Terminei a estrutura e pesquisa do template do wireframe do coordenador
 
 
 
@@ -1214,105 +405,30 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 
 ## Modelo de registro do Wireframe
 
-
-
-
 ### Data: 07/05/2026
-
-
-
 
 ### Objetivo do Dia
 
 
 Matheus: começar a fazer o wireframe do professor:
 Luíz: começar a fazer o wireframe do coordenador
-Jona: começar a fazer o wireframe do aluno
-
-
-
-
-
-
-
-
-
-
-
-
-
+Joana: começar a fazer o wireframe do aluno
 
 
 
 ### Alterações Realizadas
 
 
-
-
 #### Matheus:
-
-
-
-
-- Alteração:
-
-
-criei os componentes para fazer as telas
-
-
-
-
-
-
+- Alteração: Criei os componentes para fazer as telas
 
 
 #### Luíz:
-
-
-
-
-- Alteração:
-
-
-Fiz duas telas do coordenador e também os componentes
-
-
-
-
-
-
+- Alteração: Fiz duas telas do coordenador e também os componentes
 
 
 #### Joana:
-
-
-
-
-- Alteração:
-
-
-Fiz quatro telas do aluno
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- Alteração: Fiz quatro telas do aluno
 
 
 
@@ -1336,105 +452,27 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 
 ## Modelo de registro do Wireframe
 
-
-
-
 ### Data: 11/05/2026
-
-
-
 
 ### Objetivo do Dia
 
-
-
-
 Matheus: Continuar fazendo as telas do wireframe do Professor
 Luíz: Continuar fazendo as telas do wireframe do coordenador
-Jona: Continuar fazendo as telas do wireframe do aluno
-
-
-
-
-
-
-
-
-
-
-
-
+Joana: Continuar fazendo as telas do wireframe do aluno
 
 
 ### Alterações Realizadas
 
-
-
-
 #### Matheus:
-
-
-
-
-- Alteração:
-
-
-Fiz mais telas do Wireframe do Professor
-
-
-
-
-
-
+- Alteração: Fiz mais telas do Wireframe do Professor
 
 
 #### Luíz:
-
-
-
-
-- Alteração:
-
-
-Fiz mais telas do Wireframe do coordenador
-
-
-
-
-
-
+- Alteração: Fiz mais telas do Wireframe do coordenador
 
 
 #### Joana:
-
-
-
-
-- Alteração:
-
-
-Fiz mais telas do Wireframe do aluno
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- Alteração: Fiz mais telas do Wireframe do aluno
 
 
 
@@ -1456,110 +494,30 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 ## ---------------------------Outro Dia-------------------------
 
 
-## Modelo de Registro Diário
-
-
-
-
 ### Data: 12/05/2026
-
-
 
 
 ### Objetivo do Dia
 
-
 Matheus: Continuar fazendo as telas do wireframe do Professor
 Luíz: Continuar fazendo as telas do wireframe do coordenador
-Jona: Continuar fazendo as telas do wireframe do aluno
-
-
-
-
-
-
-
-
-
-
+Joana: Continuar fazendo as telas do wireframe do aluno
 
 
 
 
 ### Alterações Realizadas
 
-
-
-
 #### Matheus:
-
-
-
-
 - Alteração:
-
-
-
-
-
-
-
-
-
-
 
 
 #### Nome da pessoa:
-
-
-
-
 - Alteração:
 
 
-
-
-
-
-
-
-
-
-
-
 #### Joana Auriemo Racy:
-
-
-
-
 - Alteração: Organiza os frames em ordem cronologica de acesso, e padroniza os títulos.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ## Link para onde estão as estruturas do Wireframe
@@ -1568,3 +526,50 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=0-1&p=f&t
 
 
 
+# ---------------------APRESENTAÇÃO------------------------
+
+
+# Relatório Diário da Apresentação
+
+
+Este documento registra, por dia, as alterações realizadas no processo de composição dos slides da sprint 2, acompanhando contribuições individuais, decisões tomadas, problemas encontrados e próximos passos.
+
+
+
+## Equipe
+
+- Joana
+- Pablo
+
+
+## Como Registrar
+
+Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspondentes. Sempre que possível, descreva as alterações de forma objetiva, indicando como os slides foram afetados.
+
+
+----
+
+
+### Data: 13/05/2026
+
+
+### Objetivo do Dia
+
+Joana Racy: Começar os slides
+Pablo:
+
+
+
+### Alterações Realizadas
+
+#### Joana Auriemo Racy:
+- Alteração: Criei a apresentação e meu slide (de Modelo Relacional, o que é e para que serve).
+
+
+#### Pablo:
+- Alteração:
+
+
+
+## Link para onde estão os slides
+https://canva.link/tjnuod1kpcpcl1v
