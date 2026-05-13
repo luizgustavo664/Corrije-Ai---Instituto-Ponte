@@ -489,7 +489,7 @@ Colocar fotos se for preciso
 
 
 - Alteração:
-
+Acabei o diagrama de sequência sobre o US03 e também arrumei dota a documentação do registro.md
 
 
 
@@ -526,8 +526,8 @@ Colocar fotos se for preciso
 #### Rafael:
 
 
-- Alteração: Foi realizado o aprimoramento no roteiro da apresentação da sprint 2 parte 1
-https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/edit?tab=t.0#heading=h.awm2upmu5j2o
+- Alteração: 
+Foi realizado o aprimoramento no roteiro da apresentação da sprint 2 parte 1
 
 
 
@@ -536,6 +536,12 @@ https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/
 
 ## Link para onde estão as estruturas do banco de dados
 
+Rafael: roteiro da apresentação da sprint 2 parte 1.
+https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/edit?tab=t.0#heading=h.awm2upmu5j2o 
+
+
+Álvaro: Diagrama de sequência US03.
+https://editor.plantuml.com/uml/dPNTRjCm583l_HJdRfl4kcvmLQbeRPen1AnLad6BtDXRBILnPJk5WIRn4Bm15pm0uWds9Zm9nuuJugqTFxrfSlxFTuwTKsseCdLP449p8nKqluMILrnhzqwrUoLBMLUCgXkhZsHbb2mAhfm-8daZSCufLnkHS_UCoZHG9dmjjS1CDqwP45uPOMwQj5DQvTANWCef8UCnHCdXy7W4vxBam3-89GTwz-tkgmJ68LU2AbWhkQ4m7XDY2uN3vn3125x46Hojq8j4DXvAqq2QUcc2qcMjSwfcb4bjy-mVaCHhfwXDuzTnb06sSIMkQsNJ_-2QJ9s9Zy2iBxZ0IIkt-MouMJRtsNnfhJ1gXQxk4PmCXp1_1Jy_V-bCMW8d8pJYlCfNoBn99YgH2oeqoAKIrzJSVLS2nLivE4Jww4ggCi3HD9vYr9AUeR8kA0R1_eDwhQQn-KFLeM5GncAUTdK49Mne8N2luiZESdzX3T3vW5JISC36LWOmYhLywomXfoNkKDXrC4rDYqqRAdRh5SxpvKKQ9nd-PNFm1GMpTB9tWi4rLqWw76WlQWYfhtY8w1WYnQdXp75gCtJZVUhzczg1raQMr0Xi5Sy7xhai9IYgyxfQoGSJNaoowBoRyIV1RWF0rDG8xYEEsU2ZtaycQNHvSJu_2A3TjnBi2VosxEExNCmcMGpQsOttshBsGeZ7eEHxgDVCDhqJOPUMqPqq-pQFx5vJJqV9eOsPQEuAN1Z3SL5Khr5_Z93jkk1coybPN6P_GJNo_htLtSfrzpvwe4qcl6qo60m6_qFpNnQouzRSdZt65joCstl1S7SO_ASWnzkP5nGUsSGPtfJOoKveZ2CfgXBlZqiMml9w9-yJyd7FalcRhIUsmUEyx-FPI3nc0HSdUGZa6Ln8zs734qV8AQyOVXP_0G00
 
 
 
@@ -1152,21 +1158,8 @@ Jona: Continuar fazendo as telas do wireframe do aluno
 
 
 
-- Alteração: Organiza os frames em ordem cronologica de acesso, e padroniza os títulos.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- Alteração: 
+Organiza os frames em ordem cronológica de acesso, e padroniza os títulos.
 
 
 
