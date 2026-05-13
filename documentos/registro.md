@@ -503,9 +503,6 @@ Matheus: Continuar fazendo as telas do wireframe do Professor
 Luíz: Continuar fazendo as telas do wireframe do coordenador
 Joana: Continuar fazendo as telas do wireframe do aluno
 
-
-
-
 ### Alterações Realizadas
 
 #### Matheus:
@@ -519,6 +516,25 @@ Joana: Continuar fazendo as telas do wireframe do aluno
 #### Joana Auriemo Racy:
 - Alteração: Organiza os frames em ordem cronologica de acesso, e padroniza os títulos.
 
+
+## Link para onde estão as estruturas do Wireframe
+
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=0-1&p=f&t=yiozHSv70VPvzseF-0
+
+## ---------------------------Outro Dia-------------------------
+
+
+### Data: 13/05/2026
+
+
+### Objetivo do Dia
+
+Matheus: Criar as telas de Banco de Dados, Provas e Envio de notas
+
+### Alterações Realizadas
+
+#### Matheus:
+- Alteração: Criação das telas de Banco de Dados, Provas e Envio de notas junto dos seus elementos reutilizáveis e frames.
 
 ## Link para onde estão as estruturas do Wireframe
 
