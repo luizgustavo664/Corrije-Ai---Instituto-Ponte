@@ -567,9 +567,22 @@ Pablo:
 
 
 #### Pablo:
-- Alteração:
+- Alteração: O que foi feito
 
+* Analisei os wireframes já existentes
+* Estruturei o roteiro da apresentação
+* Organizei a explicação dos principais fluxos da aplicação
+* Preparei a simulação das interações e navegação entre telas
 
+## Fluxos apresentados
+
+1. Navegação principal da aplicação
+2. Interação do usuário entre telas
+3. Execução das ações principais do sistema
+
+## Observações
+
+Os wireframes utilizados já estavam previamente desenvolvidos. O trabalho realizado foi focado na preparação e condução da apresentação.
 
 ## Link para onde estão os slides
 https://canva.link/tjnuod1kpcpcl1v
