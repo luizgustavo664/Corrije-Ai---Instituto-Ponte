@@ -520,7 +520,7 @@ Joana: Continuar fazendo as telas do wireframe do aluno
 - Alteração: Organiza os frames em ordem cronologica de acesso, e padroniza os títulos.
 
 
-### Data: 12/05/2026
+### Data: 13/05/2026
 
 Luiz: Adicionado mais 2 telas ao wireframe coordenador e componentes
 
