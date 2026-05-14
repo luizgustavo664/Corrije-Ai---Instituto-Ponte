@@ -1,3 +1,16 @@
+<<<<<<< documentos/registro.md
+# Relatório Diário do Processo de Composição de Wireframes
+
+Este documento registra, por dia, as alterações realizadas no processo de composição de múltiplos wireframes, acompanhando contribuições individuais, decisões tomadas, problemas encontrados e próximos passos.
+
+## Equipe
+
+- Pablo
+
+## Como Registrar
+
+Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspondentes. Sempre que possível, descreva as alterações de forma objetiva, indicando o wireframe afetado, o motivo da mudança e o impacto esperado no fluxo ou na experiência do usuário.
+=======
 # Relatório Diário do Banco de Dados
 
 ## Relatório Diário do Processo de Criação do Wireframe do Projeto
@@ -132,10 +145,16 @@ Link: https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?usp
 
 Heloísa: Drive com as fotos do rascunho da diagramação de classes UML da prova.
 https://drive.google.com/drive/folders/10WWE-NGI_FWsrd9DImUuJKm3mLXaZSVB?usp=drive_link
+>>>>>>> documentos/registro.md
 
+---
 
+<<<<<<< documentos/registro.md
+## Modelo de Registro Diário
+=======
 ### -------------------outro dia---------------------------------------
 
+>>>>>>> documentos/registro.md
 
 ### Banco De Dados artefato 5
 
@@ -226,7 +245,14 @@ fiz o estudo e a alteração no diagrama
 
 
 - Alteração:
-terminei o diagrama de classes
+- Alteração: Criação da modelagem UML do domínio e estrutura relacional da aplicação.
+- Wireframe ou tela impactada: Fluxos de criação de prova, resolução de prova, correção, banco de questões e relatórios.
+- Justificativa: Estruturar corretamente as entidades, relacionamentos e regras de negócio do sistema antes do desenvolvimento do backend e integração com o banco de dados.
+- Observações: SQL incluindo PKs, FKs e relacionamentos principais do sistema.
+
+## Link para o que foi desenvolvido:
+
+https://drawsql.app/teams/pablo-marchina/diagrams/diagrama-classe
 
 
 
@@ -250,9 +276,33 @@ Pablo: https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?us
 ## Banco de dados
 Colocar fotos se for preciso
 
+<<<<<<< documentos/registro.md
+### Objetivo do Dia
+=======
+>>>>>>> documentos/registro.md
 
-### Objetivo do dia:
+Descrever o foco principal do trabalho no dia, como composição de telas, revisão de fluxos, integração de wireframes, ajustes visuais ou validação de navegação.
 
+<<<<<<< documentos/registro.md
+### Artefaros Trabalhados
+
+- Artefato 5: Diagrama de Classes do Domínio
+
+### Alterações Realizadas
+
+#### Pablo Marchina
+
+- Alteração: Criação da modelagem UML do domínio e estrutura relacional da aplicação.
+- Wireframe ou tela impactada: Fluxos de criação de prova, resolução de prova, correção, banco de questões e relatórios.
+- Justificativa: Estruturar corretamente as entidades, relacionamentos e regras de negócio do sistema antes do desenvolvimento do backend e integração com o banco de dados.
+- Observações: SQL incluindo PKs, FKs e relacionamentos principais do sistema.
+
+## Link para o que foi desenvolvido:
+
+https://drawsql.app/teams/pablo-marchina/diagrams/diagrama-classe
+
+---
+=======
 
 Álvaro: diagrama de sequências/ User Stories 03
 Heloísa: Modelo Entidade-Relacionamento
@@ -1267,3 +1317,4 @@ Os wireframes utilizados já estavam previamente desenvolvidos. O trabalho reali
 ## Link para onde estão os slides
 
 https://canva.link/tjnuod1kpcpcl1v
+>>>>>>> documentos/registro.md
