@@ -299,6 +299,52 @@ Colocar fotos se for preciso
 Rafael: Foi finalizado o design para a apresentação com o fluxo do aluno a ser seguido junto do roteiro.
 https://www.canva.com/design/DAHJecT2L6E/6AQ_vpT8poFMLhKRodBHKg/edit
 
+
+
+
+## ------------------Outro Dia--------------------------
+
+
+### Banco De Dados artefato 5
+
+
+### Data: 14/05/2026
+
+### Objetivo do Dia
+
+Álvaro:
+Heloísa:
+Pablo:
+Rafael: Realizar adição de título e fluxos de telas do professor e coordenador na apresentação do wireframe.
+
+
+
+### Banco de dados
+Colocar fotos se for preciso
+
+
+### Alterações Realizadas
+
+#### Álvaro:
+- Alteração:
+
+
+#### Heloísa:
+- Alteração: 
+
+#### Pablo:
+- Alteração:
+
+
+#### Rafael:
+- Alteração: Adição de título e fluxos de telas do professor e coordenador na apresentação do wireframe.
+
+
+
+## Link para onde estão as estruturas do banco de dados
+Rafael: Foi finalizado o título e fluxos de telas do professor e coordenador na apresentação do wireframe.
+https://www.canva.com/design/DAHJqZ6nGfM/g4QPY7wuvPSYB-7JGkWBpA/edit
+
 # ---------------------WIREFRAME------------------------
 
 
