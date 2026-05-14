@@ -1137,3 +1137,42 @@ https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=dri
 =======
 >>>>>>> documentos/registro.md
 >>>>>>>>> Temporary merge branch 2
+
+
+## ---------------------------Outro Dia-------------------------
+
+
+### Data: 13/05/2026
+
+
+### Objetivo do Dia
+
+Joana Racy: Acabar os slides e roteiro
+Pablo:
+
+
+
+### Alterações Realizadas
+
+#### Joana Auriemo Racy:
+- Alteração: Recriei a apresentação, adaptei slides pro modelo certo e escrevi roteiro
+
+## Link do roteiro:
+https://docs.google.com/document/d/1eAJFZrq3S6L6vTaXLxWV6Vx3hl1YGZHJZ2noENsnfGM/edit?usp=sharing
+
+
+#### Pablo:
+- Alteração:
+
+## Fluxos apresentados
+
+1. Navegação principal da aplicação
+2. Interação do usuário entre telas
+3. Execução das ações principais do sistema
+
+## Observações
+
+Os wireframes utilizados já estavam previamente desenvolvidos. O trabalho realizado foi focado na preparação e condução da apresentação.
+
+## Link para onde estão os slides
+https://canva.link/i69yzyj7b9aq5sp
