@@ -667,6 +667,9 @@ Pablo:
 #### Joana Auriemo Racy:
 - Alteração: Recriei a apresentação, adaptei slides pro modelo certo e escrevi roteiro
 
+## Link do roteiro:
+https://docs.google.com/document/d/1eAJFZrq3S6L6vTaXLxWV6Vx3hl1YGZHJZ2noENsnfGM/edit?usp=sharing
+
 
 #### Pablo:
 - Alteração:
