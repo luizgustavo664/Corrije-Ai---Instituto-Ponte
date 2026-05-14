@@ -1,24 +1,150 @@
 Drive com as fotos do rascunho da diagramação de classes UML da prova:
 https://drive.google.com/drive/folders/10WWE-NGI_FWsrd9DImUuJKm3mLXaZSVB?usp=drive_link
 
-Documento com as telas que vão ser criadas dentro do wireframe da visualização do professor:
-Link: https://docs.google.com/document/d/17ugWiNUdEXpgIERscrRcl4eRig97YaL5LyF2QrLrwDo/edit?usp=sharing
 
-Repositório do GitHub com o pacote CLI feito para otimizar o fluxo de criação de issues -> commits -> merge requests:
-Através dele é possível realizar todo o fluxo de trabalho sem sair do VSCODE
-https://github.com/misareverberate/gitlab-flow-cli
 
-Documento com o UML do coordenador:
-Link: https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D
+# Relatório diário do processo de criação do wireframe do projeto
 
-Documento com as UMLs do Aluno:
+Matheus Almeida - Aqui segue o link do figma no qual eu fiz a criação dos componentes que serão utilziados ao longo de todo o wireframe do professor, além de criar a base das telas:
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
+
+Documento com as telas que vão ser criadas dentro do wireframe da visualização do professor:  
+https://docs.google.com/document/d/17ugWiNUdEXpgIERscrRcl4eRig97YaL5LyF2QrLrwDo/edit?usp=sharing
+
+---
+
+Este documento registra, por dia, as alterações realizadas no processo de composição de múltiplos Banco de Dados, acompanhando contribuições individuais, decisões tomadas, problemas encontrados e próximos passos.
+
+---
+
+## Pablo Marchina
+
+feat(#60): adiciona diagrama de classes do módulo do professor.  
+Link:  
+https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?usp=sharing
+
+---
+
+## Luiz Gustavo
+
+### Data: 06/05/2026
+
+
+### Objetivo do Dia
+
+
+Álvaro: os UML do aluno
+Heloísa: os UML da prova
+Pablo: os UML do professor
+Rafael: os UML do coordenador
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Banco de dados
+Colocar fotos se for preciso
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Alterações Realizadas
+
+
+#### Álvaro:
+
+
+- Alteração:
+fiz parte do diagrama do aluno no modelo UML
+
+
+
+
+
+
+
+
+#### Heloísa:
+
+
+- Alteração:
+Terminei o diagrama da prava no modelo UML
+
+
+
+
+
+
+
+
+#### Pablo:
+
+
+- Alteração:
+Terminei o diagrama do Professor no modelo UML
+
+
+
+
+#### Rafael:
+
+
+- Alteração:
+fiz parte do diagrama do cordenador no modelo UML
+
+
+
+
+## Link para onde estão as estruturas do banco de dados
+
+
+Álvaro: Documento com a estrutura UML do Aluno.
 https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D
 
-Pablo Marchina: feat(#60): adiciona diagrama de classes do módulo do professor
+
+Rafael: Documento com a estrutura UML do coordenador.
+Link: https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D
+
+
+Pablo Marchina: feat(#60): adiciona diagrama de classes do módulo do professor.
 Link: https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?usp=sharing
 
-Documento com as telas que vão ser criadas dentro do wireframe da visualização do Coordenador:
-Link: https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0
+### ~ Luiz Gustavo
+
+Matheus Almeida - Aqui segue o link do figma no qual eu fiz a criação dos componentes que serão utilziados ao longo de todo o wireframe do professor, além de criar a base das telas:
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
+
+
+#### Data: 06/05/2026
+Documento com as telas que vão ser criadas dentro do wireframe da visualização do Coordenador: <br>
+Link: [Docs](https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0)
+
+#### Data: 07/05/2026
+Figma com as telas iniciais do coordenador sendo feitas de acordo com a estrutura feita anteriormente: <br>
+Link: [Figma](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=14-210&t=OCfeOvomQASkDiGU-1) ~ As telas de login, cadastro feitas e criação de componentes
 
 Joana: link do Figma - utilizado para fazer o Wireframe do aluno:
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
@@ -39,11 +165,6 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 </div>
 
 
-<<<<<<< HEAD
-
-Matheus Almeida - Aqui segue o link do figma no qual eu fiz a criação dos componentes que serão utilziados ao longo de todo o wireframe do professor, além de criar a base das telas:
-https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
-=======
 # Relatório diário do processo de criação do diagrama de classes do sistema de banco de dados
 
 ## Registro diário:
@@ -62,48 +183,908 @@ Foi finalizada a imagem para ser utilizada de referência para o resto do banco 
 
 https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=drive_link
 
+<<<<<<<<< Temporary merge branch 1
 # Relatório diário do processo de criação do modelo entidade-relacionamento
 
 ## Registro diário:
 
 ### Data: 11/05/2026
 
-### Desenvolvedora: Heloisa Kadota
 
-### Objetivo do dia:
+## Banco de dados
+Colocar fotos se for preciso
 
-Criar e colocar no WAD o modelo entidade-relacionamento seguindo as instruções de formatação informadas pelo professor.
+<<<<<<< documentos/registro.md
+### Objetivo do Dia
+=======
+>>>>>>> documentos/registro.md
 
-### Adições feitas:
+Descrever o foco principal do trabalho no dia, como composição de telas, revisão de fluxos, integração de wireframes, ajustes visuais ou validação de navegação.
 
+<<<<<<< documentos/registro.md
+### Artefaros Trabalhados
+
+- Artefato 5: Diagrama de Classes do Domínio
+
+### Alterações Realizadas
+
+#### Pablo Marchina
+
+- Alteração: Criação da modelagem UML do domínio e estrutura relacional da aplicação.
+- Wireframe ou tela impactada: Fluxos de criação de prova, resolução de prova, correção, banco de questões e relatórios.
+- Justificativa: Estruturar corretamente as entidades, relacionamentos e regras de negócio do sistema antes do desenvolvimento do backend e integração com o banco de dados.
+- Observações: SQL incluindo PKs, FKs e relacionamentos principais do sistema.
+
+## Link para o que foi desenvolvido:
+
+https://drawsql.app/teams/pablo-marchina/diagrams/diagrama-classe
+
+---
+=======
+
+Álvaro: diagrama de sequências/ User Stories 03
+Heloísa: Modelo Entidade-Relacionamento
+Pablo: Arrumar Diagrama de classe
+Rafael: fazer os slides
+
+
+
+
+### Alterações Realizadas
+
+
+#### Álvaro
+
+
+- Alteração:
+Já preparei o prompt do diagrama e comecei escrever nele
+
+
+
+
+
+
+
+
+
+
+#### Heloísa
+
+
+- Alteração:
 Foi criado o modelo entidade-relacionamento do projeto, com notação de crows foot consistente e com atribuição de atributos e outros detalhes no código PlantUML.
 
-Matheus Almeida - Aqui segue o link do figma no qual eu fiz a criação dos componentes que serão utilizados ao longo de todo o wireframe do professor, além de criar a base das telas:
+
+
+
+
+
+
+
+
+
+#### Rafael:
+
+
+- Alteração:
+Fiz o roteiro da apresentação parte 1 da sprint 2
+
+
+
+
+
+
+
+
+#### Pablo:
+
+
+- Alteração:
+Arrumei o Diagrama de classe
+
+
+
+
+
+
+## Link para onde estão as estruturas do banco de dados
+Álvaro Almeida: link do site em que foi desenvolvido o Diagrama de sequências com base na User Stories 03, porém ainda não está finalizada.
+https://miro.com/app/board/uXjVHVcFzWs=/
+
+
+Rafael: Foi finalizado o roteiro para a apresentação indicando a ordem a seguir para realizar a tarefa.
+https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/edit?tab=t.0#heading=h.5jetdw4i4zik
+
+
+Heloísa: Foi criado o modelo entidade-relacionamento do projeto, com notação de crows foot consistente e com atribuição de atributos e outros detalhes no código PlantUML. ---> foi colocado no wad.md
+
+
+## ------------------Outro Dia--------------------------
+
+
+### Banco De Dados artefato 5
+
+
+### Data: 12/05/2026
+
+
+### Objetivo do Dia
+
+
+Álvaro: diagrama de sequências/ User Stories 03 e também organizar o registro.md
+Heloísa:diagrama de entidade relacionamento
+Pablo: diagrama de sequências/ User Stories 01 e 02
+Rafael: continuar a apresentação
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Banco de dados
+Colocar fotos se for preciso
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Alterações Realizadas
+
+
+#### Álvaro:
+
+
+- Alteração:
+Acabei o diagrama de sequência sobre o US03 e também arrumei dota a documentação do registro.md
+
+
+
+
+
+
+
+
+
+#### Heloísa:
+
+
+- Alteração:
+
+
+
+
+
+
+
+
+
+
+#### Pablo:
+
+
+- Alteração:
+
+
+
+
+
+
+#### Rafael:
+
+
+- Alteração: 
+Foi realizado o aprimoramento no roteiro da apresentação da sprint 2 parte 1
+
+
+
+
+
+
+## Link para onde estão as estruturas do banco de dados
+
+Rafael: roteiro da apresentação da sprint 2 parte 1.
+https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/edit?tab=t.0#heading=h.awm2upmu5j2o 
+
+
+Álvaro: Diagrama de sequência US03.
+https://editor.plantuml.com/uml/dPNTRjCm583l_HJdRfl4kcvmLQbeRPen1AnLad6BtDXRBILnPJk5WIRn4Bm15pm0uWds9Zm9nuuJugqTFxrfSlxFTuwTKsseCdLP449p8nKqluMILrnhzqwrUoLBMLUCgXkhZsHbb2mAhfm-8daZSCufLnkHS_UCoZHG9dmjjS1CDqwP45uPOMwQj5DQvTANWCef8UCnHCdXy7W4vxBam3-89GTwz-tkgmJ68LU2AbWhkQ4m7XDY2uN3vn3125x46Hojq8j4DXvAqq2QUcc2qcMjSwfcb4bjy-mVaCHhfwXDuzTnb06sSIMkQsNJ_-2QJ9s9Zy2iBxZ0IIkt-MouMJRtsNnfhJ1gXQxk4PmCXp1_1Jy_V-bCMW8d8pJYlCfNoBn99YgH2oeqoAKIrzJSVLS2nLivE4Jww4ggCi3HD9vYr9AUeR8kA0R1_eDwhQQn-KFLeM5GncAUTdK49Mne8N2luiZESdzX3T3vW5JISC36LWOmYhLywomXfoNkKDXrC4rDYqqRAdRh5SxpvKKQ9nd-PNFm1GMpTB9tWi4rLqWw76WlQWYfhtY8w1WYnQdXp75gCtJZVUhzczg1raQMr0Xi5Sy7xhai9IYgyxfQoGSJNaoowBoRyIV1RWF0rDG8xYEEsU2ZtaycQNHvSJu_2A3TjnBi2VosxEExNCmcMGpQsOttshBsGeZ7eEHxgDVCDhqJOPUMqPqq-pQFx5vJJqV9eOsPQEuAN1Z3SL5Khr5_Z93jkk1coybPN6P_GJNo_htLtSfrzpvwe4qcl6qo60m6_qFpNnQouzRSdZt65joCstl1S7SO_ASWnzkP5nGUsSGPtfJOoKveZ2CfgXBlZqiMml9w9-yJyd7FalcRhIUsmUEyx-FPI3nc0HSdUGZa6Ln8zs734qV8AQyOVXP_0G00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ---------------------WIREFRAME------------------------
+
+
+# Relatório Diário do Wireframe
+
+
+
+
+Este documento registra, por dia, as alterações realizadas no processo de composição de múltiplos Wireframe, acompanhando contribuições individuais, decisões tomadas, problemas encontrados e próximos passos.
+
+
+
+
+## Equipe
+
+
+
+
+- Luíz
+- Matheus
+- Joana
+
+
+
+
+
+
+
+
+## Como Registrar
+
+
+
+
+Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspondentes. Sempre que possível, descreva as alterações de forma objetiva, indicando o wireframe afetado, o motivo da mudança e o impacto esperado no fluxo ou na experiência do usuário.
+
+
+
+
+----
+
+
+
+
+## Modelo de Registro Diário
+
+
+
+
+### Data: DD/MM/AAAA
+
+
+
+
+### Objetivo do Dia
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Alterações Realizadas
+
+
+
+
+#### Nome da pessoa:
+
+
+
+
+- Alteração:
+
+
+
+
+
+
+
+
+
+
+
+
+#### Nome da pessoa:
+
+
+
+
+- Alteração:
+
+
+
+
+
+
+
+
+
+
+
+
+#### Nome da pessoa:
+
+
+
+
+- Alteração:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Link para onde estão as estruturas do Wireframe
+
+
+---------------------------------------------------
+
+
+## Modelo de registro do Wireframe
+
+
+
+
+### Data: 06/05/AAAA
+
+
+
+
+### Objetivo do Dia
+
+
+Matheus: estrutura e pesquisa do template do wireframe do professor:
+Luíz: estrutura e pesquisa do template do wireframe do coordenador
+Jona: estrutura e pesquisa do template do wireframe do aluno
+
+
+
+
+
+
+
+
+
+
+
+
+### Alterações Realizadas
+
+
+
+
+#### Joana:
+
+
+
+
+- Alteração:
+
+
+Terminei a estrutura e pesquisa do template do wireframe do aluno
+
+
+
+
+
+
+
+
+#### Matheus:
+
+
+
+
+- Alteração:
+
+
+
+
+Terminei a estrutura e pesquisa do template do wireframe do professor
+
+
+
+
+
+
+#### Luíz:
+
+
+
+
+- Alteração:
+
+
+Terminei a estrutura e pesquisa do template do wireframe do coordenador
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Link para onde estão as estruturas do Wireframe
+
+
+Matheus: Documento com as telas que vão ser criadas dentro do wireframe da visualização do professor:
+https://docs.google.com/document/d/17ugWiNUdEXpgIERscrRcl4eRig97YaL5LyF2QrLrwDo/edit?usp=sharing
+
+
+Matheus: Repositório do GitHub com o pacote CLI feito para otimizar o fluxo de criação de issues -> commits -> merge requests:
+Através dele é possível realizar todo o fluxo de trabalho sem sair do VSCODE.
+https://github.com/misareverberate/gitlab-flow-cli
+
+
+Luíz: Documento com as telas que vão ser criadas dentro do wireframe da visualização do Coordenador.
+https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0
+
+### Data: 07/05/2026
+
+Figma com as telas iniciais do coordenador sendo feitas de acordo com a estrutura feita anteriormente:  
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=14-210&t=OCfeOvomQASkDiGU-1
+
+- Telas de login e cadastro feitas
+- Criação de componentes
+
+---
+
+## Heloísa
+
+Drive com as fotos do rascunho da diagramação de classes UML da prova:  
+https://drive.google.com/drive/folders/10WWE-NGI_FWsrd9DImUuJKm3mLXaZSVB?usp=drive_link
+
+---
+
+# -------------------Outro Dia---------------------------------------
+
+# Banco De Dados — Artefato 5
+
+## Data: 07/05/2026
+
+### Objetivo do Dia
+
+- Álvaro: estudar a estrutura de classes UML
+- Heloísa: fazer as conexões das atuais classes criadas
+- Pablo: começar o diagrama de classes
+- Rafael: estudar a estrutura de classes UML
+
+---
+
+## Banco de Dados
+
+Colocar fotos se for preciso.
+
+---
+
+## Alterações Realizadas
+
+#### Álvaro
+- Alteração: Fiz o estudo e a alteração no diagrama.
+
+#### Heloísa
+- Alteração: Foi finalizada a imagem para ser utilizada de referência para o resto do banco de dados do projeto.
+
+#### Rafael
+- Alteração: Fiz o estudo e a alteração no diagrama.
+
+#### Pablo
+- Alteração: Terminei o diagrama de classes.
+
+---
+
+## Link para onde estão as estruturas do banco de dados
+
+### Álvaro
+https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D
+
+### Heloísa
+https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=drive_link
+
+### Rafael
+https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%22_FvIqp9UhPcbmpztyfYB%22%7D
+
+### Pablo
+https://drive.google.com/file/d/1ObtlEZbTAccfOR6JpRT5S028EKOYxSlw/view?usp=sharing
+
+---
+
+# -----------------------Outro Dia-------------------------------
+
+# Banco De Dados — Artefato 5
+
+## Data: 11/05/2026
+
+## Banco de Dados
+
+Colocar fotos se for preciso.
+
+### Objetivo do Dia
+
+- Álvaro: diagrama de sequência / User Stories 03
+- Heloísa: modelo entidade-relacionamento
+- Pablo: arrumar diagrama de classe
+- Rafael: fazer os slides
+
+---
+
+## Alterações Realizadas
+
+#### Álvaro
+- Alteração: Já preparei o prompt do diagrama e comecei a escrever nele.
+
+#### Heloísa
+- Alteração: Foi criado o modelo entidade-relacionamento do projeto, com notação Crow’s Foot consistente e com atribuição de atributos e outros detalhes no código PlantUML.
+
+#### Rafael
+- Alteração: Fiz o roteiro da apresentação parte 1 da Sprint 2.
+
+#### Pablo
+- Alteração: Arrumei o diagrama de classe.
+
+---
+
+## Link para onde estão as estruturas do banco de dados
+
+### Álvaro Almeida
+https://miro.com/app/board/uXjVHVcFzWs=/
+
+### Rafael
+https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/edit?tab=t.0#heading=h.5jetdw4i4zik
+
+### Heloísa
+Foi criado o modelo entidade-relacionamento do projeto, com notação Crow’s Foot consistente e com atribuição de atributos e outros detalhes no código PlantUML. Foi colocado no wad.md.
+
+---
+
+# ------------------Outro Dia--------------------------
+
+# Banco De Dados — Artefato 5
+
+## Data: 12/05/2026
+
+### Objetivo do Dia
+
+- Álvaro: diagrama de sequência / User Stories 03 e organização do registro.md
+- Heloísa: diagrama entidade-relacionamento
+- Pablo: diagrama de sequência / User Stories 01 e 02
+- Rafael: continuar a apresentação
+
+---
+
+## Banco de Dados
+
+Colocar fotos se for preciso.
+
+---
+
+## Alterações Realizadas
+
+#### Álvaro
+- Alteração:
+
+#### Heloísa
+- Alteração:
+
+#### Pablo
+- Alteração:
+
+#### Rafael
+- Alteração: Foi realizado o aprimoramento no roteiro da apresentação da Sprint 2 parte 1.
+
+https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/edit?tab=t.0#heading=h.awm2upmu5j2o
+
+---
+
+# ------------------Outro Dia--------------------------
+
+# Banco De Dados — Artefato 5
+
+## Data: 13/05/2026
+
+### Objetivo do Dia
+
+- Álvaro:
+- Heloísa:
+- Pablo:
+- Rafael: realizar design da apresentação
+
+---
+
+## Banco de Dados
+
+Colocar fotos se for preciso.
+
+---
+
+## Alterações Realizadas
+
+#### Álvaro
+- Alteração:
+
+#### Heloísa
+- Alteração: Foi criado o arquivo migration.sql na pasta migrations e toda a sua documentação no WAD.
+
+#### Pablo
+- Alteração:
+
+#### Rafael
+- Alteração: Realização do design da apresentação da Sprint 2 parte 1.
+
+---
+
+## Link para onde estão as estruturas do banco de dados
+
+### Rafael
+https://www.canva.com/design/DAHJecT2L6E/6AQ_vpT8poFMLhKRodBHKg/edit
+
+---
+
+# ------------------Outro Dia--------------------------
+
+# Banco De Dados — Artefato 5
+
+## Data: 14/05/2026
+
+### Objetivo do Dia
+
+- Álvaro:
+- Heloísa:
+- Pablo:
+- Rafael: realizar adição de título e fluxos de telas do professor e coordenador na apresentação do wireframe
+
+---
+
+## Banco de Dados
+
+Colocar fotos se for preciso.
+
+---
+
+## Alterações Realizadas
+
+#### Álvaro
+- Alteração:
+
+#### Heloísa
+- Alteração:
+
+#### Pablo
+- Alteração:
+
+#### Rafael
+- Alteração: Adição de título e fluxos de telas do professor e coordenador na apresentação do wireframe.
+
+---
+
+## Link para onde estão as estruturas do banco de dados
+
+### Rafael
+https://www.canva.com/design/DAHJqZ6nGfM/g4QPY7wuvPSYB-7JGkWBpA/edit
+
+---
+
+# ---------------------WIREFRAME------------------------
+
+# Relatório Diário do Wireframe
+
+Este documento registra, por dia, as alterações realizadas no processo de composição de múltiplos Wireframes, acompanhando contribuições individuais, decisões tomadas, problemas encontrados e próximos passos.
+
+---
+
+## Equipe
+
+- Luiz
+- Matheus
+- Joana
+
+---
+
+## Como Registrar
+
+Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspondentes. Sempre que possível, descreva as alterações de forma objetiva, indicando o wireframe afetado, o motivo da mudança e o impacto esperado no fluxo ou na experiência do usuário.
+
+---
+
+## Modelo de Registro Diário
+
+### Data: DD/MM/AAAA
+
+### Objetivo do Dia
+
+### Alterações Realizadas
+
+#### Nome da pessoa:
+- Alteração:
+
+---
+
+## Link para onde estão as estruturas do Wireframe
+
+---
+
+## Modelo de Registro do Wireframe
+
+### Data: 06/05/2026
+
+### Objetivo do Dia
+
+- Matheus: estrutura e pesquisa do template do wireframe do professor
+- Luiz: estrutura e pesquisa do template do wireframe do coordenador
+- Joana: estrutura e pesquisa do template do wireframe do aluno
+
+---
+
+## Alterações Realizadas
+
+#### Joana
+- Alteração: Terminei a estrutura e pesquisa do template do wireframe do aluno.
+
+#### Matheus
+- Alteração: Terminei a estrutura e pesquisa do template do wireframe do professor.
+
+#### Luiz
+- Alteração: Terminei a estrutura e pesquisa do template do wireframe do coordenador.
+
+---
+
+## Link para onde estão as estruturas do Wireframe
+
+### Matheus
+https://docs.google.com/document/d/17ugWiNUdEXpgIERscrRcl4eRig97YaL5LyF2QrLrwDo/edit?usp=sharing
+
+### Matheus — GitHub CLI
+https://github.com/misareverberate/gitlab-flow-cli
+
+### Luiz
+https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0
+
+### Joana
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
+
+---
+
+# Relatório Diário do Processo de Criação do Diagrama de Classes do Sistema de Banco de Dados
+
+---
+
+## Modelo de Registro do Wireframe
+
+### Data: 07/05/2026
+
+### Alterações Realizadas
+
+#### Matheus
+- Alteração: Criei os componentes para fazer as telas.
+
+#### Luiz
+- Alteração: Fiz duas telas do coordenador e também os componentes.
+
+#### Joana
+- Alteração: Fiz quatro telas do aluno.
+
+---
+
+## Link para onde estão as estruturas do Wireframe
+
+### Matheus
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
->>>>>>> 06380c273d4557236565ccff9e8937e55b3c5fca
 
-# Relatório diário do processo de criação do modelo entidade-relacionamento
+### Luiz
+https://docs.google.com/document/d/1adqqXx2N4uJE0ki3xl4QfUgMcVTBYQD7d1hoESxnQkk/edit?tab=t.0
 
-## Registro diário:
+### Joana
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&t=RCH7vGXuLSJq8vto-1
+
+---
+
+## Modelo de Registro do Wireframe
 
 ### Data: 11/05/2026
 
-### Desenvolvedora: Pablo Marchina
+### Objetivo do Dia
 
-### Objetivo do dia:
+- Matheus: continuar fazendo as telas do wireframe do professor
+- Luiz: continuar fazendo as telas do wireframe do coordenador
+- Joana: continuar fazendo as telas do wireframe do aluno
 
-Atualizar o diagrama de classes com base nos outros diagramas
+---
 
-### Adições feitas:
+## Alterações Realizadas
 
-cria modelo UML consolidado da plataforma de avaliações
+#### Matheus
+- Alteração: Fiz mais telas do wireframe do professor.
 
-adiciona entidades dos módulos de pessoas, acadêmico, provas, execução e relatórios
+#### Luiz
+- Alteração: Fiz mais telas do wireframe do coordenador.
 
-modela relações de herança entre os perfis de usuário
+#### Joana
+- Alteração: Fiz mais telas do wireframe do aluno.
 
-adiciona relações de composição e agregação
+---
 
-define multiplicidades e associações entre entidades
+## Link para onde estão as estruturas do Wireframe
 
-organiza classes em pacotes UML semânticos
+### Matheus
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=17-207&t=twulAasgSiWiIlT8-1
+=========
+
+>>>>>>>>> Temporary merge branch 2
