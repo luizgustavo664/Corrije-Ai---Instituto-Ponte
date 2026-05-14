@@ -648,3 +648,38 @@ Os wireframes utilizados já estavam previamente desenvolvidos. O trabalho reali
 
 ## Link para onde estão os slides
 https://canva.link/tjnuod1kpcpcl1v
+
+## ---------------------------Outro Dia-------------------------
+
+
+### Data: 13/05/2026
+
+
+### Objetivo do Dia
+
+Joana Racy: Acabar os slides e roteiro
+Pablo:
+
+
+
+### Alterações Realizadas
+
+#### Joana Auriemo Racy:
+- Alteração: Recriei a apresentação, adaptei slides pro modelo certo e escrevi roteiro
+
+
+#### Pablo:
+- Alteração:
+
+## Fluxos apresentados
+
+1. Navegação principal da aplicação
+2. Interação do usuário entre telas
+3. Execução das ações principais do sistema
+
+## Observações
+
+Os wireframes utilizados já estavam previamente desenvolvidos. O trabalho realizado foi focado na preparação e condução da apresentação.
+
+## Link para onde estão os slides
+https://canva.link/i69yzyj7b9aq5sp
