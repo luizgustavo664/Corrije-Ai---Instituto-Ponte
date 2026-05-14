@@ -1057,7 +1057,7 @@ Jona: Continuar fazendo as telas do wireframe do aluno
 
 
 
-- Alteração:
+- Alteração: Criação das telas Painel e Provas do wireframe do professor. Além disso, foram criados os componentes Label e Card que serão reutilizados para a construção das demais telas
 
 
 
