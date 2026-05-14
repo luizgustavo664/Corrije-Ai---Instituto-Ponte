@@ -520,6 +520,10 @@ Joana: Continuar fazendo as telas do wireframe do aluno
 - Alteração: Organiza os frames em ordem cronologica de acesso, e padroniza os títulos.
 
 
+### Data: 12/05/2026
+
+Luiz: Adicionado mais 2 telas ao wireframe coordenador e componentes
+
 ## Link para onde estão as estruturas do Wireframe
 
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=0-1&p=f&t=yiozHSv70VPvzseF-0
