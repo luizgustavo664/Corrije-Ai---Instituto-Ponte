@@ -2276,14 +2276,19 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ## 3.3. Wireframes (sprint 2)
 
-## Visualização do Wireframe do Aluno
+### Visualização das telas do **aluno** a partir das USER STORIES: US-06, US-08, US-09, US-10, US-11
 
 <div align="center">
   <img src="../assets/tela_de_instrucao.jpg">
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de instrucao.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+  <strong>Figura # — Tela de instrucao.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
 </div>
 
 <div align="center">
@@ -2291,7 +2296,12 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de prova.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+  <strong>Figura # — Tela de prova.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
 </div>
 
 <div align="center">
@@ -2299,7 +2309,12 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de revisao.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+  <strong>Figura # — Tela de revisao.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
 </div>
 
 <div align="center">
@@ -2307,7 +2322,12 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de aviso.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+  <strong>Figura # — Tela de aviso.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
 </div>
 
 <div align="center">
@@ -2315,7 +2335,12 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de revisão pré-entrega.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+  <strong>Figura # — Tela de revisão pré-entrega.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
 </div>
 
 <div align="center">
@@ -2323,7 +2348,12 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de entrega.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+  <strong>Figura # — Tela de entrega.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
 </div>
 
 <div align="center">
@@ -2331,7 +2361,12 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de conclusão.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+  <strong>Figura # — Tela de conclusão.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
 </div>
 
 ## 3.4. Guia de estilos (sprint 3)
