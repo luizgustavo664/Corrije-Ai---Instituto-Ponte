@@ -2275,8 +2275,280 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 *Documente os design patterns utilizados (Repository, Strategy, Factory, DTO etc.) e quais princípios SOLID se aplicam. Justifique a adoção de cada padrão com base em uma necessidade real do projeto.*
 
 ## 3.3. Wireframes (sprint 2)
+### Visualização de telas do **coordenador** A partir das USER STORIES: US-01, US-14, US-15, US-16 
 
-*Posicione aqui as imagens do wireframe construído para sua solução e, opcionalmente, o link para acesso (mantenha o link sempre público para visualização)*
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_de_acesso_login.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 1 — Tela de Login.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_de_acesso_cadastro.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 2 — Tela de Cadastro.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_do_painel_do_coordenador.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 3 — Painel do Coordenador.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_gestao_alunos.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 4 — Gestão de Alunos.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_novo_aluno.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 5 — Cadastro de Novo Aluno.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_edicao_aluno.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 6 — Edição de Aluno.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_perfil_aluno.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 7 — Perfil do Aluno.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_gestao_professores.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 8 — Gestão de Professores.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_novo_professor.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 9 — Cadastro de Novo Professor.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_edicao_professor.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 10 — Edição de Professor.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_perfil_professor.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 11 — Perfil do Professor.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_de_provas.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 12 — Gestão de Provas.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_nova_prova.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 13 — Criação de Nova Prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_criacao_prova.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 14 — Estruturação da Prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_nova_questao.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 15 — Criação de Nova Questão.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_banco_questoes.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 16 — Banco de Questões.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_compartilhar_prova.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 17 — Compartilhamento de Prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_correcao_prova.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 18 — Correção de Prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_correcao_por_item.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 19 — Correção por Item.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_liberacao_das_notas.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 20 — Liberação das Notas.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_coordenador/tela_logout.jpg" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 21 — Tela de Logout.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
 
 ## 3.4. Guia de estilos (sprint 3)
 
