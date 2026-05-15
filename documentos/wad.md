@@ -2275,6 +2275,100 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 *Documente os design patterns utilizados (Repository, Strategy, Factory, DTO etc.) e quais princípios SOLID se aplicam. Justifique a adoção de cada padrão com base em uma necessidade real do projeto.*
 
 ## 3.3. Wireframes (sprint 2)
+
+### Visualização das telas do **aluno** a partir das USER STORIES: US-06, US-08, US-09, US-10, US-11
+
+<div align="center">
+  <img src="../assets/tela_de_instrucao.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de instrucao.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_prova.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de prova.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_revisao.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de revisao.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_aviso.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de aviso.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_pre_entrega.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de revisão pré-entrega.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_entrega.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de entrega.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_conclusao.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de conclusão.</strong><br> <em>
+    Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
 ### Visualização de telas do **coordenador** A partir das USER STORIES: US-01, US-14, US-15, US-16 
 
 <div align="center">
