@@ -2304,6 +2304,11 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
 
+
+Antes da implementação física do banco de dados, foi realizada a modelagem das informações do sistema por meio do Modelo Entidade-Relacionamento (MER) e do Diagrama Entidade-Relacionamento (DER). Esses diagramas têm como objetivo representar, em diferentes níveis de detalhamento, as principais entidades do projeto, seus atributos e os relacionamentos existentes entre elas.
+
+O Modelo Entidade-Relacionamento (MER) apresenta uma visão conceitual do banco de dados, focando nas entidades principais do domínio, como Pessoa, Aluno, Professor, Coordenador, Matéria, Prova, Enunciado, Alternativa, Resposta do Aluno, Correção, Feedback e Relatório. Nesse modelo, são demonstradas as relações gerais entre os elementos do sistema, como a associação entre professores e matérias, provas e enunciados, alunos e provas, além da especialização da entidade Pessoa em diferentes perfis de usuário.
+
 ```plantuml
 @startuml
 title Modelo Entidade-Relacionamento Conceitual - MER
@@ -2427,6 +2432,10 @@ prova ||--o{ relatorio : "1 Prova baseia 0..N Relatórios"
 ```
 
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
+
+Já o Diagrama Entidade-Relacionamento (DER) detalha essa estrutura em uma visão mais próxima da implementação no banco de dados. Nele, as entidades são representadas como tabelas, contendo seus principais atributos, tipos de dados, chaves primárias, chaves estrangeiras e restrições, como `UNIQUE` e relacionamentos obrigatórios ou opcionais. Além disso, o DER explicita tabelas associativas, como `Professor_Materia`, `Prova_Materia`, `Prova_Enunciado` e `Prova_Aluno`, utilizadas para representar relacionamentos muitos-para-muitos de forma adequada no modelo relacional.
+
+Dessa forma, o MER contribui para a compreensão conceitual do domínio do sistema, enquanto o DER serve como base para a construção do modelo relacional e físico do banco de dados no PostgreSQL/Supabase. A partir desses diagramas, torna-se possível implementar as migrations DDL de maneira mais organizada, garantindo integridade referencial, clareza nas relações entre tabelas e consistência na estrutura dos dados.
 
 ```plantuml
 @startuml
