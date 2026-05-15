@@ -2276,7 +2276,63 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ## 3.3. Wireframes (sprint 2)
 
-*Posicione aqui as imagens do wireframe construído para sua solução e, opcionalmente, o link para acesso (mantenha o link sempre público para visualização)*
+## Visualização do Wireframe do Aluno
+
+<div align="center">
+  <img src="../assets/tela_de_instrucao.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de instrucao.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_prova.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de prova.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_revisao.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de revisao.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_aviso.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de aviso.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_pre_entrega.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de revisão pré-entrega.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_entrega.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de entrega.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+</div>
+
+<div align="center">
+  <img src="../assets/tela_de_conclusao.jpg">
+</div>
+
+<div align="center">
+  <strong>Figura # — Tela de conclusão.</strong><br><em>Fonte: elaboração própria, feita usando a ferramenta do figma, segue o [Link](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0).</em>
+</div>
 
 ## 3.4. Guia de estilos (sprint 3)
 
