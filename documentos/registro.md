@@ -1172,18 +1172,11 @@ Jona: Continuar fazendo as telas do wireframe do aluno
 
 
 
-#### Nome da pessoa:
+#### Luiz 
 
 
 
-
-- Alteração:
-
-
-
-
-
-
+- Alteração: Conclusão de telas do coordenador no wireframe
 
 
 
