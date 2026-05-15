@@ -434,7 +434,7 @@ Colocar fotos se for preciso
 #### Heloísa:
 
 
-- Alteração:
+- Alteração: Foi criado o diagrama de entidade-relacionamento no WAD e a sua descrição detalhada na seção 3.6.2 do WAD.
 
 
 
@@ -468,6 +468,108 @@ https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/
 
 ## Link para onde estão as estruturas do banco de dados
 
+
+## ------------------Outro Dia--------------------------
+
+
+### Banco De Dados artefato 5
+
+
+### Data: 14/05/2026
+
+
+### Objetivo do Dia
+
+
+Álvaro: fazer apresentação scrum
+Heloísa: refinar descrição do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2)
+Pablo: ajudar o matheus com os wireframes
+Rafael: fazer apresentação parte 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Banco de dados
+Colocar fotos se for preciso
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Alterações Realizadas
+
+
+#### Álvaro:
+
+
+- Alteração:
+
+
+
+
+
+
+
+
+
+
+#### Heloísa:
+
+
+- Alteração: Foi feita a descrição e explicação do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2) para facilitar explicação e correção.
+
+
+
+
+
+
+
+
+
+
+#### Pablo:
+
+
+- Alteração:
+
+
+
+
+
+
+#### Rafael:
+
+
+- Alteração: 
+
+
+
+
+
+## Link para onde estão as estruturas do banco de dados
 
 
 
