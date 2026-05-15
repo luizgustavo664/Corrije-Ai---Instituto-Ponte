@@ -1148,7 +1148,7 @@ https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=dri
 ### Objetivo do Dia
 
 Joana Racy: Acabar os slides e roteiro
-Pablo:
+Pablo: finalização da apresentação e criação de wireframes do professor
 
 
 
@@ -1162,7 +1162,12 @@ https://docs.google.com/document/d/1eAJFZrq3S6L6vTaXLxWV6Vx3hl1YGZHJZ2noENsnfGM/
 
 
 #### Pablo:
-- Alteração:
+- Alteração: A finalização da apresentação dos fluxos de telas dos usuários professor e coordenador, bem como a criação de duas telas de wireframe relacionadas ao professor.
+
+Alterações realizadas
+Finalização dos slides da apresentação
+Organização do fluxo visual das telas
+Criação de 2 wireframes do professor
 
 ## Fluxos apresentados
 
@@ -1176,3 +1181,4 @@ Os wireframes utilizados já estavam previamente desenvolvidos. O trabalho reali
 
 ## Link para onde estão os slides
 https://canva.link/i69yzyj7b9aq5sp
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=17-207&p=f&t=3NwO1uINOG72DZQe-0
