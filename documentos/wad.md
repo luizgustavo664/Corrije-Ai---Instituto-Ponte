@@ -2550,6 +2550,139 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
   </em>
 </div>
 
+### Visualização de telas do **professor** A partir das USER STORIES: US-01, US-02, US-03, US-04, US-05, US-07, US-12, US-13, US-15
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Painel.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 22 — Painel do Professor.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Provas.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 23 — Provas.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Banco de Questões.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 24 — Banco de Questões.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Correção.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 25 — Correção das Provas.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Liberação de Nota.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 26 — Liberação de Nota.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Nova Prova.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 27 — Nova Prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Prova.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 28 — Prova com suas questões.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Compartilhar prova.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 29 — Compartilhar Prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Nova Questao.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 30 — Nova Questão.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/wireframes_professor/Questao.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 31 — Correção de questão.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o 
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+
 ## 3.4. Guia de estilos (sprint 3)
 
 *Descreva aqui orientações gerais para o leitor sobre como utilizar os componentes do guia de estilos de sua solução*
