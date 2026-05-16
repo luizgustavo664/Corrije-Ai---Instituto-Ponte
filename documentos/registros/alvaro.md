@@ -16,11 +16,11 @@
 
 
 
-Álvaro: Fazer diagrama no modelo UML sobre o aluno
+Álvaro: Fazer diagrama no modelo UML sobre o aluno, seguindo a seguinte estrutura:
 
-
-
-
+CLASSE              CLASSE    ...
+  +          --->      +      ...
+ATRIBUTOS           ATRIBUTOS ...
 
 
 ### Alterações Realizadas
@@ -86,7 +86,7 @@ https://app.diagrams.net/#G1hemkDsNpLL-8a8fV2t_MGrsL2OiyIz75#%7B%22pageId%22%3A%
 ### Objetivo do dia:
 
 
-Estudar a estrutura de classes UML, após estudo terminar o diagrama no modelo UML do aluno
+Estudar a estrutura de classes UML (O que é?; Como funciona?; Regras da estrutura UML; Importância para o projeto), após estudo terminar o diagrama no modelo UML do aluno com as classes faltantes (Curso e Resposta) e colocar atributos em cada uma.
 
 
 
@@ -143,7 +143,7 @@ Nenhuma
 
 
 
-Álvaro: Fazer o Diagrama de sequências com base na User Stories 03 Ao menos um fluxo prioritário, mostrando a interação entre as camadas Controller → Service → Repository → Banco. Linhas de vida verticais, ativação correta, mensagens síncronas e assíncronas diferenciadas, retornos tracejados.
+Álvaro: Fazer o Diagrama de sequências com base na User Stories 03 ao menos um fluxo prioritário, mostrando a interação entre as camadas Controller → Service → Repository → Banco. Linhas de vida verticais, ativação correta, mensagens síncronas e assíncronas diferenciadas, retornos tracejados.
 
 
 
@@ -159,7 +159,7 @@ Nenhuma
 
 
 - Alteração:
-Já preparei o prompt do diagrama e criei as setas que indicam a sequência do diagrama
+Já preparei o prompt do diagrama montando a estrutura Controller → Service → Repository → Banco e criei as setas que indicam a sequência do diagrama com retornos tracejados
 
 
 ##### Observação:
@@ -179,10 +179,8 @@ Possivelmente irei mudar de plataforma que foi criada a atual estrutura do diagr
 
 ## Link para onde estão as estruturas do banco de dados
 Álvaro Almeida: link do site em que foi desenvolvido o Diagrama de sequências com base na User Stories 03, porém ainda não está finalizada.
+
 https://miro.com/app/board/uXjVHVcFzWs=/
-
-
-
 
 
 
@@ -206,7 +204,7 @@ https://miro.com/app/board/uXjVHVcFzWs=/
 
 
 
-Álvaro: Terminar diagrama de sequências em relação a User Stories 03 e também organizar o registro.md
+Álvaro: Terminar diagrama de sequências com ao menos um fluxo prioritário, mostrando a interação entre as camadas Controller → Service → Repository → Banco. Linhas de vida verticais, ativação correta, mensagens síncronas e assíncronas diferenciadas, retornos tracejados, em relação a User Stories 03 e também organizar o registro.md seguindo o padrão enviado via slack pela orientadora Laíza
 
 
 
