@@ -62,26 +62,8 @@ Rafael: os UML do coordenador
 
 
 
-
-
-
-
-
-
-
-
 ### Banco de dados
 Colocar fotos se for preciso
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -309,10 +291,6 @@ Já preparei o prompt do diagrama e comecei escrever nele
 
 
 
-
-
-
-
 #### Heloísa
 
 
@@ -325,16 +303,11 @@ Foi criado o modelo entidade-relacionamento do projeto, com notação de crows f
 
 
 
-
-
-
 #### Rafael:
 
 
 - Alteração:
 Fiz o roteiro da apresentação parte 1 da sprint 2
-
-
 
 
 
@@ -389,25 +362,8 @@ Rafael: continuar a apresentação
 
 
 
-
-
-
-
-
 ### Banco de dados
 Colocar fotos se for preciso
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -429,12 +385,10 @@ Colocar fotos se for preciso
 
 
 
-
-
 #### Heloísa:
 
 
-- Alteração: Foi criado o diagrama de entidade-relacionamento no WAD e a sua descrição detalhada na seção 3.6.2 do WAD.
+- Alteração:
 
 
 
@@ -449,8 +403,6 @@ Colocar fotos se for preciso
 
 
 - Alteração:
-
-
 
 
 
@@ -468,108 +420,6 @@ https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/
 
 ## Link para onde estão as estruturas do banco de dados
 
-
-## ------------------Outro Dia--------------------------
-
-
-### Banco De Dados artefato 5
-
-
-### Data: 14/05/2026
-
-
-### Objetivo do Dia
-
-
-Álvaro: fazer apresentação scrum
-Heloísa: refinar descrição do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2)
-Pablo: ajudar o matheus com os wireframes
-Rafael: fazer apresentação parte 2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Banco de dados
-Colocar fotos se for preciso
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Alterações Realizadas
-
-
-#### Álvaro:
-
-
-- Alteração:
-
-
-
-
-
-
-
-
-
-
-#### Heloísa:
-
-
-- Alteração: Foi feita a descrição e explicação do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2) para facilitar explicação e correção.
-
-
-
-
-
-
-
-
-
-
-#### Pablo:
-
-
-- Alteração:
-
-
-
-
-
-
-#### Rafael:
-
-
-- Alteração: 
-
-
-
-
-
-## Link para onde estão as estruturas do banco de dados
 
 
 
@@ -647,21 +497,6 @@ Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspond
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Alterações Realizadas
 
 
@@ -677,14 +512,6 @@ Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspond
 
 
 
-
-
-
-
-
-
-
-
 #### Nome da pessoa:
 
 
@@ -695,43 +522,12 @@ Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspond
 
 
 
-
-
-
-
-
-
-
-
 #### Nome da pessoa:
 
 
 
 
 - Alteração:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -759,13 +555,6 @@ Para cada dia de trabalho, copie o modelo abaixo e preencha os campos correspond
 Matheus: estrutura e pesquisa do template do wireframe do professor:
 Luíz: estrutura e pesquisa do template do wireframe do coordenador
 Jona: estrutura e pesquisa do template do wireframe do aluno
-
-
-
-
-
-
-
 
 
 
@@ -824,25 +613,6 @@ Terminei a estrutura e pesquisa do template do wireframe do coordenador
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Link para onde estão as estruturas do Wireframe
 
 
@@ -896,15 +666,6 @@ Jona: começar a fazer o wireframe do aluno
 
 
 
-
-
-
-
-
-
-
-
-
 ### Alterações Realizadas
 
 
@@ -925,8 +686,6 @@ criei os componentes para fazer as telas
 
 
 
-
-
 #### Luíz:
 
 
@@ -941,9 +700,6 @@ Fiz duas telas do coordenador e também os componentes
 
 
 
-
-
-
 #### Joana:
 
 
@@ -953,25 +709,6 @@ Fiz duas telas do coordenador e também os componentes
 
 
 Fiz quatro telas do aluno
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1013,14 +750,6 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 Matheus: Continuar fazendo as telas do wireframe do Professor
 Luíz: Continuar fazendo as telas do wireframe do coordenador
 Jona: Continuar fazendo as telas do wireframe do aluno
-
-
-
-
-
-
-
-
 
 
 
@@ -1083,22 +812,6 @@ Fiz mais telas do Wireframe do aluno
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Link para onde estão as estruturas do Wireframe
 
 
@@ -1142,13 +855,6 @@ Jona: Continuar fazendo as telas do wireframe do aluno
 
 
 
-
-
-
-
-
-
-
 ### Alterações Realizadas
 
 
@@ -1160,10 +866,6 @@ Jona: Continuar fazendo as telas do wireframe do aluno
 
 
 - Alteração: Criação das telas Painel e Provas do wireframe do professor. Além disso, foram criados os componentes Label e Card que serão reutilizados para a construção das demais telas
-
-
-
-
 
 
 
@@ -1198,26 +900,6 @@ Jona: Continuar fazendo as telas do wireframe do aluno
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Link para onde estão as estruturas do Wireframe
 
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=0-1&p=f&t=yiozHSv70VPvzseF-0
@@ -1234,7 +916,7 @@ https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=dri
 >>>>>>>>> Temporary merge branch 2
 
 
-## ---------------------------Outro Dia-------------------------
+## ---------------------------APRESENTAÇÃO SPRINT 2-------------------------
 
 
 ### Data: 13/05/2026
@@ -1243,7 +925,7 @@ https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=dri
 ### Objetivo do Dia
 
 Joana Racy: Acabar os slides e roteiro
-Pablo: finalização da apresentação e criação de wireframes do professor
+Pablo:
 
 
 
@@ -1252,8 +934,6 @@ Pablo: finalização da apresentação e criação de wireframes do professor
 #### Joana Auriemo Racy:
 - Alteração: Recriei a apresentação, adaptei slides pro modelo certo e escrevi roteiro
 
-## Link do roteiro:
-https://docs.google.com/document/d/1eAJFZrq3S6L6vTaXLxWV6Vx3hl1YGZHJZ2noENsnfGM/edit?usp=sharing
 
 
 #### Pablo:
@@ -1276,4 +956,3 @@ Os wireframes utilizados já estavam previamente desenvolvidos. O trabalho reali
 
 ## Link para onde estão os slides
 https://canva.link/i69yzyj7b9aq5sp
-https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=17-207&p=f&t=3NwO1uINOG72DZQe-0
