@@ -2256,7 +2256,211 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ### 3.2.3. Diagrama de Classes do Domínio (sprint 2)
 
-*Diagrama UML de classes com entidades, atributos, relacionamentos e responsabilidades. Diferencie **associação**, **agregação** (losango vazio), **composição** (losango cheio) e **herança** (triângulo vazio). Multiplicidade explícita em toda associação.*
+O diagrama de classes a seguir representa a modelagem completa do domínio da plataforma de avaliações, contemplando aproximadamente 20 entidades distribuídas nos módulos de pessoas (Pessoa, Aluno, Professor, Coordenador), provas (Prova, Enunciado, Alternativa, Matéria), realização (ProvaAluno, RespostaAluno) e correção (Correcao, Feedback, Relatorio). Foram modeladas relações de herança (generalização via triângulo vazio), associação simples (linha contínua), agregação (losango vazio) e composição (losango cheio), todas com multiplicidades explícitas. O diagrama foi desenvolvido em PlantUML e segue as notações UML padrão.
+
+```plantuml
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+skinparam classBackgroundColor #F0F4FF
+skinparam classBorderColor #3A6BC7
+skinparam arrowColor #333333
+skinparam linetype ortho
+
+' ------------------------------------------------
+' SUPERCLASSE
+' ------------------------------------------------
+abstract class Pessoa {
+  - id : UUID
+  - nome : VARCHAR(150)
+  - email : VARCHAR(255)
+  - ativo : BOOLEAN
+  - criado_em : TIMESTAMPTZ
+  + autenticar() : void
+  + validarEmail() : boolean
+}
+
+' ------------------------------------------------
+' ESPECIALIZAÇÕES (herança — tabela por subclasse)
+' ------------------------------------------------
+class Aluno {
+  - cpf : VARCHAR(14)
+  + acessarProva(link : UUID) : void
+  + enviarResposta() : void
+}
+
+class Professor {
+  + criarProva() : Prova
+  + publicarProva(prova : Prova) : void
+  + corrigirResposta(resp : RespostaAluno) : Correcao
+}
+
+class Coordenador {
+  + gerarRelatorio(prova : Prova) : Relatorio
+  + exportarResultados(prova : Prova) : File
+  + visualizarAnalytics() : void
+}
+
+' ------------------------------------------------
+' DOMÍNIO DE PROVAS
+' ------------------------------------------------
+class Materia {
+  - id : UUID
+  - nome : VARCHAR(120)
+  - codigo : VARCHAR(30)
+  - criado_em : TIMESTAMPTZ
+}
+
+class Prova {
+  - id : UUID
+  - titulo : VARCHAR(180)
+  - descricao : TEXT
+  - modalidade : VARCHAR(60)
+  - turma : VARCHAR(80)
+  - semestre : VARCHAR(20)
+  - status : VARCHAR(20)
+  - duracao_minutos : INTEGER
+  - inicio_agendado : TIMESTAMPTZ
+  - fim_agendado : TIMESTAMPTZ
+  - embaralhar_questoes : BOOLEAN
+  - link_publicacao : UUID
+  - qr_code_url : TEXT
+  - criado_em : TIMESTAMPTZ
+  + publicar() : void
+  + encerrar() : void
+  + gerarLink() : UUID
+}
+
+class Enunciado {
+  - id : UUID
+  - tipo : VARCHAR(30)
+  - texto : TEXT
+  - pontos : DECIMAL(6,2)
+  - limite_caracteres : INTEGER
+  - ativo : BOOLEAN
+  - criado_em : TIMESTAMPTZ
+  + renderizarLatex() : String
+}
+
+class Alternativa {
+  - id : UUID
+  - texto : TEXT
+  - correta : BOOLEAN
+  - ordem : INTEGER
+  - criado_em : TIMESTAMPTZ
+}
+
+' ------------------------------------------------
+' DOMÍNIO DE REALIZAÇÃO
+' ------------------------------------------------
+class ProvaAluno {
+  - id : UUID
+  - status : VARCHAR(20)
+  - iniciado_em : TIMESTAMPTZ
+  - enviado_em : TIMESTAMPTZ
+  - nota_total : DECIMAL(6,2)
+  - criado_em : TIMESTAMPTZ
+  + calcularNota() : DECIMAL
+}
+
+class RespostaAluno {
+  - id : UUID
+  - texto_resposta : TEXT
+  - arquivo_url : TEXT
+  - rascunho : BOOLEAN
+  - criado_em : TIMESTAMPTZ
+  - atualizado_em : TIMESTAMPTZ
+  + salvarRascunho() : void
+  + enviarFinal() : void
+}
+
+' ------------------------------------------------
+' DOMÍNIO DE CORREÇÃO
+' ------------------------------------------------
+class Correcao {
+  - id : UUID
+  - nota : DECIMAL(6,2)
+  - observacao : TEXT
+  - status : VARCHAR(20)
+  - corrigida_em : TIMESTAMPTZ
+  - criado_em : TIMESTAMPTZ
+  + aplicarNota(valor : DECIMAL) : void
+  + recalcular() : void
+}
+
+class Feedback {
+  - id : UUID
+  - mensagem : TEXT
+  - criado_em : TIMESTAMPTZ
+}
+
+class Relatorio {
+  - id : UUID
+  - titulo : VARCHAR(180)
+  - conteudo : TEXT
+  - arquivo_url : TEXT
+  - gerado_em : TIMESTAMPTZ
+  + exportarExcel() : File
+}
+
+' ════════════════════════════════════════════
+' RELACIONAMENTOS
+' ════════════════════════════════════════════
+
+' Herança (generalização — triângulo vazio)
+Pessoa <|-- Aluno
+Pessoa <|-- Professor
+Pessoa <|-- Coordenador
+
+' Professor elabora Provas (associação 1..*)
+Professor "1" --> "0..*" Prova : elabora
+
+' Professor leciona Materias (associação N:M)
+Professor "0..*" -- "0..*" Materia : leciona
+
+' Prova aborda Materias (associação N:M)
+Prova "0..*" -- "0..*" Materia : aborda
+
+' Prova contém Enunciados via banco (agregação N:M)
+' losango vazio = Enunciado existe independentemente
+Prova "0..*" o-- "0..*" Enunciado : contém >\n(via ProvaEnunciado)
+
+' Enunciado possui Alternativas (composição 1..*)
+' losango cheio = Alternativa não existe sem Enunciado
+Enunciado "1" *-- "0..*" Alternativa : possui >
+
+' Aluno realiza Provas via ProvaAluno (associação com atributos)
+Aluno "1" --> "0..*" ProvaAluno : realiza
+Prova "1" --> "0..*" ProvaAluno : é aplicada a
+
+' ProvaAluno gera RespostaAluno (composição 1..*)
+ProvaAluno "1" *-- "0..*" RespostaAluno : gera >
+
+' Enunciado é respondido em RespostaAluno (associação)
+Enunciado "1" --> "0..*" RespostaAluno : é respondido em
+
+' Alternativa marcada em RespostaAluno (associação 0..1)
+Alternativa "0..1" --> "0..*" RespostaAluno : é marcada em
+
+' RespostaAluno recebe Correcao (composição 1:0..1)
+RespostaAluno "1" *-- "0..1" Correcao : recebe >
+
+' Professor realiza Correcao (associação)
+Professor "1" --> "0..*" Correcao : realiza
+
+' Correcao possui Feedbacks (composição 1..*)
+Correcao "1" *-- "0..*" Feedback : possui >
+
+' Professor escreve Feedback (associação)
+Professor "1" --> "0..*" Feedback : escreve
+
+' Coordenador gera Relatorio (associação 1..*)
+Coordenador "1" --> "0..*" Relatorio : gera
+
+' Prova baseia Relatorio (associação 1..*)
+Prova "1" --> "0..*" Relatorio : baseia
+@enduml
+```
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
