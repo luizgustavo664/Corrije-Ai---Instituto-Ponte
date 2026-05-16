@@ -395,6 +395,10 @@ Colocar fotos se for preciso
 
 
 
+
+
+
+
 #### Pablo:
 
 
@@ -415,6 +419,12 @@ https://docs.google.com/document/d/10J4JwL-qOjxi-HAR5ug6pIDgwmvQHfx1ZavNKcTeNyo/
 
 
 ## Link para onde estão as estruturas do banco de dados
+
+
+
+
+
+
 
 
 
@@ -864,18 +874,11 @@ Jona: Continuar fazendo as telas do wireframe do aluno
 
 
 
-#### Nome da pessoa:
+#### Luiz 
 
 
 
-
-- Alteração:
-
-
-
-
-
-
+- Alteração: Conclusão de telas do coordenador no wireframe
 
 
 
@@ -922,8 +925,8 @@ https://drive.google.com/drive/folders/1RXmUKvEuwlyquJh1gMrSHw_IkdPJoKEN?usp=dri
 ### Objetivo do Dia
 
 Joana Racy: Acabar os slides e roteiro
-Pablo: Acabar os slides e treinar para apresentar
-Álvaro: Acabar a apresentação e treinar para apresentar
+Pablo:
+
 
 
 ### Alterações Realizadas
@@ -934,7 +937,12 @@ Pablo: Acabar os slides e treinar para apresentar
 
 
 #### Pablo:
-- Alteração:
+- Alteração: A finalização da apresentação dos fluxos de telas dos usuários professor e coordenador, bem como a criação de duas telas de wireframe relacionadas ao professor.
+
+Alterações realizadas
+Finalização dos slides da apresentação
+Organização do fluxo visual das telas
+Criação de 2 wireframes do professor
 
 ## Fluxos apresentados
 
@@ -946,18 +954,5 @@ Pablo: Acabar os slides e treinar para apresentar
 
 Os wireframes utilizados já estavam previamente desenvolvidos. O trabalho realizado foi focado na preparação e condução da apresentação.
 
-
-
-
-#### Álvaro:
-- Alteração: Criei a apresentação falando sobre modelo relacional, com a seguinte estrutura:
- - O que é?
- - Para que serve?
- - Como foi utilizado no nosso projeto?
-
-
- 
-## Link para onde estão os slides/roteiro
-PABLO: https://canva.link/i69yzyj7b9aq5sp
-ÁLVARO: https://www.canva.com/design/DAHJecT2L6E/6AQ_vpT8poFMLhKRodBHKg/edit 
-JOANA: https://docs.google.com/document/d/1eAJFZrq3S6L6vTaXLxWV6Vx3hl1YGZHJZ2noENsnfGM/edit?usp=sharing 
+## Link para onde estão os slides
+https://canva.link/i69yzyj7b9aq5sp
