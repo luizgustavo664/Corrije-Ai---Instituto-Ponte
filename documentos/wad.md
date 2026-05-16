@@ -2444,12 +2444,20 @@ Prova "1" --> "0..*" Relatorio : baseia
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
 <div align="center">
+
   <img src="../assets/diagrama_sequencia_us01.png">
+
 </div>
 
+
+
 <div align="center">
+
   <strong>Figura X — Diagrama de Sequência — US01.</strong><br><em>Fonte: elaboração própria.</em>
+
 </div>
+US03:
+
 
 <div align="center">
   <img src="../assets/diagrama_sequencia_us02.png">
@@ -2458,6 +2466,8 @@ Prova "1" --> "0..*" Relatorio : baseia
 <div align="center">
   <strong>Figura X+1 — Diagrama de Sequência — US02.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
+
+![DIAGRAMA DE SEQUÊNCIA SOBRE A US03](/assets/diagramaUS03.png)
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
