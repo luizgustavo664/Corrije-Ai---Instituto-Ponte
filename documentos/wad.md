@@ -2260,7 +2260,16 @@ Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preench
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
-*Ao menos um fluxo prioritário, mostrando a interação entre as camadas Controller → Service → Repository → Banco. Linhas de vida verticais, ativação correta, mensagens síncronas e assíncronas diferenciadas, retornos tracejados.*
+
+
+
+
+
+
+
+US03:
+
+![DIAGRAMA DE SEQUÊNCIA SOBRE A US03](/assets/diagramaUS03.png)
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
