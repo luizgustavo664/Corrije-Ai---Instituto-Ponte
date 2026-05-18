@@ -4559,36 +4559,47 @@ As principais decisões adotadas foram:
 
 #### Principais Tabelas
 
-##### Tabela `pessoa`
+##### Tabela `coordenador`
 
-A tabela `pessoa` armazena os dados básicos compartilhados por usuários do sistema, como alunos, professores e coordenadores.
+A tabela `coordenador` armazena os coordenadores do sistema, responsáveis por gerenciar professores e configurar o ambiente.
 
 Principais atributos:
 
-- `id`: identificador único da pessoa;
+- `id`: identificador único do coordenador (UUID, PK);
+- `auth_user_id`: referência ao Supabase Auth (`auth.users`);
 - `nome`: nome completo;
 - `email`: e-mail único;
-- `created_at`: data de criação do registro.
-
-##### Tabela `aluno`
-
-A tabela `aluno` representa os estudantes cadastrados no sistema. Ela se relaciona com `pessoa`, herdando seus dados básicos.
-
-Principais atributos:
-
-- `id`: identificador único do aluno;
-- `pessoa_id`: referência à tabela `pessoa`;
-- demais campos específicos do aluno.
+- `criado_em`: data de criação do registro;
+- `atualizado_em`: data da última atualização.
 
 ##### Tabela `professor`
 
-A tabela `professor` representa os professores cadastrados no sistema.
+A tabela `professor` representa os professores cadastrados no sistema, vinculados a um coordenador.
 
 Principais atributos:
 
-- `id`: identificador único do professor;
-- `pessoa_id`: referência à tabela `pessoa`;
-- demais campos específicos do professor.
+- `id`: identificador único do professor (UUID, PK);
+- `auth_user_id`: referência ao Supabase Auth;
+- `coordenador_id`: referência à tabela `coordenador` (FK);
+- `nome`: nome completo;
+- `email`: e-mail único;
+- `criado_em`: data de criação do registro;
+- `atualizado_em`: data da última atualização.
+
+##### Tabela `aluno`
+
+A tabela `aluno` representa os estudantes cadastrados no sistema, com dados próprios e independentes.
+
+Principais atributos:
+
+- `id`: identificador único do aluno (UUID, PK);
+- `auth_user_id`: referência ao Supabase Auth;
+- `nome`: nome completo;
+- `email`: e-mail único;
+- `cpf`: CPF do aluno (único, opcional);
+- `aceitou_termos_em`: data de aceite dos termos;
+- `criado_em`: data de criação do registro;
+- `atualizado_em`: data da última atualização.
 
 ##### Tabela `materia`
 
@@ -4618,7 +4629,7 @@ As migrations DDL são os arquivos SQL responsáveis por criar a estrutura do ba
 A migration principal do projeto está localizada em:
 
 ```text
-g05\src\backend\migrations\migration.sql
+src\backend\src\database\migrations\migration.sql
 ```
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
