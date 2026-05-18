@@ -1,10 +1,16 @@
 {
-  "$schema": "https://www.schemastore.org/tsconfig",
-  "display": "Node with TypeScript (TS >=5.8 ONLY)",
-  "_version": "23.6.0",
   "compilerOptions": {
-    "rewriteRelativeImportExtensions": true,
-    "erasableSyntaxOnly": true,
-    "verbatimModuleSyntax": true
-  }
+    "target": "ES2022",
+    "module": "es2022",
+    "moduleResolution": "node16",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
