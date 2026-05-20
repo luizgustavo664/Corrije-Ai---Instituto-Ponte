@@ -120,3 +120,20 @@ Heloísa: refinar descrição do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2)
 #### Heloísa:
 
 - Alteração: Foi feita a descrição e explicação do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2) para facilitar explicação e correção.
+
+
+### Banco De Dados artefato 9
+
+### Data: 19/05/2026
+
+### Objetivo do Dia
+
+Heloísa: Atualizar o Migration e resolver os seus problemas
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: Foi feito um estudo mais aprofundado do arquivo migration e ele foi corrigo para contemplar medidas de segurança e foi resolvido problemas de lógica de sql.
