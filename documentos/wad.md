@@ -3017,12 +3017,17 @@ O Modelo Entidade-Relacionamento (MER) apresenta uma visão conceitual do banco 
 
 ```plantuml
 @startuml
-title Modelo Entidade-Relacionamento Conceitual - MER
+title Modelo Entidade-Relacionamento Conceitual - MER 
 
 hide circle
 skinparam linetype ortho
+skinparam classAttributeIconSize 0
 
-entity "Pessoa" as pessoa {
+' =========================
+' Usuários internos
+' =========================
+
+entity "Professor" as professor {
   * id
   --
   nome
@@ -3030,19 +3035,17 @@ entity "Pessoa" as pessoa {
   ativo
 }
 
-entity "Aluno" as aluno {
-  * id
-  --
-  cpf
-}
-
-entity "Professor" as professor {
-  * id
-}
-
 entity "Coordenador" as coordenador {
   * id
+  --
+  nome
+  email
+  ativo
 }
+
+' =========================
+' Organização pedagógica
+' =========================
 
 entity "Matéria" as materia {
   * id
@@ -3051,13 +3054,31 @@ entity "Matéria" as materia {
   codigo
 }
 
+entity "Tema" as tema {
+  * id
+  --
+  nome
+  descrição
+}
+
+' =========================
+' Prova
+' =========================
+
 entity "Prova" as prova {
   * id
   --
   titulo
   descrição
+  modalidade
+  turma
+  semestre
   status
   duração
+  início_agendado
+  fim_agendado
+  link_publicação
+  qr_code
 }
 
 entity "Enunciado" as enunciado {
@@ -3066,6 +3087,9 @@ entity "Enunciado" as enunciado {
   tipo
   texto
   pontos
+  limite_caracteres
+  limite_palavras
+  ativo
 }
 
 entity "Alternativa" as alternativa {
@@ -3073,15 +3097,52 @@ entity "Alternativa" as alternativa {
   --
   texto
   correta
+  ordem
 }
 
-entity "Resposta do Aluno" as resposta {
+entity "Questão da Prova" as questao_prova {
+  * id
+  --
+  ordem
+  pontos
+}
+
+' =========================
+' Submissão do aluno
+' =========================
+
+entity "Submissão da Prova" as submissao {
+  * id
+  --
+  nome_aluno_informado
+  email_aluno_informado
+  cpf_aluno_informado
+  aceite_lgpd
+  status
+  iniciado_em
+  enviado_em
+  nota_total
+}
+
+entity "Resposta da Submissão" as resposta {
   * id
   --
   texto_resposta
-  arquivo
   rascunho
 }
+
+entity "Arquivo da Resposta" as arquivo_resposta {
+  * id
+  --
+  arquivo_url
+  nome_original
+  tipo_arquivo
+  tamanho
+}
+
+' =========================
+' Correção
+' =========================
 
 entity "Correção" as correcao {
   * id
@@ -3089,6 +3150,7 @@ entity "Correção" as correcao {
   nota
   observação
   status
+  corrigida_em
 }
 
 entity "Feedback" as feedback {
@@ -3097,42 +3159,97 @@ entity "Feedback" as feedback {
   mensagem
 }
 
+' =========================
+' Relatório
+' =========================
+
 entity "Relatório" as relatorio {
   * id
   --
   título
   conteúdo
   arquivo
+  gerado_em
 }
 
-pessoa ||--o| aluno : "1 Pessoa pode ser 0..1 Aluno"
-pessoa ||--o| professor : "1 Pessoa pode ser 0..1 Professor"
-pessoa ||--o| coordenador : "1 Pessoa pode ser 0..1 Coordenador"
+' =========================
+' Relacionamentos conceituais
+' =========================
 
 professor }o--o{ materia : "0..N Professores lecionam 0..N Matérias"
+
 professor ||--o{ prova : "1 Professor elabora 0..N Provas"
 
 prova }o--o{ materia : "0..N Provas abordam 0..N Matérias"
+
+materia ||--o{ tema : "1 Matéria possui 0..N Temas"
+
 materia ||--o{ enunciado : "1 Matéria possui 0..N Enunciados"
 
-prova }o--o{ enunciado : "0..N Provas contêm 0..N Enunciados"
+tema |o--o{ enunciado : "0..1 Tema classifica 0..N Enunciados"
+
+professor ||--o{ enunciado : "1 Professor cria 0..N Enunciados"
+
+prova ||--o{ questao_prova : "1 Prova contém 0..N Questões"
+
+enunciado ||--o{ questao_prova : "1 Enunciado pode ser usado em 0..N Provas"
+
 enunciado ||--o{ alternativa : "1 Enunciado possui 0..N Alternativas"
 
-aluno }o--o{ prova : "0..N Alunos realizam 0..N Provas"
+prova ||--o{ submissao : "1 Prova recebe 0..N Submissões"
 
-aluno ||--o{ resposta : "1 Aluno produz 0..N Respostas"
-prova ||--o{ resposta : "1 Prova possui 0..N Respostas"
-enunciado ||--o{ resposta : "1 Enunciado recebe 0..N Respostas"
-alternativa |o--o{ resposta : "0..1 Alternativa aparece em 0..N Respostas"
+submissao ||--o{ resposta : "1 Submissão contém 0..N Respostas"
+
+questao_prova ||--o{ resposta : "1 Questão da Prova recebe 0..N Respostas"
+
+alternativa |o--o{ resposta : "0..1 Alternativa pode aparecer em 0..N Respostas"
+
+resposta ||--o{ arquivo_resposta : "1 Resposta possui 0..N Arquivos"
 
 resposta ||--o| correcao : "1 Resposta recebe 0..1 Correção"
+
 professor ||--o{ correcao : "1 Professor realiza 0..N Correções"
 
 correcao ||--o{ feedback : "1 Correção possui 0..N Feedbacks"
+
 professor ||--o{ feedback : "1 Professor escreve 0..N Feedbacks"
 
 coordenador ||--o{ relatorio : "1 Coordenador gera 0..N Relatórios"
+
 prova ||--o{ relatorio : "1 Prova baseia 0..N Relatórios"
+
+' =========================
+' Observações conceituais
+' =========================
+
+note right of submissao
+O aluno não é uma entidade do modelo.
+
+Os dados nome, e-mail e CPF são apenas
+informações digitadas no momento da submissão.
+
+Eles não são chave primária nem únicos,
+pois o aluno pode errar esses dados
+e ainda assim enviar a prova.
+end note
+
+note right of professor
+Professor é uma entidade independente.
+Não herda de Pessoa.
+end note
+
+note right of coordenador
+Coordenador é uma entidade independente.
+Não herda de Pessoa.
+end note
+
+note right of questao_prova
+Representa a associação entre
+Prova e Enunciado.
+
+Permite controlar ordem e pontuação
+da questão dentro de uma prova específica.
+end note
 
 @enduml
 ```
@@ -3145,33 +3262,41 @@ Dessa forma, o MER contribui para a compreensão conceitual do domínio do siste
 
 ```plantuml
 @startuml
-title Diagrama Entidade-Relacionamento - DER
+title Diagrama Entidade-Relacionamento - DER 
 
 hide circle
 skinparam linetype ortho
+skinparam classAttributeIconSize 0
 
-entity "Pessoa" as pessoa {
+' =========================
+' Usuários internos
+' =========================
+
+entity "Professor" as professor {
   * id : BIGSERIAL <<PK>>
   --
   nome : VARCHAR(150)
   email : VARCHAR(255) <<UNIQUE>>
+  google_sub : VARCHAR(255) <<UNIQUE>>
   ativo : BOOLEAN
   criado_em : TIMESTAMPTZ
-}
-
-entity "Aluno" as aluno {
-  * id : BIGINT <<PK, FK>>
-  --
-  cpf : VARCHAR(14) <<UNIQUE>>
-}
-
-entity "Professor" as professor {
-  * id : BIGINT <<PK, FK>>
+  atualizado_em : TIMESTAMPTZ
 }
 
 entity "Coordenador" as coordenador {
-  * id : BIGINT <<PK, FK>>
+  * id : BIGSERIAL <<PK>>
+  --
+  nome : VARCHAR(150)
+  email : VARCHAR(255) <<UNIQUE>>
+  google_sub : VARCHAR(255) <<UNIQUE>>
+  ativo : BOOLEAN
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
+
+' =========================
+' Organização pedagógica
+' =========================
 
 entity "Materia" as materia {
   * id : BIGSERIAL <<PK>>
@@ -3179,6 +3304,17 @@ entity "Materia" as materia {
   nome : VARCHAR(120) <<UNIQUE>>
   codigo : VARCHAR(30) <<UNIQUE>>
   criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+entity "Tema" as tema {
+  * id : BIGSERIAL <<PK>>
+  --
+  materia_id : BIGINT <<FK>>
+  nome : VARCHAR(120)
+  descricao : TEXT
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
 
 entity "Professor_Materia" as professor_materia {
@@ -3187,6 +3323,10 @@ entity "Professor_Materia" as professor_materia {
   --
   criado_em : TIMESTAMPTZ
 }
+
+' =========================
+' Provas
+' =========================
 
 entity "Prova" as prova {
   * id : BIGSERIAL <<PK>>
@@ -3197,7 +3337,7 @@ entity "Prova" as prova {
   modalidade : VARCHAR(60)
   turma : VARCHAR(80)
   semestre : VARCHAR(20)
-  status : VARCHAR(20)
+  status : status_prova_enum
   duracao_minutos : INTEGER
   inicio_agendado : TIMESTAMPTZ
   fim_agendado : TIMESTAMPTZ
@@ -3208,6 +3348,7 @@ entity "Prova" as prova {
   publicada_em : TIMESTAMPTZ
   encerrada_em : TIMESTAMPTZ
   criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
 
 entity "Prova_Materia" as prova_materia {
@@ -3217,18 +3358,25 @@ entity "Prova_Materia" as prova_materia {
   criado_em : TIMESTAMPTZ
 }
 
+' =========================
+' Banco de questões
+' =========================
+
 entity "Enunciado" as enunciado {
   * id : BIGSERIAL <<PK>>
   --
   materia_id : BIGINT <<FK>>
-  tipo : VARCHAR(30)
+  tema_id : BIGINT <<FK, NULL>>
+  criado_por_professor_id : BIGINT <<FK>>
+  tipo : tipo_questao_enum
   texto : TEXT
-  pontos : DECIMAL(6,2)
+  pontos_padrao : DECIMAL(6,2)
   ordem_banco : INTEGER
   limite_caracteres : INTEGER
   limite_palavras : INTEGER
   ativo : BOOLEAN
   criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
 
 entity "Alternativa" as alternativa {
@@ -3239,52 +3387,82 @@ entity "Alternativa" as alternativa {
   correta : BOOLEAN
   ordem : INTEGER
   criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
 
 entity "Prova_Enunciado" as prova_enunciado {
-  * prova_id : BIGINT <<PK, FK>>
-  * enunciado_id : BIGINT <<PK, FK>>
+  * id : BIGSERIAL <<PK>>
   --
+  prova_id : BIGINT <<FK>>
+  enunciado_id : BIGINT <<FK>>
   ordem : INTEGER
   pontos : DECIMAL(6,2)
   criado_em : TIMESTAMPTZ
 }
 
-entity "Prova_Aluno" as prova_aluno {
+' =========================
+' Submissão do aluno
+' =========================
+
+entity "Submissao_Prova" as submissao_prova {
   * id : BIGSERIAL <<PK>>
   --
   prova_id : BIGINT <<FK>>
-  aluno_id : BIGINT <<FK>>
-  status : VARCHAR(20)
+
+  nome_aluno_informado : VARCHAR(150)
+  email_aluno_informado : VARCHAR(255)
+  cpf_aluno_informado : VARCHAR(14)
+
+  aceite_lgpd : BOOLEAN
+  aceite_lgpd_em : TIMESTAMPTZ
+
+  token_tentativa : UUID <<UNIQUE>>
+  status : status_submissao_enum
   iniciado_em : TIMESTAMPTZ
   enviado_em : TIMESTAMPTZ
   nota_total : DECIMAL(6,2)
   criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
 
-entity "Resposta_Aluno" as resposta_aluno {
+entity "Resposta_Submissao" as resposta_submissao {
   * id : BIGSERIAL <<PK>>
   --
-  prova_aluno_id : BIGINT <<FK>>
-  enunciado_id : BIGINT <<FK>>
-  alternativa_id : BIGINT <<FK>>
+  submissao_prova_id : BIGINT <<FK>>
+  prova_enunciado_id : BIGINT <<FK>>
+  alternativa_id : BIGINT <<FK, NULL>>
   texto_resposta : TEXT
-  arquivo_url : TEXT
   rascunho : BOOLEAN
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
+entity "Arquivo_Resposta" as arquivo_resposta {
+  * id : BIGSERIAL <<PK>>
+  --
+  resposta_submissao_id : BIGINT <<FK>>
+  arquivo_url : TEXT
+  nome_original : VARCHAR(255)
+  tipo_mime : VARCHAR(100)
+  tamanho_bytes : BIGINT
+  criado_em : TIMESTAMPTZ
+}
+
+' =========================
+' Correção e feedback
+' =========================
+
 entity "Correcao" as correcao {
   * id : BIGSERIAL <<PK>>
   --
-  resposta_aluno_id : BIGINT <<FK, UNIQUE>>
+  resposta_submissao_id : BIGINT <<FK, UNIQUE>>
   professor_id : BIGINT <<FK>>
   nota : DECIMAL(6,2)
   observacao : TEXT
-  status : VARCHAR(20)
+  status : status_correcao_enum
   corrigida_em : TIMESTAMPTZ
   criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
 
 entity "Feedback" as feedback {
@@ -3294,7 +3472,12 @@ entity "Feedback" as feedback {
   professor_id : BIGINT <<FK>>
   mensagem : TEXT
   criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
+
+' =========================
+' Relatórios
+' =========================
 
 entity "Relatorio" as relatorio {
   * id : BIGSERIAL <<PK>>
@@ -3305,43 +3488,142 @@ entity "Relatorio" as relatorio {
   conteudo : TEXT
   arquivo_url : TEXT
   gerado_em : TIMESTAMPTZ
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
 }
 
 ' =========================
-' Especialização de Pessoa
+' Observações importantes
 ' =========================
 
-pessoa ||--o| aluno : "possui dados de aluno"
-pessoa ||--o| professor : "possui dados de professor"
-pessoa ||--o| coordenador : "possui dados de coordenador"
+note right of professor
+Professor é uma entidade independente.
+Não existe herança com Pessoa.
+end note
+
+note right of coordenador
+Coordenador é uma entidade independente.
+Não existe herança com Pessoa.
+end note
+
+note right of submissao_prova
+Aluno não é entidade cadastral.
+
+Nome, e-mail e CPF são dados informados
+no momento da submissão.
+
+Esses campos não são PK nem UNIQUE,
+pois podem ser digitados com erro.
+
+Para iniciar a prova:
+- aceite_lgpd deve ser true;
+- aceite_lgpd_em deve estar preenchido;
+- token_tentativa identifica a tentativa.
+end note
+
+note right of prova_materia
+A matéria associada à prova deve estar
+entre as matérias lecionadas pelo professor
+que elaborou a prova.
+
+Regra recomendada:
+EXISTS Professor_Materia
+(professor_id = prova.professor_id
+AND materia_id = prova_materia.materia_id)
+end note
+
+note right of enunciado
+Se tema_id estiver preenchido,
+o tema deve pertencer à mesma matéria
+do enunciado.
+
+Regra recomendada:
+tema.materia_id = enunciado.materia_id
+end note
+
+note right of prova_enunciado
+Recomenda-se:
+
+UNIQUE(prova_id, enunciado_id)
+UNIQUE(prova_id, ordem)
+
+O enunciado só pode ser associado
+à prova se sua matéria estiver entre
+as matérias da prova.
+end note
+
+note right of resposta_submissao
+Recomenda-se:
+
+UNIQUE(submissao_prova_id, prova_enunciado_id)
+
+A resposta deve pertencer à mesma prova
+da submissão.
+
+A alternativa marcada deve pertencer
+ao mesmo enunciado da questão respondida.
+
+alternativa_id é NULL em questões discursivas.
+end note
+
+note right of alternativa
+Para questões objetivas, recomenda-se validar:
+- mínimo de alternativas;
+- apenas uma correta, se for múltipla escolha simples;
+- alternativas compatíveis com o tipo da questão;
+- UNIQUE(enunciado_id, ordem).
+end note
+
+note right of prova
+Recomenda-se validar:
+- inicio_agendado < fim_agendado;
+- status seguindo transições permitidas;
+- prova publicada deve possuir ao menos uma questão;
+- prova publicada deve possuir ao menos uma matéria;
+- link_publicacao e qr_code_url obrigatórios
+  quando status = publicada.
+end note
+
+note right of correcao
+Cada resposta pode receber no máximo
+uma correção.
+
+Por isso, resposta_submissao_id
+deve ser UNIQUE.
+end note
 
 ' =========================
-' Relacionamentos do DER
+' Relacionamentos
 ' =========================
 
 professor ||--o{ prova : "elabora"
 
 professor ||--o{ professor_materia : "leciona"
-materia ||--o{ professor_materia : "é lecionada"
+materia ||--o{ professor_materia : "é lecionada por"
+
+materia ||--o{ tema : "possui"
+materia ||--o{ enunciado : "possui"
+tema |o--o{ enunciado : "classifica"
+
+professor ||--o{ enunciado : "cria"
 
 prova ||--o{ prova_materia : "aborda"
 materia ||--o{ prova_materia : "aparece em"
 
-materia ||--o{ enunciado : "possui"
-
 enunciado ||--o{ alternativa : "possui"
 
 prova ||--o{ prova_enunciado : "contém"
-enunciado ||--o{ prova_enunciado : "é utilizado em"
+enunciado ||--o{ prova_enunciado : "é usado em"
 
-prova ||--o{ prova_aluno : "é aplicada para"
-aluno ||--o{ prova_aluno : "realiza"
+prova ||--o{ submissao_prova : "recebe"
+submissao_prova ||--o{ resposta_submissao : "contém"
 
-prova_aluno ||--o{ resposta_aluno : "gera"
-enunciado ||--o{ resposta_aluno : "é respondido em"
-alternativa |o--o{ resposta_aluno : "é marcada em"
+prova_enunciado ||--o{ resposta_submissao : "é respondido em"
+alternativa |o--o{ resposta_submissao : "é marcada em"
 
-resposta_aluno ||--o| correcao : "recebe"
+resposta_submissao ||--o{ arquivo_resposta : "possui anexos"
+
+resposta_submissao ||--o| correcao : "recebe"
 professor ||--o{ correcao : "realiza"
 
 correcao ||--o{ feedback : "possui"

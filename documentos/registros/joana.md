@@ -93,3 +93,14 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 
 ## Link do roteiro:
 - Link do Docs: https://docs.google.com/document/d/1eAJFZrq3S6L6vTaXLxWV6Vx3hl1YGZHJZ2noENsnfGM/edit?usp=sharing
+
+## ---------------------------Outro Dia-------------------------
+
+
+### Data: 14/05/2026
+
+
+### Objetivo do Dia: Iniciar o artefato 6
+
+
+### Alterações Realizadas: Estudei o artefato 6 para compreender o que precisava ser feito e criei exemplos de expressões SQL.

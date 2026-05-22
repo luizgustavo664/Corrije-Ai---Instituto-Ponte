@@ -408,3 +408,91 @@ https://www.canva.com/design/DAHJecT2L6E/6AQ_vpT8poFMLhKRodBHKg/edit
 
 ## --------------------------FIM DA SPRINT 2----------------------------
 
+# Tabela Verdade 
+
+
+
+### Data: 19/05/2026
+
+
+
+
+### Objetivo do Dia
+
+Estudar Lógica Proposicional das consultas SQL
+
+(consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
+Tabela verdade.
+
+
+### Alterações Realizadas
+
+
+
+
+#### Álvaro:
+
+
+
+
+- Alteração: 
+Foi feito o estudo sobre o artefato 6 e depois disso implementei um Template de SQL + lógica proposicional com a seguinte estrutura:
+
+ - Expressão SQL
+ - Proposições lógicas
+ - Expressão lógica proposicional
+ - Tabela Verdade
+
+##### Observação:
+
+essa tabela verdade foi feita como uma base para as demais que serão criadas, porém ela não está pronta ainda, acabarei essa tabela amanhã 20/05/2026
+
+
+
+## Foto do Template SQL e Lógica proposicional
+
+![](/assets/1-tabela-verdade.png) 
+
+## ----------------------Outro Dia---------------------------
+
+
+### Data: 19/05/2026
+
+
+
+
+### Objetivo do Dia
+
+Criar segunda tabela verdade
+
+(consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
+Tabela verdade.
+Utilize o exemplo do wad e mais a mais a primeira tabela verdade
+
+
+### Alterações Realizadas
+
+
+
+
+#### Álvaro:
+
+
+- Alteração: 
+ implementei um Template de SQL + lógica proposicional com a seguinte estrutura:
+
+ - Expressão SQL
+ - Proposições lógicas
+ - Expressão lógica proposicional
+ - Tabela Verdade
+
+##### Observação:
+
+essa tabela verdade foi feita como uma base na primeira tabela verdade criada no dia 19/05/2026
+porém ainda nenhuma dessas tabelas estão prontas pois é necessário a finalização do MER, DER e MIGRATION
+
+
+
+## Foto do Template SQL e Lógica proposicional
+
+![](/assets/2-tabela-verdade.png) 

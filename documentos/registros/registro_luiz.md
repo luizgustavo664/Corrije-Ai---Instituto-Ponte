@@ -1,5 +1,7 @@
 # 📋 Registros do Luiz
 
+# Sprint 2
+
 > Extraído do `registro.md` do projeto — apenas contribuições de Luiz Gustavo, organizadas por data.
 
 ---
@@ -91,7 +93,7 @@ Wireframe do coordenador finalizado e inserido no WAD do projeto. ✅
 
 ---
 
-## 📊 Resumo Geral
+## 📊 Resumo Geral da sprint 2
 
 | Data | Atividade |
 |------|-----------|
@@ -102,3 +104,15 @@ Wireframe do coordenador finalizado e inserido no WAD do projeto. ✅
 | 13/05 | 1 tela + muitos componentes criados |
 | 14/05 | 3 telas criadas — wireframe quase finalizado |
 | 15/05 | Wireframe finalizado e adicionado ao WAD ✅ |
+
+# Sprint 3
+
+## 📅 19/05/2026
+
+### Objetivo do Dia
+Organizar a divisão de artefatos e revisores e estudar o guia de estilos.
+
+### Alteração
+Realizei a organização e divisão dos artefatos entre os membros da equipe, definindo responsabilidades de desenvolvimento e revisão. Também iniciei o estudo do guia de estilos do projeto.
+
+### Links
