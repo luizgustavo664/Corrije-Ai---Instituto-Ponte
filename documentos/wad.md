@@ -4623,6 +4623,8 @@ g05\src\backend\migrations\migration.sql
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
 
+As tabelas verdade abaixo mapeiam cada condição das consultas SQL para proposições lógicas (A, B, C, D), combinadas por conectivos ($\land$ = AND, $\lor$ = OR, $\neg$ = NOT). Cada linha da tabela representa uma combinação possível de valores verdade (V = verdadeiro, F = falso) e o resultado final da expressão.
+
 | #1 | --- |
 | --- | --- |
 | **Expressão SQL** | `SELECT * FROM prova WHERE status = 'publicada' AND (turma = '2A' OR semestre = '2026.1');` |
