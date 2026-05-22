@@ -124,11 +124,11 @@ Heloísa: refinar descrição do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2)
 
 ### Banco De Dados artefato 9
 
-### Data: 19/05/2026
+### Data: 20/05/2026
 
 ### Objetivo do Dia
 
-Heloísa: Atualizar o Migration e resolver os seus problemas
+Heloísa: Atualizar o MER e o DER com a exclusão do aluno
 
 ### Banco de dados
 
@@ -136,4 +136,84 @@ Heloísa: Atualizar o Migration e resolver os seus problemas
 
 #### Heloísa:
 
-- Alteração: Foi feito um estudo mais aprofundado do arquivo migration e ele foi corrigo para contemplar medidas de segurança e foi resolvido problemas de lógica de sql.
+- Alteração: Foi atualizado o DER e o MER com a exclusão da tabela alunos e atualização das susas dependências
+
+### Banco De Dados artefato 9
+
+### Data: 21/05/2026
+
+### Objetivo do Dia
+
+Heloísa: Resolver todos os problemas do artefato 5 da sprint 2
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: Foram alterados os MER, DER e Migration para condizer com os novos padrões de qualidade do projeto, colocando novas dependências e reestabelecendo conexões.
+
+### Banco De Dados artefato 9
+
+### Data: 25/05/2026
+
+### Objetivo do Dia
+
+Heloísa: 
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: 
+
+### Banco De Dados artefato 9
+
+### Data: 26/05/2026
+
+### Objetivo do Dia
+
+Heloísa: 
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: 
+
+### Banco De Dados artefato 9
+
+### Data: 27/05/2026
+
+### Objetivo do Dia
+
+Heloísa: 
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: 
+
+### Banco De Dados artefato 9
+
+### Data: 28/05/2026
+
+### Objetivo do Dia
+
+Heloísa:
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: 
