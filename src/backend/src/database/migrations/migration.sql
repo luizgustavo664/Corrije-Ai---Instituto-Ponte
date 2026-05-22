@@ -2023,3 +2023,31 @@ USING (
 CREATE POLICY "avaliacao_log_insert" ON "avaliacao_log"
 FOR INSERT TO authenticated
 WITH CHECK (TRUE);
+
+-- =========================================================
+-- Observacao sobre QR Code
+-- =========================================================
+-- O PostgreSQL/Supabase nao gera imagem de QR Code nativamente sem extensoes externas.
+-- Esta migration gera automaticamente o payload do QR Code em prova.qr_code a partir de prova.url_acesso.
+-- A imagem deve ser renderizada pelo backend ou frontend usando esse payload.
+
+
+-- =========================================================
+-- Mapeamento resumido UC -> suporte no banco
+-- =========================================================
+-- UC01: auth_user_id, funcoes auth_* e RLS por perfil.
+-- UC02: prova.status e indice prova_filtros_index.
+-- UC03: prova com campos obrigatorios titulo, modalidade, materia, turma e semestre; default rascunho.
+-- UC04: questao/enunciado/alternativa com LaTeX, tipos e limites para discursiva.
+-- UC05: banco de questoes por materia, tema e tipo.
+-- UC06: tempo_limite_min, data_inicio, data_fim e flags de embaralhamento.
+-- UC07: url_acesso unica e payload qr_code.
+-- UC08: aluno sem senha com CPF e aceite de termos; policies anon para entrada.
+-- UC09: resposta_aluno e resposta_anexo com JPG/PNG/PDF ate 5MB.
+-- UC10: resposta_aluno.rascunho e sincronizada_em para autosave.
+-- UC11: status prova_aluno enviada/corrigida e bloqueio de resposta fora de em_andamento.
+-- UC12: correcao por resposta/questao e feedback.
+-- UC13: funcao corrigir_objetivas_automaticamente.
+-- UC14: resultado_aluno, relatorio e exportacao_resultado.
+-- UC15: email_envio com status de envio.
+-- UC16: avaliacao_log para analytics.
