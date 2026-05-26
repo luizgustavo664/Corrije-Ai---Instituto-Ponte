@@ -467,7 +467,7 @@ Criar segunda tabela verdade
 
 (consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
 Tabela verdade.
-Utilize o exemplo do wad e mais a mais a primeira tabela verdade
+Utilize o exemplo do wad e mais a primeira tabela verdade
 
 
 ### Alterações Realizadas
@@ -496,3 +496,46 @@ porém ainda nenhuma dessas tabelas estão prontas pois é necessário a finaliz
 ## Foto do Template SQL e Lógica proposicional
 
 ![](/assets/2-tabela-verdade.png) 
+
+## -----------------------Outro dia---------------------
+
+### Data: 26/05/2026
+
+
+
+
+### Objetivo do Dia
+
+Criar quarta tabela verdade
+
+(consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
+Tabela verdade.
+Utilize o exemplo do wad e mais a primeira tabela verdade
+
+Revisar as outras tabelas
+
+
+### Alterações Realizadas
+
+
+
+
+#### Álvaro:
+
+
+- Alteração: 
+ implementei um Template de SQL + lógica proposicional com a seguinte estrutura:
+
+ - Expressão SQL
+ - Proposições lógicas
+ - Expressão lógica proposicional
+ - Tabela Verdade
+revisei as outras tabelas 
+
+##### Observação:
+
+Nenhuma
+
+## Foto do Template SQL e Lógica proposicional
+
+![](/assets/4-tabela-verdade.png) 
