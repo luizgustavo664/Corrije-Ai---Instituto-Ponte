@@ -135,3 +135,15 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 | **Proposições lógicas** | $A$: A nota total é maior ou igual a 6 (`nota_total >= 6`) <br> $B$: O resultado já está liberado (`liberado = true`) |
 | **Expressão lógica proposicional** | $A \land \neg B$ |
 | **Tabela Verdade** | <table><thead><tr><th>$A$</th><th>$B$</th><th>$\neg B$</th><th>$A \land \neg B$</th></tr></thead><tbody><tr><td>F</td><td>F</td><td>V</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>V</td><td>V</td></tr><tr><td>V</td><td>V</td><td>F</td><td>F</td></tr></tbody></table> |
+
+
+## ---------------------------Outro Dia-------------------------
+
+
+### Data: 26/05/2026
+
+
+### Objetivo do Dia: Desenvolver artefato 6
+
+
+### Alterações Realizadas: Criei a 4ª tabela verdade e ajustei as outras 3
