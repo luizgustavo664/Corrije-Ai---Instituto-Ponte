@@ -9,6 +9,8 @@ import {
 } from "fastify-type-provider-zod";
 import { ZodError } from "zod";
 import { ApiError } from "./errors/api-error.js";
+import { authRoutes } from "./routes/auth.routes.js";
+import { healthRoutes } from "./routes/health.routes.js";
 
 const validationDetails = (error: Error & { validation?: unknown }) => {
   if (error instanceof ZodError) {
@@ -47,6 +49,14 @@ export function buildApp() {
   app.register(fastifySwaggerUi, {
     routePrefix: "/docs",
   });
+
+  app.register(
+    async (api) => {
+      api.register(healthRoutes);
+      api.register(authRoutes);
+    },
+    { prefix: "/api/v1" },
+  );
 
   app.setNotFoundHandler((_request, reply) => {
     return reply.status(404).send({
