@@ -1,53 +1,99 @@
 import Fastify from "fastify";
 import { fastifyCors } from "@fastify/cors";
-import {validatorCompiler, serializerCompiler} from "fastify-type-provider-zod";
 import { fastifySwagger } from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
+import { ZodError } from "zod";
+import { ApiError } from "./errors/api-error.js";
 
-// ? Porta onde o servidor roda
-const PORT = 3333;
+const validationDetails = (error: Error & { validation?: unknown }) => {
+  if (error instanceof ZodError) {
+    return error.issues.map((issue) => ({
+      field: issue.path.length > 0 ? issue.path.join(".") : "body",
+      message: issue.message,
+    }));
+  }
 
-const app = Fastify({
-    logger: {
-        transport: {
-            target: 'pino-pretty',
-            options: {
-                colorize: true, 
-                translateTime: 'HH:MM:ss Z',
-                ignore: 'pid,hostname',
-            },
-        },
-    }
-});
-
-app.setValidatorCompiler(validatorCompiler);
-app.setSerializerCompiler(serializerCompiler);
-
-app.register(fastifyCors, { origin: "*" });
-
-// ? Configuração do Swagger para configuração da API
-app.register(fastifySwagger, {
-  openapi: {
-    info: {
-      title: "Api - Instituto Ponte",
-      version: "1.0.0",
+  return [
+    {
+      field: "request",
+      message: error.message,
     },
-  },
-});
+  ];
+};
 
-app.register(fastifySwaggerUi, {
-  routePrefix: "/docs",
-});
-
-
-// ? Registro das rotas
-
-app
-  .listen({ port: PORT })
-  .then(() => {
-    console.log(`Servidor HTTP rodando na porta ${PORT}`);
-  })
-  .catch((error) => {
-    app.log.error(error);
-    process.exit(1);
+export function buildApp() {
+  const app = Fastify({
+    logger: process.env.NODE_ENV !== "test",
   });
+
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
+
+  app.register(fastifyCors, { origin: "*" });
+  app.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: "Api - Instituto Ponte",
+        version: "1.0.0",
+      },
+    },
+    transform: jsonSchemaTransform,
+  });
+  app.register(fastifySwaggerUi, {
+    routePrefix: "/docs",
+  });
+
+  app.setNotFoundHandler((_request, reply) => {
+    return reply.status(404).send({
+      success: false,
+      error: {
+        code: "NOT_FOUND",
+        message: "Rota não encontrada.",
+        details: [],
+      },
+    });
+  });
+
+  app.setErrorHandler((error, _request, reply) => {
+    if (error instanceof ApiError) {
+      return reply.status(error.statusCode).send({
+        success: false,
+        error: {
+          code: error.code,
+          message: error.message,
+          details: error.details.length > 0 ? error.details : undefined,
+        },
+      });
+    }
+
+    const maybeValidationError = error as Error & { validation?: unknown };
+
+    if (error instanceof ZodError || maybeValidationError.validation) {
+      return reply.status(422).send({
+        success: false,
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "Payload inválido.",
+          details: validationDetails(maybeValidationError),
+        },
+      });
+    }
+
+    app.log.error(error);
+    return reply.status(500).send({
+      success: false,
+      error: {
+        code: "INTERNAL_ERROR",
+        message: "Erro interno não esperado.",
+        details: [],
+      },
+    });
+  });
+
+  return app;
+}
