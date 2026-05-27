@@ -10,8 +10,11 @@ import {
 import { ZodError } from "zod";
 import { ApiError } from "./errors/api-error.js";
 import { authRoutes } from "./routes/auth.routes.js";
+import { coordenadorRoutes } from "./routes/coordenador.routes.js";
 import { healthRoutes } from "./routes/health.routes.js";
 import { materiaRoutes } from "./routes/materia.routes.js";
+import { professorRoutes } from "./routes/professor.routes.js";
+import { provaRoutes } from "./routes/prova.routes.js";
 import { temaRoutes } from "./routes/tema.routes.js";
 import { questaoRoutes } from "./routes/questao.routes.js";
 
@@ -57,7 +60,10 @@ export function buildApp() {
     async (api) => {
       api.register(healthRoutes);
       api.register(authRoutes);
+      api.register(coordenadorRoutes);
+      api.register(provaRoutes);
       api.register(questaoRoutes);
+      api.register(professorRoutes);
       api.register(materiaRoutes);
       api.register(temaRoutes);
     },
