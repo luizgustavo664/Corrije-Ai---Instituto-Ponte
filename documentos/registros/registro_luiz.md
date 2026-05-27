@@ -172,10 +172,14 @@ Finalizei todo o style guide do projeto.
 ## 📅 27/05/2026
 
 ### Objetivo do Dia
+Avançar em relação ao protótipo de alta fidelidade, unindo os wireframes junto ao style guide
 
 ### Alteração
+Avancei bastante em relação ao protótipo de alta fidelidade, unindo os wireframes junto ao style guide e criando uma versão prévia do protótipo de alta fidelidade.
 
 ### Links
+
+[Protótipo](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=MEPAxCd0Se83aeVP-0)
 
 ## 📅 28/05/2026
 
