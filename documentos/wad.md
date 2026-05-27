@@ -2443,358 +2443,368 @@ Prova "1" --> "0..*" Relatorio : baseia
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
+Os diagramas de sequência a seguir detalham os fluxos das UC01, UC02 e UC03. A modelagem mantém a separação em camadas usada no projeto: o ator interage com a interface, a requisição é tratada por um controller, as regras de negócio ficam no service, a persistência é isolada no repository e o banco armazena as entidades do domínio.
 
-@startuml
-title US01 — Autenticação e Acesso do Professor/Coordenador
+# Diagramas de Sequência UML — UC01, UC02, UC03
+
+---
+
+## UC01 — Autenticar-se
+
+```plantuml
+@startuml DiagramaSequenciaUC01
+title UC01 — Autenticar-se
 
 autonumber
+skinparam sequenceArrowThickness 2
 skinparam sequenceMessageAlign center
 skinparam responseMessageBelowArrow true
 skinparam ParticipantPadding 25
 skinparam BoxPadding 10
 
-actor "Professor/Coordenador" as Usuario
-
+actor "Professor / Coordenador" as Usuario
+boundary "Tela de Login" as Tela
 boundary "AuthController" as Controller
 control "AuthService" as Service
-entity "Pessoa" as Pessoa
-database "PessoaRepository" as Repository
+participant "Supabase Auth\n(Google OAuth)" as Supabase
+database "UsuarioRepository" as UsuarioRepository
 database "Banco de Dados" as Banco
-participant "Google OAuth" as Google
-collections "FilaAuditoria" as Queue
 
-Usuario -> Controller: loginGoogle()
+== Iniciar autenticação ==
+
+Usuario -> Tela: selecionar "Entrar com Google"
+activate Tela
+
+Tela -> Controller: GET /auth/google
 activate Controller
 
-Controller -> Google: autenticar()
+Controller -> Supabase: redirecionarOAuth()
 deactivate Controller
 
-Google ->> Controller: callbackOAuth(token)
+Supabase --> Usuario: exibir consentimento Google
+deactivate Tela
+
+== Validar retorno OAuth ==
+
+Usuario -> Supabase: autenticar conta Google
+activate Supabase
+
+Supabase -> Controller: callbackOAuth(accessToken, authUserId)
+deactivate Supabase
 activate Controller
 
-Controller -> Service: validarLogin(token)
+Controller -> Service: resolverPerfil(authUserId)
 activate Service
 
-Service -> Google: validarToken(token)
-Google --> Service: email,nome
+Service -> UsuarioRepository: buscarPorAuthUserId(authUserId)
+activate UsuarioRepository
 
-Service -> Repository: buscarPorEmail(email)
-activate Repository
-
-Repository -> Banco: SELECT Pessoa
+UsuarioRepository -> Banco: SELECT 'professor' AS perfil, id\n  FROM professor\n  WHERE auth_user_id = $1\nUNION ALL\nSELECT 'coordenador', id\n  FROM coordenador\n  WHERE auth_user_id = $1
 activate Banco
-Banco --> Repository: dadosPessoa
+Banco --> UsuarioRepository: perfilEncontrado | null
 deactivate Banco
 
-Repository --> Service: Pessoa
-deactivate Repository
+UsuarioRepository --> Service: PerfilDTO | null
+deactivate UsuarioRepository
 
-alt usuário autorizado
-
-    Service -> Pessoa: ativar()
-    activate Pessoa
-    Pessoa --> Service: statusAtivo
-    deactivate Pessoa
-
-    Service ->> Queue: registrarLogin()
-    
-    Service --> Controller: acessoPermitido()
+alt perfil = "professor"
+    Service --> Controller: PerfilDTO(perfil = "professor", usuarioId)
     deactivate Service
 
-    Controller --> Usuario: redirecionarDashboard()
+    Controller --> Usuario: redirecionar para /painel/professor
     deactivate Controller
 
-else usuário não autorizado
-
-    Service --> Controller: acessoNegado()
+else perfil = "coordenador"
+    Service --> Controller: PerfilDTO(perfil = "coordenador", usuarioId)
     deactivate Service
 
-    Controller --> Usuario: exibirMensagemErro()
+    Controller --> Usuario: redirecionar para /painel/coordenador
     deactivate Controller
 
+else auth_user_id não encontrado nas tabelas internas
+    Service --> Controller: acessoNegado
+    deactivate Service
+
+    Controller --> Usuario: exibir mensagem de erro\n"Usuário não autorizado"
+    deactivate Controller
 end
 
-note right of Queue
-Processamento assíncrono\nregistro de auditoria
+note right of Supabase
+  O JWT de sessão é emitido
+  pelo Supabase Auth e gerenciado
+  no cliente — não é criado
+  pelo domínio da aplicação.
 end note
 
 @enduml
+```
 
 <div align="center">
-
-  <img src="../assets/diagrama_sequencia_us01.png">
-
+  <strong>Figura X — Diagrama de Sequência — UC01.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
+---
 
+## UC02 — Listar e filtrar provas por status
 
-<div align="center">
-
-  <strong>Figura X — Diagrama de Sequência — US01.</strong><br><em>Fonte: elaboração própria.</em>
-
-</div>
-US03:
-
-@startuml
-title US02 — Criação e Publicação de Prova
+```plantuml
+@startuml DiagramaSequenciaUC02
+title UC02 — Listar e filtrar provas por status
 
 autonumber
+skinparam sequenceArrowThickness 2
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 25
+skinparam BoxPadding 10
+
+actor "Professor / Coordenador" as Usuario
+boundary "Home de Provas" as Tela
+boundary "ProvaController" as Controller
+control "ProvaService" as Service
+database "ProvaRepository" as ProvaRepository
+entity "Prova" as Prova
+database "Banco de Dados" as Banco
+
+== Carregar listagem inicial ==
+
+Usuario -> Tela: acessar tela inicial de provas
+activate Tela
+
+Tela -> Controller: GET /provas
+activate Controller
+
+Controller -> Service: listarProvas(usuarioId)
+activate Service
+
+Service -> ProvaRepository: buscarPorUsuario(usuarioId)
+activate ProvaRepository
+
+note right of ProvaRepository
+  A RLS do banco filtra automaticamente
+  os resultados pelo perfil do usuário
+  autenticado (professor vê apenas
+  suas provas; coordenador vê todas).
+end note
+
+ProvaRepository -> Banco: SELECT * FROM prova\n(filtrado via RLS por auth_user_id)
+activate Banco
+Banco --> ProvaRepository: provasEncontradas
+deactivate Banco
+
+ProvaRepository --> Service: List<Prova>
+deactivate ProvaRepository
+
+Service -> Prova: agruparPorStatus()
+activate Prova
+Prova --> Service: provasAgrupadas\n{rascunho, publicada, encerrada, antiga}
+deactivate Prova
+
+Service --> Controller: ListaProvasDTO
+deactivate Service
+
+Controller --> Tela: 200 OK\nListaProvasDTO
+deactivate Controller
+
+Tela --> Usuario: exibir Rascunho,\nPublicada, Encerrada e Antiga
+deactivate Tela
+
+== Aplicar filtros opcionais ==
+
+opt usuário aplica filtros
+    Usuario -> Tela: informar turma, semestre,\nmateriaId ou professorId
+    activate Tela
+
+    Tela -> Controller: GET /provas?turma=&semestre=&materiaId=&professorId=
+    activate Controller
+
+    Controller -> Service: filtrarProvas(usuarioId, filtros)
+    activate Service
+
+    Service -> ProvaRepository: buscarComFiltros(usuarioId, filtros)
+    activate ProvaRepository
+
+    ProvaRepository -> Banco: SELECT * FROM prova\nWHERE status IN (...)\n  AND turma = $turma\n  AND semestre = $semestre\n  AND materia_id = $materiaId\n  AND professor_id = $professorId\n(filtros opcionais, via RLS)
+    activate Banco
+    Banco --> ProvaRepository: provasFiltradas
+    deactivate Banco
+
+    ProvaRepository --> Service: List<Prova>
+    deactivate ProvaRepository
+
+    alt há provas compatíveis
+        Service -> Prova: agruparPorStatus()
+        activate Prova
+        Prova --> Service: provasAgrupadas
+        deactivate Prova
+
+        Service --> Controller: ListaProvasDTO
+        deactivate Service
+
+        Controller --> Tela: 200 OK\nListaProvasDTO
+        deactivate Controller
+
+        Tela --> Usuario: atualizar listagem filtrada
+        deactivate Tela
+    else nenhum resultado encontrado
+        Service --> Controller: ListaProvasDTO(vazia)
+        deactivate Service
+
+        Controller --> Tela: 200 OK\nestadoVazio
+        deactivate Controller
+
+        Tela --> Usuario: exibir mensagem de estado vazio
+        deactivate Tela
+    end
+end
+
+@enduml
+```
+
+<div align="center">
+  <strong>Figura X+1 — Diagrama de Sequência — UC02.</strong><br><em>Fonte: elaboração própria.</em>
+</div>
+
+---
+
+## UC03 — Criar prova a partir da home
+
+```plantuml
+@startuml DiagramaSequenciaUC03
+title UC03 — Criar prova a partir da home
+
+autonumber
+skinparam sequenceArrowThickness 2
 skinparam sequenceMessageAlign center
 skinparam responseMessageBelowArrow true
 skinparam ParticipantPadding 25
 skinparam BoxPadding 10
 
 actor "Professor" as Professor
-
+boundary "Home / Nova Prova" as Tela
 boundary "ProvaController" as Controller
 control "ProvaService" as Service
-
-entity "Professor" as ProfessorEntity
+database "ProvaRepository" as ProvaRepository
+database "MateriaRepository" as MateriaRepository
 entity "Prova" as Prova
-entity "Materia" as Materia
-entity "Enunciado" as Enunciado
-
-database "ProvaRepository" as Repository
 database "Banco de Dados" as Banco
 
-collections "FilaPublicacao" as Queue
+== Abrir formulário de criação ==
 
-Professor -> Controller: criarProva()
+Professor -> Tela: clicar em "Criar prova"
+activate Tela
+
+Tela -> Controller: GET /provas/nova
 activate Controller
 
-Controller -> Service: criarProva()
+Controller -> Service: buscarDadosFormulario(professorId)
 activate Service
 
-Service -> ProfessorEntity: criarProva()
-activate ProfessorEntity
+Service -> MateriaRepository: listarPorProfessor(professorId)
+activate MateriaRepository
 
-ProfessorEntity --> Service: Prova
-deactivate ProfessorEntity
-
-Service -> Prova: publicar()
-activate Prova
-
-Prova --> Service: statusPublicado
-deactivate Prova
-
-Service -> Repository: salvar(prova)
-activate Repository
-
-Repository -> Banco: INSERT Prova
+MateriaRepository -> Banco: SELECT m.*\nFROM materia m\nJOIN materia_professor mp\n  ON mp.materia_id = m.id\nWHERE mp.professor_id = $1
 activate Banco
-Banco --> Repository: provaPersistida
+Banco --> MateriaRepository: materiasVinculadas
 deactivate Banco
 
-Repository --> Service: Prova
-deactivate Repository
+MateriaRepository --> Service: List<Materia>
+deactivate MateriaRepository
 
-loop adicionar questões
-
-    Service -> Enunciado: atualizarTexto(texto)
-    activate Enunciado
-    Enunciado --> Service: enunciadoAtualizado
-    deactivate Enunciado
-
-end
-
-Service -> Materia: atualizarDados(nome,codigo)
-activate Materia
-Materia --> Service: materiaAtualizada
-deactivate Materia
-
-Service ->> Queue: publicarProva()
-
-Service --> Controller: provaCriada()
+Service --> Controller: FormularioProvaDTO
 deactivate Service
 
-Controller --> Professor: exibirLinkPublicacao()
+Controller --> Tela: 200 OK\nFormularioProvaDTO
 deactivate Controller
 
-note right of Queue
-Publicação assíncrona\nQR Code e distribuição
-end note
+Tela --> Professor: exibir campos obrigatórios\n(titulo, modalidade, materia, turma, semestre)
+deactivate Tela
+
+== Criar prova como rascunho ==
+
+Professor -> Tela: preencher titulo, modalidade,\nmateriaId, turma e semestre
+activate Tela
+
+Tela -> Controller: POST /provas\nCriarProvaDTO\n{titulo, modalidade, materiaId, turma, semestre}
+activate Controller
+
+Controller -> Service: criarRascunho(professorId, dto)
+activate Service
+
+Service -> Service: validarCamposObrigatorios(dto)
+
+alt campos válidos
+    Service -> Prova: criarRascunho(dto, professorId)
+    activate Prova
+    Prova --> Service: Prova(status = "rascunho")
+    deactivate Prova
+
+    Service -> ProvaRepository: salvar(Prova)
+    activate ProvaRepository
+
+    note right of ProvaRepository
+      O banco executa automaticamente
+      o trigger validar_professor_materia_prova,
+      garantindo que o professor está
+      vinculado à matéria informada.
+    end note
+
+    ProvaRepository -> Banco: INSERT INTO prova\n(professor_id, materia_id, titulo,\n modalidade, turma, semestre,\n status = 'rascunho')
+    activate Banco
+    Banco --> ProvaRepository: provaPersistida
+    deactivate Banco
+
+    ProvaRepository --> Service: Prova
+    deactivate ProvaRepository
+
+    Service --> Controller: ProvaDTO
+    deactivate Service
+
+    Controller --> Tela: 201 Created\nProvaDTO
+    deactivate Controller
+
+    Tela --> Professor: redirecionar para editor da prova
+    deactivate Tela
+
+else campo obrigatório ausente
+    Service --> Controller: erroValidacao
+    deactivate Service
+
+    Controller --> Tela: 400 Bad Request\nmensagensDeErro
+    deactivate Controller
+
+    Tela --> Professor: destacar campos inválidos
+    deactivate Tela
+
+else professor não vinculado à matéria (erro de trigger)
+    Service -> ProvaRepository: salvar(Prova)
+    activate ProvaRepository
+
+    ProvaRepository -> Banco: INSERT INTO prova (...)
+    activate Banco
+    Banco --> ProvaRepository: EXCEPTION — professor não\nvinculado à matéria
+    deactivate Banco
+
+    ProvaRepository --> Service: erroVinculo
+    deactivate ProvaRepository
+
+    Service --> Controller: erroVinculo
+    deactivate Service
+
+    Controller --> Tela: 422 Unprocessable Entity\n"Professor não vinculado à matéria"
+    deactivate Controller
+
+    Tela --> Professor: exibir mensagem de erro
+    deactivate Tela
+end
 
 @enduml
+```
 
 <div align="center">
-  <img src="../assets/diagrama_sequencia_us02.png">
+  <strong>Figura X+2 — Diagrama de Sequência — UC03.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
-<div align="center">
-  <strong>Figura X+1 — Diagrama de Sequência — US02.</strong><br><em>Fonte: elaboração própria.</em>
-</div>
-
-@startuml
-
-skinparam sequenceArrowThickness 2
-skinparam sequenceMessageAlign center
-skinparam responseMessageBelowArrow true
-
-actor       "Professor"  as Prof
-boundary    "Controller" as C
-control     "Service"    as S
-control     "Repository" as R
-entity      "Banco"      as B
-
-== CR-01: Home exibe ação de criar prova ==
-
-Prof  ->  C  : GET /home
-activate C
-
-C     ->  S  : buscarDadosHome()
-activate S
-
-S     ->  R  : findHome()
-activate R
-
-R     ->  B  : SELECT configurações
-activate B
-B     --> R  : dados brutos
-deactivate B
-
-R     --> S  : HomeDTO
-deactivate R
-
-S     --> C  : HomeDTO
-deactivate S
-
-C     --> Prof : 200 OK — HomeDTO
-deactivate C
-
-== CR-02a: Buscar schema do formulário ==
-
-Prof  ->  C  : GET /provas/form
-activate C
-
-C     ->  S  : buscarSchemaFormulario()
-activate S
-
-S     ->  R  : findFormSchema()
-activate R
-
-R     ->  B  : SELECT campos_obrigatorios
-activate B
-B     --> R  : schema bruto
-deactivate B
-
-R     --> S  : FormSchemaDTO
-deactivate R
-
-S     --> C  : FormSchemaDTO
-deactivate S
-
-C     --> Prof : 200 OK — FormSchemaDTO
-deactivate C
-
-== CR-02b: Criar prova com campos obrigatórios (POST) ==
-
-Prof  ->  C  : POST /provas\n{nome, modalidade, disciplina, turma, semestre}
-activate C
-
-C     ->  S  : validarECriar(ProvaDTO)
-activate S
-
-note right of S
-  Valida campos obrigatórios:
-  nome, modalidade, disciplina,
-  turma, semestre
-end note
-
-S     ->  R  : salvar(ProvaEntity)
-activate R
-
-R     ->  B  : INSERT INTO provas
-activate B
-B     --> R  : prova_id gerado
-deactivate B
-
-R     --> S  : ProvaEntity
-deactivate R
-
-S     --> C  : ProvaEntity
-deactivate S
-
-C     --> Prof : 201 Created — prova_id
-deactivate C
-
-== CR-03: Salvar automaticamente como rascunho (PATCH) ==
-
-Prof  ->>  C  : PATCH /provas/{id}\n{status: RASCUNHO}
-activate C
-
-C     ->   S  : atualizarStatus(id, RASCUNHO)
-activate S
-
-S     ->   R  : atualizarStatus(id, RASCUNHO)
-activate R
-
-R     ->   B  : UPDATE provas SET status='rascunho' WHERE id={id}
-activate B
-B     --> R   : 1 row updated
-deactivate B
-
-R     --> S   : ProvaEntity atualizada
-deactivate R
-
-S     --> C   : ProvaEntity atualizada
-deactivate S
-
-C     --> Prof : 200 OK — status: RASCUNHO
-deactivate C
-
-== Edição posterior: atualizar dados completos (PUT) ==
-
-Prof  ->  C  : PUT /provas/{id}\n{dados completos}
-activate C
-
-C     ->  S  : atualizarCompleto(ProvaDTO)
-activate S
-
-S     ->  R  : atualizar(ProvaEntity)
-activate R
-
-R     ->  B  : UPDATE provas SET ... WHERE id={id}
-activate B
-B     --> R  : 1 row updated
-deactivate B
-
-R     --> S  : ProvaEntity
-deactivate R
-
-S     --> C  : ProvaEntity
-deactivate S
-
-C     --> Prof : 200 OK — prova atualizada
-deactivate C
-
-== Descarte: cancelar rascunho (DELETE) ==
-
-Prof  ->  C  : DELETE /provas/{id}
-activate C
-
-C     ->  S  : deletarRascunho(id)
-activate S
-
-S     ->  R  : deletar(id)
-activate R
-
-R     ->  B  : DELETE FROM provas WHERE id={id}
-activate B
-B     --> R  : 1 row deleted
-deactivate B
-
-R     --> S  : void
-deactivate R
-
-S     --> C  : void
-deactivate S
-
-C     --> Prof : 204 No Content
-deactivate C
-
-@enduml
-
-![DIAGRAMA DE SEQUÊNCIA SOBRE A US03](/assets/diagramaUS03.png)
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
