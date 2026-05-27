@@ -11,8 +11,12 @@ import { ZodError } from "zod";
 import { ApiError } from "./errors/api-error.js";
 import { alunoRoutes } from "./routes/aluno.routes.js";
 import { alunoPortalRoutes } from "./routes/aluno-portal.routes.js";
+import { analyticsRoutes } from "./routes/analytics.routes.js";
+import { anexoExportarRoutes } from "./routes/anexo-exportar.routes.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { coordenadorRoutes } from "./routes/coordenador.routes.js";
+import { correcaoRoutes } from "./routes/correcao.routes.js";
+import { emailRoutes } from "./routes/email.routes.js";
 import { healthRoutes } from "./routes/health.routes.js";
 import { materiaRoutes } from "./routes/materia.routes.js";
 import { professorRoutes } from "./routes/professor.routes.js";
@@ -21,6 +25,7 @@ import { temaRoutes } from "./routes/tema.routes.js";
 import { questaoRoutes } from "./routes/questao.routes.js";
 import { respostaAnexoRoutes } from "./routes/resposta-anexo.routes.js";
 import { respostaAlunoRoutes } from "./routes/resposta-aluno.routes.js";
+import { resultadoRoutes } from "./routes/resultado.routes.js";
 
 const validationDetails = (error: Error & { validation?: unknown }) => {
   if (error instanceof ZodError) {
@@ -71,6 +76,11 @@ export function buildApp() {
       api.register(alunoPortalRoutes);
       api.register(respostaAlunoRoutes);
       api.register(respostaAnexoRoutes);
+      api.register(correcaoRoutes);
+      api.register(resultadoRoutes);
+      api.register(analyticsRoutes);
+      api.register(anexoExportarRoutes);
+      api.register(emailRoutes);
       api.register(professorRoutes);
       api.register(materiaRoutes);
       api.register(temaRoutes);
