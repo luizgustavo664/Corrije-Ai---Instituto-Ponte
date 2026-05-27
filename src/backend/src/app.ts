@@ -11,6 +11,9 @@ import { ZodError } from "zod";
 import { ApiError } from "./errors/api-error.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { healthRoutes } from "./routes/health.routes.js";
+import { materiaRoutes } from "./routes/materia.routes.js";
+import { temaRoutes } from "./routes/tema.routes.js";
+import { questaoRoutes } from "./routes/questao.routes.js";
 
 const validationDetails = (error: Error & { validation?: unknown }) => {
   if (error instanceof ZodError) {
@@ -54,6 +57,9 @@ export function buildApp() {
     async (api) => {
       api.register(healthRoutes);
       api.register(authRoutes);
+      api.register(questaoRoutes);
+      api.register(materiaRoutes);
+      api.register(temaRoutes);
     },
     { prefix: "/api/v1" },
   );
