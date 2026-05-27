@@ -1549,38 +1549,38 @@ Conecta-se ao processo de desenvolvimento e à sustentabilidade do sistema como 
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
-Conforme o enunciado do módulo, as colunas de Endpoint e Método serão preenchidas a partir da Sprint 3. A seguir, apresentam-se as colunas RF e RN para os fluxos priorizados.
+Esta matriz foi atualizada conforme o estado atual da implementação. O backend já possui servidor Fastify, Swagger UI em `/docs`, conexão PostgreSQL e migration com tabelas, enums, índices, triggers e políticas RLS.
 
-| RF | RN associadas | Endpoint | Método |
-|----|---------------|----------|--------|
-| RF001 | RN01 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF002 | RN19 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF003 | RN20 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF022 | RN02 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF004 | RN03 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF005 | RN03 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF006 | RN04 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF007 | RN05 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF023 | RN06 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF008 | RN07 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF009 | RN08 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF024 | RN09 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF025 | RN09 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF010 | RN10 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF011 | RN10 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF012 | RN04 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF013 | RN11 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF026 | RN12 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF014 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF015 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF016 | RN13 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF017 | RN14 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF027 | RN15 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF028 | RN16 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF018 | RN17 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF019 | RN17 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF020 | RN01 | *(a definir — Sprint 3)* | *(a definir)* |
-| RF021 | RN18 | *(a definir — Sprint 3)* | *(a definir)* |
+| RF | RN associadas | Endpoint previsto | Método | Situação atual |
+|----|---------------|-------------------|--------|----------------|
+| RF001 | RN01 | `/provas` | GET | Não implementado; suporte parcial no banco por `prova.status` e `prova_status` |
+| RF002 | RN18, RN19 | `/auth/google`, `/auth/callback`, `/auth/session` | GET, GET, GET | Não implementado; suporte parcial no banco por `auth_user_id`, funções `auth_*` e RLS |
+| RF003 | RN20 | `/questoes` | GET | Não implementado; suporte no banco por `questao`, `tema`, `materia` e índices |
+| RF004 | RN03 | `/questoes` | POST, PATCH | Não implementado; suporte no banco por `enunciado.conteudo_latex` |
+| RF005 | RN03 | `/questoes` | POST, PATCH | Não implementado; suporte no banco por enum `questao_tipo` |
+| RF006 | RN04 | `/questoes/{id}` | PATCH | Não implementado; suporte no banco por `questao.permite_anexo` |
+| RF007 | RN05 | `/provas/{id}/configuracoes` | PATCH | Não implementado; suporte no banco por `tempo_limite_min`, `data_inicio` e `data_fim` |
+| RF008 | RN07 | `/provas/{id}/publicar` | POST | Não implementado; suporte no banco por `url_acesso`, `qr_code` e trigger de QR Code |
+| RF009 | RN08 | `/public/provas/{token}/identificacao` | POST | Não implementado; suporte no banco por `aluno` e `prova_aluno` |
+| RF010 | RN10 | Sem endpoint próprio | N/A | Recurso de frontend; não implementado no código atual |
+| RF011 | RN10 | Sem endpoint próprio | N/A | Recurso de frontend; não implementado no código atual |
+| RF012 | RN04 | `/respostas/{id}/anexos` | POST, GET | Não implementado; suporte no banco por `resposta_anexo` |
+| RF013 | RN11 | Sem endpoint próprio | N/A | Recurso client-side; não implementado no código atual |
+| RF014 | RN13 | `/provas/{id}/correcao/questoes/{questaoId}` | GET | Não implementado; suporte parcial no banco por `resposta_aluno` e `correcao` |
+| RF015 | RN13 | `/respostas/{id}/correcao` | POST, PATCH | Não implementado; suporte no banco por `correcao` e `feedback` |
+| RF016 | RN13 | `/respostas/{id}/anexos` | GET | Não implementado; suporte no banco por `resposta_anexo` |
+| RF017 | RN14 | `/provas/{id}/resultados/exportacao` | POST, GET | Não implementado; suporte no banco por `resultado_aluno`, `relatorio` e `exportacao_resultado` |
+| RF018 | RN17 | `/coordenador/provas` | GET | Não implementado; suporte parcial via RLS para coordenador |
+| RF019 | RN17 | `/coordenador/relatorios`, `/coordenador/analytics` | GET, GET | Não implementado; suporte no banco por `relatorio` e `avaliacao_log` |
+| RF020 | RN01 | `/coordenador/provas?status=` | GET | Não implementado; suporte no banco por índice `prova_status_index` |
+| RF021 | RN18 | `/provas`, `/provas/{id}` | POST, PATCH, DELETE | Não implementado; suporte no banco por tabela `prova`, FKs e RLS |
+| RF022 | RN02 | `/provas?turma=&semestre=&materiaId=&professorId=` | GET | Não implementado; suporte no banco por índice `prova_filtros_index` |
+| RF023 | RN06 | `/provas/{id}/configuracoes` | PATCH | Não implementado; suporte no banco por `embaralhar_questoes` e `embaralhar_alternativas` |
+| RF024 | RN09 | `/public/provas/{token}` | GET | Não implementado; suporte parcial no banco por `prova.instrucoes` e políticas `anon` |
+| RF025 | RN09 | Sem endpoint próprio | N/A | Recurso de frontend; não implementado no código atual |
+| RF026 | RN12 | `/provas-aluno/{id}/revisao`, `/provas-aluno/{id}/envio-final` | GET, POST | Não implementado; suporte no banco por `prova_aluno` e `resposta_aluno` |
+| RF027 | RN15 | `/provas/{id}/resultados/liberacao-email` | POST | Não implementado; suporte no banco por `email_envio` |
+| RF028 | RN16 | `/provas/{id}/anexos/exportacao` | POST, GET | Não implementado; suporte no banco por `exportacao_resultado` e `resposta_anexo` |
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
@@ -3758,11 +3758,38 @@ g05\src\backend\migrations\migration.sql
 
 ## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
 
-*A RTM consolida a rastreabilidade completa do sistema. Um elo quebrado invalida toda a cadeia — mantenha-a atualizada a cada sprint. A partir da sprint 3 não deve haver lacunas nos fluxos centrais.*
+Atualização conforme o estado atual da implementação: as telas e endpoints abaixo representam a rastreabilidade planejada para os fluxos do produto, enquanto a coluna "Status/Evidência" diferencia o que já existe no código do que ainda está pendente. No backend atual há Swagger UI em `/docs`, conexão PostgreSQL e migration completa.
 
-| Persona | RF    | RN   | Endpoint    | Tela     | Teste | Evidência        |
-|---------|-------|------|-------------|----------|-------|------------------|
-| ...     | RF001 | RN01 | `/usuarios` | Cadastro | CT02  | print, log, relatório de cobertura |
+| Persona | RF | RN | Endpoint previsto | Tela | Teste | Status/Evidência |
+|---------|----|----|-------------------|------|-------|------------------|
+| Professor, Coordenador | RF002 | RN18, RN19 | `/auth/google`, `/auth/callback`, `/auth/session` | Login interno | CT-UC01 | Não implementado; evidência parcial em `migration.sql` com `auth_user_id`, funções `auth_*` e RLS |
+| Professor, Coordenador | RF001 | RN01 | `/provas` | Home de provas | CT-UC02 | Não implementado; evidência parcial em `migration.sql` com enum `prova_status` |
+| Professor, Coordenador | RF022 | RN02 | `/provas?turma=&semestre=&materiaId=&professorId=` | Home de provas com filtros | CT-UC02-FILTROS | Não implementado; evidência parcial em `prova_filtros_index` |
+| Coordenador | RF020 | RN01 | `/coordenador/provas?status=` | Gestão de provas do coordenador | CT-UC02-COORD | Não implementado; evidência parcial em RLS de `prova` |
+| Professor | RF021 | RN18 | `/provas`, `/provas/{id}` | Nova prova / Editor de prova | CT-UC03 | Não implementado; evidência parcial em tabela `prova`, FKs e trigger `validar_professor_materia_prova` |
+| Professor | RF003 | RN20 | `/questoes` | Banco de questões | CT-UC05 | Não implementado; evidência parcial em tabelas `questao`, `tema`, `materia` |
+| Professor | RF004 | RN03 | `/questoes` | Nova questão / Editor de questão | CT-UC04-LATEX | Não implementado; evidência parcial em `enunciado.conteudo_latex` |
+| Professor | RF005 | RN03 | `/questoes` | Nova questão / Editor de questão | CT-UC04-TIPO | Não implementado; evidência parcial em enum `questao_tipo` |
+| Professor | RF006 | RN04 | `/questoes/{id}` | Configuração da questão | CT-UC04-ANEXO | Não implementado; evidência parcial em `questao.permite_anexo` |
+| Professor | RF007 | RN05 | `/provas/{id}/configuracoes` | Configurações da prova | CT-UC06-TEMPO | Não implementado; evidência parcial em `tempo_limite_min`, `data_inicio`, `data_fim` |
+| Professor | RF023 | RN06 | `/provas/{id}/configuracoes` | Configurações da prova | CT-UC06-EMBARALHAR | Não implementado; evidência parcial em `embaralhar_questoes` e `embaralhar_alternativas` |
+| Professor | RF008 | RN07 | `/provas/{id}/publicar` | Compartilhar prova | CT-UC07 | Não implementado; evidência parcial em `url_acesso`, `qr_code` e trigger `gerar_qr_code_prova` |
+| Aluno | RF024 | RN09 | `/public/provas/{token}` | Portal de instruções | CT-UC08-PORTAL | Não implementado; evidência parcial em `prova.instrucoes` e policy `prova_select_anon_publicada_por_link` |
+| Aluno | RF009 | RN08 | `/public/provas/{token}/identificacao` | Identificação do aluno | CT-UC08-ID | Não implementado; evidência parcial em `aluno`, CPF único e consentimento |
+| Aluno | RF025 | RN09 | Sem endpoint próprio | Responder prova | CT-UC09-TIMER | Pendente no frontend; não há implementação atual |
+| Aluno | RF010 | RN10 | Sem endpoint próprio | Responder prova | CT-UC09-ZOOM | Pendente no frontend; não há implementação atual |
+| Aluno | RF011 | RN10 | Sem endpoint próprio | Responder prova | CT-UC09-LATEX | Pendente no frontend; suporte parcial no banco por enunciado em LaTeX |
+| Aluno | RF012 | RN04 | `/respostas/{id}/anexos` | Responder prova / Upload | CT-UC09-UPLOAD | Não implementado; evidência parcial em `resposta_anexo` |
+| Aluno | RF013 | RN11 | Sem endpoint próprio | Responder prova / Upload | CT-UC09-COMPRESSAO | Pendente no frontend; não há implementação atual |
+| Aluno | RF026 | RN12 | `/provas-aluno/{id}/revisao`, `/provas-aluno/{id}/envio-final` | Revisão final | CT-UC11 | Não implementado; evidência parcial em `prova_aluno.status` e `resposta_aluno` |
+| Professor | RF014 | RN13 | `/provas/{id}/correcao/questoes/{questaoId}` | Correção por questão | CT-UC12-LISTAR | Não implementado; evidência parcial em `resposta_aluno` e `correcao` |
+| Professor | RF015 | RN13 | `/respostas/{id}/correcao` | Correção por questão | CT-UC12-NOTA | Não implementado; evidência parcial em `correcao.nota` e `feedback` |
+| Professor | RF016 | RN13 | `/respostas/{id}/anexos` | Correção por questão / Galeria | CT-UC12-ANEXO | Não implementado; evidência parcial em `resposta_anexo` |
+| Professor, Coordenador | RF017 | RN14 | `/provas/{id}/resultados/exportacao` | Resultados | CT-UC14-EXCEL | Não implementado; evidência parcial em `resultado_aluno`, `relatorio`, `exportacao_resultado` |
+| Coordenador | RF018 | RN17 | `/coordenador/provas` | Painel do coordenador | CT-UC14-COORD | Não implementado; evidência parcial em RLS de coordenador |
+| Coordenador | RF019 | RN17 | `/coordenador/relatorios`, `/coordenador/analytics` | Relatórios / Analytics | CT-UC16 | Não implementado; evidência parcial em `relatorio` e `avaliacao_log` |
+| Professor, Coordenador | RF027 | RN15 | `/provas/{id}/resultados/liberacao-email` | Liberação de resultados | CT-UC15 | Não implementado; evidência parcial em `email_envio` |
+| Coordenador | RF028 | RN16 | `/provas/{id}/anexos/exportacao` | Exportação de anexos | CT-UC14-ANEXOS | Não implementado; evidência parcial em `exportacao_resultado` e `resposta_anexo` |
 
 # <a name="c4"></a>4. Desenvolvimento da Aplicação Web
 
