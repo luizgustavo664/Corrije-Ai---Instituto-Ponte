@@ -2443,6 +2443,83 @@ Prova "1" --> "0..*" Relatorio : baseia
 
 ### 3.2.4. Diagrama de Sequência UML (sprint 3)
 
+
+@startuml
+title US01 — Autenticação e Acesso do Professor/Coordenador
+
+autonumber
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 25
+skinparam BoxPadding 10
+
+actor "Professor/Coordenador" as Usuario
+
+boundary "AuthController" as Controller
+control "AuthService" as Service
+entity "Pessoa" as Pessoa
+database "PessoaRepository" as Repository
+database "Banco de Dados" as Banco
+participant "Google OAuth" as Google
+collections "FilaAuditoria" as Queue
+
+Usuario -> Controller: loginGoogle()
+activate Controller
+
+Controller -> Google: autenticar()
+deactivate Controller
+
+Google ->> Controller: callbackOAuth(token)
+activate Controller
+
+Controller -> Service: validarLogin(token)
+activate Service
+
+Service -> Google: validarToken(token)
+Google --> Service: email,nome
+
+Service -> Repository: buscarPorEmail(email)
+activate Repository
+
+Repository -> Banco: SELECT Pessoa
+activate Banco
+Banco --> Repository: dadosPessoa
+deactivate Banco
+
+Repository --> Service: Pessoa
+deactivate Repository
+
+alt usuário autorizado
+
+    Service -> Pessoa: ativar()
+    activate Pessoa
+    Pessoa --> Service: statusAtivo
+    deactivate Pessoa
+
+    Service ->> Queue: registrarLogin()
+    
+    Service --> Controller: acessoPermitido()
+    deactivate Service
+
+    Controller --> Usuario: redirecionarDashboard()
+    deactivate Controller
+
+else usuário não autorizado
+
+    Service --> Controller: acessoNegado()
+    deactivate Service
+
+    Controller --> Usuario: exibirMensagemErro()
+    deactivate Controller
+
+end
+
+note right of Queue
+Processamento assíncrono\nregistro de auditoria
+end note
+
+@enduml
+
 <div align="center">
 
   <img src="../assets/diagrama_sequencia_us01.png">
@@ -2458,6 +2535,86 @@ Prova "1" --> "0..*" Relatorio : baseia
 </div>
 US03:
 
+@startuml
+title US02 — Criação e Publicação de Prova
+
+autonumber
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 25
+skinparam BoxPadding 10
+
+actor "Professor" as Professor
+
+boundary "ProvaController" as Controller
+control "ProvaService" as Service
+
+entity "Professor" as ProfessorEntity
+entity "Prova" as Prova
+entity "Materia" as Materia
+entity "Enunciado" as Enunciado
+
+database "ProvaRepository" as Repository
+database "Banco de Dados" as Banco
+
+collections "FilaPublicacao" as Queue
+
+Professor -> Controller: criarProva()
+activate Controller
+
+Controller -> Service: criarProva()
+activate Service
+
+Service -> ProfessorEntity: criarProva()
+activate ProfessorEntity
+
+ProfessorEntity --> Service: Prova
+deactivate ProfessorEntity
+
+Service -> Prova: publicar()
+activate Prova
+
+Prova --> Service: statusPublicado
+deactivate Prova
+
+Service -> Repository: salvar(prova)
+activate Repository
+
+Repository -> Banco: INSERT Prova
+activate Banco
+Banco --> Repository: provaPersistida
+deactivate Banco
+
+Repository --> Service: Prova
+deactivate Repository
+
+loop adicionar questões
+
+    Service -> Enunciado: atualizarTexto(texto)
+    activate Enunciado
+    Enunciado --> Service: enunciadoAtualizado
+    deactivate Enunciado
+
+end
+
+Service -> Materia: atualizarDados(nome,codigo)
+activate Materia
+Materia --> Service: materiaAtualizada
+deactivate Materia
+
+Service ->> Queue: publicarProva()
+
+Service --> Controller: provaCriada()
+deactivate Service
+
+Controller --> Professor: exibirLinkPublicacao()
+deactivate Controller
+
+note right of Queue
+Publicação assíncrona\nQR Code e distribuição
+end note
+
+@enduml
 
 <div align="center">
   <img src="../assets/diagrama_sequencia_us02.png">
@@ -2466,6 +2623,176 @@ US03:
 <div align="center">
   <strong>Figura X+1 — Diagrama de Sequência — US02.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
+
+@startuml
+
+skinparam sequenceArrowThickness 2
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+actor       "Professor"  as Prof
+boundary    "Controller" as C
+control     "Service"    as S
+control     "Repository" as R
+entity      "Banco"      as B
+
+== CR-01: Home exibe ação de criar prova ==
+
+Prof  ->  C  : GET /home
+activate C
+
+C     ->  S  : buscarDadosHome()
+activate S
+
+S     ->  R  : findHome()
+activate R
+
+R     ->  B  : SELECT configurações
+activate B
+B     --> R  : dados brutos
+deactivate B
+
+R     --> S  : HomeDTO
+deactivate R
+
+S     --> C  : HomeDTO
+deactivate S
+
+C     --> Prof : 200 OK — HomeDTO
+deactivate C
+
+== CR-02a: Buscar schema do formulário ==
+
+Prof  ->  C  : GET /provas/form
+activate C
+
+C     ->  S  : buscarSchemaFormulario()
+activate S
+
+S     ->  R  : findFormSchema()
+activate R
+
+R     ->  B  : SELECT campos_obrigatorios
+activate B
+B     --> R  : schema bruto
+deactivate B
+
+R     --> S  : FormSchemaDTO
+deactivate R
+
+S     --> C  : FormSchemaDTO
+deactivate S
+
+C     --> Prof : 200 OK — FormSchemaDTO
+deactivate C
+
+== CR-02b: Criar prova com campos obrigatórios (POST) ==
+
+Prof  ->  C  : POST /provas\n{nome, modalidade, disciplina, turma, semestre}
+activate C
+
+C     ->  S  : validarECriar(ProvaDTO)
+activate S
+
+note right of S
+  Valida campos obrigatórios:
+  nome, modalidade, disciplina,
+  turma, semestre
+end note
+
+S     ->  R  : salvar(ProvaEntity)
+activate R
+
+R     ->  B  : INSERT INTO provas
+activate B
+B     --> R  : prova_id gerado
+deactivate B
+
+R     --> S  : ProvaEntity
+deactivate R
+
+S     --> C  : ProvaEntity
+deactivate S
+
+C     --> Prof : 201 Created — prova_id
+deactivate C
+
+== CR-03: Salvar automaticamente como rascunho (PATCH) ==
+
+Prof  ->>  C  : PATCH /provas/{id}\n{status: RASCUNHO}
+activate C
+
+C     ->   S  : atualizarStatus(id, RASCUNHO)
+activate S
+
+S     ->   R  : atualizarStatus(id, RASCUNHO)
+activate R
+
+R     ->   B  : UPDATE provas SET status='rascunho' WHERE id={id}
+activate B
+B     --> R   : 1 row updated
+deactivate B
+
+R     --> S   : ProvaEntity atualizada
+deactivate R
+
+S     --> C   : ProvaEntity atualizada
+deactivate S
+
+C     --> Prof : 200 OK — status: RASCUNHO
+deactivate C
+
+== Edição posterior: atualizar dados completos (PUT) ==
+
+Prof  ->  C  : PUT /provas/{id}\n{dados completos}
+activate C
+
+C     ->  S  : atualizarCompleto(ProvaDTO)
+activate S
+
+S     ->  R  : atualizar(ProvaEntity)
+activate R
+
+R     ->  B  : UPDATE provas SET ... WHERE id={id}
+activate B
+B     --> R  : 1 row updated
+deactivate B
+
+R     --> S  : ProvaEntity
+deactivate R
+
+S     --> C  : ProvaEntity
+deactivate S
+
+C     --> Prof : 200 OK — prova atualizada
+deactivate C
+
+== Descarte: cancelar rascunho (DELETE) ==
+
+Prof  ->  C  : DELETE /provas/{id}
+activate C
+
+C     ->  S  : deletarRascunho(id)
+activate S
+
+S     ->  R  : deletar(id)
+activate R
+
+R     ->  B  : DELETE FROM provas WHERE id={id}
+activate B
+B     --> R  : 1 row deleted
+deactivate B
+
+R     --> S  : void
+deactivate R
+
+S     --> C  : void
+deactivate S
+
+C     --> Prof : 204 No Content
+deactivate C
+
+@enduml
 
 ![DIAGRAMA DE SEQUÊNCIA SOBRE A US03](/assets/diagramaUS03.png)
 
