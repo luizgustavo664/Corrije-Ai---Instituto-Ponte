@@ -496,3 +496,41 @@ porém ainda nenhuma dessas tabelas estão prontas pois é necessário a finaliz
 ## Foto do Template SQL e Lógica proposicional
 
 ![](/assets/2-tabela-verdade.png) 
+
+## ----------------Outro dia-----------------
+
+### Data: 27/05/2026
+
+
+
+
+### Objetivo do Dia
+
+Revisar todos os artefatos de programação de todas as sprints em relação aos feedbacks do professor Wesley.
+Para a correção, utilizar o seguinte método:
+Vermelho --> pedir revisão para o professor (erro de correção).
+Laranja --> arrumar de acordo com o feedback.
+Rosa --> revisar depois que terminar as tarefas da sprint 3.
+
+### Alterações Realizadas
+
+Revi todos os comentários feitos pelo professor e grifei as correções da seguinte maneira:
+
+Vermelho --> pedir revisão para o professor (erro de correção).
+Laranja --> arrumar de acordo com o feedback.
+Rosa --> revisar depois que terminar as tarefas da sprint 3.
+
+#### Álvaro:
+
+
+
+
+##### Observação:
+
+Nenhuma
+
+
+
+## Link
+
+https://drive.google.com/file/d/1SW_f9gVGW6yVsgPzkLq_E8s53s84jY7G/view?ts=6a15adec 
