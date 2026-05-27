@@ -116,3 +116,15 @@ Organizar a divisão de artefatos e revisores e estudar o guia de estilos.
 Realizei a organização e divisão dos artefatos entre os membros da equipe, definindo responsabilidades de desenvolvimento e revisão. Também iniciei o estudo do guia de estilos do projeto.
 
 ### Links
+
+## 📅 26/05/2026
+
+### Objetivo do Dia
+Finalizar o Guia de estilos para dar íncio ao protótipo de alta fidelidade.
+
+### Alteração
+Finalizei todo o style guide do projeto.
+
+### Links
+
+ [Link](https://sesame-lunar-20691913.figma.site/)
