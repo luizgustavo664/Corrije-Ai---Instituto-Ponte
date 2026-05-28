@@ -138,6 +138,31 @@ Cores erradas: branco suave, preto, azul escuro, vermelho e informação (azul c
 
 Cores corretas: ciano, sucesso (verde) e aviso (laranja)
 
+Corrigir o branco suave (e8ecf0 para f2f2f2), preto (0e2040 para 000000), azul escuro (0e2040 para 05245f), vermelho (df6969 para ef4444) e informação/azul claro (1b6ec2 para 3b82f6).
+
+Cores corretas: Ciano, sucesso/verde, aviso/laranja
+
 ## Link para onde está o design feito com o Figma:
 
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=QtzUNpqWMLAQtIJG-0
+
+### Data: 28/05/2026
+
+
+### Objetivo do Dia
+
+Rafael: Realizar o estudo aprofundado sobre documentação de guia de estilos e protótipo.
+
+
+### Estudo realizado
+Colocar fotos se for preciso
+
+### Alterações Realizadas
+
+#### Rafael:
+
+- Alteração: Foi realizado o estudo aprofundado sobre documentação de guia de estilos e protótipo.
+
+## Link para onde está o estudo realizado com a IA Chat GPT:
+
+https://chatgpt.com/c/6a187f7e-c84c-83e9-bbf9-9b45d707e4f8
