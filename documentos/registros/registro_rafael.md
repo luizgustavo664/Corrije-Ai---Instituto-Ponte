@@ -78,7 +78,7 @@ Colocar fotos se for preciso
 
  https://chatgpt.com/share/6a0ca7a8-c6bc-83e9-a75e-0e5fb8ddaced
 
- ### Data: 25/05/2026
+### Data: 25/05/2026
 
 
 ### Objetivo do Dia
@@ -97,3 +97,23 @@ Colocar fotos se for preciso
 ## Link para onde está o protótipo feito com o Figma Make:
 
 https://pause-kit-95074407.figma.site/
+
+### Data: 26/05/2026
+
+
+### Objetivo do Dia
+
+Rafael: Realizar o design do guia de estilos.
+
+### Guia de estilos
+Colocar fotos se for preciso
+
+### Alterações Realizadas
+
+#### Rafael:
+
+- Alteração: Foi realizado o design do guia de estilos.
+
+## Link para onde está o design feito com o Figma:
+
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=380-557&p=f&t=9kcwY8wCWUyUi0DN-0
