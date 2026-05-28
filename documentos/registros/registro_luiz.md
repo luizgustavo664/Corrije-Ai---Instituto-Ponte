@@ -117,6 +117,18 @@ Realizei a organização e divisão dos artefatos entre os membros da equipe, de
 
 ### Links
 
+## 📅 25/05/2026
+
+### Objetivo do Dia
+Estudar guia de estilos e criar prévia.
+
+### Alteração
+Estudei guia de estilos de acordo com a adalove, estruturei toda a base do nosso guia de estilos e criei uma versão prévia dele utilizando o FigmaMake.
+
+### Links
+
+ [Link da prévia](https://sesame-lunar-20691913.figma.site/)
+
 ## 📅 26/05/2026
 
 ### Objetivo do Dia
@@ -128,3 +140,4 @@ Finalizei todo o style guide do projeto.
 ### Links
 
  [Link](https://sesame-lunar-20691913.figma.site/)
+
