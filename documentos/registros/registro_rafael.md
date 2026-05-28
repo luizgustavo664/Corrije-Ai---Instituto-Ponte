@@ -151,18 +151,20 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&
 
 ### Objetivo do Dia
 
-Rafael: Realizar o estudo aprofundado sobre documentação de guia de estilos e protótipo.
+Rafael: Realizar o estudo aprofundado sobre documentação de guia de estilos e protótipo e a documentação prévia.
 
 
-### Estudo realizado
+### Estudo realizado e documentação
 Colocar fotos se for preciso
 
 ### Alterações Realizadas
 
 #### Rafael:
 
-- Alteração: Foi realizado o estudo aprofundado sobre documentação de guia de estilos e protótipo.
+- Alteração: Foi realizado o estudo aprofundado sobre documentação de guia de estilos e protótipo e uma prévia da documentação de ambos.
 
-## Link para onde está o estudo realizado com a IA Chat GPT:
+## Link para onde está o estudo realizado com a IA Chat GPT e a documentação prévia:
 
 https://chatgpt.com/c/6a187f7e-c84c-83e9-bbf9-9b45d707e4f8
+
+https://docs.google.com/document/d/1FMkr8Wr4BYk0v4T6TH_4_sgdb7MDEkxsH-MecunJ3jo/edit?tab=t.0
