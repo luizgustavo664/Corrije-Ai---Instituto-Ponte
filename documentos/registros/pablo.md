@@ -2,6 +2,91 @@
 
 ---
 
+### Data: 19/05/2026 (TerÃ§a-feira)
+
+### Objetivo do Dia
+Criar o Diagrama de Classes Arquitetural da aplicaÃ§Ã£o na subseÃ§Ã£o 3.2.3.1 do WAD.
+
+### AlteraÃ§Ãµes Realizadas
+Desenvolvi o Diagrama de Classes Arquitetural da aplicaÃ§Ã£o, representando as camadas Controller, Service, Repository e Model e suas principais relaÃ§Ãµes.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/112
+documentos/wad.md (seÃ§Ã£o 3.2.3.1)
+
+### ObservaÃ§Ãµes:
+Atividade concluÃ­da e registrada no WAD.
+
+---
+
+### Data: 21/05/2026 (Quinta-feira)
+
+### Objetivo do Dia
+Adicionar uma consulta SELECT real com lÃ³gica proposicional na subseÃ§Ã£o 3.6.4 do WAD.
+
+### AlteraÃ§Ãµes Realizadas
+Documentei uma consulta SELECT real do sistema, explicando a condiÃ§Ã£o lÃ³gica utilizada e sua relaÃ§Ã£o com o funcionamento da aplicaÃ§Ã£o.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/149
+documentos/wad.md (seÃ§Ã£o 3.6.4)
+
+### ObservaÃ§Ãµes:
+Atividade concluÃ­da e registrada no WAD.
+
+---
+
+### Data: 26/05/2026 (TerÃ§a-feira)
+
+### Objetivo do Dia
+Adicionar tabelas verdade para as consultas SQL documentadas na subseÃ§Ã£o 3.6.4 do WAD.
+
+### AlteraÃ§Ãµes Realizadas
+Criei tabelas verdade para explicitar os cenÃ¡rios booleanos das consultas SQL e apoiar a interpretaÃ§Ã£o das expressÃµes proposicionais.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/151
+documentos/wad.md (seÃ§Ã£o 3.6.4)
+
+### ObservaÃ§Ãµes:
+Atividade concluÃ­da e registrada no WAD.
+
+---
+
+### Data: 27/05/2026 (Quarta-feira)
+
+### Objetivo do Dia
+Garantir diversidade de operadores lÃ³gicos nas consultas SQL da subseÃ§Ã£o 3.6.4 do WAD.
+
+### AlteraÃ§Ãµes Realizadas
+Revisei as consultas SQL para incluir operadores lÃ³gicos variados, como IN e ILIKE, mantendo a coerÃªncia com os exemplos e explicaÃ§Ãµes do artefato.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/152
+documentos/wad.md (seÃ§Ã£o 3.6.4)
+
+### ObservaÃ§Ãµes:
+Atividade concluÃ­da e registrada no WAD.
+
+---
+
+### Data: 28/05/2026 (Quinta-feira)
+
+### Objetivo do Dia
+Revisar a coerÃªncia entre os artefatos do WAD.
+
+### AlteraÃ§Ãµes Realizadas
+Revisei a coerÃªncia entre requisitos, regras de negÃ³cio, endpoints, diagramas e referÃªncias internas do WAD, corrigindo inconsistÃªncias encontradas.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/153
+documentos/wad.md
+
+### ObservaÃ§Ãµes:
+Atividade concluÃ­da e registrada no WAD.
+
+---
+
 ### Data: 06/05/2026 (Quarta-feira)
 
 ### Objetivo do Dia
