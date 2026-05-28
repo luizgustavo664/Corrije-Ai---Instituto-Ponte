@@ -117,3 +117,27 @@ Colocar fotos se for preciso
 ## Link para onde está o design feito com o Figma:
 
 https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=380-557&p=f&t=9kcwY8wCWUyUi0DN-0
+
+### Data: 27/05/2026
+
+
+### Objetivo do Dia
+
+Rafael: Realizar a corrreção das cores do protótipo.
+
+### Guia de estilos
+Colocar fotos se for preciso
+
+### Alterações Realizadas
+
+#### Rafael:
+
+- Apontamento para correção de cores:
+
+Cores erradas: branco suave, preto, azul escuro, vermelho e informação (azul claro).
+
+Cores corretas: ciano, sucesso (verde) e aviso (laranja)
+
+## Link para onde está o design feito com o Figma:
+
+https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=QtzUNpqWMLAQtIJG-0
