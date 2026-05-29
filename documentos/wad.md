@@ -3820,7 +3820,34 @@ Essa consulta insere uma nova questão ativa de múltipla escolha no banco de da
 
 ## 4.1. Primeira versão da aplicação web (sprint 3)
 
-*Descreva e ilustre aqui o desenvolvimento da primeira versão do sistema web. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi implementado, (b) o que não foi concluído, (c) dificuldades técnicas enfrentadas e próximos passos.*
+Durante a sprint 3, o desenvolvimento concentrou-se na estruturação inicial da aplicação web, na definição da base técnica do backend e na consolidação dos artefatos arquiteturais necessários para orientar a implementação das próximas etapas. A primeira versão ainda não representa o fluxo completo da plataforma em produção, mas estabelece a base do sistema e reduz incertezas técnicas importantes para as sprints seguintes.
+
+**(a) O que foi implementado**
+
+- Estrutura inicial do backend em Node.js com Fastify, incluindo configuração de CORS, Swagger UI e validação/serialização com `fastify-type-provider-zod`.
+- Configuração da conexão com PostgreSQL/Supabase por meio de `pg` e variáveis de ambiente.
+- Script de execução de migrations, permitindo aplicar os arquivos SQL versionados do projeto.
+- Migration inicial do banco de dados, contemplando tabelas centrais do domínio, enums, chaves estrangeiras, índices, triggers, funções auxiliares e políticas de Row Level Security (RLS).
+- Estrutura inicial do frontend com Vite/React, servindo como base para a construção das telas da aplicação.
+- Atualização dos artefatos de documentação técnica, incluindo diagramas UML em PlantUML, matriz de rastreabilidade e detalhamento dos casos de uso principais.
+
+**(b) O que não foi concluído**
+
+- Os endpoints funcionais de domínio ainda não foram implementados no backend.
+- As rotas de autenticação, provas, questões, submissões, correção, resultados e analytics ainda precisam ser codificadas e integradas ao banco.
+- O frontend ainda não contempla os fluxos finais de uso para professor, coordenador e aluno.
+- Os testes automatizados necessários para validar endpoints, regras de negócio e integração com banco ainda não foram finalizados.
+- A integração completa entre frontend, backend e banco de dados ainda está pendente.
+
+**(c) Dificuldades técnicas enfrentadas**
+
+A principal dificuldade técnica da sprint foi a adaptação às novas tecnologias utilizadas pelo grupo. A equipe precisou compreender melhor a organização do backend com Fastify, o uso de migrations SQL para modelar regras de negócio no banco e a relação entre autenticação, autorização e RLS no Supabase/PostgreSQL.
+
+Também houve uma curva de aprendizado relacionada ao PlantUML. A ferramenta se mostrou versátil para representar diferentes visões do sistema, mas exigiu atenção à sintaxe, à escolha correta dos tipos de participantes e à coerência semântica dos diagramas com o restante do projeto.
+
+**(d) Próximos passos**
+
+Os próximos passos são programar o frontend, implementar os endpoints principais do backend e finalizar os testes necessários para o projeto. A prioridade será transformar a modelagem já documentada em fluxos funcionais, integrando as telas às rotas da API e validando os cenários centrais com testes automatizados e evidências de funcionamento.
 
 ## 4.2. Segunda versão da aplicação web (sprint 4)
 
