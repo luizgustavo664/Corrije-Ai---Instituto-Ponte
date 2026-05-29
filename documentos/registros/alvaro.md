@@ -467,7 +467,7 @@ Criar segunda tabela verdade
 
 (consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
 Tabela verdade.
-Utilize o exemplo do wad e mais a mais a primeira tabela verdade
+Utilize o exemplo do wad e mais a primeira tabela verdade
 
 
 ### Alterações Realizadas
@@ -498,7 +498,34 @@ porém ainda nenhuma dessas tabelas estão prontas pois é necessário a finaliz
 ![](/assets/2-tabela-verdade.png) 
 
 <<<<<<< documentos/registros/alvaro.md
-## ----------------------Outro Dia---------------------------
+## -----------------------Outro dia---------------------
+
+### Data: 26/05/2026
+
+
+
+
+### Objetivo do Dia
+
+Criar quarta tabela verdade
+
+(consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
+Tabela verdade.
+Utilize o exemplo do wad e mais a primeira tabela verdade
+
+Revisar as outras tabelas
+
+
+### Alterações Realizadas
+
+
+
+
+#### Álvaro:
+
+
+- Alteração: 
+=======## ----------------------Outro Dia---------------------------
 
 ### Data: 25/05/2026
 
@@ -508,19 +535,20 @@ Criar terceira tabela verdade
 
 (consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
 Tabela verdade.
-Utilize o exemplo do wad e mais a mais a primeira tabela verdade
+Utilize o exemplo do wad e mais a primeira tabela verdade.
 
 ### Alterações Realizadas
 
 #### Álvaro:
 
-- Alteração:
- implementei um Template de SQL + lógica proposicional com a seguinte estrutura:
+* Alteração:
 
- - Expressão SQL
- - Proposições lógicas
- - Expressão lógica proposicional
- - Tabela Verdade
+Implementei um Template de SQL + lógica proposicional com a seguinte estrutura:
+
+* Expressão SQL
+* Proposições lógicas
+* Expressão lógica proposicional
+* Tabela Verdade
 
 ##### Observação:
 
@@ -529,6 +557,43 @@ A tabela ainda não está completa, pois atualmente encontra-se em formato `.htm
 ## Foto do Template SQL e Lógica proposicional
 
 ![](/assets/3-tabela-verdade.png)
+
+## -----------------------Outro dia---------------------
+
+### Data: 26/05/2026
+
+### Objetivo do Dia
+
+Criar quarta tabela verdade
+
+(consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
+Tabela verdade.
+Utilize o exemplo do wad e mais a primeira tabela verdade.
+
+Revisar as outras tabelas.
+
+### Alterações Realizadas
+
+#### Álvaro:
+
+* Alteração:
+
+Implementei um Template de SQL + lógica proposicional com a seguinte estrutura:
+
+* Expressão SQL
+* Proposições lógicas
+* Expressão lógica proposicional
+* Tabela Verdade
+
+Revisei as outras tabelas.
+
+##### Observação:
+
+Nenhuma.
+
+## Foto do Template SQL e Lógica proposicional
+
+![](/assets/4-tabela-verdade.png)
 
 ## ---------------------Outro dia--------------------
 
@@ -556,7 +621,7 @@ Rosa --> revisar depois que terminar as tarefas da sprint 3.
 
 ##### Observação:
 
-Nenhuma
+Nenhuma.
 
 ## Link
 
@@ -570,10 +635,10 @@ https://www.canva.com/design/DAHK4Rv8QJg/e65wdrxs2tkp_NeoWeJvWg/edit
 
 Revisar todos os feedbacks da planilha criada pelo professor de programação em relação à Sprint 2, revendo todas as rubricas e suas seções:
 
-Rubrica 1  
-Rubrica 2  
-Rubrica 3  
-Rubrica 4  
+Rubrica 1
+Rubrica 2
+Rubrica 3
+Rubrica 4
 Rubrica 5
 
 ### Alterações Realizadas
