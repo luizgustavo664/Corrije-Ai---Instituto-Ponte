@@ -208,12 +208,12 @@ Heloísa: Atualização da Matriz de Rastreabilidade
 
 ### Objetivo do Dia
 
-Heloísa:
+Heloísa: Fazer o relatório de desenvolvimento, seçã0 4.1 do WAD
 
 ### Banco de dados
 
 ### Alterações Realizadas
 
-#### Heloísa:
+#### Heloísa: 
 
-- Alteração: 
+- Alteração: Foi criado o relatório de desenvolvimento da seção 4.1 do WAD, registrando as principais mudanças e pontos chave da sprint.
