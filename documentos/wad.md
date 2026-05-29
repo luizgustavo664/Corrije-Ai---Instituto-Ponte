@@ -1586,7 +1586,48 @@ Esta matriz foi atualizada conforme o estado atual da implementação. O backend
 
 ### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
 
-*Posicione aqui o diagrama de arquitetura da solução, indicando as camadas principais (Controller, Service, Repository, Model) e suas responsabilidades. Atualize sempre que necessário.*
+O servidor do projeto adota uma Arquitetura em Camadas no estilo Controller-Service-Repository. Essa organização separa claramente as responsabilidades de entrada HTTP, lógica de negócio e acesso a dados, tornando o sistema mais modular, testável e fácil de manter.
+
+#### a) Controllers (Ponto de entrada HTTP)
+
+Os controllers recebem as requisições, validam parâmetros básicos, tratam exceções e retornam respostas HTTP.
+
+- `src/backend/dist/routes/questoes.routes.js`
+  - `questoesRoutes(app)` — registra a rota POST `/provas/:provaId/questoes` e encaminha a requisição ao controller.
+- `src/backend/dist/controllers/questoes.controller.js`
+  - `QuestoesController.criarQuestao(request, reply)` — valida campos obrigatórios (`tipo`, `enunciado`), chama o service responsável pela criação da questão e devolve o resultado ou erro apropriado.
+
+#### b) Services (Lógica de negócio)
+
+Os services contêm regras de negócio, validações de domínio e orquestram chamadas aos repositories.
+
+- `src/backend/dist/services/questoes.service.js`
+  - `QuestoesService.criarQuestao(input)` — valida o tipo da questão, o enunciado, a pontuação máxima e as alternativas; verifica se a prova existe e está em estado `rascunho`; transforma o tipo para uso no banco e delega a persistência ao repository.
+  - `QuestoesService.validarAlternativas(tipo, alternativas)` — valida o conjunto de alternativas para questões objetivas, garantindo pelo menos duas opções e exatamente uma correta.
+  - `AppError` — classe de exceção de domínio usada para propagar erros de validação com códigos HTTP específicos.
+
+#### c) Repositories (Persistência de dados)
+
+Os repositories encapsulam as consultas SQL e as transações no banco PostgreSQL.
+
+- `src/backend/dist/repositories/questoes.repository.js`
+  - `QuestoesRepository.findProvaById(provaId)` — busca a prova pelo ID.
+  - `QuestoesRepository.criarQuestao(input)` — inicia uma transação, busca a prova com lock, insere a questão, o enunciado e as alternativas, associa a questão à prova e finaliza a transação.
+  - `QuestoesRepository.findProvaByIdForUpdate(client, provaId)` — busca a prova com `FOR UPDATE` para evitar condições de concorrência.
+  - `QuestoesRepository.nextOrdemOriginal(client, provaId)` — calcula a próxima ordem original da questão na prova.
+  - `QuestoesRepository.insertAlternativas(client, questaoId, input)` — insere alternativas e ajusta o modo de replicação quando necessário.
+
+#### d) Modelo de dados
+
+A camada de dados é representada pelas tabelas consultadas no banco PostgreSQL. As principais entidades envolvidas são:
+
+- `prova`
+- `questao`
+- `enunciado`
+- `alternativa`
+- `prova_questao`
+
+> Observação: o backend não usa views server-side no padrão MVC tradicional. A interface do usuário é implementada no frontend separado, enquanto o servidor fornece APIs organizadas em camadas.
 
 ### 3.2.2. Diagrama de Casos de Uso
 
