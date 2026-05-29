@@ -533,4 +533,44 @@ Nenhuma
 
 ## Link
 
-https://drive.google.com/file/d/1SW_f9gVGW6yVsgPzkLq_E8s53s84jY7G/view?ts=6a15adec 
+https://www.canva.com/design/DAHK4Rv8QJg/e65wdrxs2tkp_NeoWeJvWg/edit  
+
+
+## ---------------------Outro dia--------------------
+
+
+### Data: 28/05/2026
+
+
+
+
+### Objetivo do Dia
+
+Revisar todos os feedbacks da planilha criada pelo professor de programação em relação à Sprint 2, revendo todas as rubricas e suas seções:
+
+Rubrica 1
+Rubrica 2
+Rubrica 3
+Rubrica 4
+Rubrica 5
+
+
+### Alterações Realizadas
+
+
+
+
+#### Álvaro:
+
+Verifiquei cada seção de cada rubrica e criei um documento com todas as revisões, apontando em qual rubrica e em qual item/seção o ponto foi descontado incorretamente.
+
+
+##### Observação:
+
+Houve vários erros de correção devido à utilização da migration da Sprint 3 para a correção do artefato 5 da Sprint 2.
+
+
+
+## Link do docs:
+
+https://docs.google.com/document/d/1DptyVm8M-KIZH_O-UZcHAutej6qWo7yZIjbUuymURbM/edit?tab=t.0 
