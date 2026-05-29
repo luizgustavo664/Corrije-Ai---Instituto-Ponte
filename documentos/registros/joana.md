@@ -147,3 +147,15 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 
 
 ### Alterações Realizadas: Criei a 4ª tabela verdade e ajustei as outras 3
+
+
+## ---------------------------Outro Dia-------------------------
+
+
+### Data: 28/05/2026
+
+
+### Objetivo do Dia: Revisar Artefato 6
+
+
+### Alterações Realizadas: Foi feita uma revisão final do Artefato 6, com mudança na tabela 2 e adição da tabeça 5.
