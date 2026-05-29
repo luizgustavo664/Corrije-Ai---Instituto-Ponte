@@ -497,12 +497,10 @@ porém ainda nenhuma dessas tabelas estão prontas pois é necessário a finaliz
 
 ![](/assets/2-tabela-verdade.png) 
 
+<<<<<<< documentos/registros/alvaro.md
 ## ----------------------Outro Dia---------------------------
 
 ### Data: 25/05/2026
-
-
-
 
 ### Objetivo do Dia
 
@@ -512,16 +510,11 @@ Criar terceira tabela verdade
 Tabela verdade.
 Utilize o exemplo do wad e mais a mais a primeira tabela verdade
 
-
 ### Alterações Realizadas
-
-
-
 
 #### Álvaro:
 
-
-- Alteração: 
+- Alteração:
  implementei um Template de SQL + lógica proposicional com a seguinte estrutura:
 
  - Expressão SQL
@@ -533,7 +526,66 @@ Utilize o exemplo do wad e mais a mais a primeira tabela verdade
 
 A tabela ainda não está completa, pois atualmente encontra-se em formato `.html`. A conversão para o formato `.md` será realizada amanhã, dia 26/05/2026.
 
-
 ## Foto do Template SQL e Lógica proposicional
 
- ![](/assets/3-tabela-verdade.png) 
+![](/assets/3-tabela-verdade.png)
+
+## ---------------------Outro dia--------------------
+
+### Data: 27/05/2026
+
+### Objetivo do Dia
+
+Revisar todos os artefatos de programação de todas as sprints em relação aos feedbacks do professor Wesley.
+
+Para a correção, utilizar o seguinte método:
+
+Vermelho --> pedir revisão para o professor (erro de correção).
+Laranja --> arrumar de acordo com o feedback.
+Rosa --> revisar depois que terminar as tarefas da sprint 3.
+
+### Alterações Realizadas
+
+#### Álvaro:
+
+Revi todos os comentários feitos pelo professor e grifei as correções da seguinte maneira:
+
+Vermelho --> pedir revisão para o professor (erro de correção).
+Laranja --> arrumar de acordo com o feedback.
+Rosa --> revisar depois que terminar as tarefas da sprint 3.
+
+##### Observação:
+
+Nenhuma
+
+## Link
+
+https://www.canva.com/design/DAHK4Rv8QJg/e65wdrxs2tkp_NeoWeJvWg/edit
+
+## ---------------------Outro dia--------------------
+
+### Data: 28/05/2026
+
+### Objetivo do Dia
+
+Revisar todos os feedbacks da planilha criada pelo professor de programação em relação à Sprint 2, revendo todas as rubricas e suas seções:
+
+Rubrica 1  
+Rubrica 2  
+Rubrica 3  
+Rubrica 4  
+Rubrica 5
+
+### Alterações Realizadas
+
+#### Álvaro:
+
+Verifiquei cada seção de cada rubrica e criei um documento com todas as revisões, apontando em qual rubrica e em qual item/seção o ponto foi descontado incorretamente.
+
+##### Observação:
+
+Houve vários erros de correção devido à utilização da migration da Sprint 3 para a correção do artefato 5 da Sprint 2.
+
+## Link do docs:
+
+https://docs.google.com/document/d/1DptyVm8M-KIZH_O-UZcHAutej6qWo7yZIjbUuymURbM/edit?tab=t.0
