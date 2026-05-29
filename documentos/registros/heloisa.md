@@ -120,3 +120,100 @@ Heloísa: refinar descrição do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2)
 #### Heloísa:
 
 - Alteração: Foi feita a descrição e explicação do modelo ER(WAD 3.6.1) e diagrama ER(WAD 3.6.2) para facilitar explicação e correção.
+
+
+### Banco De Dados artefato 9
+
+### Data: 20/05/2026
+
+### Objetivo do Dia
+
+Heloísa: Atualizar o MER e o DER com a exclusão do aluno
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: Foi atualizado o DER e o MER com a exclusão da tabela alunos e atualização das susas dependências
+
+### Banco De Dados artefato 9
+
+### Data: 21/05/2026
+
+### Objetivo do Dia
+
+Heloísa: Resolver todos os problemas do artefato 5 da sprint 2
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: Foram alterados os MER, DER e Migration para condizer com os novos padrões de qualidade do projeto, colocando novas dependências e reestabelecendo conexões.
+
+### Banco De Dados artefato 9
+
+### Data: 25/05/2026
+
+### Objetivo do Dia
+
+Heloísa: Estudo e criação da arquitetura em camadas(WAD 3.2.1)
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: Estudo aprofundado da arquitetura em camadas (WAD 3.2.1) e desenvolvimento da seção no WAD, definindo todas as funções das camadas.
+
+### Banco De Dados artefato 9
+
+### Data: 26/05/2026
+
+### Objetivo do Dia
+
+Heloísa: Atualização do diagrama de sequências UML (seção 3.2.4)
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: Atualizar o diagrama de sequências UML seção 3.2.4 para condizer com os requisitos da Sprint 3 de atualização dos nomes dos comandos.
+
+### Banco De Dados artefato 9
+
+### Data: 27/05/2026
+
+### Objetivo do Dia
+
+Heloísa: Atualização da Matriz de Rastreabilidade
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa:
+
+- Alteração: 
+
+### Banco De Dados artefato 9
+
+### Data: 28/05/2026
+
+### Objetivo do Dia
+
+Heloísa: Fazer o relatório de desenvolvimento, seçã0 4.1 do WAD
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa: 
+
+- Alteração: Foi criado o relatório de desenvolvimento da seção 4.1 do WAD, registrando as principais mudanças e pontos chave da sprint.

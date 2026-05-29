@@ -2,6 +2,8 @@
 
 # Sprint 2
 
+# Sprint 2
+
 > Extraído do `registro.md` do projeto — apenas contribuições de Luiz Gustavo, organizadas por data.
 
 ---
@@ -93,6 +95,7 @@ Wireframe do coordenador finalizado e inserido no WAD do projeto. ✅
 
 ---
 
+## 📊 Resumo Geral da sprint 2
 ## 📊 Resumo Geral da sprint 2
 
 | Data | Atividade |
