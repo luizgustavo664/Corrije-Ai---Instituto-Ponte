@@ -497,8 +497,7 @@ porém ainda nenhuma dessas tabelas estão prontas pois é necessário a finaliz
 
 ![](/assets/2-tabela-verdade.png) 
 
-## ---------------------Outro dia--------------------
-
+## ----------------Outro dia-----------------
 
 ### Data: 27/05/2026
 
@@ -507,32 +506,23 @@ porém ainda nenhuma dessas tabelas estão prontas pois é necessário a finaliz
 
 ### Objetivo do Dia
 
-Criar apresentação sprint 3:
-
-Criar uma pequena apresentação apenas mostrando tudo o que foi alterado em relação à interface comparado ao que vocês já mostraram até agora (Compartilhar na TV do grupo + Pedro).
-
-        
-      Criar três tarefas para que a Verônica execute utilizando a aplicação local - aqui será um teste de fluxo.
-
-
-        
-      A ideia aqui é explorar o que nós já implementamos e fazer um pré-teste com ela.
-
-        
-      Deixem dois computadores prontos, pois pode ser que o Thiago esteja presente novamente.
-
-        
-      Compartilhar as ações da Verônica via Google Meet para o Pedro acompanhar e fazer sugestões, caso queira.
-
+Revisar todos os artefatos de programação de todas as sprints em relação aos feedbacks do professor Wesley.
+Para a correção, utilizar o seguinte método:
+Vermelho --> pedir revisão para o professor (erro de correção).
+Laranja --> arrumar de acordo com o feedback.
+Rosa --> revisar depois que terminar as tarefas da sprint 3.
 
 ### Alterações Realizadas
 
+Revi todos os comentários feitos pelo professor e grifei as correções da seguinte maneira:
 
-
+Vermelho --> pedir revisão para o professor (erro de correção).
+Laranja --> arrumar de acordo com o feedback.
+Rosa --> revisar depois que terminar as tarefas da sprint 3.
 
 #### Álvaro:
 
-Criei uma pequena apresentação apenas mostrando tudo o que foi alterado em relação à interface comparado ao que nós já mostramos até agora
+
 
 
 ##### Observação:
@@ -541,7 +531,7 @@ Nenhuma
 
 
 
-## Link do Slide
+## Link
 
 https://www.canva.com/design/DAHK4Rv8QJg/e65wdrxs2tkp_NeoWeJvWg/edit  
 
