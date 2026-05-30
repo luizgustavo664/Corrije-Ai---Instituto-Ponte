@@ -500,33 +500,6 @@ porém ainda nenhuma dessas tabelas estão prontas pois é necessário a finaliz
 <<<<<<< documentos/registros/alvaro.md
 ## -----------------------Outro dia---------------------
 
-### Data: 26/05/2026
-
-
-
-
-### Objetivo do Dia
-
-Criar quarta tabela verdade
-
-(consultas de SELECT, UPDATE e/ou DELETE com diferentes combinações de condições AND, OR, NOT, LIKE, IN) e
-Tabela verdade.
-Utilize o exemplo do wad e mais a primeira tabela verdade
-
-Revisar as outras tabelas
-
-
-### Alterações Realizadas
-
-
-
-
-#### Álvaro:
-
-
-- Alteração: 
-=======## ----------------------Outro Dia---------------------------
-
 ### Data: 25/05/2026
 
 ### Objetivo do Dia
@@ -558,7 +531,8 @@ A tabela ainda não está completa, pois atualmente encontra-se em formato `.htm
 
 ![](/assets/3-tabela-verdade.png)
 
-## -----------------------Outro dia---------------------
+
+## ----------------------Outro Dia---------------------------
 
 ### Data: 26/05/2026
 
@@ -601,6 +575,21 @@ Nenhuma.
 
 ### Objetivo do Dia
 
+Criar uma pequena apresentação apenas mostrando tudo o que foi alterado em relação à interface comparado ao que nós já mostramos até agora(Compartilhar na TV do grupo + Pedro).
+
+        
+      Criar três tarefas para que a Verônica execute utilizando a aplicação local - aqui será um teste de fluxo.
+
+
+        
+      A ideia aqui é explorar o que nós já implementamos e fazer um pré-teste com ela.
+
+        
+      Deixem dois computadores prontos, pois pode ser que o Thiago esteja presente novamente.
+
+        
+      Compartilhar as ações da Verônica via Google Meet para o Pedro acompanhar e fazer sugestões, caso queira.
+
 Revisar todos os artefatos de programação de todas as sprints em relação aos feedbacks do professor Wesley.
 
 Para a correção, utilizar o seguinte método:
@@ -612,6 +601,8 @@ Rosa --> revisar depois que terminar as tarefas da sprint 3.
 ### Alterações Realizadas
 
 #### Álvaro:
+
+Elaborei os slides com o objetivo de apresentar uma comparação entre o que foi desenvolvido na sprint anterior (sprint 2) e o que foi realizado nesta sprint (sprint 3). O primeiro slide apresenta uma introdução ao tema, enquanto o segundo traz o título da apresentação e uma visão geral da sprint 2. Do terceiro ao sexto slide, foram incluídos os wireframes criados durante a sprint, utilizados como base de comparação com as entregas realizadas na sprint 3. Por fim, o último slide foi destinado ao encerramento da apresentação, com a identificação do grupo e um agradecimento pela presença da Verônica.
 
 Revi todos os comentários feitos pelo professor e grifei as correções da seguinte maneira:
 
@@ -625,7 +616,9 @@ Nenhuma.
 
 ## Link
 
-https://www.canva.com/design/DAHK4Rv8QJg/e65wdrxs2tkp_NeoWeJvWg/edit
+https://docs.google.com/spreadsheets/d/1SW_f9gVGW6yVsgPzkLq_E8s53s84jY7G/edit?gid=1772680983#gid=1772680983 
+
+https://www.canva.com/design/DAHK4Rv8QJg/e65wdrxs2tkp_NeoWeJvWg/edit 
 
 ## ---------------------Outro dia--------------------
 
@@ -654,3 +647,6 @@ Houve vários erros de correção devido à utilização da migration da Sprint 
 ## Link do docs:
 
 https://docs.google.com/document/d/1DptyVm8M-KIZH_O-UZcHAutej6qWo7yZIjbUuymURbM/edit?tab=t.0
+
+
+## --------------------------FIM DA SPRINT 3----------------------------
