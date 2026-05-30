@@ -141,8 +141,10 @@ Dividi as tasks do artefato 7 entre o guia de estilos e o protótipo de alta fid
 ## 📅 22/05/2026
 
 ### Objetivo do Dia
+Estudar sobre o guia de estilos a partir de autoestudos e se aprofundar no tema
 
 ### Alteração
+Realizei estudos aprofundados sobre o guia de estilos, explorando conceitos e melhores práticas para a criação de um guia de estilos eficaz e alinhado com as necessidades do projeto.
 
 ### Links
 
