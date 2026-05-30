@@ -182,15 +182,11 @@ Finalizei todo o style guide do projeto.
 ## 📅 28/05/2026
 
 ### Objetivo do Dia
+Finalizar o Protótipo de Alta Fidelidade.
 
 ### Alteração
+Finalizei o protótipo de alta fidelidade utilizando o guia de estilos finalizado, conlcuindo a criação das telas e componentes do projeto.
 
 ### Links
 
-## 📅 29/05/2026
-
-### Objetivo do Dia
-
-### Alteração
-
-### Links
+[Protótipo](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=MEPAxCd0Se83aeVP-0)
