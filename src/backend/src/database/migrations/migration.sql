@@ -1,6 +1,7 @@
--- Migration inicial corrigida para Supabase/PostgreSQL
--- Versao com regras de negocio no banco, RLS CRUD, enums, normalizacao de questoes,
--- validacoes de publicacao, respostas, correcoes, relatorios e timestamps.
+-- Migration inicial alinhada ao WAD, regras de negocio e casos de uso (UC01 a UC16)
+-- Supabase/PostgreSQL com RLS, enums, normalizacao, validacoes de publicacao,
+-- fluxo do aluno sem senha por link unico, anexos, autosave, correcao, resultados,
+-- envio de e-mail, exportacao e analytics.
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE EXTENSION IF NOT EXISTS "citext";
@@ -23,7 +24,7 @@ END $$;
 
 DO $$
 BEGIN
-    CREATE TYPE "questao_tipo" AS ENUM ('objetiva', 'discursiva');
+    CREATE TYPE "questao_tipo" AS ENUM ('multipla_escolha', 'verdadeiro_falso', 'discursiva');
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -36,6 +37,12 @@ END $$;
 DO $$
 BEGIN
     CREATE TYPE "relatorio_tipo" AS ENUM ('desempenho_geral', 'por_aluno', 'por_questao', 'por_materia');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$
+BEGIN
+    CREATE TYPE "email_status" AS ENUM ('pendente', 'enviado', 'erro');
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -136,6 +143,7 @@ CREATE TABLE "aluno" (
     "nome" TEXT NOT NULL,
     "email" CITEXT NOT NULL,
     "cpf" TEXT NULL,
+    "aceitou_termos_em" TIMESTAMPTZ NULL,
     "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -179,6 +187,9 @@ CREATE TABLE "questao" (
     "materia_id" UUID NOT NULL,
     "tema_id" UUID NULL,
     "tipo" "questao_tipo" NOT NULL,
+    "limite_caracteres" INTEGER NULL,
+    "limite_palavras" INTEGER NULL,
+    "permite_anexo" BOOLEAN NOT NULL DEFAULT FALSE,
     "pontuacao_padrao" NUMERIC(5, 2) NOT NULL DEFAULT 1,
     "ativa" BOOLEAN NOT NULL DEFAULT TRUE,
     "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -186,6 +197,15 @@ CREATE TABLE "questao" (
 
     CONSTRAINT "questao_pontuacao_padrao_check"
         CHECK ("pontuacao_padrao" > 0),
+    CONSTRAINT "questao_limite_caracteres_check"
+        CHECK ("limite_caracteres" IS NULL OR "limite_caracteres" > 0),
+    CONSTRAINT "questao_limite_palavras_check"
+        CHECK ("limite_palavras" IS NULL OR "limite_palavras" > 0),
+    CONSTRAINT "questao_discursiva_limites_check"
+        CHECK (
+            "tipo" = 'discursiva'
+            OR ("limite_caracteres" IS NULL AND "limite_palavras" IS NULL AND "permite_anexo" = FALSE)
+        ),
     CONSTRAINT "questao_materia_id_foreign"
         FOREIGN KEY ("materia_id")
         REFERENCES "materia" ("id")
@@ -261,6 +281,9 @@ CREATE TABLE "prova" (
     "professor_id" UUID NOT NULL,
     "materia_id" UUID NOT NULL,
     "titulo" TEXT NOT NULL,
+    "modalidade" TEXT NOT NULL DEFAULT 'online',
+    "turma" TEXT NOT NULL,
+    "semestre" TEXT NOT NULL,
     "instrucoes" TEXT NULL,
     "tempo_limite_min" INTEGER NULL,
     "data_inicio" TIMESTAMPTZ NULL,
@@ -275,6 +298,12 @@ CREATE TABLE "prova" (
 
     CONSTRAINT "prova_titulo_check"
         CHECK (char_length(btrim("titulo")) > 0),
+    CONSTRAINT "prova_modalidade_check"
+        CHECK (char_length(btrim("modalidade")) > 0),
+    CONSTRAINT "prova_turma_check"
+        CHECK (char_length(btrim("turma")) > 0),
+    CONSTRAINT "prova_semestre_check"
+        CHECK (char_length(btrim("semestre")) > 0),
     CONSTRAINT "prova_tempo_limite_check"
         CHECK ("tempo_limite_min" IS NULL OR "tempo_limite_min" > 0),
     CONSTRAINT "prova_datas_check"
@@ -313,6 +342,9 @@ CREATE INDEX "prova_materia_id_index"
 
 CREATE INDEX "prova_status_index"
     ON "prova" ("status");
+
+CREATE INDEX "prova_filtros_index"
+    ON "prova" ("status", "turma", "semestre", "materia_id", "professor_id");
 
 CREATE TABLE "prova_status_historico" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -406,6 +438,8 @@ CREATE TABLE "resposta_aluno" (
     "resposta_texto" TEXT NULL,
     "url_imagem" TEXT NULL,
     "rascunho" BOOLEAN NOT NULL DEFAULT TRUE,
+    "sincronizada_em" TIMESTAMPTZ NULL,
+    "enviada_final" BOOLEAN NOT NULL DEFAULT FALSE,
     "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -436,6 +470,30 @@ CREATE INDEX "resposta_aluno_prova_aluno_id_index"
 
 CREATE INDEX "resposta_aluno_questao_id_index"
     ON "resposta_aluno" ("questao_id");
+
+CREATE TABLE "resposta_anexo" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "resposta_id" UUID NOT NULL,
+    "url_arquivo" TEXT NOT NULL,
+    "nome_arquivo" TEXT NULL,
+    "mime_type" TEXT NOT NULL,
+    "tamanho_bytes" INTEGER NOT NULL,
+    "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "resposta_anexo_url_check"
+        CHECK (char_length(btrim("url_arquivo")) > 0),
+    CONSTRAINT "resposta_anexo_mime_type_check"
+        CHECK ("mime_type" IN ('image/jpeg', 'image/png', 'application/pdf')),
+    CONSTRAINT "resposta_anexo_tamanho_check"
+        CHECK ("tamanho_bytes" > 0 AND "tamanho_bytes" <= 5242880),
+    CONSTRAINT "resposta_anexo_resposta_id_foreign"
+        FOREIGN KEY ("resposta_id")
+        REFERENCES "resposta_aluno" ("id")
+        ON DELETE CASCADE
+);
+
+CREATE INDEX "resposta_anexo_resposta_id_index"
+    ON "resposta_anexo" ("resposta_id");
 
 CREATE TABLE "correcao" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -527,6 +585,98 @@ CREATE INDEX "relatorio_coordenador_id_index"
 
 CREATE INDEX "relatorio_tipo_index"
     ON "relatorio" ("tipo");
+
+CREATE TABLE "resultado_aluno" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "prova_aluno_id" UUID NOT NULL UNIQUE,
+    "nota_total" NUMERIC(6, 2) NOT NULL DEFAULT 0,
+    "percentual" NUMERIC(5, 2) NULL,
+    "liberado" BOOLEAN NOT NULL DEFAULT FALSE,
+    "liberado_em" TIMESTAMPTZ NULL,
+    "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "atualizado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "resultado_aluno_nota_total_check"
+        CHECK ("nota_total" >= 0),
+    CONSTRAINT "resultado_aluno_percentual_check"
+        CHECK ("percentual" IS NULL OR ("percentual" >= 0 AND "percentual" <= 100)),
+    CONSTRAINT "resultado_aluno_prova_aluno_id_foreign"
+        FOREIGN KEY ("prova_aluno_id")
+        REFERENCES "prova_aluno" ("id")
+        ON DELETE CASCADE
+);
+
+CREATE TABLE "exportacao_resultado" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "prova_id" UUID NOT NULL,
+    "coordenador_id" UUID NOT NULL,
+    "formato" TEXT NOT NULL DEFAULT 'xlsx',
+    "url_arquivo" TEXT NULL,
+    "gerado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "exportacao_resultado_formato_check"
+        CHECK ("formato" IN ('xlsx', 'csv')),
+    CONSTRAINT "exportacao_resultado_prova_id_foreign"
+        FOREIGN KEY ("prova_id")
+        REFERENCES "prova" ("id")
+        ON DELETE CASCADE,
+    CONSTRAINT "exportacao_resultado_coordenador_id_foreign"
+        FOREIGN KEY ("coordenador_id")
+        REFERENCES "coordenador" ("id")
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE "email_envio" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "prova_aluno_id" UUID NOT NULL,
+    "destinatario" CITEXT NOT NULL,
+    "assunto" TEXT NOT NULL,
+    "corpo" TEXT NULL,
+    "status" "email_status" NOT NULL DEFAULT 'pendente',
+    "erro" TEXT NULL,
+    "enviado_em" TIMESTAMPTZ NULL,
+    "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "atualizado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "email_envio_assunto_check"
+        CHECK (char_length(btrim("assunto")) > 0),
+    CONSTRAINT "email_envio_prova_aluno_id_foreign"
+        FOREIGN KEY ("prova_aluno_id")
+        REFERENCES "prova_aluno" ("id")
+        ON DELETE CASCADE
+);
+
+CREATE INDEX "email_envio_prova_aluno_id_index" ON "email_envio" ("prova_aluno_id");
+CREATE INDEX "email_envio_status_index" ON "email_envio" ("status");
+
+CREATE TABLE "avaliacao_log" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "prova_id" UUID NULL,
+    "prova_aluno_id" UUID NULL,
+    "ator_tipo" TEXT NOT NULL,
+    "ator_id" UUID NULL,
+    "acao" TEXT NOT NULL,
+    "detalhes" JSONB NOT NULL DEFAULT '{}'::jsonb,
+    "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "avaliacao_log_ator_tipo_check"
+        CHECK ("ator_tipo" IN ('aluno', 'professor', 'coordenador', 'sistema')),
+    CONSTRAINT "avaliacao_log_acao_check"
+        CHECK (char_length(btrim("acao")) > 0),
+    CONSTRAINT "avaliacao_log_prova_id_foreign"
+        FOREIGN KEY ("prova_id")
+        REFERENCES "prova" ("id")
+        ON DELETE SET NULL,
+    CONSTRAINT "avaliacao_log_prova_aluno_id_foreign"
+        FOREIGN KEY ("prova_aluno_id")
+        REFERENCES "prova_aluno" ("id")
+        ON DELETE SET NULL
+);
+
+CREATE INDEX "avaliacao_log_prova_id_index" ON "avaliacao_log" ("prova_id");
+CREATE INDEX "avaliacao_log_prova_aluno_id_index" ON "avaliacao_log" ("prova_aluno_id");
+CREATE INDEX "avaliacao_log_acao_index" ON "avaliacao_log" ("acao");
 
 -- =========================================================
 -- Funcoes de apoio para RLS
@@ -723,8 +873,8 @@ BEGIN
         RAISE EXCEPTION 'Questao % nao encontrada.', NEW."questao_id";
     END IF;
 
-    IF v_tipo <> 'objetiva' THEN
-        RAISE EXCEPTION 'Somente questoes objetivas podem ter alternativas.';
+    IF v_tipo NOT IN ('multipla_escolha', 'verdadeiro_falso') THEN
+        RAISE EXCEPTION 'Somente questoes de multipla escolha ou verdadeiro/falso podem ter alternativas.';
     END IF;
 
     RETURN NEW;
@@ -829,6 +979,7 @@ DECLARE
     v_quantidade_questoes INTEGER;
     v_sem_enunciado INTEGER;
     v_objetivas_invalidas INTEGER;
+    v_vf_invalidas INTEGER;
     v_discursivas_com_alternativa INTEGER;
 BEGIN
     IF TG_OP = 'UPDATE' AND NEW."status" <> OLD."status" THEN
@@ -884,7 +1035,7 @@ BEGIN
     JOIN "questao" q
         ON q."id" = pq."questao_id"
     WHERE pq."prova_id" = NEW."id"
-      AND q."tipo" = 'objetiva'
+      AND q."tipo" = 'multipla_escolha'
       AND (
           (SELECT COUNT(*) FROM "alternativa" a WHERE a."questao_id" = q."id") < 2
           OR
@@ -892,7 +1043,24 @@ BEGIN
       );
 
     IF v_objetivas_invalidas > 0 THEN
-        RAISE EXCEPTION 'Questoes objetivas precisam ter pelo menos duas alternativas e exatamente uma correta.';
+        RAISE EXCEPTION 'Questoes de multipla escolha precisam ter pelo menos duas alternativas e exatamente uma correta.';
+    END IF;
+
+    SELECT COUNT(*)
+    INTO v_vf_invalidas
+    FROM "prova_questao" pq
+    JOIN "questao" q
+        ON q."id" = pq."questao_id"
+    WHERE pq."prova_id" = NEW."id"
+      AND q."tipo" = 'verdadeiro_falso'
+      AND (
+          (SELECT COUNT(*) FROM "alternativa" a WHERE a."questao_id" = q."id") <> 2
+          OR
+          (SELECT COUNT(*) FROM "alternativa" a WHERE a."questao_id" = q."id" AND a."correta" = TRUE) <> 1
+      );
+
+    IF v_vf_invalidas > 0 THEN
+        RAISE EXCEPTION 'Questoes de verdadeiro/falso precisam ter exatamente duas alternativas e uma correta.';
     END IF;
 
     SELECT COUNT(*)
@@ -1076,12 +1244,28 @@ BEGIN
         END IF;
     END IF;
 
-    IF v_tipo_questao = 'objetiva' AND NEW."alternativa_id" IS NULL THEN
-        RAISE EXCEPTION 'Questoes objetivas precisam de alternativa marcada.';
+    IF v_tipo_questao IN ('multipla_escolha', 'verdadeiro_falso') AND NEW."alternativa_id" IS NULL THEN
+        RAISE EXCEPTION 'Questoes de multipla escolha ou verdadeiro/falso precisam de alternativa marcada.';
     END IF;
 
     IF v_tipo_questao = 'discursiva' AND NEW."alternativa_id" IS NOT NULL THEN
         RAISE EXCEPTION 'Questoes discursivas nao devem ter alternativa marcada.';
+    END IF;
+
+    IF v_tipo_questao = 'discursiva' THEN
+        IF EXISTS (
+            SELECT 1 FROM "questao" q
+            WHERE q."id" = NEW."questao_id"
+              AND q."limite_caracteres" IS NOT NULL
+              AND NEW."resposta_texto" IS NOT NULL
+              AND char_length(NEW."resposta_texto") > q."limite_caracteres"
+        ) THEN
+            RAISE EXCEPTION 'A resposta ultrapassa o limite de caracteres da questao.';
+        END IF;
+    END IF;
+
+    IF NEW."sincronizada_em" IS NULL THEN
+        NEW."sincronizada_em" = CURRENT_TIMESTAMP;
     END IF;
 
     RETURN NEW;
@@ -1089,7 +1273,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER "validar_resposta_aluno_trigger"
-BEFORE INSERT OR UPDATE OF "prova_aluno_id", "questao_id", "alternativa_id", "resposta_texto", "url_imagem" ON "resposta_aluno"
+BEFORE INSERT OR UPDATE OF "prova_aluno_id", "questao_id", "alternativa_id", "resposta_texto", "url_imagem", "rascunho", "sincronizada_em", "enviada_final" ON "resposta_aluno"
 FOR EACH ROW
 EXECUTE FUNCTION "validar_resposta_aluno"();
 
@@ -1149,6 +1333,30 @@ CREATE TRIGGER "validar_correcao_trigger"
 BEFORE INSERT OR UPDATE OF "resposta_id", "professor_id", "nota" ON "correcao"
 FOR EACH ROW
 EXECUTE FUNCTION "validar_correcao"();
+
+CREATE OR REPLACE FUNCTION "corrigir_objetivas_automaticamente"(p_prova_aluno_id UUID, p_professor_id UUID)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO "correcao" ("resposta_id", "professor_id", "nota", "tipo", "corrigida_em")
+    SELECT
+        ra."id",
+        p_professor_id,
+        CASE WHEN a."correta" = TRUE THEN pq."pontuacao_max" ELSE 0 END,
+        'automatica',
+        CURRENT_TIMESTAMP
+    FROM "resposta_aluno" ra
+    JOIN "prova_aluno" pa ON pa."id" = ra."prova_aluno_id"
+    JOIN "prova_questao" pq ON pq."prova_id" = pa."prova_id" AND pq."questao_id" = ra."questao_id"
+    JOIN "questao" q ON q."id" = ra."questao_id"
+    JOIN "alternativa" a ON a."id" = ra."alternativa_id"
+    WHERE ra."prova_aluno_id" = p_prova_aluno_id
+      AND q."tipo" IN ('multipla_escolha', 'verdadeiro_falso')
+    ON CONFLICT ("resposta_id") DO UPDATE
+    SET "nota" = EXCLUDED."nota",
+        "tipo" = 'automatica',
+        "corrigida_em" = CURRENT_TIMESTAMP;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 -- =========================================================
 -- Triggers de atualizado_em
@@ -1210,6 +1418,14 @@ CREATE TRIGGER "set_relatorio_atualizado_em"
 BEFORE UPDATE ON "relatorio"
 FOR EACH ROW EXECUTE FUNCTION "set_atualizado_em"();
 
+CREATE TRIGGER "set_resultado_aluno_atualizado_em"
+BEFORE UPDATE ON "resultado_aluno"
+FOR EACH ROW EXECUTE FUNCTION "set_atualizado_em"();
+
+CREATE TRIGGER "set_email_envio_atualizado_em"
+BEFORE UPDATE ON "email_envio"
+FOR EACH ROW EXECUTE FUNCTION "set_atualizado_em"();
+
 -- =========================================================
 -- Row Level Security - CRUD
 -- =========================================================
@@ -1231,6 +1447,11 @@ ALTER TABLE "resposta_aluno" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "correcao" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "feedback" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "relatorio" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "resposta_anexo" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "resultado_aluno" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "exportacao_resultado" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "email_envio" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "avaliacao_log" ENABLE ROW LEVEL SECURITY;
 
 -- Coordenador
 CREATE POLICY "coordenador_select" ON "coordenador"
@@ -1687,9 +1908,146 @@ CREATE POLICY "relatorio_delete" ON "relatorio"
 FOR DELETE TO authenticated
 USING ("is_coordenador"());
 
+
+-- Portal publico do aluno por link unico (UC08 a UC11)
+CREATE POLICY "prova_select_anon_publicada_por_link" ON "prova"
+FOR SELECT TO anon
+USING ("status" = 'publicada' AND "url_acesso" IS NOT NULL);
+
+CREATE POLICY "aluno_insert_anon_portal" ON "aluno"
+FOR INSERT TO anon
+WITH CHECK (
+    char_length(btrim("nome")) > 0
+    AND "email" IS NOT NULL
+    AND "cpf" IS NOT NULL
+    AND "aceitou_termos_em" IS NOT NULL
+);
+
+-- Anexos de resposta
+CREATE POLICY "resposta_anexo_select" ON "resposta_anexo"
+FOR SELECT TO authenticated
+USING (
+    "is_coordenador"()
+    OR EXISTS (
+        SELECT 1
+        FROM "resposta_aluno" ra
+        JOIN "prova_aluno" pa ON pa."id" = ra."prova_aluno_id"
+        WHERE ra."id" = "resposta_anexo"."resposta_id"
+          AND (pa."aluno_id" = "auth_aluno_id"() OR "is_professor_da_prova"(pa."prova_id"))
+    )
+);
+
+CREATE POLICY "resposta_anexo_insert" ON "resposta_anexo"
+FOR INSERT TO authenticated
+WITH CHECK (
+    EXISTS (
+        SELECT 1
+        FROM "resposta_aluno" ra
+        JOIN "prova_aluno" pa ON pa."id" = ra."prova_aluno_id"
+        WHERE ra."id" = "resposta_anexo"."resposta_id"
+          AND pa."aluno_id" = "auth_aluno_id"()
+          AND pa."status" = 'em_andamento'
+    )
+);
+
+CREATE POLICY "resposta_anexo_delete" ON "resposta_anexo"
+FOR DELETE TO authenticated
+USING (
+    EXISTS (
+        SELECT 1
+        FROM "resposta_aluno" ra
+        JOIN "prova_aluno" pa ON pa."id" = ra."prova_aluno_id"
+        WHERE ra."id" = "resposta_anexo"."resposta_id"
+          AND pa."aluno_id" = "auth_aluno_id"()
+          AND pa."status" = 'em_andamento'
+    )
+);
+
+-- Resultados, exportacoes e emails
+CREATE POLICY "resultado_aluno_select" ON "resultado_aluno"
+FOR SELECT TO authenticated
+USING (
+    "is_coordenador"()
+    OR EXISTS (
+        SELECT 1 FROM "prova_aluno" pa
+        WHERE pa."id" = "resultado_aluno"."prova_aluno_id"
+          AND ("is_professor_da_prova"(pa."prova_id") OR (pa."aluno_id" = "auth_aluno_id"() AND "resultado_aluno"."liberado" = TRUE))
+    )
+);
+
+CREATE POLICY "resultado_aluno_upsert" ON "resultado_aluno"
+FOR ALL TO authenticated
+USING (
+    "is_coordenador"()
+    OR EXISTS (SELECT 1 FROM "prova_aluno" pa WHERE pa."id" = "resultado_aluno"."prova_aluno_id" AND "is_professor_da_prova"(pa."prova_id"))
+)
+WITH CHECK (
+    "is_coordenador"()
+    OR EXISTS (SELECT 1 FROM "prova_aluno" pa WHERE pa."id" = "resultado_aluno"."prova_aluno_id" AND "is_professor_da_prova"(pa."prova_id"))
+);
+
+CREATE POLICY "exportacao_resultado_select" ON "exportacao_resultado"
+FOR SELECT TO authenticated
+USING ("is_coordenador"() OR "is_professor_da_prova"("prova_id"));
+
+CREATE POLICY "exportacao_resultado_insert" ON "exportacao_resultado"
+FOR INSERT TO authenticated
+WITH CHECK ("is_coordenador"());
+
+CREATE POLICY "email_envio_select" ON "email_envio"
+FOR SELECT TO authenticated
+USING (
+    "is_coordenador"()
+    OR EXISTS (SELECT 1 FROM "prova_aluno" pa WHERE pa."id" = "email_envio"."prova_aluno_id" AND "is_professor_da_prova"(pa."prova_id"))
+);
+
+CREATE POLICY "email_envio_insert" ON "email_envio"
+FOR INSERT TO authenticated
+WITH CHECK (
+    "is_coordenador"()
+    OR EXISTS (SELECT 1 FROM "prova_aluno" pa WHERE pa."id" = "email_envio"."prova_aluno_id" AND "is_professor_da_prova"(pa."prova_id"))
+);
+
+CREATE POLICY "email_envio_update" ON "email_envio"
+FOR UPDATE TO authenticated
+USING ("is_coordenador"())
+WITH CHECK ("is_coordenador"());
+
+CREATE POLICY "avaliacao_log_select" ON "avaliacao_log"
+FOR SELECT TO authenticated
+USING (
+    "is_coordenador"()
+    OR ("prova_id" IS NOT NULL AND "is_professor_da_prova"("prova_id"))
+);
+
+CREATE POLICY "avaliacao_log_insert" ON "avaliacao_log"
+FOR INSERT TO authenticated
+WITH CHECK (TRUE);
+
 -- =========================================================
 -- Observacao sobre QR Code
 -- =========================================================
 -- O PostgreSQL/Supabase nao gera imagem de QR Code nativamente sem extensoes externas.
 -- Esta migration gera automaticamente o payload do QR Code em prova.qr_code a partir de prova.url_acesso.
 -- A imagem deve ser renderizada pelo backend ou frontend usando esse payload.
+
+
+-- =========================================================
+-- Mapeamento resumido UC -> suporte no banco
+-- =========================================================
+-- UC01: auth_user_id, funcoes auth_* e RLS por perfil.
+-- UC02: prova.status e indice prova_filtros_index.
+-- UC03: prova com campos obrigatorios titulo, modalidade, materia, turma e semestre; default rascunho.
+-- UC04: questao/enunciado/alternativa com LaTeX, tipos e limites para discursiva.
+-- UC05: banco de questoes por materia, tema e tipo.
+-- UC06: tempo_limite_min, data_inicio, data_fim e flags de embaralhamento.
+-- UC07: url_acesso unica e payload qr_code.
+-- UC08: aluno sem senha com CPF e aceite de termos; policies anon para entrada.
+-- UC09: resposta_aluno e resposta_anexo com JPG/PNG/PDF ate 5MB.
+-- UC10: resposta_aluno.rascunho e sincronizada_em para autosave.
+-- UC11: status prova_aluno enviada/corrigida e bloqueio de resposta fora de em_andamento.
+-- UC12: correcao por resposta/questao e feedback.
+-- UC13: funcao corrigir_objetivas_automaticamente.
+-- UC14: resultado_aluno, relatorio e exportacao_resultado.
+-- UC15: email_envio com status de envio.
+-- UC16: avaliacao_log para analytics.

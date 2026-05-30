@@ -1,5 +1,7 @@
 # 📋 Registros do Luiz
 
+# Sprint 2
+
 > Extraído do `registro.md` do projeto — apenas contribuições de Luiz Gustavo, organizadas por data.
 
 ---
@@ -91,7 +93,7 @@ Wireframe do coordenador finalizado e inserido no WAD do projeto. ✅
 
 ---
 
-## 📊 Resumo Geral
+## 📊 Resumo Geral da sprint 2
 
 | Data | Atividade |
 |------|-----------|
@@ -102,3 +104,40 @@ Wireframe do coordenador finalizado e inserido no WAD do projeto. ✅
 | 13/05 | 1 tela + muitos componentes criados |
 | 14/05 | 3 telas criadas — wireframe quase finalizado |
 | 15/05 | Wireframe finalizado e adicionado ao WAD ✅ |
+
+# Sprint 3
+
+## 📅 19/05/2026
+
+### Objetivo do Dia
+Organizar a divisão de artefatos e revisores e estudar o guia de estilos.
+
+### Alteração
+Realizei a organização e divisão dos artefatos entre os membros da equipe, definindo responsabilidades de desenvolvimento e revisão. Também iniciei o estudo do guia de estilos do projeto.
+
+### Links
+
+## 📅 25/05/2026
+
+### Objetivo do Dia
+Estudar guia de estilos e criar prévia.
+
+### Alteração
+Estudei guia de estilos de acordo com a adalove, estruturei toda a base do nosso guia de estilos e criei uma versão prévia dele utilizando o FigmaMake.
+
+### Links
+
+ [Link da prévia](https://sesame-lunar-20691913.figma.site/)
+
+## 📅 26/05/2026
+
+### Objetivo do Dia
+Finalizar o Guia de estilos para dar íncio ao protótipo de alta fidelidade.
+
+### Alteração
+Finalizei todo o style guide do projeto.
+
+### Links
+
+ [Link](https://sesame-lunar-20691913.figma.site/)
+
