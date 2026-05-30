@@ -4618,7 +4618,7 @@ As migrations DDL são os arquivos SQL responsáveis por criar a estrutura do ba
 A migration principal do projeto está localizada em:
 
 ```text
-g05\src\backend\migrations\migration.sql
+src\backend\src\database\migrations\migration.sql
 ```
 
 ### 3.6.4. Consultas SQL e lógica proposicional (sprint 2)
