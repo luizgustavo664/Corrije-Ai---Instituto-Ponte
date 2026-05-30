@@ -13,6 +13,12 @@ export const correcaoRespostaParamsSchema = z.object({
   respostaId: z.string().uuid("O respostaId deve ser um UUID válido.").describe("Identificador único da resposta a ser corrigida."),
 });
 
+/**
+ * Corpo para salvar uma correção manual.
+ * O limite superior da nota não é validado neste schema,
+ * pois depende da pontuacaoMax configurada na associação
+ * prova-questão.
+ */
 export const salvarCorrecaoBodySchema = z
   .object({
     nota: z.number().min(0, "A nota deve ser maior ou igual a zero.").describe("Nota atribuída à resposta."),
@@ -57,6 +63,11 @@ export const correcaoRespostaSchema = z.object({
     .describe("Dados da correção já realizada, se houver."),
 });
 
+/**
+ * DTO de resposta após salvar correção manual.
+ * tipo é sempre "manual", pois este schema é usado apenas
+ * para correções feitas pelo professor (não automáticas).
+ */
 export const correcaoSalvaSchema = z.object({
   id: z.string().uuid().describe("Identificador único da correção."),
   nota: z.number().describe("Nota atribuída."),
@@ -64,6 +75,12 @@ export const correcaoSalvaSchema = z.object({
   corrigidaEm: z.string().datetime().describe("Data e hora da correção."),
 });
 
+/**
+ * DTO de resultado da correção automática de questões objetivas.
+ * Apenas questões de múltipla escolha e verdadeiro/falso são
+ * corrigidas automaticamente; discursivas permanecem pendentes
+ * para correção manual do professor.
+ */
 export const correcaoAutomaticaSchema = z.object({
   provaId: z.string().uuid().describe("Identificador único da prova."),
   respostasCorrigidas: z.number().int().nonnegative().describe("Quantidade de respostas objetivas corrigidas automaticamente."),

@@ -1,20 +1,23 @@
 import { pool } from "../database/pool.js";
 import { toIsoString } from "../helpers/date.js";
-import type { AuthUser } from "../middlewares/auth.js";
+import type { AuthUser } from "../models/auth.model.js";
 import type { AddQuestaoProvaInput } from "../schemas/prova-questao.schema.js";
 
+/** Linha resumo da tabela `prova` para validação de existência. */
 type ProvaResumoRow = {
   id: string;
   materia_id: string;
   status: string;
 };
 
+/** Linha resumo da tabela `questao` para validação de existência. */
 type QuestaoResumoRow = {
   id: string;
   materia_id: string;
   tem_enunciado: boolean;
 };
 
+/** Linha bruta da tabela `prova_questao` com JOIN opcional com `questao` e `enunciado`. */
 type ProvaQuestaoRow = {
   prova_id: string;
   questao_id: string;
@@ -35,6 +38,10 @@ type ProvaQuestaoRow = {
   enunciado_url_imagem?: string | null;
 };
 
+/** Converte uma ProvaQuestaoRow (snake_case) para o modelo de associação (camelCase).
+ *  - pontuacao_max é convertida de string (NUMERIC) para Number.
+ *  - O objeto `questao` é montado apenas quando há dados de JOIN (questao_tipo presente).
+ *  - enunciado.conteudoLatex usa fallback para string vazia. */
 const mapProvaQuestao = (row: ProvaQuestaoRow) => ({
   provaId: row.prova_id,
   questaoId: row.questao_id,
@@ -63,6 +70,9 @@ const mapProvaQuestao = (row: ProvaQuestaoRow) => ({
     : undefined,
 });
 
+/** Fragmento SQL reutilizável que JOIN prova_questao com questao e enunciado.
+ *  Colunas da questão são prefixadas com "questao_" e do enunciado com "enunciado_"
+ *  para evitar colisão com campos da tabela prova_questao. */
 const selectProvaQuestaoSql = `
   SELECT
     pq."prova_id",
@@ -87,7 +97,19 @@ const selectProvaQuestaoSql = `
   JOIN "enunciado" e ON e."questao_id" = q."id"
 `;
 
+/**
+ * Repositório da associação entre provas e questões (tabela `prova_questao`).
+ *
+ * Define ordem e pontuação máxima de cada questão na prova.
+ * A consulta principal usa JOIN com questao e enunciado para evitar N+1.
+ */
 export class ProvaQuestaoRepository {
+  /**
+   * Busca dados resumidos da prova para validação de existência.
+   *
+   * @param provaId - ID da prova.
+   * @returns Dados resumidos da prova ou null.
+   */
   async findProva(provaId: string) {
     const result = await pool.query<ProvaResumoRow>(
       'SELECT "id", "materia_id", "status" FROM "prova" WHERE "id" = $1',
@@ -96,6 +118,13 @@ export class ProvaQuestaoRepository {
     return result.rows[0] ?? null;
   }
 
+  /**
+   * Verifica se o usuário tem acesso à prova para gerenciar questões.
+   *
+   * @param provaId - ID da prova.
+   * @param user - Usuário autenticado.
+   * @returns true se tiver acesso.
+   */
   async hasAccess(provaId: string, user: AuthUser) {
     if (user.perfil === "coordenador") return true;
 
@@ -120,6 +149,12 @@ export class ProvaQuestaoRepository {
     return result.rows[0]?.exists ?? false;
   }
 
+  /**
+   * Busca dados resumidos da questão para validação de existência e enunciado.
+   *
+   * @param questaoId - ID da questão.
+   * @returns Dados resumidos da questão ou null.
+   */
   async findQuestao(questaoId: string) {
     const result = await pool.query<QuestaoResumoRow>(
       `
@@ -134,6 +169,13 @@ export class ProvaQuestaoRepository {
     return result.rows[0] ?? null;
   }
 
+  /**
+   * Verifica se uma ordem já está em uso na prova (unicidade de ordem).
+   *
+   * @param provaId - ID da prova.
+   * @param ordemOriginal - Número de ordem a verificar.
+   * @returns true se a ordem já estiver ocupada.
+   */
   async hasOrdem(provaId: string, ordemOriginal: number) {
     const result = await pool.query(
       'SELECT EXISTS (SELECT 1 FROM "prova_questao" WHERE "prova_id" = $1 AND "ordem_original" = $2) AS "exists"',
@@ -142,6 +184,13 @@ export class ProvaQuestaoRepository {
     return result.rows[0]?.exists ?? false;
   }
 
+  /**
+   * Verifica se a questão já está vinculada à prova (evita duplicidade).
+   *
+   * @param provaId - ID da prova.
+   * @param questaoId - ID da questão.
+   * @returns true se a questão já estiver na prova.
+   */
   async hasQuestao(provaId: string, questaoId: string) {
     const result = await pool.query(
       'SELECT EXISTS (SELECT 1 FROM "prova_questao" WHERE "prova_id" = $1 AND "questao_id" = $2) AS "exists"',
@@ -150,6 +199,13 @@ export class ProvaQuestaoRepository {
     return result.rows[0]?.exists ?? false;
   }
 
+  /**
+   * Associa uma questão a uma prova com ordem e pontuação máxima.
+   *
+   * @param provaId - ID da prova.
+   * @param input - Dados da associação: questaoId, ordemOriginal, pontuacaoMax opcional.
+   * @returns A associação recém-criada com dados da questão via JOIN.
+   */
   async create(provaId: string, input: AddQuestaoProvaInput) {
     const result = await pool.query<ProvaQuestaoRow>(
       `
@@ -162,6 +218,12 @@ export class ProvaQuestaoRepository {
     return mapProvaQuestao(result.rows[0]);
   }
 
+  /**
+   * Lista todas as questões de uma prova ordenadas por ordem original.
+   *
+   * @param provaId - ID da prova.
+   * @returns Lista de associações com dados completos das questões.
+   */
   async findByProva(provaId: string) {
     const result = await pool.query<ProvaQuestaoRow>(
       `
@@ -174,6 +236,12 @@ export class ProvaQuestaoRepository {
     return result.rows.map(mapProvaQuestao);
   }
 
+  /**
+   * Remove a associação entre uma questão e uma prova.
+   *
+   * @param provaId - ID da prova.
+   * @param questaoId - ID da questão a ser removida.
+   */
   async delete(provaId: string, questaoId: string) {
     await pool.query('DELETE FROM "prova_questao" WHERE "prova_id" = $1 AND "questao_id" = $2', [
       provaId,

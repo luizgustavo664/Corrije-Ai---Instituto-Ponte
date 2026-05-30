@@ -4,6 +4,7 @@ import { withTransaction } from "../database/transaction.js";
 import { toIsoString } from "../helpers/date.js";
 import type { IniciarProvaInput } from "../schemas/aluno-portal.schema.js";
 
+/** Linha pública da tabela `prova` para exibição ao aluno. */
 type ProvaPublicaRow = {
   id: string;
   titulo: string;
@@ -14,11 +15,13 @@ type ProvaPublicaRow = {
   status: string;
 };
 
+/** Linha da tabela `prova_aluno` para controle de status. */
 type ProvaAlunoRow = {
   id: string;
   status: "nao_iniciada" | "em_andamento" | "enviada" | "corrigida";
 };
 
+/** Alternativa pública (sem campo correta) exibida ao aluno. */
 type AlternativaPublica = {
   id: string;
   ordem: number;
@@ -26,6 +29,7 @@ type AlternativaPublica = {
   urlImagem: string | null;
 };
 
+/** Linha de questão pública com enunciado e alternativas (sem campo correta). */
 type QuestaoPublicaRow = {
   id: string;
   ordem: number;
@@ -35,12 +39,16 @@ type QuestaoPublicaRow = {
   alternativas: AlternativaPublica[] | null;
 };
 
+/** Normaliza a URL de acesso extraindo URL original e slug (último segmento).
+ *  Permite acesso via URL completa ou código curto. */
 const normalizeUrlAcesso = (urlAcesso: string) => {
   const decoded = decodeURIComponent(urlAcesso.trim());
   const slug = decoded.split("/").filter(Boolean).at(-1) ?? decoded;
   return { original: decoded, slug };
 };
 
+/** Converte uma ProvaPublicaRow para o formato público da prova (camelCase).
+ *  Datas são convertidas com toIsoString(). */
 const mapProvaPublica = (row: ProvaPublicaRow) => ({
   id: row.id,
   titulo: row.titulo,
@@ -51,6 +59,8 @@ const mapProvaPublica = (row: ProvaPublicaRow) => ({
   status: row.status,
 });
 
+/** Converte uma QuestaoPublicaRow para o formato público da questão (camelCase).
+ *  Alternativas são exibidas sem o campo correta. */
 const mapQuestaoPublica = (row: QuestaoPublicaRow) => ({
   id: row.id,
   ordem: row.ordem,
@@ -62,7 +72,20 @@ const mapQuestaoPublica = (row: QuestaoPublicaRow) => ({
   alternativas: row.alternativas ?? [],
 });
 
+/**
+ * Repositório de acesso público do aluno ao portal de provas.
+ *
+ * Localiza prova por URL (normalizando slug), faz upsert do aluno
+ * por email, retoma sessão anterior ou bloqueia se já enviada.
+ * Registra log de auditoria ao iniciar nova prova.
+ */
 export class AlunoPortalRepository {
+  /**
+   * Busca prova pública por URL de acesso normalizada.
+   *
+   * @param urlAcesso - URL ou slug de acesso à prova.
+   * @returns Dados públicos da prova ou null.
+   */
   async findPublicByUrl(urlAcesso: string) {
     const normalized = normalizeUrlAcesso(urlAcesso);
     const result = await pool.query<ProvaPublicaRow>(
@@ -79,6 +102,13 @@ export class AlunoPortalRepository {
     return result.rows[0] ? mapProvaPublica(result.rows[0]) : null;
   }
 
+  /**
+   * Busca questões públicas de uma prova (sem campo correta nas alternativas).
+   *
+   * @param provaId - ID da prova.
+   * @param client - Conexão opcional (para uso dentro de transação).
+   * @returns Lista de questões públicas.
+   */
   async findQuestoesPublicas(provaId: string, client: PoolClient | typeof pool = pool) {
     const result = await client.query<QuestaoPublicaRow>(
       `
@@ -114,6 +144,14 @@ export class AlunoPortalRepository {
     return result.rows.map(mapQuestaoPublica);
   }
 
+  /**
+   * Inicia uma prova para o aluno: faz upsert do aluno, cria prova_aluno
+   * e registra log de auditoria. Retoma sessão anterior se existir.
+   *
+   * @param provaId - ID da prova.
+   * @param input - Dados do aluno: nome, email, cpf.
+   * @returns Dados da prova-aluno e flag finalizada.
+   */
   async iniciarProva(provaId: string, input: IniciarProvaInput) {
     return withTransaction(async (client) => {
       const alunoId = await this.upsertAluno(client, input);
@@ -162,9 +200,9 @@ export class AlunoPortalRepository {
       `
         INSERT INTO "aluno" ("nome", "email", "cpf", "aceitou_termos_em")
         VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
-        ON CONFLICT ("cpf") DO UPDATE
+        ON CONFLICT ("email") DO UPDATE
         SET "nome" = EXCLUDED."nome",
-            "email" = EXCLUDED."email",
+            "cpf" = COALESCE(EXCLUDED."cpf", "aluno"."cpf"),
             "aceitou_termos_em" = CURRENT_TIMESTAMP
         RETURNING "id"
       `,

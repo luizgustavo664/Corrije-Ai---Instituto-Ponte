@@ -1,5 +1,5 @@
 import { forbidden } from "../errors/api-error.js";
-import type { AuthUser } from "../middlewares/auth.js";
+import type { AuthUser } from "../models/auth.model.js";
 import { ResultadoRepository } from "../repositories/resultado.repository.js";
 import type { ExportarResultadoInput } from "../schemas/resultado.schema.js";
 import { StorageService } from "./storage.service.js";
@@ -47,12 +47,39 @@ const gerarXlsxResultados = (resultados: ResultadoConsolidado[]) => {
   return XLSX.write(workbook, { type: "buffer", bookType: "xlsx" }) as Buffer;
 };
 
+/**
+ * Resultados consolidados por prova e exportação para CSV/XLSX.
+ *
+ * ## Consolidação
+ * A query principal usa CTEs para agregar notas por aluno, calcular
+ * percentuais e fazer upsert em `resultado_aluno`. O resultado inclui:
+ * - Dados do aluno (nome, email)
+ * - Nota total, percentual
+ * - Status de liberação
+ * - Pendências de correção
+ * - Nota individual por questão
+ *
+ * ## Exportação
+ * - CSV: cada linha é um aluno, colunas dinâmicas por questão.
+ * - XLSX: mesma estrutura, gerado com a biblioteca `xlsx`.
+ * - O arquivo é enviado ao Supabase Storage e o registro salvo
+ *   em `exportacao_resultado`.
+ * - **Apenas coordenadores** podem exportar.
+ */
 export class ResultadoService {
   constructor(
     private readonly resultadoRepository = new ResultadoRepository(),
     private readonly storageService = new StorageService(),
   ) {}
 
+  /**
+   * Retorna os resultados consolidados de todos os alunos de uma prova.
+   *
+   * @param provaId - ID da prova.
+   * @param user - Usuário autenticado (deve ter permissão de acesso).
+   * @returns Lista de resultados consolidados com dados do aluno, nota total, percentual, status e notas por questão.
+   * @throws forbidden - Se o usuário não tiver permissão para acessar os resultados.
+   */
   async consolidarPorProva(provaId: string, user: AuthUser) {
     const hasAccess = await this.resultadoRepository.hasAccessToProva(provaId, user);
     if (!hasAccess) {
@@ -62,6 +89,15 @@ export class ResultadoService {
     return this.resultadoRepository.findByProva(provaId);
   }
 
+  /**
+   * Gera arquivo CSV ou XLSX com os resultados e faz upload ao storage.
+   *
+   * @param provaId - ID da prova.
+   * @param input.formato - Formato do arquivo: "csv" ou "xlsx".
+   * @param user - Usuário autenticado (apenas coordenadores podem exportar).
+   * @returns Registro da exportação com URL do arquivo gerado e data de criação.
+   * @throws forbidden - Se o usuário não for coordenador.
+   */
   async exportarPorProva(provaId: string, input: ExportarResultadoInput, user: AuthUser) {
     if (user.perfil !== "coordenador") {
       throw forbidden("Somente coordenadores podem exportar resultados.");
