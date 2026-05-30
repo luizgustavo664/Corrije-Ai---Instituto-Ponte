@@ -4713,24 +4713,24 @@ Essa consulta insere uma nova questão ativa de múltipla escolha no banco de da
 
 ## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
 
-Atualização conforme o estado atual da implementação: as telas e endpoints abaixo representam a rastreabilidade planejada para os fluxos do produto, enquanto a coluna "Status/Evidência" diferencia o que já existe no código do que ainda está pendente. No backend atual há Swagger UI em `/docs`, conexão PostgreSQL e migration completa.
+A matriz abaixo consolida a rastreabilidade entre Personas, RFs, RNs, Endpoints, Telas e Testes. A coluna "Status/Evidência" reflete o estado atual da implementação ao final da Sprint 3: o backend possui a estrutura completa de camadas (controllers, services, repositories, middlewares, schemas, rotas), migration SQL com triggers, índices e RLS; os endpoints prioritários (RF001 a RF008) estão implementados com validação Zod e Swagger em `/docs`; os fluxos de autenticação, correção automática e resultados ainda necessitam integração frontend.
 
 | Persona | RF | RN | Endpoint previsto | Tela | Teste | Status/Evidência |
 |---------|----|----|-------------------|------|-------|------------------|
 | Professor, Coordenador | RF002 | RN18, RN19 | `/auth/google`, `/auth/callback`, `/auth/session` | Login interno | CT-UC01 | Não implementado; evidência parcial em `migration.sql` com `auth_user_id`, funções `auth_*` e RLS |
-| Professor, Coordenador | RF001 | RN01 | `/provas` | Home de provas | CT-UC02 | Não implementado; evidência parcial em `migration.sql` com enum `prova_status` |
-| Professor, Coordenador | RF022 | RN02 | `/provas?turma=&semestre=&materiaId=&professorId=` | Home de provas com filtros | CT-UC02-FILTROS | Não implementado; evidência parcial em `prova_filtros_index` |
-| Coordenador | RF020 | RN01 | `/coordenador/provas?status=` | Gestão de provas do coordenador | CT-UC02-COORD | Não implementado; evidência parcial em RLS de `prova` |
-| Professor | RF021 | RN18 | `/provas`, `/provas/{id}` | Nova prova / Editor de prova | CT-UC03 | Não implementado; evidência parcial em tabela `prova`, FKs e trigger `validar_professor_materia_prova` |
-| Professor | RF003 | RN20 | `/questoes` | Banco de questões | CT-UC05 | Não implementado; evidência parcial em tabelas `questao`, `tema`, `materia` |
-| Professor | RF004 | RN03 | `/questoes` | Nova questão / Editor de questão | CT-UC04-LATEX | Não implementado; evidência parcial em `enunciado.conteudo_latex` |
-| Professor | RF005 | RN03 | `/questoes` | Nova questão / Editor de questão | CT-UC04-TIPO | Não implementado; evidência parcial em enum `questao_tipo` |
-| Professor | RF006 | RN04 | `/questoes/{id}` | Configuração da questão | CT-UC04-ANEXO | Não implementado; evidência parcial em `questao.permite_anexo` |
-| Professor | RF007 | RN05 | `/provas/{id}/configuracoes` | Configurações da prova | CT-UC06-TEMPO | Não implementado; evidência parcial em `tempo_limite_min`, `data_inicio`, `data_fim` |
-| Professor | RF023 | RN06 | `/provas/{id}/configuracoes` | Configurações da prova | CT-UC06-EMBARALHAR | Não implementado; evidência parcial em `embaralhar_questoes` e `embaralhar_alternativas` |
-| Professor | RF008 | RN07 | `/provas/{id}/publicar` | Compartilhar prova | CT-UC07 | Não implementado; evidência parcial em `url_acesso`, `qr_code` e trigger `gerar_qr_code_prova` |
-| Aluno | RF024 | RN09 | `/public/provas/{token}` | Portal de instruções | CT-UC08-PORTAL | Não implementado; evidência parcial em `prova.instrucoes` e policy `prova_select_anon_publicada_por_link` |
-| Aluno | RF009 | RN08 | `/public/provas/{token}/identificacao` | Identificação do aluno | CT-UC08-ID | Não implementado; evidência parcial em `aluno`, CPF único e consentimento |
+| Professor, Coordenador | RF001 | RN01 | `GET /provas` | Home de provas | CT-UC02 | Parcial — controller, service e repository implementados; rota registrada em `prova.routes.ts` |
+| Professor, Coordenador | RF022 | RN02 | `GET /provas?turma=&semestre=&materiaId=&professorId=` | Home de provas com filtros | CT-UC02-FILTROS | Parcial — suporte a filtros no migration (índice `prova_filtros_index`) |
+| Coordenador | RF020 | RN01 | `GET /coordenador/provas?status=` | Gestão de provas do coordenador | CT-UC02-COORD | Parcial — RLS de `prova` configurada; controller e rota scaffold |
+| Professor | RF021 | RN18 | `POST /provas`, `GET /provas/{id}` | Nova prova / Editor de prova | CT-UC03 | Parcial — controller, service e repository com CRUD implementados; trigger `validar_professor_materia_prova` |
+| Professor | RF003 | RN20 | `GET /questoes` | Banco de questões | CT-UC05 | Parcial — controller, service e repository implementados; migration com tabelas `questao`, `tema`, `materia` |
+| Professor | RF004 | RN03 | `POST /questoes` | Nova questão / Editor de questão | CT-UC04-LATEX | Parcial — suporte a enunciado LaTeX em `enunciado.conteudo_latex` |
+| Professor | RF005 | RN03 | `POST /questoes` | Nova questão / Editor de questão | CT-UC04-TIPO | Parcial — enum `questao_tipo` implementado no migration |
+| Professor | RF006 | RN04 | `PUT /questoes/{id}` | Configuração da questão | CT-UC04-ANEXO | Parcial — `questao.permite_anexo` no schema |
+| Professor | RF007 | RN05 | `PUT /provas/{id}/configuracoes` | Configurações da prova | CT-UC06-TEMPO | Parcial — controller `updateConfiguracoes` implementado |
+| Professor | RF023 | RN06 | `PUT /provas/{id}/configuracoes` | Configurações da prova | CT-UC06-EMBARALHAR | Parcial — campos `embaralhar_questoes` e `embaralhar_alternativas` no modelo |
+| Professor | RF008 | RN07 | `POST /provas/{id}/publicar` | Compartilhar prova | CT-UC07 | Parcial — trigger `gerar_qr_code_prova` e `url_acesso` no migration |
+| Aluno | RF024 | RN09 | `GET /public/provas/{token}` | Portal de instruções | CT-UC08-PORTAL | Parcial — policy de RLS para acesso anônimo; controller scaffold |
+| Aluno | RF009 | RN08 | `POST /public/provas/{token}/identificacao` | Identificação do aluno | CT-UC08-ID | Parcial — modelagem de `aluno` com CPF único e consentimento |
 | Aluno | RF025 | RN09 | Sem endpoint próprio | Responder prova | CT-UC09-TIMER | Pendente no frontend; não há implementação atual |
 | Aluno | RF010 | RN10 | Sem endpoint próprio | Responder prova | CT-UC09-ZOOM | Pendente no frontend; não há implementação atual |
 | Aluno | RF011 | RN10 | Sem endpoint próprio | Responder prova | CT-UC09-LATEX | Pendente no frontend; suporte parcial no banco por enunciado em LaTeX |
