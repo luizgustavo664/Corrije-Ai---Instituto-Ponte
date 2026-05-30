@@ -4115,25 +4115,286 @@ O coordenador precisa acessar relatórios de diferentes granularidades (RF019, U
 
 ## 3.4. Guia de estilos (sprint 3)
 
-*Descreva aqui orientações gerais para o leitor sobre como utilizar os componentes do guia de estilos de sua solução*
+O Style Guide da plataforma **Corrije Aí** foi desenvolvido para garantir consistência visual, acessibilidade e uma experiência intuitiva para todos os usuários (alunos, professores e coordenadores). O sistema de design segue princípios de design SaaS educacional com foco em simplicidade, confiança e organização.
+
+### Princípios de Design
+
+- **Visual minimalista:** uso generoso de espaço em branco para evitar sobrecarga cognitiva.
+- **Hierarquia clara:** tipografia responsiva em 7 níveis distintos.
+- **Bordas arredondadas:** radius entre 8px e 16px para suavidade visual.
+- **Acessibilidade:** contraste mínimo AA (WCAG 2.1) em todas as combinações de cores.
+- **Componentes modulares:** botões, inputs e cards reutilizáveis com estados bem definidos.
+- **Grid responsivo:** sistema adaptativo de 4, 8 ou 12 colunas conforme breakpoint.
+- **Espaçamento consistente:** escala baseada em múltiplos de 4px (4, 8, 16, 24, 32, 48, 64).
+
+### Breakpoints Responsivos
+
+| Dispositivo | Largura | Grid |
+|---|---:|---:|
+| Mobile | < 768px | 4 colunas |
+| Tablet | 768px – 1023px | 8 colunas |
+| Desktop | ≥ 1024px | 12 colunas |
 
 ### 3.4.1 Cores
 
-*Apresente aqui a paleta de cores, com seus códigos de aplicação e suas respectivas funções*
+A paleta de cores da Corrije Aí transmite confiança (azul escuro), energia positiva (amarelo), clareza (ciano) e simplicidade (tons neutros). Todas as combinações foram testadas para conformidade **WCAG AA**.
+
+#### Cores Principais
+
+| Nome | Função | Código HEX | Uso Principal | Contraste de Texto |
+|---|---|---|---|---|
+| Amarelo | Primária | `#FFDE59` | CTAs principais, destaques, badges | Texto escuro (`#05245F`) |
+| Ciano | Secundária | `#009799` | Links, elementos interativos, acentos | Texto branco (`#FFFFFF`) |
+| Azul Escuro | Estrutural | `#05245F` | Cabeçalhos, textos principais, bordas | Texto branco (`#FFFFFF`) |
+| Branco Suave | Background | `#F2F2F2` | Fundos de página, áreas de conteúdo | Texto escuro (`#000000`) |
+| Preto | Texto | `#000000` | Texto principal, ícones | Texto branco (`#FFFFFF`) |
+
+#### Cores de Feedback
+
+| Estado | Código HEX | Aplicação |
+|---|---|---|
+| Sucesso | `#22C55E` | Confirmações, aprovações, resultados positivos |
+| Erro | `#EF4444` | Validações falhadas, avisos críticos, exclusões |
+| Aviso | `#F59E0B` | Alertas moderados, campos obrigatórios |
+| Informação | `#3B82F6` | Tooltips, mensagens neutras, ajuda contextual |
+
+#### Exemplos de Uso
+
+```css
+/* Botão primário */
+background: #FFDE59;
+color: #05245F;
+
+/* Input com foco */
+border: 1.5px solid #009799;
+background: #F2F2F2;
+
+/* Input com erro */
+border: 1.5px solid #EF4444;
+background: #FEF2F2;
+```
 
 ### 3.4.2 Tipografia
 
-*Apresente aqui a tipografia da solução, com famílias de fontes e suas respectivas funções*
+A tipografia utiliza três famílias de fontes com funções específicas para garantir legibilidade e hierarquia visual em todos os dispositivos.
+
+#### Famílias de Fonte
+
+| Família | Pesos Usados | Função | Aplicação |
+|---|---|---|---|
+| Poppins | 300 (Light), 500 (Medium) | Títulos e subtítulos | H1, H2, H3, labels de botões |
+| Inter | 400 (Regular) | Corpo de texto | Parágrafos, inputs, descrições |
+| JetBrains Mono | 400 (Regular) | Código e dados técnicos | Badges, códigos hexadecimais, endpoints |
+
+#### Escala Tipográfica (Desktop)
+
+| Nível | Tag | Tamanho | Peso | Família | Uso |
+|---:|---|---:|---:|---|---|
+| 1 | H1 | 48px | 500 | Poppins | Títulos de página principal |
+| 2 | H2 | 32px | 500 | Poppins | Seções principais |
+| 3 | H3 | 24px | 500 | Poppins | Subsecções e cards |
+| 4 | Subtítulo | 20px | 300 | Poppins | Descrições de seção |
+| 5 | Padrão | 16px | 400 | Inter | Corpo de texto |
+| 6 | Secundário | 14px | 400 | Inter | Metadados, timestamps |
+| 7 | Pequeno | 12px | 400 | Inter | Labels, ajuda |
+
+#### Tipografia Responsiva
+
+| Elemento | Mobile (< 768px) | Tablet (768–1023px) | Desktop (≥ 1024px) |
+|---|---:|---:|---:|
+| H1 | 32px | 40px | 48px |
+| H2 | 24px | 28px | 32px |
+| H3 | 20px | 22px | 24px |
+| Subtítulo | 18px | 18px | 20px |
+| Texto padrão | 16px | 16px | 16px |
+| Texto secundário | 14px | 14px | 14px |
+| Texto pequeno | 12px | 12px | 12px |
+
+**Nota:** Títulos (H1–H3) aumentam progressivamente para aproveitar espaço em telas maiores, enquanto textos de corpo permanecem consistentes para manter legibilidade.
+
+#### Line-height (altura de linha)
+
+- **Títulos (Poppins):** 1.1 – 1.2 (compacto para impacto visual).
+- **Corpo de texto (Inter):** 1.6 – 1.7 (confortável para leitura prolongada).
+- **Código (JetBrains Mono):** 1.4 (otimizado para dados técnicos).
 
 ### 3.4.3 Iconografia e imagens 
 
-*(esta subseção é opcional, caso não existam ícones e imagens, apague esta subseção)*
+#### Sistema de Ícones
 
-*posicione aqui imagens e textos contendo exemplos padronizados de ícones e imagens, com seus respectivos atributos de aplicação, utilizadas na solução*
+A plataforma utiliza ícones lineares da biblioteca **Lucide React** (variante moderna do Heroicons), com estilo minimalista e *stroke* consistente.
+
+**Especificações técnicas:**
+
+- **Stroke width:** 1.5px
+- **Tamanhos padrão:** 14px (inline), 16px (texto), 20px (botões), 24px (cards)
+- **Cor primária:** `#05245F` (azul escuro)
+- **Cor secundária:** `#6B7280` (cinza neutro para metadados)
+
+**Ícones utilizados:**
+
+| Ícone | Componente Lucide | Contexto de Uso |
+|---|---|---|
+| 📄 | `FileText` | Provas, documentos, arquivos |
+| 👥 | `Users` | Submissões, alunos, turmas |
+
+#### Diretrizes de Uso
+
+- **Alinhamento:** ícones devem estar verticalmente centralizados com o texto adjacente.
+- **Espaçamento:** margem de 6–8px entre ícone e texto.
+- **Estados interativos:** reduzir opacidade para 70% em estado *disabled*.
+- **Containers de ícones:** background `#F2F2F2`, dimensões 44×44px, border-radius 12px.
+
+#### Imagens e Assets
+
+**Logotipo:**
+
+- **Formato:** PNG com fundo transparente.
+- **Dimensões máximas:** 340px (largura) × 100px (altura).
+- **Container:** fundo branco (`#FFFFFF`), padding 32px, border-radius 16px.
+- **Sombra:** `0 4px 16px rgba(0,0,0,0.1)`.
+
+<div align="center">
+  <strong>Figura 32 — Style guide.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=418-10782&t=6EwlpwAERlPfGWIS-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/style_Guide.png" width="850">
+</div>
+
+**Componente `ImageWithFallback`:** todas as imagens devem usar o componente `ImageWithFallback` para garantir tratamento de erros e carregamento progressivo:
+
+```tsx
+import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
+
+<ImageWithFallback
+  src={imageSrc}
+  alt="Descrição acessível"
+  className="w-full object-contain"
+/>
+```
+
+**Diretrizes para imagens:**
+
+- **Aspect ratio:** preservar proporção original.
+- **object-fit:** `contain` para logos/ícones; `cover` para backgrounds.
+- **Lazy loading:** nativo via `loading=\"lazy\"` quando apropriado.
+- **Alt text:** sempre descritivo e contextual para acessibilidade.
+
+#### Recursos Adicionais
+
+- Fonte Poppins: Google Fonts
+- Fonte Inter: Google Fonts
+- Fonte JetBrains Mono: Google Fonts
+- Ícones Lucide: https://lucide.dev
 
 ## 3.5 Protótipo de alta fidelidade (sprint 3)
 
-*posicione aqui algumas imagens demonstrativas de seu protótipo de alta fidelidade e o link para acesso ao protótipo completo (mantenha o link sempre público para visualização)*
+As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrije Aí. O protótipo completo pode ser visualizado no link público do Figma:
+
+<div align="center">
+  <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+    telas do protótipo
+  </a>
+  •
+  <a href="https://spool-cobalt-21834134.figma.site">
+    fluxo (coordenador/professor)
+  </a>
+  •
+  <a href="https://gravy-craft-64395734.figma.site">
+    fluxo (aluno)
+  </a>.
+</div>
+
+<div align="center">
+  <strong>Figura 33 — Tela de login do professor.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://spool-cobalt-21834134.figma.site">
+      fluxo (coordenador/professor)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela_de_login_do_professor.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 34 — Tela de home do professor.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://spool-cobalt-21834134.figma.site">
+      fluxo (coordenador/professor)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela_de_Home_do_coordenador.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 35 — Tela de nova prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://spool-cobalt-21834134.figma.site">
+      fluxo (coordenador/professor)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela_de_nova_prova.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 36 — Tela de instrução de prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://gravy-craft-64395734.figma.site">
+      fluxo (aluno)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela_de_instrução.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 37 — Tela de início de prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://gravy-craft-64395734.figma.site">
+      fluxo (aluno)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela _Início_de_Prova.png" width="850">
+</div>
 
 ## 3.6. Modelagem do banco de dados (sprints 2 e 4)
 
