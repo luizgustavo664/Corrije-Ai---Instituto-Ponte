@@ -132,9 +132,9 @@ Dividi as tasks do artefato 7 entre o guia de estilos e o protótipo de alta fid
 
 ## 📅 21/05/2026
 
-### Objetivo do Dia
+### Objetivo do Dia Avaliar e delegar tarefas de correção em relação a artefatos da sprint passada 
 
-### Alteração
+### Alteração Realizei uma avaliação detalhada dos artefatos produzidos na sprint passada, identificando áreas que necessitam de correção ou melhoria. Com base nessa avaliação, deleguei as tarefas de correção aos membros da equipe responsáveis, garantindo que todos estejam alinhados com os padrões de qualidade estabelecidos para o projeto.
 
 ### Links
 
