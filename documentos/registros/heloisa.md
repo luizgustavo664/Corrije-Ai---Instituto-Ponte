@@ -217,3 +217,22 @@ Heloísa: Fazer o relatório de desenvolvimento, seçã0 4.1 do WAD
 #### Heloísa: 
 
 - Alteração: Foi criado o relatório de desenvolvimento da seção 4.1 do WAD, registrando as principais mudanças e pontos chave da sprint.
+
+# Sprint 4
+
+### Banco De Dados artefato 10
+
+### Data: 01/06/2026
+
+### Objetivo do Dia
+
+Heloísa: atualização dos requisitos funcionais na seção 3.1.3 e da tabela RF->RN->endpoint seção 3.1.4 do WAD
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa: 
+
+- Alteração: Atualização dos requisitos funcionais, agora sendo considerados todas as etapas do projeto e o desenvolvimento mais aprofundado do projeto.
+E atualização da matriz RF->RN->endpoint, atualizando os endpoint para condizer com o resto do projeto.
