@@ -1551,17 +1551,17 @@ A matriz abaixo foi atualizada a partir das rotas registradas no backend Fastify
 
 | RF | RN associadas | Endpoint(s) implementado(s) | Método(s) | Situação atual |
 |----|---------------|-----------------------------|-----------|----------------|
-| RF001 | RN01 | `/api/v1/provas`, `/api/v1/provas/{provaId}`, `/api/v1/provas/{provaId}/status-historico`, `/api/v1/provas/{provaId}/encerrar`, `/api/v1/provas/{provaId}/arquivar` | GET, PUT, DELETE, POST | Implementado no backend; evidências em `prova.routes.ts`, `prova.controller.ts`, `prova.service.ts` e `prova.repository.ts`. |
+| RF001 | RN01 | `/api/v1/provas`, `/api/v1/provas/{provaId}`, `/api/v1/provas/{provaId}/status-historico`, `/api/v1/provas/{provaId}/configuracoes`, `/api/v1/provas/{provaId}/publicar`, `/api/v1/provas/{provaId}/encerrar`, `/api/v1/provas/{provaId}/arquivar` | GET, PUT, DELETE, POST, PATCH | Implementado no backend; evidências em `prova.routes.ts`, `prova.controller.ts`, `prova.service.ts` e `prova.repository.ts`. |
 | RF002 | RN18, RN19 | `/api/v1/auth/google`, `/api/v1/auth/google/callback`, `/api/v1/auth/me`, `/api/v1/auth/logout` | GET, POST | Implementado no backend com OAuth Google/JWT e verificação de usuário interno cadastrado. |
-| RF003 | RN20 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/provas/{provaId}/questoes` | GET, POST, PUT, DELETE | Implementado no backend; banco de questões pesquisável por matéria, tema, tipo, status e busca textual. |
+| RF003 | RN20 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/provas/{provaId}/questoes`, `/api/v1/provas/{provaId}/questoes/{questaoId}` | GET, POST, PUT, DELETE | Implementado no backend; banco de questões pesquisável por matéria, tema, tipo, status e busca textual. |
 | RF004 | RN03 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}` | POST, PUT | Implementado no backend com enunciado em `conteudoLatex` validado por Zod e persistido em `enunciado.conteudo_latex`. |
 | RF005 | RN03 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}` | POST, PUT | Implementado no backend com tipos `multipla_escolha`, `verdadeiro_falso` e `discursiva`. |
-| RF006 | RN04 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/public/respostas/{respostaId}/anexos` | POST, PUT | Implementado parcialmente: backend controla `permiteAnexo` e upload; galeria visual é responsabilidade do frontend. |
+| RF006 | RN04 | `/api/v1/provas/{provaId}/questoes`, `/api/v1/public/respostas/{respostaId}/anexos` | GET, POST, DELETE | Implementado parcialmente: backend controla `permiteAnexo`, upload e vínculo da questão; galeria visual é responsabilidade do frontend. |
 | RF007 | RN05 | `/api/v1/provas/{provaId}/configuracoes`, `/api/v1/public/provas/{urlAcesso}`, `/api/v1/provas/{provaId}/encerrar` | PATCH, GET, POST | Implementado no backend; regras de período e encerramento ficam em service/repository. |
 | RF008 | RN07 | `/api/v1/provas/{provaId}/publicar` | POST | Implementado no backend; publicação gera URL única de acesso e payload de QR Code. |
 | RF009 | RN08 | `/api/v1/public/provas/{urlAcesso}/iniciar` | POST | Implementado no backend; aluno se identifica por nome, e-mail, CPF e aceite de termos. |
 | RF010 | RN10 | Sem endpoint próprio | N/A | Pendente no frontend; backend entrega os dados de questão/anexo necessários para visualização. |
-| RF011 | RN10 | `/api/v1/public/provas/{urlAcesso}/iniciar`, `/api/v1/questoes` | GET, POST | Implementado parcialmente no backend por armazenamento/retorno de LaTeX; renderização visual é frontend. |
+| RF011 | RN10 | `/api/v1/public/provas/{urlAcesso}`, `/api/v1/public/provas/{urlAcesso}/iniciar`, `/api/v1/public/provas-aluno/{provaAlunoId}/respostas/{questaoId}` | GET, POST, PUT | Implementado parcialmente no backend por armazenamento/retorno de LaTeX; renderização visual e zoom são responsabilidades do frontend. |
 | RF012 | RN04 | `/api/v1/public/respostas/{respostaId}/anexos` | POST | Implementado no backend com multipart, validação de tipo e limite de tamanho. |
 | RF013 | RN11 | Sem endpoint próprio | N/A | Pendente no frontend; backend recebe anexos, mas compressão client-side não é função da WebAPI. |
 | RF014 | RN13 | `/api/v1/provas/{provaId}/correcao/questoes`, `/api/v1/provas/{provaId}/questoes/{questaoId}/respostas` | GET | Implementado no backend para correção por item. |
