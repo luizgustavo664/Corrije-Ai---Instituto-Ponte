@@ -4712,11 +4712,22 @@ Integrar o frontend as rotas ja documentadas e produzir evidencias navegaveis: l
 
 ## 6.2 Análise de Mercado
 
-*a) Visão Geral do Setor (até 250 palavras)*
-*Contextualize o setor no qual a aplicação está inserida, considerando aspectos econômicos, tecnológicos e regulatórios. Utilize fontes confiáveis.*
+a)
+A aplicação está inserida no setor de tecnologia educacional aplicada ao terceiro setor, com foco em avaliação remota, inclusão digital e gestão pedagógica. Economicamente, organizações sociais de educação, como o Instituto Ponte, atuam em um contexto de alta demanda por oportunidades educacionais e dependência de doações, parcerias e comprovação de impacto. Por isso, soluções digitais que aumentam eficiência, transparência e geração de indicadores tornam-se estratégicas para fortalecer a confiança de financiadores e apoiar a expansão institucional.
+No aspecto tecnológico, o setor educacional brasileiro vem ampliando o uso de recursos digitais, mas ainda enfrenta desigualdades de acesso, infraestrutura e letramento tecnológico. A pesquisa TIC Educação 2023 indica avanço da conectividade nas escolas, mas também evidencia que a adoção de tecnologias exige ferramentas simples, acessíveis e adequadas a diferentes realidades de uso. Nesse cenário, uma plataforma responsiva para provas remotas, envio de anexos, correção por questão e relatórios automatizados atende diretamente à necessidade de organizar processos avaliativos em ambientes híbridos.
+Do ponto de vista regulatório, a aplicação deve observar a Lei Geral de Proteção de Dados (LGPD), especialmente por tratar dados educacionais de adolescentes, exigindo segurança, finalidade clara e tratamento no melhor interesse do estudante. Além disso, por dialogar com uma OSCIP, o projeto se conecta a um setor regulado por normas de transparência, prestação de contas e finalidade pública.
 
-*b) Tamanho e Crescimento do Mercado (até 250 palavras)*
-*Apresente dados quantitativos sobre o tamanho atual e projeções de crescimento do mercado. Utilize fontes confiáveis.*
+Fontes: Estão na seção (referências)
+
+
+
+*b) O mercado no qual a aplicação do Instituto Ponte se insere combina EdTech, avaliação digital e gestão educacional para organizações de impacto social. Em escala global, o segmento de softwares educacionais foi estimado em US$ 30,1 bilhões em 2023 e deve alcançar US$ 75,9 bilhões até 2030, com crescimento médio anual de 14,1% entre 2024 e 2030. Dentro desse setor, o mercado de avaliações educacionais K-12 também apresenta expansão relevante: foi avaliado em US$ 13,85 bilhões em 2024 e tem projeção de chegar a US$ 32,04 bilhões em 2033, com CAGR de 9,9%.
+
+Na América Latina, o setor de EdTechs demonstra maturação e escala regional. Segundo o Report EdTech 2025, do Distrito, existem 1.326 startups educacionais ativas na região; entre 2014 e o início de 2025, o setor captou US$ 912,4 milhões em 553 rodadas, sendo o Brasil responsável por US$ 656,4 milhões em 320 rodadas. Esses dados indicam que o país é um dos pólos mais relevantes para soluções educacionais digitais.
+
+Para o Instituto Ponte, esse crescimento reforça a oportunidade de adotar uma plataforma própria de avaliações remotas, capaz de reduzir perdas operacionais, padronizar correções, gerar indicadores e escalar o acompanhamento pedagógico de estudantes em diferentes estados.
+
+Fontes: Estão na seção (referências)
 
 *c) Tendências de Mercado (até 300 palavras)*
 *Identifique e analise tendências relevantes (tecnológicas, comportamentais e mercadológicas) que influenciam o setor. Utilize fontes confiáveis.*
@@ -4810,6 +4821,22 @@ TRANSPARÊNCIA BRASIL. **Organizações da Sociedade Civil: dados e transparênc
 UNICEF – United Nations Children's Fund. **Relatório Situação da Infância e Adolescência Brasileira 2022**. Brasília: UNICEF, 2022. Disponível em: https://www.unicef.org/brazil/relatorios. Acesso em: 1 mai. 2025.
 
 W3C – World Wide Web Consortium. **Web Content Accessibility Guidelines (WCAG) 2.1**. W3C Recommendation, 5 June 2018. Disponível em: https://www.w3.org/TR/WCAG21. Acesso em: 1 mai. 2025.
+
+COMITÊ GESTOR DA INTERNET NO BRASIL. [Pesquisa sobre o uso das tecnologias de informação e comunicação nas escolas brasileiras: TIC Educação 2023](https://cgi.br/publicacao/pesquisa-sobre-o-uso-das-tecnologias-de-informacao-e-comunicacao-nas-escolas-brasileiras-tic-educacao-2023/). São Paulo: CGI.br, 2024. Acesso em: 1 jun. 2026.
+
+TODOS PELA EDUCAÇÃO. [Anuário Brasileiro da Educação Básica 2024](https://anuario.todospelaeducacao.org.br/2024/index.html). São Paulo: Todos Pela Educação, 2024. Acesso em: 1 jun. 2026.
+
+BRASIL. [Lei nº 13.709, de 14 de agosto de 2018: Lei Geral de Proteção de Dados Pessoais (LGPD)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Brasília, DF: Presidência da República, 2018. Acesso em: 1 jun. 2026.
+
+BRASIL. [Lei nº 9.790, de 23 de março de 1999](https://www.planalto.gov.br/ccivil_03/leis/L9790.htm). Dispõe sobre a qualificação de pessoas jurídicas de direito privado, sem fins lucrativos, como Organizações da Sociedade Civil de Interesse Público. Brasília, DF: Presidência da República, 1999. Acesso em: 1 jun. 2026.
+
+GRAND VIEW RESEARCH. [Global EdTech Software Market Size & Outlook, 2023-2030](https://www.grandviewresearch.com/horizon/outlook/edtech-software-market-size/global). San Francisco: Grand View Research, 2024. Acesso em: 1 jun. 2026.
+
+RESEARCH AND MARKETS. [K-12 Testing and Assessment Market Forecast to 2033](https://www.researchandmarkets.com/reports/6189457/k-12-testing-assessment-market-forecast). Dublin: Research and Markets, 2025. Acesso em: 1 jun. 2026.
+
+ASSOCIAÇÃO BRASILEIRA DE INTERNET. [Distrito destaca que edtechs se reinventam em meio à queda de fundações e investimentos, com foco em inovação](https://abranet.org.br/noticias/distrito-destaca-que-edtechs-se-reinventam-em-meio-a-queda-de-fundacoes-e-investimentos-com-foco-em-inovacao/). Abranet, 2025. Acesso em: 1 jun. 2026.
+
+INSTITUTO PONTE. [Relatório Anual 2025](https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf). Vitória: Instituto Ponte, 2026. Acesso em: 1 jun. 2026.
 
 # <a name="c9"></a>Anexos
 
