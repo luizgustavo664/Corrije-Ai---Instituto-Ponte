@@ -4470,146 +4470,68 @@ src\backend\src\database\migrations\migration.sql
 
 ### 3.6.4. Consultas SQL e logica proposicional (sprint 2)
 
-As consultas abaixo foram retiradas ou derivadas diretamente dos repositories e da migration do backend. Cada consulta possui condicao composta e demonstra AND, OR, EXISTS, ILIKE, IN, IS NOT NULL, negacao logica e UPSERT.
 
-#### Consulta 1 - validacao de questoes objetivas antes da publicacao
+| #1 | --- |
+| --- | --- |
+| **Expressão SQL** | `SELECT * FROM prova WHERE status = 'publicada' AND (turma = '2A' OR semestre = '2026.1');` |
+| **Proposições lógicas** | $A$: A prova está publicada (`status = 'publicada'`) <br> $B$: A prova é da turma 2A (`turma = '2A'`) <br> $C$: A prova é do semestre 2026.1 (`semestre = '2026.1'`) |
+| **Expressão lógica proposicional** | $A \land (B \lor C)$ |
+| **Tabela Verdade** | <table><thead><tr><th>$A$</th><th>$B$</th><th>$C$</th><th>$B \lor C$</th><th>$A \land (B \lor C)$</th></tr></thead><tbody><tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>F</td><td>V</td><td>V</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td><td>V</td><td>F</td></tr><tr><td>F</td><td>V</td><td>V</td><td>V</td><td>F</td></tr><tr><td>V</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>V</td><td>V</td><td>V</td></tr><tr><td>V</td><td>V</td><td>F</td><td>V</td><td>V</td></tr><tr><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td></tr></tbody></table> |
 
-~~~sql
-SELECT COUNT(*)
-FROM "prova_questao" pq
-JOIN "questao" q ON q."id" = pq."questao_id"
-WHERE pq."prova_id" = $1
-  AND q."tipo" = 'multipla_escolha'
-  AND (
-    (SELECT COUNT(*) FROM "alternativa" a WHERE a."questao_id" = q."id") < 2
-    OR
-    (SELECT COUNT(*) FROM "alternativa" a WHERE a."questao_id" = q."id" AND a."correta" = TRUE) <> 1
-  );
-~~~
+**Descrição:**
+Essa consulta retorna apenas provas que estejam publicadas e associadas à turma 2A ou ao semestre 2026.1.
 
-Descricao: conta questoes de multipla escolha invalidas antes da publicacao.
+---
 
-| Proposicao | Significado |
-|------------|-------------|
-| A | A questao pertence a prova informada. |
-| B | A questao e multipla escolha. |
-| C | A questao tem menos de duas alternativas. |
-| D | A questao nao tem exatamente uma alternativa correta. |
 
-Expressao logica: A AND B AND (C OR D).
+| #2 | --- |
+| --- | --- |
+| **Expressão SQL** | `SELECT * FROM questao WHERE tipo = 'multipla_escolha' AND ativa = true;` |
+| **Proposições lógicas** | $A$: A questão é de múltipla escolha (`tipo = 'multipla_escolha'`) <br> $B$: A questão está ativa (`ativa = true`) |
+| **Expressão lógica proposicional** | $A \land B$ |
+| **Tabela Verdade** | <table><thead><tr><th>$A$</th><th>$B$</th><th>$A \land B$</th></tr></thead><tbody><tr><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td></tr><tr><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>V</td><td>V</td></tr></tbody></table> |
 
-| A | B | C | D | C OR D | Resultado |
-|---|---|---|---|--------|-----------|
-| F | F | F | F | F | F |
-| F | V | V | F | V | F |
-| V | F | V | V | V | F |
-| V | V | F | F | F | F |
-| V | V | V | F | V | V |
-| V | V | F | V | V | V |
-| V | V | V | V | V | V |
+**Descrição:**
+Essa consulta seleciona questões de múltipla escolha que estejam ativas no sistema.
 
-#### Consulta 2 - listagem de questoes por professor, status ativo e busca textual
+---
 
-~~~sql
-SELECT q.*, e."conteudo_latex" AS "enunciado_conteudo_latex"
-FROM "questao" q
-JOIN "enunciado" e ON e."questao_id" = q."id"
-WHERE EXISTS (
-  SELECT 1
-  FROM "materia_professor" mp
-  WHERE mp."materia_id" = q."materia_id"
-    AND mp."professor_id" = $1
-)
-AND q."ativa" = TRUE
-AND e."conteudo_latex" ILIKE $2;
-~~~
 
-Descricao: baseada em QuestaoRepository.findMany, filtra por vinculo professor/materia, questao ativa e busca ILIKE.
+| #3 | --- |
+| --- | --- |
+| **Expressão SQL** | `UPDATE resultado_aluno SET liberado = true, liberado_em = CURRENT_TIMESTAMP WHERE nota_total >= 6 AND liberado = false;` |
+| **Proposições lógicas** | $A$: A nota total é maior ou igual a 6 (`nota_total >= 6`) <br> $B$: O resultado já está liberado (`liberado = true`) |
+| **Expressão lógica proposicional** | $A \land \neg B$ |
+| **Tabela Verdade** | <table><thead><tr><th>$A$</th><th>$B$</th><th>$\neg B$</th><th>$A \land \neg B$</th></tr></thead><tbody><tr><td>F</td><td>F</td><td>V</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>V</td><td>V</td></tr><tr><td>V</td><td>V</td><td>F</td><td>F</td></tr></tbody></table> |
 
-| Proposicao | Significado |
-|------------|-------------|
-| A | Existe vinculo entre materia da questao e professor autenticado. |
-| B | A questao esta ativa. |
-| C | O enunciado atende ao filtro ILIKE. |
+**Descrição:**
+Essa consulta atualiza os resultados dos alunos, liberando apenas aqueles com nota suficiente e que ainda não foram liberados.
 
-Expressao logica: A AND B AND C.
+---
 
-| A | B | C | Resultado |
-|---|---|---|-----------|
-| F | F | F | F |
-| F | V | V | F |
-| V | F | V | F |
-| V | V | F | F |
-| V | V | V | V |
 
-#### Consulta 3 - UPSERT de correcao automatica de objetivas
+| #4 | --- |
+| --- | --- |
+| **Expressão SQL** | `DELETE FROM email_envio WHERE status = 'erro' OR (status = 'pendente' AND criado_em < CURRENT_TIMESTAMP - INTERVAL '7 days');` |
+| **Proposições lógicas** | $A$: O status do e-mail é erro (`status = 'erro'`) <br> $B$: O status do e-mail é pendente (`status = 'pendente'`) <br> $C$: O e-mail foi criado há mais de 7 dias (`criado_em < CURRENT_TIMESTAMP - INTERVAL '7 days'`) |
+| **Expressão lógica proposicional** | $A \lor (B \land C)$ |
+| **Tabela Verdade** | <table><thead><tr><th>$A$</th><th>$B$</th><th>$C$</th><th>$B \land C$</th><th>$A \lor (B \land C)$</th></tr></thead><tbody><tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td></tr><tr><td>V</td><td>F</td><td>F</td><td>F</td><td>V</td></tr><tr><td>V</td><td>F</td><td>V</td><td>F</td><td>V</td></tr><tr><td>V</td><td>V</td><td>F</td><td>F</td><td>V</td></tr><tr><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td></tr></tbody></table> |
 
-~~~sql
-INSERT INTO "correcao" ("resposta_id", "professor_id", "nota", "tipo", "corrigida_em")
-SELECT
-  ra."id",
-  $2,
-  CASE WHEN a."correta" = TRUE THEN pq."pontuacao_max" ELSE 0 END,
-  'automatica',
-  CURRENT_TIMESTAMP
-FROM "resposta_aluno" ra
-JOIN "prova_aluno" pa ON pa."id" = ra."prova_aluno_id"
-JOIN "prova_questao" pq ON pq."prova_id" = pa."prova_id" AND pq."questao_id" = ra."questao_id"
-JOIN "questao" q ON q."id" = ra."questao_id"
-JOIN "alternativa" a ON a."id" = ra."alternativa_id"
-WHERE pa."prova_id" = $1
-  AND pa."status" IN ('enviada', 'corrigida')
-  AND q."tipo" IN ('multipla_escolha', 'verdadeiro_falso')
-  AND ra."alternativa_id" IS NOT NULL
-ON CONFLICT ("resposta_id") DO UPDATE
-SET "nota" = EXCLUDED."nota",
-    "tipo" = 'automatica',
-    "corrigida_em" = CURRENT_TIMESTAMP;
-~~~
+**Descrição:**
+Essa consulta remove registros de e-mails com erro ou pendentes há mais de 7 dias, ajudando na limpeza do sistema.
 
-Descricao: query real de CorrecaoRepository.corrigirObjetivas.
+---
 
-| Proposicao | Significado |
-|------------|-------------|
-| A | A resposta pertence a prova informada. |
-| B | A prova do aluno esta enviada ou corrigida. |
-| C | A questao e objetiva. |
-| D | A resposta possui alternativa marcada. |
 
-Expressao logica: A AND B AND C AND D.
+| #5 | --- |
+| --- | --- |
+| **Expressão SQL** | `INSERT INTO questao (titulo, tipo, ativa) VALUES ('Questão sobre lógica', 'multipla_escolha', true);` |
+| **Proposições lógicas** | $A$: O título da questão foi informado (`titulo IS NOT NULL`) <br> $B$: O tipo da questão é múltipla escolha (`tipo = 'multipla_escolha'`) <br> $C$: A questão está ativa (`ativa = true`) |
+| **Expressão lógica proposicional** | $A \land B \land C$ |
+| **Tabela Verdade** | <table><thead><tr><th>$A$</th><th>$B$</th><th>$C$</th><th>$A \land B$</th><th>$A \land B \land C$</th></tr></thead><tbody><tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>V</td><td>F</td><td>V</td><td>F</td></tr><tr><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td></tr></tbody></table> |
 
-| A | B | C | D | Resultado |
-|---|---|---|---|-----------|
-| F | F | F | F | F |
-| F | V | V | V | F |
-| V | F | V | V | F |
-| V | V | F | V | F |
-| V | V | V | F | F |
-| V | V | V | V | V |
-
-#### Consulta 4 - remocao de questao de uma prova
-
-~~~sql
-DELETE FROM "prova_questao"
-WHERE "prova_id" = $1
-  AND "questao_id" = $2;
-~~~
-
-Descricao: query real de ProvaQuestaoRepository.remover.
-
-| Proposicao | Significado |
-|------------|-------------|
-| A | O vinculo pertence a prova informada. |
-| B | O vinculo aponta para a questao informada. |
-
-Expressao logica: A AND B.
-
-| A | B | Resultado |
-|---|---|-----------|
-| F | F | F |
-| F | V | F |
-| V | F | F |
-| V | V | V |
+**Descrição:**
+Essa consulta insere uma nova questão ativa de múltipla escolha no banco de dados.
 
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
 
