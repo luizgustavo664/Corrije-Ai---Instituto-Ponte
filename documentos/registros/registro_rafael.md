@@ -168,3 +168,23 @@ Colocar fotos se for preciso
 https://chatgpt.com/c/6a187f7e-c84c-83e9-bbf9-9b45d707e4f8
 
 https://docs.google.com/document/d/1FMkr8Wr4BYk0v4T6TH_4_sgdb7MDEkxsH-MecunJ3jo/edit?tab=t.0
+
+### Data: 01/06/2026
+
+
+### Objetivo do Dia
+
+
+Rafael: Atualizar o modelo ER, identificar entidades e relacionamentos principais e registrar as alterações na documentação.
+
+
+### Modelagem do banco de dados
+
+
+### Alterações Realizadas
+
+
+#### Rafael:
+
+
+- Alteração: Foram atualizados o MER e o DER na seção 3.6 do WAD para alinhar o modelo ER à migration principal (`src/backend/src/database/migrations/migration.sql`). Também foram documentadas as entidades principais por grupo, os relacionamentos centrais, as tabelas atuais do modelo físico e a substituição das estruturas antigas por `questao`, `prova_questao`, `prova_aluno`, `resposta_aluno`, `resultado_aluno`, `exportacao_resultado`, `email_envio` e `avaliacao_log`.
