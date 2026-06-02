@@ -5625,11 +5625,10 @@ Os principais diferenciais competitivos da solução são a interface simples e 
 
 Como objetivos estratégicos, o projeto busca aumentar a confiabilidade das avaliações remotas, reduzir falhas operacionais, melhorar a eficiência da correção, apoiar decisões pedagógicas com dados e contribuir para a missão do Instituto Ponte de promover ascensão social por meio da educação de qualidade.
 
-Fonte: Instituto Ponte, Relatório Anual 2025; documentação WAD do projeto. https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf
 
 ## 6.2 Análise de Mercado
 
-a)
+### 6.2.1 Visão Geral do Setor
 A aplicação está inserida no setor de tecnologia educacional aplicada ao terceiro setor, com foco em avaliação remota, inclusão digital e gestão pedagógica. Economicamente, organizações sociais de educação, como o Instituto Ponte, atuam em um contexto de alta demanda por oportunidades educacionais e dependência de doações, parcerias e comprovação de impacto. Por isso, soluções digitais que aumentam eficiência, transparência e geração de indicadores tornam-se estratégicas para fortalecer a confiança de financiadores e apoiar a expansão institucional.
 No aspecto tecnológico, o setor educacional brasileiro vem ampliando o uso de recursos digitais, mas ainda enfrenta desigualdades de acesso, infraestrutura e letramento tecnológico. A pesquisa TIC Educação 2023 indica avanço da conectividade nas escolas, mas também evidencia que a adoção de tecnologias exige ferramentas simples, acessíveis e adequadas a diferentes realidades de uso. Nesse cenário, uma plataforma responsiva para provas remotas, envio de anexos, correção por questão e relatórios automatizados atende diretamente à necessidade de organizar processos avaliativos em ambientes híbridos.
 Do ponto de vista regulatório, a aplicação deve observar a Lei Geral de Proteção de Dados (LGPD), especialmente por tratar dados educacionais de adolescentes, exigindo segurança, finalidade clara e tratamento no melhor interesse do estudante. Além disso, por dialogar com uma OSCIP, o projeto se conecta a um setor regulado por normas de transparência, prestação de contas e finalidade pública.
@@ -5638,7 +5637,8 @@ Fontes: Estão na seção (referências)
 
 
 
-*b) O mercado no qual a aplicação do Instituto Ponte se insere combina EdTech, avaliação digital e gestão educacional para organizações de impacto social. Em escala global, o segmento de softwares educacionais foi estimado em US$ 30,1 bilhões em 2023 e deve alcançar US$ 75,9 bilhões até 2030, com crescimento médio anual de 14,1% entre 2024 e 2030. Dentro desse setor, o mercado de avaliações educacionais K-12 também apresenta expansão relevante: foi avaliado em US$ 13,85 bilhões em 2024 e tem projeção de chegar a US$ 32,04 bilhões em 2033, com CAGR de 9,9%.
+### 6.2.2 Tamanho e Crescimento do Mercado 
+O mercado no qual a aplicação do Instituto Ponte se insere combina EdTech, avaliação digital e gestão educacional para organizações de impacto social. Em escala global, o segmento de softwares educacionais foi estimado em US$ 30,1 bilhões em 2023 e deve alcançar US$ 75,9 bilhões até 2030, com crescimento médio anual de 14,1% entre 2024 e 2030. Dentro desse setor, o mercado de avaliações educacionais K-12 também apresenta expansão relevante: foi avaliado em US$ 13,85 bilhões em 2024 e tem projeção de chegar a US$ 32,04 bilhões em 2033, com CAGR de 9,9%.
 
 Na América Latina, o setor de EdTechs demonstra maturação e escala regional. Segundo o Report EdTech 2025, do Distrito, existem 1.326 startups educacionais ativas na região; entre 2014 e o início de 2025, o setor captou US$ 912,4 milhões em 553 rodadas, sendo o Brasil responsável por US$ 656,4 milhões em 320 rodadas. Esses dados indicam que o país é um dos pólos mais relevantes para soluções educacionais digitais.
 
@@ -5646,8 +5646,22 @@ Para o Instituto Ponte, esse crescimento reforça a oportunidade de adotar uma p
 
 Fontes: Estão na seção (referências)
 
-*c) Tendências de Mercado (até 300 palavras)*
-*Identifique e analise tendências relevantes (tecnológicas, comportamentais e mercadológicas) que influenciam o setor. Utilize fontes confiáveis.*
+### 6.2.3 Tendências de Mercado
+
+O setor de tecnologia educacional apresenta três tendências relevantes para a aplicação do Instituto Ponte. A primeira é a consolidação de modelos híbridos e mobile-first. Como muitos estudantes acessam atividades educacionais por dispositivos próprios e com diferentes condições de conectividade, plataformas simples, responsivas e de baixo atrito tendem a ganhar importância. Para o projeto, isso reforça decisões como acesso por link, envio de anexos pelo celular, interface objetiva e salvamento estruturado das respostas.
+
+
+A segunda tendência é o uso crescente de dados para gestão pedagógica e prestação de contas. Instituições educacionais e organizações sociais precisam demonstrar impacto, acompanhar desempenho e identificar dificuldades de aprendizagem com mais rapidez. Assim, relatórios automáticos, dashboards e histórico de avaliações tornam-se diferenciais estratégicos, pois apoiam professores, coordenadores e financiadores na tomada de decisão.
+
+
+A terceira tendência é a incorporação cuidadosa de automação e inteligência artificial em processos educacionais. A UNESCO aponta que o uso de IA generativa na educação exige governança, proteção de dados, transparência e supervisão humana. Nesse sentido, a aplicação pode evoluir para recursos de apoio à correção e análise de desempenho, desde que preserve a isonomia avaliativa e a responsabilidade pedagógica dos professores.
+
+
+Por fim, observa-se maior exigência por segurança, privacidade e conformidade regulatória. Como a plataforma lida com dados de estudantes e avaliações, a aderência à LGPD e a boas práticas de proteção de dados deixa de ser apenas requisito técnico e passa a ser um fator de confiança institucional.
+
+
+Fontes: Estão na seção (referências).
+
 
 ## 6.3 Análise da Concorrência
 
