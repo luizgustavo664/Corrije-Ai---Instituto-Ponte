@@ -209,6 +209,15 @@ describe("AnalyticsController - integração", () => {
       expect(response.body.error.code).toBe("NOT_FOUND");
     });
 
+    it("deve retornar 422 quando provaId não é UUID válido", async () => {
+      const response = await request(app.server)
+        .get("/api/v1/provas/prova-invalida/analytics")
+        .set("Authorization", seed.coordenadorToken);
+
+      expect(response.statusCode).toBe(422);
+      expect(response.body.error.code).toBe("VALIDATION_ERROR");
+    });
+
     it("deve retornar 401 quando não há token de autenticação", async () => {
       const response = await request(app.server).get(`/api/v1/provas/${seed.provaId}/analytics`);
 

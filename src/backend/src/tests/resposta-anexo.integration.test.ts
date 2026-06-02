@@ -203,6 +203,18 @@ describe("RespostaAnexoController - integração", () => {
     expect(response.body.error.code).toBe("BUSINESS_RULE_ERROR");
   });
 
+  it("deve rejeitar com 422 quando respostaId não é UUID válido", async () => {
+    const response = await request(app.server)
+      .post("/api/v1/public/respostas/resposta-invalida/anexos")
+      .attach("file", Buffer.from("conteudo"), {
+        filename: "resposta.png",
+        contentType: "image/png",
+      });
+
+    expect(response.statusCode).toBe(422);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
   it("deve rejeitar com 422 arquivo cujo tamanho excede 5MB", async () => {
     const response = await request(app.server)
       .post(`/api/v1/public/respostas/${seed.respostaComAnexoId}/anexos`)
@@ -225,5 +237,17 @@ describe("RespostaAnexoController - integração", () => {
 
     expect(response.statusCode).toBe(409);
     expect(response.body.error.code).toBe("CONFLICT");
+  });
+
+  it("deve retornar 404 quando resposta não existe", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/public/respostas/${randomUUID()}/anexos`)
+      .attach("file", Buffer.from("conteudo"), {
+        filename: "resposta.pdf",
+        contentType: "application/pdf",
+      });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
   });
 });

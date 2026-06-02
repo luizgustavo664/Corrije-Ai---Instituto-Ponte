@@ -294,6 +294,15 @@ describe("ResultadosController - integração", () => {
     expect(response.statusCode).toBe(422);
   });
 
+  it("deve retornar 404 ao listar resultados de prova inexistente", async () => {
+    const response = await request(app.server)
+      .get(`/api/v1/provas/${randomUUID()}/resultados`)
+      .set("Authorization", seed.tokenCoordenador);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
   it("deve exportar resultados em CSV como coordenador, fazer upload ao storage e persistir exportacao_resultado", async () => {
     process.env.SUPABASE_STORAGE_URL = "https://storage.test";
     process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-test";
@@ -408,5 +417,15 @@ describe("ResultadosController - integração", () => {
       .send({ formato: "pdf" });
 
     expect(response.statusCode).toBe(422);
+  });
+
+  it("deve retornar 404 ao exportar resultados de prova inexistente", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/provas/${randomUUID()}/resultados/exportar`)
+      .set("Authorization", seed.tokenCoordenador)
+      .send({ formato: "csv" });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
   });
 });

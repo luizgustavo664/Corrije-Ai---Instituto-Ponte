@@ -266,4 +266,32 @@ describe("CorrecaoAutomaticaController - integração", () => {
     ]);
     expect(recalc.rows[0].nota).toBe("0.00");
   });
+
+  it("deve retornar 422 quando provaId não é UUID válido", async () => {
+    const response = await request(app.server)
+      .post("/api/v1/provas/prova-invalida/correcao/objetivas")
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(422);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("deve retornar 404 quando a prova não existe", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/provas/${randomUUID()}/correcao/objetivas`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve bloquear com 403 professor sem acesso à prova", async () => {
+    const tokenOutroProfessor = `Bearer test-professor:${randomUUID()}:outro@example.com:Professor Sem Acesso`;
+    const response = await request(app.server)
+      .post(`/api/v1/provas/${seed.provaId}/correcao/objetivas`)
+      .set("Authorization", tokenOutroProfessor);
+
+    expect(response.statusCode).toBe(403);
+    expect(response.body.error.code).toBe("FORBIDDEN");
+  });
 });
