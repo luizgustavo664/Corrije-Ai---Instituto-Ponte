@@ -4807,139 +4807,130 @@ end note
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2, atualizado na sprint 4)
 
 
-Já o Diagrama Entidade-Relacionamento (DER) detalha essa estrutura em uma visão mais próxima da implementação no banco de dados. Nele, as entidades são representadas como tabelas, contendo seus principais atributos, tipos de dados, chaves primárias, chaves estrangeiras e restrições, como `UNIQUE`, `CHECK` e relacionamentos obrigatórios ou opcionais. O DER atualizado explicita as tabelas associativas existentes na migration atual, especialmente `materia_professor`, `prova_questao` e `prova_aluno`.
+O Diagrama Entidade-Relacionamento (DER) abaixo representa a visão física do banco implementado na migration principal `src/backend/src/database/migrations/migration.sql`. Diferentemente do MER conceitual, esta visão usa os nomes reais das tabelas, colunas, chaves primárias, chaves estrangeiras, restrições `UNIQUE`, restrições `CHECK` mais relevantes e tipos PostgreSQL/Supabase usados pelo sistema.
 
 
-Dessa forma, o MER contribui para a compreensão conceitual do domínio do sistema, enquanto o DER serve como base para a construção do modelo relacional e físico do banco de dados no PostgreSQL/Supabase. A partir desses diagramas, torna-se possível implementar as migrations DDL de maneira mais organizada, garantindo integridade referencial, clareza nas relações entre tabelas e consistência na estrutura dos dados.
+A modelagem física atual possui 22 tabelas de domínio: `coordenador`, `professor`, `materia`, `materia_professor`, `aluno`, `tema`, `questao`, `enunciado`, `alternativa`, `prova`, `prova_status_historico`, `prova_questao`, `prova_aluno`, `resposta_aluno`, `resposta_anexo`, `correcao`, `feedback`, `relatorio`, `resultado_aluno`, `exportacao_resultado`, `email_envio` e `avaliacao_log`. As tabelas associativas reais são `materia_professor`, `prova_questao` e `prova_aluno`; não existem tabelas físicas chamadas `prova_materia` ou `prova_enunciado`.
 
 
 ```plantuml
 @startuml
-title Diagrama Entidade-Relacionamento - DER
-
+title Diagrama Entidade-Relacionamento Físico - DER
 
 hide circle
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-
-entity "Coordenador" as coordenador {
+entity "coordenador" as coordenador {
   * id : UUID <<PK>>
   --
-  auth_user_id : UUID <<UNIQUE, FK auth.users>>
-  nome : TEXT
+  auth_user_id : UUID <<UNIQUE, FK auth.users, NULL>>
+  nome : TEXT <<CHECK>>
   email : CITEXT <<UNIQUE>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Professor" as professor {
+entity "professor" as professor {
   * id : UUID <<PK>>
   --
-  auth_user_id : UUID <<UNIQUE, FK auth.users>>
+  auth_user_id : UUID <<UNIQUE, FK auth.users, NULL>>
   coordenador_id : UUID <<FK>>
-  nome : TEXT
+  nome : TEXT <<CHECK>>
   email : CITEXT <<UNIQUE>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Materia" as materia {
+entity "materia" as materia {
   * id : UUID <<PK>>
   --
-  nome : TEXT <<UNIQUE>>
-  codigo : TEXT <<UNIQUE, NULL>>
+  nome : TEXT <<UNIQUE, CHECK>>
+  codigo : TEXT <<UNIQUE, NULL, CHECK>>
   descricao : TEXT <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Materia_Professor" as materia_professor {
+entity "materia_professor" as materia_professor {
   * materia_id : UUID <<PK, FK>>
   * professor_id : UUID <<PK, FK>>
   --
   criado_em : TIMESTAMPTZ
 }
 
-
-entity "Aluno" as aluno {
+entity "aluno" as aluno {
   * id : UUID <<PK>>
   --
-  auth_user_id : UUID <<UNIQUE, FK auth.users>>
-  nome : TEXT
+  auth_user_id : UUID <<UNIQUE, FK auth.users, NULL>>
+  nome : TEXT <<CHECK>>
   email : CITEXT <<UNIQUE>>
-  cpf : TEXT <<UNIQUE, NULL>>
+  cpf : TEXT <<UNIQUE, NULL, CHECK>>
   aceitou_termos_em : TIMESTAMPTZ <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Tema" as tema {
+entity "tema" as tema {
   * id : UUID <<PK>>
   --
   materia_id : UUID <<FK>>
-  nome : TEXT
+  nome : TEXT <<CHECK>>
   descricao : TEXT <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
+  UNIQUE(materia_id, nome)
 }
 
-
-entity "Questao" as questao {
+entity "questao" as questao {
   * id : UUID <<PK>>
   --
   materia_id : UUID <<FK>>
   tema_id : UUID <<FK, NULL>>
   tipo : questao_tipo
-  limite_caracteres : INTEGER <<NULL>>
-  limite_palavras : INTEGER <<NULL>>
+  limite_caracteres : INTEGER <<NULL, CHECK>>
+  limite_palavras : INTEGER <<NULL, CHECK>>
   permite_anexo : BOOLEAN
-  pontuacao_padrao : NUMERIC(5,2)
+  pontuacao_padrao : NUMERIC(5,2) <<CHECK>>
   ativa : BOOLEAN
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Enunciado" as enunciado {
+entity "enunciado" as enunciado {
   * id : UUID <<PK>>
   --
-  questao_id : UUID <<FK, UNIQUE>>
-  conteudo_latex : TEXT
+  questao_id : UUID <<UNIQUE, FK>>
+  conteudo_latex : TEXT <<CHECK>>
   url_imagem : TEXT <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Alternativa" as alternativa {
+entity "alternativa" as alternativa {
   * id : UUID <<PK>>
   --
   questao_id : UUID <<FK>>
-  ordem_original : INTEGER
-  conteudo_latex : TEXT
+  ordem_original : INTEGER <<CHECK>>
+  conteudo_latex : TEXT <<CHECK>>
   url_imagem : TEXT <<NULL>>
   correta : BOOLEAN
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
+  UNIQUE(questao_id, ordem_original)
 }
 
-
-entity "Prova" as prova {
+entity "prova" as prova {
   * id : UUID <<PK>>
   --
   professor_id : UUID <<FK>>
   materia_id : UUID <<FK>>
-  titulo : TEXT
-  modalidade : TEXT
-  turma : TEXT
-  semestre : TEXT
+  titulo : TEXT <<CHECK>>
+  modalidade : TEXT <<CHECK>>
+  turma : TEXT <<CHECK>>
+  semestre : TEXT <<CHECK>>
   instrucoes : TEXT <<NULL>>
-  tempo_limite_min : INTEGER <<NULL>>
+  tempo_limite_min : INTEGER <<NULL, CHECK>>
   data_inicio : TIMESTAMPTZ <<NULL>>
   data_fim : TIMESTAMPTZ <<NULL>>
   embaralhar_questoes : BOOLEAN
@@ -4951,8 +4942,7 @@ entity "Prova" as prova {
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Prova_Status_Historico" as prova_status_historico {
+entity "prova_status_historico" as prova_status_historico {
   * id : UUID <<PK>>
   --
   prova_id : UUID <<FK>>
@@ -4962,18 +4952,17 @@ entity "Prova_Status_Historico" as prova_status_historico {
   criado_em : TIMESTAMPTZ
 }
 
-
-entity "Prova_Questao" as prova_questao {
+entity "prova_questao" as prova_questao {
   * prova_id : UUID <<PK, FK>>
   * questao_id : UUID <<PK, FK>>
   --
-  ordem_original : INTEGER
-  pontuacao_max : NUMERIC(5,2)
+  ordem_original : INTEGER <<CHECK>>
+  pontuacao_max : NUMERIC(5,2) <<CHECK>>
   criado_em : TIMESTAMPTZ
+  UNIQUE(prova_id, ordem_original)
 }
 
-
-entity "Prova_Aluno" as prova_aluno {
+entity "prova_aluno" as prova_aluno {
   * id : UUID <<PK>>
   --
   prova_id : UUID <<FK>>
@@ -4985,10 +4974,10 @@ entity "Prova_Aluno" as prova_aluno {
   ordem_alternativas : JSONB
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
+  UNIQUE(prova_id, aluno_id)
 }
 
-
-entity "Resposta_Aluno" as resposta_aluno {
+entity "resposta_aluno" as resposta_aluno {
   * id : UUID <<PK>>
   --
   prova_aluno_id : UUID <<FK>>
@@ -5001,27 +4990,26 @@ entity "Resposta_Aluno" as resposta_aluno {
   enviada_final : BOOLEAN
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
+  UNIQUE(prova_aluno_id, questao_id)
 }
 
-
-entity "Resposta_Anexo" as resposta_anexo {
+entity "resposta_anexo" as resposta_anexo {
   * id : UUID <<PK>>
   --
   resposta_id : UUID <<FK>>
-  url_arquivo : TEXT
+  url_arquivo : TEXT <<CHECK>>
   nome_arquivo : TEXT <<NULL>>
-  mime_type : TEXT
-  tamanho_bytes : INTEGER
+  mime_type : TEXT <<CHECK>>
+  tamanho_bytes : INTEGER <<CHECK>>
   criado_em : TIMESTAMPTZ
 }
 
-
-entity "Correcao" as correcao {
+entity "correcao" as correcao {
   * id : UUID <<PK>>
   --
-  resposta_id : UUID <<FK, UNIQUE>>
+  resposta_id : UUID <<UNIQUE, FK>>
   professor_id : UUID <<FK>>
-  nota : NUMERIC(5,2)
+  nota : NUMERIC(5,2) <<CHECK>>
   observacao : TEXT <<NULL>>
   tipo : correcao_tipo
   corrigida_em : TIMESTAMPTZ <<NULL>>
@@ -5029,25 +5017,23 @@ entity "Correcao" as correcao {
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Feedback" as feedback {
+entity "feedback" as feedback {
   * id : UUID <<PK>>
   --
   correcao_id : UUID <<FK>>
   professor_id : UUID <<FK>>
-  mensagem : TEXT
+  mensagem : TEXT <<CHECK>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Relatorio" as relatorio {
+entity "relatorio" as relatorio {
   * id : UUID <<PK>>
   --
   prova_id : UUID <<FK>>
   coordenador_id : UUID <<FK>>
   tipo : relatorio_tipo
-  titulo : TEXT <<NULL>>
+  titulo : TEXT <<NULL, CHECK>>
   conteudo : TEXT <<NULL>>
   url_arquivo : TEXT <<NULL>>
   gerado_em : TIMESTAMPTZ
@@ -5055,38 +5041,35 @@ entity "Relatorio" as relatorio {
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Resultado_Aluno" as resultado_aluno {
+entity "resultado_aluno" as resultado_aluno {
   * id : UUID <<PK>>
   --
-  prova_aluno_id : UUID <<FK, UNIQUE>>
-  nota_total : NUMERIC(6,2)
-  percentual : NUMERIC(5,2) <<NULL>>
+  prova_aluno_id : UUID <<UNIQUE, FK>>
+  nota_total : NUMERIC(6,2) <<CHECK>>
+  percentual : NUMERIC(5,2) <<NULL, CHECK>>
   liberado : BOOLEAN
   liberado_em : TIMESTAMPTZ <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Exportacao_Resultado" as exportacao_resultado {
+entity "exportacao_resultado" as exportacao_resultado {
   * id : UUID <<PK>>
   --
   prova_id : UUID <<FK>>
   coordenador_id : UUID <<FK>>
-  formato : TEXT
+  formato : TEXT <<CHECK>>
   url_arquivo : TEXT <<NULL>>
   gerado_em : TIMESTAMPTZ
   criado_em : TIMESTAMPTZ
 }
 
-
-entity "Email_Envio" as email_envio {
+entity "email_envio" as email_envio {
   * id : UUID <<PK>>
   --
   prova_aluno_id : UUID <<FK>>
   destinatario : CITEXT
-  assunto : TEXT
+  assunto : TEXT <<CHECK>>
   corpo : TEXT <<NULL>>
   status : email_status
   erro : TEXT <<NULL>>
@@ -5095,104 +5078,99 @@ entity "Email_Envio" as email_envio {
   atualizado_em : TIMESTAMPTZ
 }
 
-
-entity "Avaliacao_Log" as avaliacao_log {
+entity "avaliacao_log" as avaliacao_log {
   * id : UUID <<PK>>
   --
   prova_id : UUID <<FK, NULL>>
   prova_aluno_id : UUID <<FK, NULL>>
-  ator_tipo : TEXT
+  ator_tipo : TEXT <<CHECK>>
   ator_id : UUID <<NULL>>
-  acao : TEXT
+  acao : TEXT <<CHECK>>
   detalhes : JSONB
   criado_em : TIMESTAMPTZ
 }
 
+coordenador ||--o{ professor : "professor.coordenador_id"
 
-' =========================
-' Relacionamentos
-' =========================
+materia ||--o{ materia_professor : "materia_id"
+professor ||--o{ materia_professor : "professor_id"
 
+materia ||--o{ tema : "tema.materia_id"
+materia ||--o{ questao : "questao.materia_id"
+tema |o--o{ questao : "questao.tema_id"
 
-coordenador ||--o{ professor : "gerencia"
+questao ||--|| enunciado : "enunciado.questao_id"
+questao ||--o{ alternativa : "alternativa.questao_id"
 
+professor ||--o{ prova : "prova.professor_id"
+materia ||--o{ prova : "prova.materia_id"
+prova ||--o{ prova_status_historico : "prova_status_historico.prova_id"
 
-materia ||--o{ materia_professor : "é lecionada"
-professor ||--o{ materia_professor : "leciona"
+prova ||--o{ prova_questao : "prova_id"
+questao ||--o{ prova_questao : "questao_id"
 
+prova ||--o{ prova_aluno : "prova_aluno.prova_id"
+aluno ||--o{ prova_aluno : "prova_aluno.aluno_id"
 
-materia ||--o{ tema : "possui"
-materia ||--o{ questao : "possui"
-tema |o--o{ questao : "classifica"
+prova_aluno ||--o{ resposta_aluno : "resposta_aluno.prova_aluno_id"
+questao ||--o{ resposta_aluno : "resposta_aluno.questao_id"
+alternativa |o--o{ resposta_aluno : "resposta_aluno.alternativa_id"
 
+resposta_aluno ||--o{ resposta_anexo : "resposta_anexo.resposta_id"
+resposta_aluno ||--o| correcao : "correcao.resposta_id"
+professor ||--o{ correcao : "correcao.professor_id"
 
-questao ||--|| enunciado : "possui"
-questao ||--o{ alternativa : "possui"
+correcao ||--o{ feedback : "feedback.correcao_id"
+professor ||--o{ feedback : "feedback.professor_id"
 
+prova ||--o{ relatorio : "relatorio.prova_id"
+coordenador ||--o{ relatorio : "relatorio.coordenador_id"
 
-professor ||--o{ prova : "elabora"
-materia ||--o{ prova : "classifica"
+prova_aluno ||--o| resultado_aluno : "resultado_aluno.prova_aluno_id"
+prova_aluno ||--o{ email_envio : "email_envio.prova_aluno_id"
 
+prova ||--o{ exportacao_resultado : "exportacao_resultado.prova_id"
+coordenador ||--o{ exportacao_resultado : "exportacao_resultado.coordenador_id"
 
-prova ||--o{ prova_status_historico : "registra status"
-
-
-prova ||--o{ prova_questao : "contém"
-questao ||--o{ prova_questao : "é usada em"
-
-
-prova ||--o{ prova_aluno : "é aplicada"
-aluno ||--o{ prova_aluno : "realiza"
-
-
-prova_aluno ||--o{ resposta_aluno : "contém"
-questao ||--o{ resposta_aluno : "é respondida"
-alternativa |o--o{ resposta_aluno : "é marcada"
-
-
-resposta_aluno ||--o{ resposta_anexo : "possui"
-
-
-resposta_aluno ||--o| correcao : "recebe"
-professor ||--o{ correcao : "realiza"
-
-
-correcao ||--o{ feedback : "possui"
-professor ||--o{ feedback : "escreve"
-
-
-coordenador ||--o{ relatorio : "gera"
-prova ||--o{ relatorio : "baseia"
-
-
-prova_aluno ||--o| resultado_aluno : "consolida"
-prova_aluno ||--o{ email_envio : "notifica"
-
-
-prova ||--o{ exportacao_resultado : "exporta"
-coordenador ||--o{ exportacao_resultado : "solicita"
-
-
-prova |o--o{ avaliacao_log : "audita"
-prova_aluno |o--o{ avaliacao_log : "audita"
-
+prova |o--o{ avaliacao_log : "avaliacao_log.prova_id"
+prova_aluno |o--o{ avaliacao_log : "avaliacao_log.prova_aluno_id"
 
 note right of prova
-As colunas e enums seguem a migration atual:
-prova_status, prova_aluno_status, questao_tipo,
-correcao_tipo, relatorio_tipo e email_status.
+Enums usados pela migration:
+prova_status, prova_aluno_status,
+questao_tipo, correcao_tipo,
+relatorio_tipo e email_status.
+
+Constraints relevantes:
+url_acesso UNIQUE, datas coerentes
+e campos obrigatórios para publicação.
 end note
 
-
-note right of resposta_aluno
-UNIQUE(prova_aluno_id, questao_id).
-A resposta pode ser objetiva, textual
-ou com imagem/anexo, conforme a questão.
+note right of alternativa
+UNIQUE(questao_id, ordem_original).
+Índice único parcial garante no máximo
+uma alternativa correta por questão.
 end note
 
+note right of resposta_anexo
+mime_type aceita image/jpeg, image/png
+ou application/pdf.
+tamanho_bytes deve ser maior que 0
+e até 5 MB.
+end note
+
+note right of avaliacao_log
+prova_id e prova_aluno_id são opcionais.
+As FKs usam ON DELETE SET NULL.
+ator_tipo aceita aluno, professor,
+coordenador ou sistema.
+end note
 
 @enduml
 ```
+
+
+Os índices físicos criados para apoiar consultas e filtros aparecem principalmente nas chaves estrangeiras e nos campos mais consultados: `professor.coordenador_id`, `materia_professor.professor_id`, `tema.materia_id`, `questao.materia_id`, `questao.tema_id`, `questao.tipo`, `alternativa.questao_id`, `prova.professor_id`, `prova.materia_id`, `prova.status`, o índice composto `prova(status, turma, semestre, materia_id, professor_id)`, `prova_status_historico.prova_id`, `prova_questao.questao_id`, `prova_aluno.prova_id`, `prova_aluno.aluno_id`, `prova_aluno.status`, `resposta_aluno.prova_aluno_id`, `resposta_aluno.questao_id`, `resposta_anexo.resposta_id`, `correcao.professor_id`, `feedback.correcao_id`, `feedback.professor_id`, `relatorio.prova_id`, `relatorio.coordenador_id`, `relatorio.tipo`, `email_envio.prova_aluno_id`, `email_envio.status`, `avaliacao_log.prova_id`, `avaliacao_log.prova_aluno_id` e `avaliacao_log.acao`.
 
 
 ### 3.6.3. Modelo Relacional e Modelo Físico
