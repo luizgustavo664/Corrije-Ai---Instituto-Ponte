@@ -1584,108 +1584,340 @@ A matriz abaixo foi atualizada a partir das rotas registradas no backend Fastify
 
 ### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
 
-O backend segue Arquitetura em Camadas no padrão **Controller → Service → Repository → Model**, alinhado ao modelo de referência disponibilizado em `modelos-arquitetura-exemplo`. A separação impede que rotas HTTP acessem diretamente o banco e mantém as regras de negócio concentradas nas classes de serviço.
+A arquitetura atual do backend segue uma organização em camadas, implementada em TypeScript com Fastify, validação por Zod, documentação automática via Swagger/OpenAPI e persistência em PostgreSQL/Supabase. O código entregue nesta sprint está concentrado no diretório `src`, com separação explícita entre rotas, controllers, services, repositories, schemas, middlewares, helpers, database, errors e testes.
+
+A aplicação não possui, no código analisado, uma camada de frontend implementada dentro do artefato entregue. Por isso, o diagrama abaixo representa o estado real do backend e seus pontos de integração: clientes HTTP acessam a WebAPI, a WebAPI processa autenticação, validação, regras de negócio e persistência, e o banco PostgreSQL/Supabase armazena os dados da aplicação.
 
 ```plantuml
-@startuml ArquiteturaEmCamadasCorrijeAi
-title Arquitetura em Camadas - Corrije Ai
+@startuml AplicacaoInfraestrutura
+title Aplicação Fastify e Infraestrutura Interna
 
 top to bottom direction
 skinparam shadowing false
 skinparam roundCorner 12
 skinparam componentStyle rectangle
+skinparam packageStyle rectangle
 
-actor "Usuario\n(navegador / cliente HTTP)" as Cliente
+actor "Cliente HTTP\n(navegador, ferramenta de API\nou portal consumidor da API)" as Cliente
 
-package "1. Controller" as L1 #E8F4FD {
-  [AuthController] as AuthC
-  [ProvaController] as ProvaC
-  [QuestaoController] as QuestaoC
-  [AlunoPortalController] as PortalC
-  [CorrecaoController] as CorrecaoC
-  [ResultadoController] as ResultadoC
-  [AnalyticsController] as AnalyticsC
+package "Aplicação Fastify\nsrc/app.ts + src/server.ts" as App {
+  component "buildApp()\nConfiguração do servidor" as BuildApp
+  component "Fastify Server\nPorta: process.env.PORT ou 3333" as Server
+  component "CORS\n@fastify/cors" as Cors
+  component "Swagger/OpenAPI\n@fastify/swagger\n@fastify/swagger-ui\n/docs" as Swagger
+  component "Validação/Serialização\nfastify-type-provider-zod\nZod" as ZodProvider
+  component "Error Handler Global\nApiError, ZodError,\n404 e 500 padronizados" as ErrorHandler
 }
 
-package "2. Service" as L2 #FFF7E0 {
-  [AuthService] as AuthS
-  [ProvaService] as ProvaS
-  [QuestaoService] as QuestaoS
-  [AlunoPortalService] as PortalS
-  [CorrecaoService] as CorrecaoS
-  [ResultadoService] as ResultadoS
-  [AnalyticsService] as AnalyticsS
+package "Infraestrutura Interna" as Infra {
+  component "requireAuth / requireRole\nsrc/middlewares/auth.ts" as AuthMiddleware
+  component "ApiError\nsrc/errors/api-error.ts" as ApiError
+  component "sendSuccess / sendCreated\ngetAuthenticatedUser\nsrc/helpers/http.ts" as HttpHelpers
+  component "parseSingleMultipartFile\nsrc/helpers/multipart.ts" as Multipart
+  component "pool\nsrc/database/pool.ts" as Pool
+  component "withTransaction\nsrc/database/transaction.ts" as Transaction
+  component "migrate.ts\nExecução das migrations" as Migrate
 }
 
-package "3. Repository" as L3 #E8F8E8 {
-  [AuthRepository] as AuthR
-  [ProvaRepository] as ProvaR
-  [QuestaoRepository] as QuestaoR
-  [AlunoPortalRepository] as PortalR
-  [CorrecaoRepository] as CorrecaoR
-  [ResultadoRepository] as ResultadoR
-  [AnalyticsRepository] as AnalyticsR
-}
+database "PostgreSQL / Supabase\nsrc/database/migrations/*.sql" as DB
+cloud "Supabase Auth\nJWT + auth.users" as SupabaseAuth
+cloud "Storage HTTP\nusado pelo StorageService" as Storage
+cloud "Serviço de e-mail simulado\nFakeEmailAdapter" as EmailFake
 
-package "4. Model / Schema" as L4 #F3E8FF {
-  [Professor]
-  [Coordenador]
-  [Prova]
-  [Questao]
-  [ProvaAluno]
-  [RespostaAluno]
-  [Correcao]
-  [ResultadoAluno]
-}
+Cliente --> Server : HTTP
+Server --> BuildApp
+BuildApp --> Cors
+BuildApp --> Swagger
+BuildApp --> ZodProvider
+BuildApp --> ErrorHandler
 
-database "PostgreSQL / Supabase\n(migrations SQL, triggers, RLS)" as DB
+ErrorHandler --> ApiError
+AuthMiddleware --> SupabaseAuth : valida JWT
+AuthMiddleware --> Pool : consulta professor/coordenador
+Transaction --> Pool
+Pool --> DB
+Migrate --> DB
 
-Cliente -down-> AuthC
-Cliente -down-> ProvaC
-Cliente -down-> QuestaoC
-Cliente -down-> PortalC
-Cliente -down-> CorrecaoC
-Cliente -down-> ResultadoC
-Cliente -down-> AnalyticsC
-
-AuthC -down-> AuthS
-ProvaC -down-> ProvaS
-QuestaoC -down-> QuestaoS
-PortalC -down-> PortalS
-CorrecaoC -down-> CorrecaoS
-ResultadoC -down-> ResultadoS
-AnalyticsC -down-> AnalyticsS
-
-AuthS -down-> AuthR
-ProvaS -down-> ProvaR
-QuestaoS -down-> QuestaoR
-PortalS -down-> PortalR
-CorrecaoS -down-> CorrecaoR
-ResultadoS -down-> ResultadoR
-AnalyticsS -down-> AnalyticsR
-
-ProvaS ..> QuestaoR : vinculos de questoes
-CorrecaoS ..> ProvaR : permissao e pontuacao
-ResultadoS ..> CorrecaoR : consolidacao de notas
-
-AuthR -down-> DB
-ProvaR -down-> DB
-QuestaoR -down-> DB
-PortalR -down-> DB
-CorrecaoR -down-> DB
-ResultadoR -down-> DB
-AnalyticsR -down-> DB
 @enduml
 ```
 
-| Camada | O que faz | O que não faz | Evidências no código |
-|---|---|---|---|
-| Controller | Recebe requisições HTTP, aciona services e retorna status/body padronizados. | Não executa SQL e não concentra regras de negócio. | `src/backend/src/controllers`, `src/backend/src/routes` |
-| Service | Aplica regras de negócio, valida transições e orquestra repositories. | Não conhece detalhes de renderização do frontend nem monta SQL diretamente. | `src/backend/src/services` |
-| Repository | Encapsula SQL, transações e mapeamento entre banco e objetos de resposta. | Não decide autorização de rota nem trata protocolo HTTP. | `src/backend/src/repositories`, `src/backend/src/database/transaction.ts` |
-| Model / Schema | Representa contratos de entrada/saída e entidades persistidas nas migrations. | Não acessa banco diretamente. | `src/backend/src/schemas`, `src/backend/src/database/migrations/migration.sql` |
+```plantuml
+@startuml RotasControllers
+title Camada de Rotas e Controllers
 
-Essa organização é observável nas rotas principais do artefato: `/api/v1/provas` passa por `ProvaController`, `ProvaService` e `ProvaRepository`; `/api/v1/questoes` passa por `QuestaoController`, `QuestaoService` e `QuestaoRepository`; `/api/v1/public/provas/{urlAcesso}` passa por `AlunoPortalController`, `AlunoPortalService` e `AlunoPortalRepository`.
+top to bottom direction
+skinparam shadowing false
+skinparam roundCorner 12
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "Camada de Rotas\nsrc/routes" as Routes {
+  component "healthRoutes" as RHealth
+  component "authRoutes" as RAuth
+  component "alunoRoutes" as RAluno
+  component "alunoPortalRoutes" as RPortal
+  component "analyticsRoutes" as RAnalytics
+  component "anexoExportarRoutes" as RAnexoExportar
+  component "coordenadorRoutes" as RCoordenador
+  component "correcaoRoutes" as RCorrecao
+  component "emailRoutes" as REmail
+  component "materiaRoutes" as RMateria
+  component "professorRoutes" as RProfessor
+  component "provaRoutes" as RProva
+  component "questaoRoutes" as RQuestao
+  component "respostaAlunoRoutes" as RRespostaAluno
+  component "respostaAnexoRoutes" as RRespostaAnexo
+  component "resultadoRoutes" as RResultado
+  component "temaRoutes" as RTema
+}
+
+package "Camada de Controle\nsrc/controllers" as Controllers {
+  component "HealthController" as CHealth
+  component "AuthController" as CAuth
+  component "AlunoController" as CAluno
+  component "AlunoPortalController" as CPortal
+  component "AnalyticsController" as CAnalytics
+  component "AnexoExportarController" as CAnexoExportar
+  component "CorrecaoController" as CCorrecao
+  component "EmailResultadoController" as CEmail
+  component "MateriaController" as CMateria
+  component "ProfessorController" as CProfessor
+  component "ProvaController" as CProva
+  component "ProvaQuestaoController" as CProvaQuestao
+  component "QuestaoController" as CQuestao
+  component "RespostaAlunoController" as CRespostaAluno
+  component "RespostaAnexoController" as CRespostaAnexo
+  component "ResultadoController" as CResultado
+  component "TemaController" as CTema
+}
+
+component "requireAuth / requireRole\nsrc/middlewares/auth.ts" as AuthMiddleware
+component "sendSuccess / sendCreated\ngetAuthenticatedUser\nsrc/helpers/http.ts" as HttpHelpers
+component "parseSingleMultipartFile\nsrc/helpers/multipart.ts" as Multipart
+
+Routes --> AuthMiddleware : rotas protegidas
+
+RHealth --> CHealth
+RAuth --> CAuth
+RAluno --> CAluno
+RPortal --> CPortal
+RAnalytics --> CAnalytics
+RAnexoExportar --> CAnexoExportar
+RCorrecao --> CCorrecao
+REmail --> CEmail
+RMateria --> CMateria
+RProfessor --> CProfessor
+RProva --> CProva
+RProva --> CProvaQuestao
+RQuestao --> CQuestao
+RRespostaAluno --> CRespostaAluno
+RRespostaAnexo --> CRespostaAnexo
+RResultado --> CResultado
+RTema --> CTema
+
+Controllers --> HttpHelpers
+CRespostaAnexo --> Multipart
+
+@enduml
+```
+
+```plantuml
+@startuml ControllersServices
+title Relação entre Controllers e Services
+
+top to bottom direction
+skinparam shadowing false
+skinparam roundCorner 12
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "Camada de Controle\nsrc/controllers" as Controllers {
+  component "HealthController" as CHealth
+  component "AuthController" as CAuth
+  component "AlunoController" as CAluno
+  component "AlunoPortalController" as CPortal
+  component "AnalyticsController" as CAnalytics
+  component "AnexoExportarController" as CAnexoExportar
+  component "CorrecaoController" as CCorrecao
+  component "EmailResultadoController" as CEmail
+  component "MateriaController" as CMateria
+  component "ProfessorController" as CProfessor
+  component "ProvaController" as CProva
+  component "ProvaQuestaoController" as CProvaQuestao
+  component "QuestaoController" as CQuestao
+  component "RespostaAlunoController" as CRespostaAluno
+  component "RespostaAnexoController" as CRespostaAnexo
+  component "ResultadoController" as CResultado
+  component "TemaController" as CTema
+}
+
+package "Camada de Serviço\nsrc/services" as Services {
+  component "HealthService" as SHealth
+  component "AuthService" as SAuth
+  component "AlunoService" as SAluno
+  component "AlunoPortalService" as SPortal
+  component "AnalyticsService" as SAnalytics
+  component "AvaliacaoLogService" as SLog
+  component "AnexoExportarService" as SAnexoExportar
+  component "CorrecaoService" as SCorrecao
+  component "EmailResultadoService" as SEmailResultado
+  component "MateriaService" as SMateria
+  component "ProfessorService" as SProfessor
+  component "ProvaService" as SProva
+  component "ProvaQuestaoService" as SProvaQuestao
+  component "QuestaoService" as SQuestao
+  component "RespostaAlunoService" as SRespostaAluno
+  component "RespostaAnexoService" as SRespostaAnexo
+  component "ResultadoService" as SResultado
+  component "TemaService" as STema
+}
+
+CHealth --> SHealth
+CAuth --> SAuth
+CAluno --> SAluno
+CPortal --> SPortal
+CAnalytics --> SAnalytics
+CAnalytics --> SLog
+CAnexoExportar --> SAnexoExportar
+CCorrecao --> SCorrecao
+CEmail --> SEmailResultado
+CMateria --> SMateria
+CProfessor --> SProfessor
+CProva --> SProva
+CProvaQuestao --> SProvaQuestao
+CQuestao --> SQuestao
+CRespostaAluno --> SRespostaAluno
+CRespostaAnexo --> SRespostaAnexo
+CResultado --> SResultado
+CTema --> STema
+
+@enduml
+```
+
+```plantuml
+@startuml ServicesRepositoriesBanco
+title Services, Repositories e Banco de Dados
+
+top to bottom direction
+skinparam shadowing false
+skinparam roundCorner 12
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "Camada de Serviço\nsrc/services" as Services {
+  component "HealthService" as SHealth
+  component "AuthService" as SAuth
+  component "AlunoService" as SAluno
+  component "AlunoPortalService" as SPortal
+  component "AnalyticsService" as SAnalytics
+  component "AvaliacaoLogService" as SLog
+  component "AnexoExportarService" as SAnexoExportar
+  component "CorrecaoService" as SCorrecao
+  component "EmailResultadoService" as SEmailResultado
+  component "FakeEmailAdapter\nEmailAdapter" as SEmailAdapter
+  component "MateriaService" as SMateria
+  component "ProfessorService" as SProfessor
+  component "ProvaService" as SProva
+  component "ProvaQuestaoService" as SProvaQuestao
+  component "QuestaoService" as SQuestao
+  component "RespostaAlunoService" as SRespostaAluno
+  component "RespostaAnexoService" as SRespostaAnexo
+  component "ResultadoService" as SResultado
+  component "StorageService" as SStorage
+  component "TemaService" as STema
+}
+
+package "Camada de Repositório\nsrc/repositories" as Repositories {
+  component "AlunoRepository" as RepAluno
+  component "AlunoPortalRepository" as RepPortal
+  component "AnalyticsRepository" as RepAnalytics
+  component "AnexoExportarRepository" as RepAnexoExportar
+  component "AuthRepository" as RepAuth
+  component "AvaliacaoLogRepository" as RepLog
+  component "CorrecaoRepository" as RepCorrecao
+  component "EmailEnvioRepository" as RepEmail
+  component "MateriaRepository" as RepMateria
+  component "ProfessorRepository" as RepProfessor
+  component "ProvaRepository" as RepProva
+  component "ProvaQuestaoRepository" as RepProvaQuestao
+  component "QuestaoRepository" as RepQuestao
+  component "RespostaAlunoRepository" as RepRespostaAluno
+  component "RespostaAnexoRepository" as RepRespostaAnexo
+  component "ResultadoRepository" as RepResultado
+  component "TemaRepository" as RepTema
+}
+
+component "pool\nsrc/database/pool.ts" as Pool
+database "PostgreSQL / Supabase\nsrc/database/migrations/*.sql" as DB
+cloud "Storage HTTP\nusado pelo StorageService" as Storage
+cloud "Serviço de e-mail simulado\nFakeEmailAdapter" as EmailFake
+
+SHealth --> Pool
+SAuth --> RepAuth
+SAluno --> RepAluno
+SPortal --> RepPortal
+SAnalytics --> RepAnalytics
+SLog --> RepLog
+SAnexoExportar --> RepAnexoExportar
+SCorrecao --> RepCorrecao
+SEmailResultado --> RepEmail
+SEmailResultado --> SEmailAdapter
+SMateria --> RepMateria
+SProfessor --> RepProfessor
+SProva --> RepProva
+SProvaQuestao --> RepProvaQuestao
+SQuestao --> RepQuestao
+SRespostaAluno --> RepRespostaAluno
+SRespostaAnexo --> RepRespostaAnexo
+SRespostaAnexo --> SStorage
+SResultado --> RepResultado
+SResultado --> RepEmail
+STema --> RepTema
+
+SStorage --> Storage
+SEmailAdapter --> EmailFake
+
+Repositories --> Pool
+Pool --> DB
+
+@enduml
+```
+
+A aplicação é inicializada por `src/server.ts`, que chama `buildApp()` em `src/app.ts` e sobe o servidor na porta definida por `process.env.PORT`, usando `3333` como padrão. Dentro de `buildApp()`, o Fastify registra CORS, Swagger, Swagger UI, compiladores de validação/serialização baseados em Zod e todas as rotas sob o prefixo `/api/v1`. A documentação OpenAPI fica disponível em `/docs`, gerada a partir dos schemas declarados diretamente nas rotas.
+
+A arquitetura observada no código é composta pelas seguintes camadas reais:
+
+| Camada | Diretório/arquivo | Responsabilidade real no código |
+|---|---|---|
+| Inicialização da aplicação | `src/server.ts`, `src/app.ts` | Cria a instância Fastify, registra plugins, configura Swagger, registra rotas, define tratamento global de erros e inicia o servidor HTTP. |
+| Rotas | `src/routes/*.routes.ts` | Declaram endpoints, métodos HTTP, schemas Zod de `params`, `querystring`, `body` e `response`, além de aplicar middlewares de autenticação/autorização quando necessário. |
+| Controllers | `src/controllers/*.controller.ts` | Recebem a requisição validada, extraem usuário autenticado ou parâmetros, chamam services e retornam respostas padronizadas por helpers HTTP. |
+| Services | `src/services/*.service.ts` | Concentraram regras de negócio, validações de fluxo, autorização de domínio, orquestração de repositories, cálculo de resultados, correção e envio de e-mails. |
+| Repositories | `src/repositories/*.repository.ts` | Encapsulam queries SQL, `JOINs`, `INSERTs`, `UPDATEs`, `DELETEs`, `UPSERTs`, paginação, consultas agregadas e acesso direto ao PostgreSQL. |
+| Schemas | `src/schemas/*.schema.ts` | Definem contratos de entrada e saída da WebAPI com Zod, alimentando tanto a validação em runtime quanto a documentação Swagger/OpenAPI. |
+| Middlewares | `src/middlewares/auth.ts` | Implementam autenticação por Bearer Token, validação de JWT Supabase, modo de teste e autorização por perfil (`professor` ou `coordenador`). |
+| Banco e transações | `src/database/pool.ts`, `src/database/transaction.ts`, `src/database/migrations/*.sql` | Configuram o pool PostgreSQL, transações manuais e estrutura persistente do banco, incluindo tabelas, enums, constraints, triggers, funções e RLS. |
+| Erros | `src/errors/api-error.ts` | Padronizam erros de domínio e infraestrutura com status HTTP e códigos como `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT` e `BUSINESS_RULE_ERROR`. |
+| Helpers | `src/helpers/http.ts`, `src/helpers/multipart.ts`, `src/helpers/date.ts` | Padronizam envelope de resposta, obtenção do usuário autenticado, parsing de multipart e utilitários de data. |
+| Testes | `src/tests` e `src/tests/unit` | Cobrem integrações e unidades de services, repositories, controllers, middlewares, helpers, transações, autenticação, provas, questões, respostas, correção, resultados, e-mails e analytics. |
+
+A estrutura de dependência segue, na prática, o fluxo:
+
+```text
+Cliente HTTP
+  -> Fastify route
+  -> middleware de autenticação/autorização, quando aplicado
+  -> schema Zod de validação
+  -> controller
+  -> service
+  -> repository
+  -> pool PostgreSQL
+  -> banco PostgreSQL/Supabase
+```
+
+Esse fluxo evita que as rotas executem SQL diretamente. As rotas apenas descrevem o contrato HTTP e apontam para o controller. Os controllers chamam services. As services aplicam regra de negócio e chamam repositories. Os repositories fazem o acesso ao banco.
+
+---
 
 ### 3.2.2. Diagrama de Casos de Uso
 
@@ -3467,84 +3699,221 @@ end
 
 ### 3.2.7. Padroes de Projeto Aplicados (sprints 3 a 5)
 
-Esta secao registra apenas padroes que aparecem no backend atual. A evidencia esta em src/backend/src/controllers, src/backend/src/services, src/backend/src/repositories, src/backend/src/schemas, src/backend/src/middlewares/auth.ts, src/backend/src/database/pool.ts e src/backend/src/database/migrations/migration.sql.
+Esta seção lista apenas padrões que aparecem no código entregue. Não foram incluídos padrões sem evidência direta na estrutura do projeto.
 
-#### 1. Repository Pattern
+### 1. Layered Architecture
 
-Os repositories concentram SQL e isolam PostgreSQL/Supabase do restante da aplicacao. Controllers e services chamam classes como ProfessorRepository, ProvaRepository, QuestaoRepository, ProvaQuestaoRepository, AlunoPortalRepository, RespostaAlunoRepository, RespostaAnexoRepository, CorrecaoRepository, ResultadoRepository, EmailEnvioRepository e AvaliacaoLogRepository.
+O projeto aplica arquitetura em camadas, separando rotas, controllers, services, repositories e infraestrutura de banco. Essa separação é visível na organização dos diretórios `src/routes`, `src/controllers`, `src/services`, `src/repositories`, `src/schemas`, `src/middlewares` e `src/database`.
 
-- Necessidade: manter JOINs, filtros, UPSERTs, paginacao, RLS e constraints fora da camada HTTP.
-- Evidencia: QuestaoRepository.findMany, ProvaRepository.findMany, CorrecaoRepository.corrigirObjetivas e ProvaQuestaoRepository.remover.
-- Requisitos: RF001, RF003, RF009, RF012, RF014, RF017, RF027 e RF028.
+A camada de rotas declara endpoints e contratos. A camada de controllers recebe requisições e respostas. A camada de services concentra regras de negócio. A camada de repositories concentra SQL e acesso ao PostgreSQL. A infraestrutura de banco, autenticação e erros fica separada em módulos próprios.
 
-#### 2. Service Layer
+Exemplos reais:
 
-A camada de service concentra regra de negocio e orquestra repositories. ProvaService decide transicoes de status; QuestaoService valida edicao de questoes; AlunoPortalService inicia prova publica; RespostaAlunoService salva e envia respostas; CorrecaoService corrige; ResultadoService consolida notas; EmailResultadoService libera resultados por e-mail; AnalyticsService registra eventos.
+| Fluxo | Encadeamento |
+|---|---|
+| Criação de prova | `prova.routes.ts` → `ProvaController` → `ProvaService` → `ProvaRepository` → PostgreSQL |
+| Criação/listagem de questões | `questao.routes.ts` → `QuestaoController` → `QuestaoService` → `QuestaoRepository` → PostgreSQL |
+| Portal do aluno | `aluno-portal.routes.ts` → `AlunoPortalController` → `AlunoPortalService` → `AlunoPortalRepository` → PostgreSQL |
+| Correção | `correcao.routes.ts` → `CorrecaoController` → `CorrecaoService` → `CorrecaoRepository` → PostgreSQL |
+| Resultados | `resultado.routes.ts` → `ResultadoController` → `ResultadoService` → `ResultadoRepository` → PostgreSQL |
 
-- Necessidade: impedir que controllers conhecam regras como prova editavel somente em rascunho, aluno unico por prova, limites de pontuacao, envio final e autorizacao por vinculo professor/materia.
-- Evidencia: controllers chamam services, services chamam repositories e as rotas retornam envelopes padronizados.
-- Requisitos: RF001, RF007, RF008, RF009, RF014, RF015, RF017, RF019, RF027.
+Esse padrão reduz acoplamento e impede que regras de negócio fiquem espalhadas diretamente nas rotas HTTP.
 
-#### 3. DTO e validacao por schema Zod
+### 2. Repository Pattern
 
-Os schemas em src/backend/src/schemas definem params, querystring, body e response usados nas rotas Fastify por fastify-type-provider-zod. Entradas invalidas sao rejeitadas antes de chegar aos services, com status 422 e erro padronizado.
+O padrão Repository é usado para isolar a persistência. Os repositories são responsáveis por montar queries SQL, executar comandos no banco, lidar com `JOINs`, paginação, agregações, `UPSERTs` e consultas especializadas.
 
-- Evidencia: createProvaBodySchema, updateProvaConfiguracoesBodySchema, createQuestaoBodySchema, iniciarProvaBodySchema, salvarRespostaBodySchema, salvarCorrecaoBodySchema e schemas de resultado/e-mail.
-- Requisitos: RF004, RF005, RF006, RF007, RF009, RF012, RF015.
+Repositories reais do código:
 
-#### 4. Strategy para correcao
+| Repository | Responsabilidade |
+|---|---|
+| `AlunoRepository` | CRUD e consultas de alunos. |
+| `AlunoPortalRepository` | Consulta de prova pública, criação/reuso de aluno e tentativa da prova. |
+| `AnalyticsRepository` | Consulta de analytics de provas. |
+| `AnexoExportarRepository` | Busca e estrutura anexos para exportação. |
+| `AuthRepository` | Suporte à autenticação de usuários internos. |
+| `AvaliacaoLogRepository` | Persistência de logs operacionais. |
+| `CorrecaoRepository` | Consultas e gravações de correção, incluindo objetivas automáticas. |
+| `EmailEnvioRepository` | Registro, listagem e atualização de envios de e-mail. |
+| `MateriaRepository` | CRUD de matérias. |
+| `ProfessorRepository` | CRUD de professores e vínculos com matérias. |
+| `ProvaRepository` | CRUD, status, publicação, histórico e consultas de provas. |
+| `ProvaQuestaoRepository` | Vínculo entre provas e questões. |
+| `QuestaoRepository` | CRUD/listagem de questões, enunciados e alternativas. |
+| `RespostaAlunoRepository` | Salvamento, listagem e envio final de respostas. |
+| `RespostaAnexoRepository` | Registro de anexos vinculados a respostas. |
+| `ResultadoRepository` | Consolidação e exportação de resultados. |
+| `TemaRepository` | CRUD/listagem de temas. |
 
-O dominio de correcao usa duas estrategias comprovaveis: correcao automatica de objetivas e correcao manual de discursivas. CorrecaoRepository.corrigirObjetivas calcula nota em lote com CASE WHEN e ON CONFLICT; a correcao manual recebe nota, observacao e feedback do professor.
+Esse padrão é importante porque o banco possui muitas regras relacionais e queries com múltiplas tabelas. Sem repositories, controllers e services ficariam acoplados à implementação SQL.
 
-- Evidencia: POST /api/v1/provas/:provaId/correcao/objetivas e PUT /api/v1/respostas/:respostaId/correcao.
-- Requisitos: RF014, RF015, RN13.
+### 3. Service Layer
 
-#### 5. State para ciclo de vida
+O padrão Service Layer aparece em todos os domínios principais. As services não apenas repassam chamadas; elas aplicam regras e coordenam repositories.
 
-Prova percorre rascunho, publicada, encerrada e antiga. ProvaService.publicar, ProvaService.encerrar e ProvaService.arquivar executam transicoes; a migration reforca regras com validar_transicao_e_publicacao_prova_trigger e prova_status_historico. O fluxo do aluno usa prova_aluno.status, AlunoPortalService e RespostaAlunoService.
+Exemplos reais:
 
-- Evidencia: POST /api/v1/provas/:provaId/publicar, /encerrar, /arquivar e POST /api/v1/public/provas-aluno/:provaAlunoId/enviar.
-- Requisitos: RF001, RF007, RF008, RF020, RF026, RN01, RN05, RN12.
+| Service | Regras/orquestrações observáveis |
+|---|---|
+| `ProvaService` | Cria prova, lista conforme perfil, atualiza metadados, valida status editável, publica, encerra, arquiva, remove e consulta histórico. |
+| `ProvaQuestaoService` | Garante que questões só sejam adicionadas/removidas em provas no status `rascunho`. |
+| `QuestaoService` | Valida acesso à matéria e coordena criação/edição/listagem de questões. |
+| `AlunoPortalService` | Valida se prova está publicada e disponível antes de exibir/iniciar prova pública. |
+| `RespostaAlunoService` | Garante que tentativa exista, esteja em andamento, salva rascunho e envia prova final. |
+| `CorrecaoService` | Controla acesso à prova, executa correção automática e salva correção manual. |
+| `ResultadoService` | Consolida resultados e restringe exportação a coordenadores. |
+| `EmailResultadoService` | Libera resultados por e-mail, trata pendências de correção, registra envios e permite reenvio apenas quando status é `erro`. |
+| `RespostaAnexoService` | Coordena upload de arquivo e registro do anexo. |
 
-#### 6. Chain of Responsibility em auth
+Esse padrão mantém as regras de negócio fora dos controllers e facilita testes unitários, como demonstrado pelos arquivos em `src/tests/unit`.
 
-Rotas protegidas passam por leitura do token, montagem do usuario autenticado e validacao de perfil por requireRole. A cadeia retorna 401 quando nao ha autenticacao valida e 403 quando o perfil nao pode executar a acao.
+### 4. DTO/Schema Validation com Zod
 
-- Evidencia: src/backend/src/middlewares/auth.ts aplicado em provas, questoes, correcao, resultados, e-mails, analytics, cadastros e coordenador.
-- Requisitos: RF002, RF018, RF019, RF021, RN18, RN19.
+A aplicação usa Zod como mecanismo de validação e documentação. Os schemas estão em `src/schemas` e são conectados ao Fastify por `fastify-type-provider-zod`.
 
-#### 7. Singleton do pool PostgreSQL
+Exemplos de schemas reais:
 
-src/backend/src/database/pool.ts exporta uma unica instancia de pg.Pool configurada por DATABASE_URL. Repositories reutilizam o mesmo pool e evitam abrir conexoes por requisicao.
+| Arquivo | Exemplos de schemas |
+|---|---|
+| `prova.schema.ts` | `createProvaBodySchema`, `updateProvaBodySchema`, `publicarProvaBodySchema`, `provaSchema`, `provaDetailSchema`. |
+| `questao.schema.ts` | `createQuestaoBodySchema`, `updateQuestaoBodySchema`, `questaoTipoSchema`, `questaoResponseSchema`. |
+| `resposta-aluno.schema.ts` | `salvarRespostaBodySchema`, `enviarProvaBodySchema`, `respostaSalvaSchema`. |
+| `correcao.schema.ts` | `salvarCorrecaoBodySchema`, `correcaoQuestaoSchema`, `correcaoRespostaSchema`. |
+| `resultado.schema.ts` | `resultadoAlunoSchema`, `resultadoQuestaoSchema`, `exportarResultadoBodySchema`. |
+| `email.schema.ts` | `liberarEmailBodySchema`, `emailEnvioSchema`, `emailLiberadoSchema`. |
 
-- Evidencia: imports de pool nos repositories e helper withTransaction.
-- Requisitos: RNF desempenho e capacidade.
+Esse padrão evita que entradas inválidas avancem para a camada de serviço. Quando há erro de validação, o handler global retorna status `422` com erro padronizado.
 
-#### 8. Observer por triggers, logs e analytics
+### 5. Middleware Pattern
 
-A migration contem triggers que reagem a eventos de escrita: set_atualizado_em, registrar_status_prova, gerar_qr_code_prova e triggers de validacao. Na aplicacao, AnalyticsService e AvaliacaoLogRepository registram eventos por POST /api/v1/logs.
+O padrão Middleware aparece principalmente na autenticação/autorização. As rotas protegidas recebem `preHandler: requireRole(...)`. O middleware executa antes do controller, valida o usuário e decide se a requisição pode continuar.
 
-- Evidencia: avaliacao_log, prova_status_historico e triggers em migration.sql.
-- Requisitos: RF008, RF019, RF020, RN07, RN17.
+Exemplos:
 
-#### 9. Facade em services compostos
+```text
+requireRole("professor")
+requireRole("coordenador")
+requireRole("professor", "coordenador")
+```
 
-ResultadoService, EmailResultadoService, AnexoExportarService e AlunoPortalService escondem orquestracoes de varios repositories atras de metodos simples para os controllers.
+O middleware `requireAuth` também possui dois modos reais:
 
-- Evidencia: GET /api/v1/provas/:provaId/resultados, POST /api/v1/provas/:provaId/resultados/exportar, POST /api/v1/provas/:provaId/resultados/liberar-email e POST /api/v1/provas/:provaId/anexos/exportar.
-- Requisitos: RF017, RF027, RF028, RF009, RF026.
+| Modo | Funcionamento |
+|---|---|
+| Teste | Aceita headers `x-user-role`, `x-user-id`, `x-user-email`, `x-user-name` ou tokens `test-professor`/`test-coordenador`. |
+| Normal | Valida Bearer Token JWT com `jose`, usando `SUPABASE_JWT_SECRET` e, opcionalmente, `SUPABASE_JWT_ISSUER`. Depois busca o usuário em `professor` ou `coordenador`. |
 
-| Padrao | Evidencia no backend | Requisitos centrais |
-|--------|----------------------|---------------------|
-| Repository | repositories/*.repository.ts | RF001, RF003, RF014, RF017 |
-| Service Layer | services/*.service.ts | RF001, RF007, RF009, RF017 |
-| DTO/Zod | schemas/*.schema.ts e rotas Fastify | RF004, RF007, RF009, RF015 |
-| Strategy | CorrecaoService e CorrecaoRepository | RF014, RF015 |
-| State | ProvaService, RespostaAlunoService e triggers | RF001, RF008, RF026 |
-| Chain of Responsibility | middlewares/auth.ts e requireRole | RF002, RF018, RF019 |
-| Singleton | database/pool.ts | RNF desempenho/capacidade |
-| Observer | triggers, AvaliacaoLogRepository, AnalyticsService | RF008, RF019, RF020 |
-| Facade | ResultadoService, EmailResultadoService, AnexoExportarService | RF017, RF027, RF028 |
+Esse padrão centraliza autenticação e autorização, evitando repetição de validação de token dentro de cada controller.
+
+### 6. Adapter Pattern
+
+O projeto possui uma interface `EmailAdapter` em `src/services/email-adapter.ts`, com implementação concreta `FakeEmailAdapter`.
+
+```text
+EmailAdapter
+  -> FakeEmailAdapter
+```
+
+A interface define o contrato:
+
+```text
+send(para, assunto, corpo): Promise<{ success: boolean; error?: string }>
+```
+
+A implementação atual é simulada: se `EMAIL_FAIL_MODE=always`, retorna falha; caso contrário, retorna sucesso. Isso permite que `EmailResultadoService` dependa de um contrato de envio, sem ficar acoplado a um provedor real de e-mail. No futuro, uma implementação real poderia substituir o adapter fake sem alterar a regra de negócio principal.
+
+### 7. Singleton/Shared Resource para pool de conexão
+
+O arquivo `src/database/pool.ts` exporta uma única instância de `Pool` do pacote `pg`. Todos os repositories reutilizam essa instância, evitando criar uma nova conexão para cada operação manualmente.
+
+Esse padrão de recurso compartilhado aparece na prática como:
+
+```text
+pool.ts
+  -> export const pool = new Pool(...)
+repositories
+  -> importam pool
+transaction.ts
+  -> usa pool.connect()
+```
+
+A configuração também adapta SSL conforme o host: banco local (`localhost` ou `127.0.0.1`) usa SSL falso; banco remoto usa SSL com `rejectUnauthorized: false`.
+
+### 8. Unit of Work / Transaction Helper
+
+O helper `withTransaction` em `src/database/transaction.ts` implementa uma unidade de trabalho transacional. Ele abre uma conexão, executa `BEGIN`, roda o callback, aplica `COMMIT` em caso de sucesso e `ROLLBACK` em caso de erro, liberando o client no final.
+
+Esse padrão é importante em operações que precisam manter consistência entre múltiplos comandos SQL. Ele evita gravações parciais quando uma etapa falha.
+
+Fluxo implementado:
+
+```text
+pool.connect()
+BEGIN
+callback(client)
+COMMIT
+client.release()
+```
+
+Em caso de erro:
+
+```text
+ROLLBACK
+client.release()
+throw error
+```
+
+### 9. State Pattern aplicado ao ciclo de vida
+
+O sistema aplica uma lógica de estados para provas e tentativas de aluno. Embora não exista uma classe formal chamada `State`, o padrão aparece como modelagem explícita de estados, transições permitidas e ações associadas.
+
+Estados da prova:
+
+```text
+rascunho -> publicada -> encerrada -> antiga
+```
+
+Estados da tentativa do aluno:
+
+```text
+nao_iniciada -> em_andamento -> enviada -> corrigida
+```
+
+A lógica aparece em:
+
+| Local | Evidência |
+|---|---|
+| `prova_status` | Enum no banco. |
+| `prova_aluno_status` | Enum no banco. |
+| `ProvaService.publicar` | Permite publicar apenas prova em `rascunho`. |
+| `ProvaService.encerrar` | Permite encerrar apenas prova `publicada`. |
+| `ProvaService.arquivar` | Permite arquivar apenas prova `encerrada`. |
+| `ProvaQuestaoService` | Permite alterar questões apenas em prova `rascunho`. |
+| `RespostaAlunoService` | Permite salvar/enviar apenas tentativa em andamento. |
+| Triggers SQL | Reforçam transições e regras de publicação no banco. |
+
+### 10. Strategy Pattern aplicado à correção
+
+O domínio de correção possui duas estratégias reais:
+
+| Estratégia | Implementação |
+|---|---|
+| Correção automática | `POST /api/v1/provas/:provaId/correcao/objetivas`, usando `CorrecaoService.executarCorrecaoAutomatica` e `CorrecaoRepository.corrigirObjetivas`. |
+| Correção manual | `PUT /api/v1/respostas/:respostaId/correcao`, usando nota, observação e feedback do professor. |
+
+A correção automática atende questões objetivas, como múltipla escolha e verdadeiro/falso. A correção manual atende respostas que dependem da avaliação do professor, especialmente discursivas. As duas estratégias gravam dados na tabela `correcao`, diferenciadas pelo enum `correcao_tipo`.
+
+### 11. Template/Factory de resposta HTTP
+
+Os helpers HTTP padronizam a estrutura das respostas. Controllers não montam manualmente o envelope completo em todos os casos; eles usam funções auxiliares como `sendSuccess` e `sendCreated`.
+
+Isso padroniza o formato de retorno e torna a WebAPI mais previsível. Também reduz repetição nos controllers.
+
+### 12. Centralized Error Handling
+
+O tratamento de erros é centralizado em `src/app.ts` pelo `setErrorHandler`. O projeto não espalha `try/catch` de formatação HTTP por todas as rotas. Erros de domínio são lançados como `ApiError`, erros de validação Zod são convertidos para `VALIDATION_ERROR`, rotas inexistentes recebem `NOT_FOUND` e erros inesperados retornam `INTERNAL_ERROR`.
+
+Esse padrão melhora a consistência da API e facilita a documentação dos retornos.
 
 ## 3.3. Wireframes (sprint 2)
 
