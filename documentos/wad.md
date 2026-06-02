@@ -5134,27 +5134,29 @@ end note
 ### 3.6.3. Modelo Relacional e Modelo Físico
 
 
-Esta seção apresenta a modelagem física do banco de dados do projeto. O modelo foi estruturado para utilização com PostgreSQL/Supabase, contemplando as tabelas principais do sistema, seus atributos, tipos de dados, chaves primárias, chaves estrangeiras, restrições e índices.
+Esta seção apresenta o modelo físico efetivamente implementado no banco de dados do projeto. A fonte de verdade considerada é a migration `src/backend/src/database/migrations/migration.sql`, que define extensões, enums, tabelas, tipos de dados, chaves primárias, chaves estrangeiras, restrições, índices, triggers, funções auxiliares e políticas de Row Level Security do PostgreSQL/Supabase.
 
 
 
 
-#### Modelo Físico
+#### Decisões físicas adotadas
 
 
-O modelo físico descreve como o banco será implementado no PostgreSQL/Supabase, incluindo tipos de dados, constraints e relacionamentos.
+O banco utiliza PostgreSQL/Supabase com as extensões `pgcrypto`, para geração de identificadores por `gen_random_uuid()`, e `citext`, para campos de e-mail com comparação insensível a maiúsculas e minúsculas. As entidades centrais usam `UUID` como chave primária, datas e horários usam `TIMESTAMPTZ`, conteúdos variáveis usam `TEXT` ou `JSONB`, e notas usam `NUMERIC` com precisão definida. A integridade é reforçada por `FOREIGN KEY`, `UNIQUE`, `CHECK`, índices, triggers e RLS.
 
 
-As principais decisões adotadas foram:
+#### Enums implementados
 
+| Enum | Valores |
+|------|---------|
+| `prova_status` | `rascunho`, `publicada`, `encerrada`, `antiga` |
+| `prova_aluno_status` | `nao_iniciada`, `em_andamento`, `enviada`, `corrigida` |
+| `questao_tipo` | `multipla_escolha`, `verdadeiro_falso`, `discursiva` |
+| `correcao_tipo` | `manual`, `automatica` |
+| `relatorio_tipo` | `desempenho_geral`, `por_aluno`, `por_questao`, `por_materia` |
+| `email_status` | `pendente`, `enviado`, `erro` |
 
-- Utilização de `UUID` como chave primária nas tabelas principais;
-- Uso de `gen_random_uuid()` para geração automática dos identificadores;
-- Definição de campos obrigatórios com `NOT NULL`;
-- Uso de `FOREIGN KEY` para garantir integridade entre tabelas relacionadas;
-- Uso de `UNIQUE` para impedir duplicidade em campos como e-mail;
-- Uso de `TIMESTAMPTZ` para armazenar datas e horários com fuso;
-- Uso de tabelas associativas para representar relacionamentos muitos-para-muitos.
+Não há enum `perfil` nem enum próprio para formato de exportação. O formato de exportação é implementado como `TEXT`, com `CHECK` restrito a `xlsx` e `csv`.
 
 
 #### Principais Tabelas
