@@ -5617,9 +5617,15 @@ Integrar o frontend as rotas ja documentadas e produzir evidencias navegaveis: l
 
 ## 6.1 Resumo Executivo
 
-*Preencher com até 300 palavras, sem necessidade de fonte*
+O projeto propõe uma aplicação web para centralizar a criação, aplicação, entrega, correção e análise de avaliações remotas do Instituto Ponte. A oportunidade identificada está no crescimento da atuação nacional da instituição, que atende centenas de estudantes em diferentes estados brasileiros, exigindo processos digitais mais escaláveis, seguros e padronizados.
 
-*Apresente de forma clara e objetiva os principais destaques do projeto: oportunidades de mercado, diferenciais competitivos da aplicação web e os objetivos estratégicos pretendidos.*
+Atualmente, parte do fluxo avaliativo ocorre por canais dispersos, como WhatsApp e e-mail, o que gera risco de perda de arquivos, dificuldade de organização das respostas, retrabalho para professores e menor isonomia na correção. A aplicação atende esse problema ao reunir, em uma única plataforma, o acesso às provas, o envio de respostas e anexos, o acompanhamento do progresso, a correção por questão e a visualização de resultados.
+
+Os principais diferenciais competitivos da solução são a interface simples e responsiva para alunos, o acesso facilitado por link, o suporte a respostas com anexos e fórmulas, o salvamento estruturado das submissões, o banco de questões, a correção padronizada por item e os painéis de desempenho para professores e coordenadores. Esses recursos fortalecem a equidade do processo avaliativo e reduzem a carga operacional da equipe pedagógica.
+
+Como objetivos estratégicos, o projeto busca aumentar a confiabilidade das avaliações remotas, reduzir falhas operacionais, melhorar a eficiência da correção, apoiar decisões pedagógicas com dados e contribuir para a missão do Instituto Ponte de promover ascensão social por meio da educação de qualidade.
+
+Fonte: Instituto Ponte, Relatório Anual 2025; documentação WAD do projeto. https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf
 
 ## 6.2 Análise de Mercado
 
