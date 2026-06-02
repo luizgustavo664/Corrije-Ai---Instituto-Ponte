@@ -1468,12 +1468,10 @@ Identificou-se que o processo de correção de provas do Instituto Ponte é info
 | CONF — Confiabilidade    | O sistema deve garantir a integridade das respostas e arquivos enviados. | 100% das submissões confirmadas armazenadas; taxa de falha < 2%. | Salvamento automático de progresso (US10), confirmação visual de envio (US11), persistência transacional em banco e validação de integridade na exportação de anexos (RN16). |
 | DES — Desempenho         | O sistema deve responder de forma eficiente às ações principais do usuário, mesmo em conexões de baixa velocidade. | Endpoints de leitura (listagem de provas, questões) respondem em p95 < 500ms com até 200 registros; endpoints de escrita (submissão de prova) confirmam persistência em p95 < 1s; uploads de imagem processados com compressão client-side antes do envio. | Otimização de requisições, compressão de imagens client-side e cache de respostas frequentes. |
 | SUP — Suportabilidade    | O sistema deve permitir manutenção e evolução contínua ao longo das sprints, com cobertura de testes que proteja funcionalidades existentes contra regressões. | Cobertura de testes automatizados ≥ 60% nas camadas de serviço ao final da Sprint 4; tempo de onboarding de novo desenvolvedor ≤ 2h seguindo o README; nenhuma alteração em sprint posterior deve quebrar testes existentes aprovados. | Arquitetura modular em camadas (Controller/Service/Repository), versionamento Git com branches por funcionalidade e suite de testes Jest. |
-| SEG — Segurança          | O sistema deve restringir o acesso às provas, proteger dados pessoais dos alunos (CPF, e-mail) em conformidade com a LGPD, e validar todos os dados de entrada. | Acesso de alunos apenas via link UUID válido; 100% dos inputs validados no backend; tráfego obrigatoriamente via HTTPS; dados pessoais não armazenados em texto plano; consentimento LGPD registrado com timestamp por aluno. | URLs únicas por UUID, validação backend em todas as rotas, HTTPS obrigatório, hash de dados sensíveis e registro de consentimento explícito. |
-| CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 50 usuários simultâneos em testes iniciais; taxa de erros 5xx < 1% e p95 < 1s sob essa carga. | Arquitetura Node.js com I/O não-bloqueante; uploads com compressão client-side reduzem carga no servidor; testável com k6 ou Artillery. |
+| SEG — Segurança          | O sistema deve restringir o acesso às provas, proteger dados pessoais dos alunos (CPF, e-mail) em conformidade com a LGPD, e validar todos os dados de entrada. | Acesso de alunos apenas via link UUID válido; 100% dos inputs validados no backend; tráfego obrigatoriamente via HTTPS (TLS 1.2+); dados pessoais criptografados em repouso (AES-256) e em trânsito; consentimento LGPD registrado com timestamp por aluno; política de retenção definida. | URLs únicas por UUID, validação backend em todas as rotas, TLS 1.2+ obrigatório, criptografia AES-256 em armazenamento, política de retenção e registro de consentimento explícito. |
+| CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 200 usuários simultâneos em testes iniciais; taxa de erros 5xx < 1% e p95 < 1s sob essa carga. | Arquitetura Node.js com I/O não-bloqueante; uploads com compressão client-side reduzem carga no servidor; testável com k6 ou Artillery. |
 | REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Ausência de sistema de login/senha para alunos; ausência de chamadas a WebAPIs externas não autorizadas; verificável por revisão de código. | Fluxo do aluno via link UUID sem senha; OAuth2 apenas para usuários internos; nenhuma dependência de API externa no package.json além das bibliotecas autorizadas (KaTeX, MathJax). |
 | ORG — Organizacionais    | O sistema deve ser documentado e entregável de forma reproduzível, com README atualizado a cada sprint e instruções de instalação executáveis em ambiente limpo. | README com instruções de instalação executáveis em ambiente limpo Ubuntu/Node.js sem etapas adicionais; documentação sincronizada com o código a cada sprint; todas as variáveis de ambiente externalizadas em `.env.example`. | Documentação versionada junto ao código, variáveis de ambiente separadas e README com passo a passo de instalação verificado por membro externo ao time. |
-
----
 
 #### Explicação dos Requisitos Não Funcionais
 
@@ -1553,17 +1551,17 @@ A matriz abaixo foi atualizada a partir das rotas registradas no backend Fastify
 
 | RF | RN associadas | Endpoint(s) implementado(s) | Método(s) | Situação atual |
 |----|---------------|-----------------------------|-----------|----------------|
-| RF001 | RN01 | `/api/v1/provas`, `/api/v1/provas/{provaId}`, `/api/v1/provas/{provaId}/status-historico`, `/api/v1/provas/{provaId}/encerrar`, `/api/v1/provas/{provaId}/arquivar` | GET, PUT, DELETE, POST | Implementado no backend; evidências em `prova.routes.ts`, `prova.controller.ts`, `prova.service.ts` e `prova.repository.ts`. |
+| RF001 | RN01 | `/api/v1/provas`, `/api/v1/provas/{provaId}`, `/api/v1/provas/{provaId}/status-historico`, `/api/v1/provas/{provaId}/configuracoes`, `/api/v1/provas/{provaId}/publicar`, `/api/v1/provas/{provaId}/encerrar`, `/api/v1/provas/{provaId}/arquivar` | GET, PUT, DELETE, POST, PATCH | Implementado no backend; evidências em `prova.routes.ts`, `prova.controller.ts`, `prova.service.ts` e `prova.repository.ts`. |
 | RF002 | RN18, RN19 | `/api/v1/auth/google`, `/api/v1/auth/google/callback`, `/api/v1/auth/me`, `/api/v1/auth/logout` | GET, POST | Implementado no backend com OAuth Google/JWT e verificação de usuário interno cadastrado. |
-| RF003 | RN20 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/provas/{provaId}/questoes` | GET, POST, PUT, DELETE | Implementado no backend; banco de questões pesquisável por matéria, tema, tipo, status e busca textual. |
+| RF003 | RN20 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/provas/{provaId}/questoes`, `/api/v1/provas/{provaId}/questoes/{questaoId}` | GET, POST, PUT, DELETE | Implementado no backend; banco de questões pesquisável por matéria, tema, tipo, status e busca textual. |
 | RF004 | RN03 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}` | POST, PUT | Implementado no backend com enunciado em `conteudoLatex` validado por Zod e persistido em `enunciado.conteudo_latex`. |
 | RF005 | RN03 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}` | POST, PUT | Implementado no backend com tipos `multipla_escolha`, `verdadeiro_falso` e `discursiva`. |
-| RF006 | RN04 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/public/respostas/{respostaId}/anexos` | POST, PUT | Implementado parcialmente: backend controla `permiteAnexo` e upload; galeria visual é responsabilidade do frontend. |
+| RF006 | RN04 | `/api/v1/provas/{provaId}/questoes`, `/api/v1/public/respostas/{respostaId}/anexos` | GET, POST, DELETE | Implementado parcialmente: backend controla `permiteAnexo`, upload e vínculo da questão; galeria visual é responsabilidade do frontend. |
 | RF007 | RN05 | `/api/v1/provas/{provaId}/configuracoes`, `/api/v1/public/provas/{urlAcesso}`, `/api/v1/provas/{provaId}/encerrar` | PATCH, GET, POST | Implementado no backend; regras de período e encerramento ficam em service/repository. |
 | RF008 | RN07 | `/api/v1/provas/{provaId}/publicar` | POST | Implementado no backend; publicação gera URL única de acesso e payload de QR Code. |
 | RF009 | RN08 | `/api/v1/public/provas/{urlAcesso}/iniciar` | POST | Implementado no backend; aluno se identifica por nome, e-mail, CPF e aceite de termos. |
 | RF010 | RN10 | Sem endpoint próprio | N/A | Pendente no frontend; backend entrega os dados de questão/anexo necessários para visualização. |
-| RF011 | RN10 | `/api/v1/public/provas/{urlAcesso}/iniciar`, `/api/v1/questoes` | GET, POST | Implementado parcialmente no backend por armazenamento/retorno de LaTeX; renderização visual é frontend. |
+| RF011 | RN10 | `/api/v1/public/provas/{urlAcesso}`, `/api/v1/public/provas/{urlAcesso}/iniciar`, `/api/v1/public/provas-aluno/{provaAlunoId}/respostas/{questaoId}` | GET, POST, PUT | Implementado parcialmente no backend por armazenamento/retorno de LaTeX; renderização visual e zoom são responsabilidades do frontend. |
 | RF012 | RN04 | `/api/v1/public/respostas/{respostaId}/anexos` | POST | Implementado no backend com multipart, validação de tipo e limite de tamanho. |
 | RF013 | RN11 | Sem endpoint próprio | N/A | Pendente no frontend; backend recebe anexos, mas compressão client-side não é função da WebAPI. |
 | RF014 | RN13 | `/api/v1/provas/{provaId}/correcao/questoes`, `/api/v1/provas/{provaId}/questoes/{questaoId}/respostas` | GET | Implementado no backend para correção por item. |
@@ -1586,108 +1584,340 @@ A matriz abaixo foi atualizada a partir das rotas registradas no backend Fastify
 
 ### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
 
-O backend segue Arquitetura em Camadas no padrão **Controller → Service → Repository → Model**, alinhado ao modelo de referência disponibilizado em `modelos-arquitetura-exemplo`. A separação impede que rotas HTTP acessem diretamente o banco e mantém as regras de negócio concentradas nas classes de serviço.
+A arquitetura atual do backend segue uma organização em camadas, implementada em TypeScript com Fastify, validação por Zod, documentação automática via Swagger/OpenAPI e persistência em PostgreSQL/Supabase. O código entregue nesta sprint está concentrado no diretório `src`, com separação explícita entre rotas, controllers, services, repositories, schemas, middlewares, helpers, database, errors e testes.
+
+A aplicação não possui, no código analisado, uma camada de frontend implementada dentro do artefato entregue. Por isso, o diagrama abaixo representa o estado real do backend e seus pontos de integração: clientes HTTP acessam a WebAPI, a WebAPI processa autenticação, validação, regras de negócio e persistência, e o banco PostgreSQL/Supabase armazena os dados da aplicação.
 
 ```plantuml
-@startuml ArquiteturaEmCamadasCorrijeAi
-title Arquitetura em Camadas - Corrije Ai
+@startuml AplicacaoInfraestrutura
+title Aplicação Fastify e Infraestrutura Interna
 
 top to bottom direction
 skinparam shadowing false
 skinparam roundCorner 12
 skinparam componentStyle rectangle
+skinparam packageStyle rectangle
 
-actor "Usuario\n(navegador / cliente HTTP)" as Cliente
+actor "Cliente HTTP\n(navegador, ferramenta de API\nou portal consumidor da API)" as Cliente
 
-package "1. Controller" as L1 #E8F4FD {
-  [AuthController] as AuthC
-  [ProvaController] as ProvaC
-  [QuestaoController] as QuestaoC
-  [AlunoPortalController] as PortalC
-  [CorrecaoController] as CorrecaoC
-  [ResultadoController] as ResultadoC
-  [AnalyticsController] as AnalyticsC
+package "Aplicação Fastify\nsrc/app.ts + src/server.ts" as App {
+  component "buildApp()\nConfiguração do servidor" as BuildApp
+  component "Fastify Server\nPorta: process.env.PORT ou 3333" as Server
+  component "CORS\n@fastify/cors" as Cors
+  component "Swagger/OpenAPI\n@fastify/swagger\n@fastify/swagger-ui\n/docs" as Swagger
+  component "Validação/Serialização\nfastify-type-provider-zod\nZod" as ZodProvider
+  component "Error Handler Global\nApiError, ZodError,\n404 e 500 padronizados" as ErrorHandler
 }
 
-package "2. Service" as L2 #FFF7E0 {
-  [AuthService] as AuthS
-  [ProvaService] as ProvaS
-  [QuestaoService] as QuestaoS
-  [AlunoPortalService] as PortalS
-  [CorrecaoService] as CorrecaoS
-  [ResultadoService] as ResultadoS
-  [AnalyticsService] as AnalyticsS
+package "Infraestrutura Interna" as Infra {
+  component "requireAuth / requireRole\nsrc/middlewares/auth.ts" as AuthMiddleware
+  component "ApiError\nsrc/errors/api-error.ts" as ApiError
+  component "sendSuccess / sendCreated\ngetAuthenticatedUser\nsrc/helpers/http.ts" as HttpHelpers
+  component "parseSingleMultipartFile\nsrc/helpers/multipart.ts" as Multipart
+  component "pool\nsrc/database/pool.ts" as Pool
+  component "withTransaction\nsrc/database/transaction.ts" as Transaction
+  component "migrate.ts\nExecução das migrations" as Migrate
 }
 
-package "3. Repository" as L3 #E8F8E8 {
-  [AuthRepository] as AuthR
-  [ProvaRepository] as ProvaR
-  [QuestaoRepository] as QuestaoR
-  [AlunoPortalRepository] as PortalR
-  [CorrecaoRepository] as CorrecaoR
-  [ResultadoRepository] as ResultadoR
-  [AnalyticsRepository] as AnalyticsR
-}
+database "PostgreSQL / Supabase\nsrc/database/migrations/*.sql" as DB
+cloud "Supabase Auth\nJWT + auth.users" as SupabaseAuth
+cloud "Storage HTTP\nusado pelo StorageService" as Storage
+cloud "Serviço de e-mail simulado\nFakeEmailAdapter" as EmailFake
 
-package "4. Model / Schema" as L4 #F3E8FF {
-  [Professor]
-  [Coordenador]
-  [Prova]
-  [Questao]
-  [ProvaAluno]
-  [RespostaAluno]
-  [Correcao]
-  [ResultadoAluno]
-}
+Cliente --> Server : HTTP
+Server --> BuildApp
+BuildApp --> Cors
+BuildApp --> Swagger
+BuildApp --> ZodProvider
+BuildApp --> ErrorHandler
 
-database "PostgreSQL / Supabase\n(migrations SQL, triggers, RLS)" as DB
+ErrorHandler --> ApiError
+AuthMiddleware --> SupabaseAuth : valida JWT
+AuthMiddleware --> Pool : consulta professor/coordenador
+Transaction --> Pool
+Pool --> DB
+Migrate --> DB
 
-Cliente -down-> AuthC
-Cliente -down-> ProvaC
-Cliente -down-> QuestaoC
-Cliente -down-> PortalC
-Cliente -down-> CorrecaoC
-Cliente -down-> ResultadoC
-Cliente -down-> AnalyticsC
-
-AuthC -down-> AuthS
-ProvaC -down-> ProvaS
-QuestaoC -down-> QuestaoS
-PortalC -down-> PortalS
-CorrecaoC -down-> CorrecaoS
-ResultadoC -down-> ResultadoS
-AnalyticsC -down-> AnalyticsS
-
-AuthS -down-> AuthR
-ProvaS -down-> ProvaR
-QuestaoS -down-> QuestaoR
-PortalS -down-> PortalR
-CorrecaoS -down-> CorrecaoR
-ResultadoS -down-> ResultadoR
-AnalyticsS -down-> AnalyticsR
-
-ProvaS ..> QuestaoR : vinculos de questoes
-CorrecaoS ..> ProvaR : permissao e pontuacao
-ResultadoS ..> CorrecaoR : consolidacao de notas
-
-AuthR -down-> DB
-ProvaR -down-> DB
-QuestaoR -down-> DB
-PortalR -down-> DB
-CorrecaoR -down-> DB
-ResultadoR -down-> DB
-AnalyticsR -down-> DB
 @enduml
 ```
 
-| Camada | O que faz | O que não faz | Evidências no código |
-|---|---|---|---|
-| Controller | Recebe requisições HTTP, aciona services e retorna status/body padronizados. | Não executa SQL e não concentra regras de negócio. | `src/backend/src/controllers`, `src/backend/src/routes` |
-| Service | Aplica regras de negócio, valida transições e orquestra repositories. | Não conhece detalhes de renderização do frontend nem monta SQL diretamente. | `src/backend/src/services` |
-| Repository | Encapsula SQL, transações e mapeamento entre banco e objetos de resposta. | Não decide autorização de rota nem trata protocolo HTTP. | `src/backend/src/repositories`, `src/backend/src/database/transaction.ts` |
-| Model / Schema | Representa contratos de entrada/saída e entidades persistidas nas migrations. | Não acessa banco diretamente. | `src/backend/src/schemas`, `src/backend/src/database/migrations/migration.sql` |
+```plantuml
+@startuml RotasControllers
+title Camada de Rotas e Controllers
 
-Essa organização é observável nas rotas principais do artefato: `/api/v1/provas` passa por `ProvaController`, `ProvaService` e `ProvaRepository`; `/api/v1/questoes` passa por `QuestaoController`, `QuestaoService` e `QuestaoRepository`; `/api/v1/public/provas/{urlAcesso}` passa por `AlunoPortalController`, `AlunoPortalService` e `AlunoPortalRepository`.
+top to bottom direction
+skinparam shadowing false
+skinparam roundCorner 12
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "Camada de Rotas\nsrc/routes" as Routes {
+  component "healthRoutes" as RHealth
+  component "authRoutes" as RAuth
+  component "alunoRoutes" as RAluno
+  component "alunoPortalRoutes" as RPortal
+  component "analyticsRoutes" as RAnalytics
+  component "anexoExportarRoutes" as RAnexoExportar
+  component "coordenadorRoutes" as RCoordenador
+  component "correcaoRoutes" as RCorrecao
+  component "emailRoutes" as REmail
+  component "materiaRoutes" as RMateria
+  component "professorRoutes" as RProfessor
+  component "provaRoutes" as RProva
+  component "questaoRoutes" as RQuestao
+  component "respostaAlunoRoutes" as RRespostaAluno
+  component "respostaAnexoRoutes" as RRespostaAnexo
+  component "resultadoRoutes" as RResultado
+  component "temaRoutes" as RTema
+}
+
+package "Camada de Controle\nsrc/controllers" as Controllers {
+  component "HealthController" as CHealth
+  component "AuthController" as CAuth
+  component "AlunoController" as CAluno
+  component "AlunoPortalController" as CPortal
+  component "AnalyticsController" as CAnalytics
+  component "AnexoExportarController" as CAnexoExportar
+  component "CorrecaoController" as CCorrecao
+  component "EmailResultadoController" as CEmail
+  component "MateriaController" as CMateria
+  component "ProfessorController" as CProfessor
+  component "ProvaController" as CProva
+  component "ProvaQuestaoController" as CProvaQuestao
+  component "QuestaoController" as CQuestao
+  component "RespostaAlunoController" as CRespostaAluno
+  component "RespostaAnexoController" as CRespostaAnexo
+  component "ResultadoController" as CResultado
+  component "TemaController" as CTema
+}
+
+component "requireAuth / requireRole\nsrc/middlewares/auth.ts" as AuthMiddleware
+component "sendSuccess / sendCreated\ngetAuthenticatedUser\nsrc/helpers/http.ts" as HttpHelpers
+component "parseSingleMultipartFile\nsrc/helpers/multipart.ts" as Multipart
+
+Routes --> AuthMiddleware : rotas protegidas
+
+RHealth --> CHealth
+RAuth --> CAuth
+RAluno --> CAluno
+RPortal --> CPortal
+RAnalytics --> CAnalytics
+RAnexoExportar --> CAnexoExportar
+RCorrecao --> CCorrecao
+REmail --> CEmail
+RMateria --> CMateria
+RProfessor --> CProfessor
+RProva --> CProva
+RProva --> CProvaQuestao
+RQuestao --> CQuestao
+RRespostaAluno --> CRespostaAluno
+RRespostaAnexo --> CRespostaAnexo
+RResultado --> CResultado
+RTema --> CTema
+
+Controllers --> HttpHelpers
+CRespostaAnexo --> Multipart
+
+@enduml
+```
+
+```plantuml
+@startuml ControllersServices
+title Relação entre Controllers e Services
+
+top to bottom direction
+skinparam shadowing false
+skinparam roundCorner 12
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "Camada de Controle\nsrc/controllers" as Controllers {
+  component "HealthController" as CHealth
+  component "AuthController" as CAuth
+  component "AlunoController" as CAluno
+  component "AlunoPortalController" as CPortal
+  component "AnalyticsController" as CAnalytics
+  component "AnexoExportarController" as CAnexoExportar
+  component "CorrecaoController" as CCorrecao
+  component "EmailResultadoController" as CEmail
+  component "MateriaController" as CMateria
+  component "ProfessorController" as CProfessor
+  component "ProvaController" as CProva
+  component "ProvaQuestaoController" as CProvaQuestao
+  component "QuestaoController" as CQuestao
+  component "RespostaAlunoController" as CRespostaAluno
+  component "RespostaAnexoController" as CRespostaAnexo
+  component "ResultadoController" as CResultado
+  component "TemaController" as CTema
+}
+
+package "Camada de Serviço\nsrc/services" as Services {
+  component "HealthService" as SHealth
+  component "AuthService" as SAuth
+  component "AlunoService" as SAluno
+  component "AlunoPortalService" as SPortal
+  component "AnalyticsService" as SAnalytics
+  component "AvaliacaoLogService" as SLog
+  component "AnexoExportarService" as SAnexoExportar
+  component "CorrecaoService" as SCorrecao
+  component "EmailResultadoService" as SEmailResultado
+  component "MateriaService" as SMateria
+  component "ProfessorService" as SProfessor
+  component "ProvaService" as SProva
+  component "ProvaQuestaoService" as SProvaQuestao
+  component "QuestaoService" as SQuestao
+  component "RespostaAlunoService" as SRespostaAluno
+  component "RespostaAnexoService" as SRespostaAnexo
+  component "ResultadoService" as SResultado
+  component "TemaService" as STema
+}
+
+CHealth --> SHealth
+CAuth --> SAuth
+CAluno --> SAluno
+CPortal --> SPortal
+CAnalytics --> SAnalytics
+CAnalytics --> SLog
+CAnexoExportar --> SAnexoExportar
+CCorrecao --> SCorrecao
+CEmail --> SEmailResultado
+CMateria --> SMateria
+CProfessor --> SProfessor
+CProva --> SProva
+CProvaQuestao --> SProvaQuestao
+CQuestao --> SQuestao
+CRespostaAluno --> SRespostaAluno
+CRespostaAnexo --> SRespostaAnexo
+CResultado --> SResultado
+CTema --> STema
+
+@enduml
+```
+
+```plantuml
+@startuml ServicesRepositoriesBanco
+title Services, Repositories e Banco de Dados
+
+top to bottom direction
+skinparam shadowing false
+skinparam roundCorner 12
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "Camada de Serviço\nsrc/services" as Services {
+  component "HealthService" as SHealth
+  component "AuthService" as SAuth
+  component "AlunoService" as SAluno
+  component "AlunoPortalService" as SPortal
+  component "AnalyticsService" as SAnalytics
+  component "AvaliacaoLogService" as SLog
+  component "AnexoExportarService" as SAnexoExportar
+  component "CorrecaoService" as SCorrecao
+  component "EmailResultadoService" as SEmailResultado
+  component "FakeEmailAdapter\nEmailAdapter" as SEmailAdapter
+  component "MateriaService" as SMateria
+  component "ProfessorService" as SProfessor
+  component "ProvaService" as SProva
+  component "ProvaQuestaoService" as SProvaQuestao
+  component "QuestaoService" as SQuestao
+  component "RespostaAlunoService" as SRespostaAluno
+  component "RespostaAnexoService" as SRespostaAnexo
+  component "ResultadoService" as SResultado
+  component "StorageService" as SStorage
+  component "TemaService" as STema
+}
+
+package "Camada de Repositório\nsrc/repositories" as Repositories {
+  component "AlunoRepository" as RepAluno
+  component "AlunoPortalRepository" as RepPortal
+  component "AnalyticsRepository" as RepAnalytics
+  component "AnexoExportarRepository" as RepAnexoExportar
+  component "AuthRepository" as RepAuth
+  component "AvaliacaoLogRepository" as RepLog
+  component "CorrecaoRepository" as RepCorrecao
+  component "EmailEnvioRepository" as RepEmail
+  component "MateriaRepository" as RepMateria
+  component "ProfessorRepository" as RepProfessor
+  component "ProvaRepository" as RepProva
+  component "ProvaQuestaoRepository" as RepProvaQuestao
+  component "QuestaoRepository" as RepQuestao
+  component "RespostaAlunoRepository" as RepRespostaAluno
+  component "RespostaAnexoRepository" as RepRespostaAnexo
+  component "ResultadoRepository" as RepResultado
+  component "TemaRepository" as RepTema
+}
+
+component "pool\nsrc/database/pool.ts" as Pool
+database "PostgreSQL / Supabase\nsrc/database/migrations/*.sql" as DB
+cloud "Storage HTTP\nusado pelo StorageService" as Storage
+cloud "Serviço de e-mail simulado\nFakeEmailAdapter" as EmailFake
+
+SHealth --> Pool
+SAuth --> RepAuth
+SAluno --> RepAluno
+SPortal --> RepPortal
+SAnalytics --> RepAnalytics
+SLog --> RepLog
+SAnexoExportar --> RepAnexoExportar
+SCorrecao --> RepCorrecao
+SEmailResultado --> RepEmail
+SEmailResultado --> SEmailAdapter
+SMateria --> RepMateria
+SProfessor --> RepProfessor
+SProva --> RepProva
+SProvaQuestao --> RepProvaQuestao
+SQuestao --> RepQuestao
+SRespostaAluno --> RepRespostaAluno
+SRespostaAnexo --> RepRespostaAnexo
+SRespostaAnexo --> SStorage
+SResultado --> RepResultado
+SResultado --> RepEmail
+STema --> RepTema
+
+SStorage --> Storage
+SEmailAdapter --> EmailFake
+
+Repositories --> Pool
+Pool --> DB
+
+@enduml
+```
+
+A aplicação é inicializada por `src/server.ts`, que chama `buildApp()` em `src/app.ts` e sobe o servidor na porta definida por `process.env.PORT`, usando `3333` como padrão. Dentro de `buildApp()`, o Fastify registra CORS, Swagger, Swagger UI, compiladores de validação/serialização baseados em Zod e todas as rotas sob o prefixo `/api/v1`. A documentação OpenAPI fica disponível em `/docs`, gerada a partir dos schemas declarados diretamente nas rotas.
+
+A arquitetura observada no código é composta pelas seguintes camadas reais:
+
+| Camada | Diretório/arquivo | Responsabilidade real no código |
+|---|---|---|
+| Inicialização da aplicação | `src/server.ts`, `src/app.ts` | Cria a instância Fastify, registra plugins, configura Swagger, registra rotas, define tratamento global de erros e inicia o servidor HTTP. |
+| Rotas | `src/routes/*.routes.ts` | Declaram endpoints, métodos HTTP, schemas Zod de `params`, `querystring`, `body` e `response`, além de aplicar middlewares de autenticação/autorização quando necessário. |
+| Controllers | `src/controllers/*.controller.ts` | Recebem a requisição validada, extraem usuário autenticado ou parâmetros, chamam services e retornam respostas padronizadas por helpers HTTP. |
+| Services | `src/services/*.service.ts` | Concentraram regras de negócio, validações de fluxo, autorização de domínio, orquestração de repositories, cálculo de resultados, correção e envio de e-mails. |
+| Repositories | `src/repositories/*.repository.ts` | Encapsulam queries SQL, `JOINs`, `INSERTs`, `UPDATEs`, `DELETEs`, `UPSERTs`, paginação, consultas agregadas e acesso direto ao PostgreSQL. |
+| Schemas | `src/schemas/*.schema.ts` | Definem contratos de entrada e saída da WebAPI com Zod, alimentando tanto a validação em runtime quanto a documentação Swagger/OpenAPI. |
+| Middlewares | `src/middlewares/auth.ts` | Implementam autenticação por Bearer Token, validação de JWT Supabase, modo de teste e autorização por perfil (`professor` ou `coordenador`). |
+| Banco e transações | `src/database/pool.ts`, `src/database/transaction.ts`, `src/database/migrations/*.sql` | Configuram o pool PostgreSQL, transações manuais e estrutura persistente do banco, incluindo tabelas, enums, constraints, triggers, funções e RLS. |
+| Erros | `src/errors/api-error.ts` | Padronizam erros de domínio e infraestrutura com status HTTP e códigos como `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT` e `BUSINESS_RULE_ERROR`. |
+| Helpers | `src/helpers/http.ts`, `src/helpers/multipart.ts`, `src/helpers/date.ts` | Padronizam envelope de resposta, obtenção do usuário autenticado, parsing de multipart e utilitários de data. |
+| Testes | `src/tests` e `src/tests/unit` | Cobrem integrações e unidades de services, repositories, controllers, middlewares, helpers, transações, autenticação, provas, questões, respostas, correção, resultados, e-mails e analytics. |
+
+A estrutura de dependência segue, na prática, o fluxo:
+
+```text
+Cliente HTTP
+  -> Fastify route
+  -> middleware de autenticação/autorização, quando aplicado
+  -> schema Zod de validação
+  -> controller
+  -> service
+  -> repository
+  -> pool PostgreSQL
+  -> banco PostgreSQL/Supabase
+```
+
+Esse fluxo evita que as rotas executem SQL diretamente. As rotas apenas descrevem o contrato HTTP e apontam para o controller. Os controllers chamam services. As services aplicam regra de negócio e chamam repositories. Os repositories fazem o acesso ao banco.
+
+---
 
 ### 3.2.2. Diagrama de Casos de Uso
 
@@ -3469,84 +3699,221 @@ end
 
 ### 3.2.7. Padroes de Projeto Aplicados (sprints 3 a 5)
 
-Esta secao registra apenas padroes que aparecem no backend atual. A evidencia esta em src/backend/src/controllers, src/backend/src/services, src/backend/src/repositories, src/backend/src/schemas, src/backend/src/middlewares/auth.ts, src/backend/src/database/pool.ts e src/backend/src/database/migrations/migration.sql.
+Esta seção lista apenas padrões que aparecem no código entregue. Não foram incluídos padrões sem evidência direta na estrutura do projeto.
 
-#### 1. Repository Pattern
+### 1. Layered Architecture
 
-Os repositories concentram SQL e isolam PostgreSQL/Supabase do restante da aplicacao. Controllers e services chamam classes como ProfessorRepository, ProvaRepository, QuestaoRepository, ProvaQuestaoRepository, AlunoPortalRepository, RespostaAlunoRepository, RespostaAnexoRepository, CorrecaoRepository, ResultadoRepository, EmailEnvioRepository e AvaliacaoLogRepository.
+O projeto aplica arquitetura em camadas, separando rotas, controllers, services, repositories e infraestrutura de banco. Essa separação é visível na organização dos diretórios `src/routes`, `src/controllers`, `src/services`, `src/repositories`, `src/schemas`, `src/middlewares` e `src/database`.
 
-- Necessidade: manter JOINs, filtros, UPSERTs, paginacao, RLS e constraints fora da camada HTTP.
-- Evidencia: QuestaoRepository.findMany, ProvaRepository.findMany, CorrecaoRepository.corrigirObjetivas e ProvaQuestaoRepository.remover.
-- Requisitos: RF001, RF003, RF009, RF012, RF014, RF017, RF027 e RF028.
+A camada de rotas declara endpoints e contratos. A camada de controllers recebe requisições e respostas. A camada de services concentra regras de negócio. A camada de repositories concentra SQL e acesso ao PostgreSQL. A infraestrutura de banco, autenticação e erros fica separada em módulos próprios.
 
-#### 2. Service Layer
+Exemplos reais:
 
-A camada de service concentra regra de negocio e orquestra repositories. ProvaService decide transicoes de status; QuestaoService valida edicao de questoes; AlunoPortalService inicia prova publica; RespostaAlunoService salva e envia respostas; CorrecaoService corrige; ResultadoService consolida notas; EmailResultadoService libera resultados por e-mail; AnalyticsService registra eventos.
+| Fluxo | Encadeamento |
+|---|---|
+| Criação de prova | `prova.routes.ts` → `ProvaController` → `ProvaService` → `ProvaRepository` → PostgreSQL |
+| Criação/listagem de questões | `questao.routes.ts` → `QuestaoController` → `QuestaoService` → `QuestaoRepository` → PostgreSQL |
+| Portal do aluno | `aluno-portal.routes.ts` → `AlunoPortalController` → `AlunoPortalService` → `AlunoPortalRepository` → PostgreSQL |
+| Correção | `correcao.routes.ts` → `CorrecaoController` → `CorrecaoService` → `CorrecaoRepository` → PostgreSQL |
+| Resultados | `resultado.routes.ts` → `ResultadoController` → `ResultadoService` → `ResultadoRepository` → PostgreSQL |
 
-- Necessidade: impedir que controllers conhecam regras como prova editavel somente em rascunho, aluno unico por prova, limites de pontuacao, envio final e autorizacao por vinculo professor/materia.
-- Evidencia: controllers chamam services, services chamam repositories e as rotas retornam envelopes padronizados.
-- Requisitos: RF001, RF007, RF008, RF009, RF014, RF015, RF017, RF019, RF027.
+Esse padrão reduz acoplamento e impede que regras de negócio fiquem espalhadas diretamente nas rotas HTTP.
 
-#### 3. DTO e validacao por schema Zod
+### 2. Repository Pattern
 
-Os schemas em src/backend/src/schemas definem params, querystring, body e response usados nas rotas Fastify por fastify-type-provider-zod. Entradas invalidas sao rejeitadas antes de chegar aos services, com status 422 e erro padronizado.
+O padrão Repository é usado para isolar a persistência. Os repositories são responsáveis por montar queries SQL, executar comandos no banco, lidar com `JOINs`, paginação, agregações, `UPSERTs` e consultas especializadas.
 
-- Evidencia: createProvaBodySchema, updateProvaConfiguracoesBodySchema, createQuestaoBodySchema, iniciarProvaBodySchema, salvarRespostaBodySchema, salvarCorrecaoBodySchema e schemas de resultado/e-mail.
-- Requisitos: RF004, RF005, RF006, RF007, RF009, RF012, RF015.
+Repositories reais do código:
 
-#### 4. Strategy para correcao
+| Repository | Responsabilidade |
+|---|---|
+| `AlunoRepository` | CRUD e consultas de alunos. |
+| `AlunoPortalRepository` | Consulta de prova pública, criação/reuso de aluno e tentativa da prova. |
+| `AnalyticsRepository` | Consulta de analytics de provas. |
+| `AnexoExportarRepository` | Busca e estrutura anexos para exportação. |
+| `AuthRepository` | Suporte à autenticação de usuários internos. |
+| `AvaliacaoLogRepository` | Persistência de logs operacionais. |
+| `CorrecaoRepository` | Consultas e gravações de correção, incluindo objetivas automáticas. |
+| `EmailEnvioRepository` | Registro, listagem e atualização de envios de e-mail. |
+| `MateriaRepository` | CRUD de matérias. |
+| `ProfessorRepository` | CRUD de professores e vínculos com matérias. |
+| `ProvaRepository` | CRUD, status, publicação, histórico e consultas de provas. |
+| `ProvaQuestaoRepository` | Vínculo entre provas e questões. |
+| `QuestaoRepository` | CRUD/listagem de questões, enunciados e alternativas. |
+| `RespostaAlunoRepository` | Salvamento, listagem e envio final de respostas. |
+| `RespostaAnexoRepository` | Registro de anexos vinculados a respostas. |
+| `ResultadoRepository` | Consolidação e exportação de resultados. |
+| `TemaRepository` | CRUD/listagem de temas. |
 
-O dominio de correcao usa duas estrategias comprovaveis: correcao automatica de objetivas e correcao manual de discursivas. CorrecaoRepository.corrigirObjetivas calcula nota em lote com CASE WHEN e ON CONFLICT; a correcao manual recebe nota, observacao e feedback do professor.
+Esse padrão é importante porque o banco possui muitas regras relacionais e queries com múltiplas tabelas. Sem repositories, controllers e services ficariam acoplados à implementação SQL.
 
-- Evidencia: POST /api/v1/provas/:provaId/correcao/objetivas e PUT /api/v1/respostas/:respostaId/correcao.
-- Requisitos: RF014, RF015, RN13.
+### 3. Service Layer
 
-#### 5. State para ciclo de vida
+O padrão Service Layer aparece em todos os domínios principais. As services não apenas repassam chamadas; elas aplicam regras e coordenam repositories.
 
-Prova percorre rascunho, publicada, encerrada e antiga. ProvaService.publicar, ProvaService.encerrar e ProvaService.arquivar executam transicoes; a migration reforca regras com validar_transicao_e_publicacao_prova_trigger e prova_status_historico. O fluxo do aluno usa prova_aluno.status, AlunoPortalService e RespostaAlunoService.
+Exemplos reais:
 
-- Evidencia: POST /api/v1/provas/:provaId/publicar, /encerrar, /arquivar e POST /api/v1/public/provas-aluno/:provaAlunoId/enviar.
-- Requisitos: RF001, RF007, RF008, RF020, RF026, RN01, RN05, RN12.
+| Service | Regras/orquestrações observáveis |
+|---|---|
+| `ProvaService` | Cria prova, lista conforme perfil, atualiza metadados, valida status editável, publica, encerra, arquiva, remove e consulta histórico. |
+| `ProvaQuestaoService` | Garante que questões só sejam adicionadas/removidas em provas no status `rascunho`. |
+| `QuestaoService` | Valida acesso à matéria e coordena criação/edição/listagem de questões. |
+| `AlunoPortalService` | Valida se prova está publicada e disponível antes de exibir/iniciar prova pública. |
+| `RespostaAlunoService` | Garante que tentativa exista, esteja em andamento, salva rascunho e envia prova final. |
+| `CorrecaoService` | Controla acesso à prova, executa correção automática e salva correção manual. |
+| `ResultadoService` | Consolida resultados e restringe exportação a coordenadores. |
+| `EmailResultadoService` | Libera resultados por e-mail, trata pendências de correção, registra envios e permite reenvio apenas quando status é `erro`. |
+| `RespostaAnexoService` | Coordena upload de arquivo e registro do anexo. |
 
-#### 6. Chain of Responsibility em auth
+Esse padrão mantém as regras de negócio fora dos controllers e facilita testes unitários, como demonstrado pelos arquivos em `src/tests/unit`.
 
-Rotas protegidas passam por leitura do token, montagem do usuario autenticado e validacao de perfil por requireRole. A cadeia retorna 401 quando nao ha autenticacao valida e 403 quando o perfil nao pode executar a acao.
+### 4. DTO/Schema Validation com Zod
 
-- Evidencia: src/backend/src/middlewares/auth.ts aplicado em provas, questoes, correcao, resultados, e-mails, analytics, cadastros e coordenador.
-- Requisitos: RF002, RF018, RF019, RF021, RN18, RN19.
+A aplicação usa Zod como mecanismo de validação e documentação. Os schemas estão em `src/schemas` e são conectados ao Fastify por `fastify-type-provider-zod`.
 
-#### 7. Singleton do pool PostgreSQL
+Exemplos de schemas reais:
 
-src/backend/src/database/pool.ts exporta uma unica instancia de pg.Pool configurada por DATABASE_URL. Repositories reutilizam o mesmo pool e evitam abrir conexoes por requisicao.
+| Arquivo | Exemplos de schemas |
+|---|---|
+| `prova.schema.ts` | `createProvaBodySchema`, `updateProvaBodySchema`, `publicarProvaBodySchema`, `provaSchema`, `provaDetailSchema`. |
+| `questao.schema.ts` | `createQuestaoBodySchema`, `updateQuestaoBodySchema`, `questaoTipoSchema`, `questaoResponseSchema`. |
+| `resposta-aluno.schema.ts` | `salvarRespostaBodySchema`, `enviarProvaBodySchema`, `respostaSalvaSchema`. |
+| `correcao.schema.ts` | `salvarCorrecaoBodySchema`, `correcaoQuestaoSchema`, `correcaoRespostaSchema`. |
+| `resultado.schema.ts` | `resultadoAlunoSchema`, `resultadoQuestaoSchema`, `exportarResultadoBodySchema`. |
+| `email.schema.ts` | `liberarEmailBodySchema`, `emailEnvioSchema`, `emailLiberadoSchema`. |
 
-- Evidencia: imports de pool nos repositories e helper withTransaction.
-- Requisitos: RNF desempenho e capacidade.
+Esse padrão evita que entradas inválidas avancem para a camada de serviço. Quando há erro de validação, o handler global retorna status `422` com erro padronizado.
 
-#### 8. Observer por triggers, logs e analytics
+### 5. Middleware Pattern
 
-A migration contem triggers que reagem a eventos de escrita: set_atualizado_em, registrar_status_prova, gerar_qr_code_prova e triggers de validacao. Na aplicacao, AnalyticsService e AvaliacaoLogRepository registram eventos por POST /api/v1/logs.
+O padrão Middleware aparece principalmente na autenticação/autorização. As rotas protegidas recebem `preHandler: requireRole(...)`. O middleware executa antes do controller, valida o usuário e decide se a requisição pode continuar.
 
-- Evidencia: avaliacao_log, prova_status_historico e triggers em migration.sql.
-- Requisitos: RF008, RF019, RF020, RN07, RN17.
+Exemplos:
 
-#### 9. Facade em services compostos
+```text
+requireRole("professor")
+requireRole("coordenador")
+requireRole("professor", "coordenador")
+```
 
-ResultadoService, EmailResultadoService, AnexoExportarService e AlunoPortalService escondem orquestracoes de varios repositories atras de metodos simples para os controllers.
+O middleware `requireAuth` também possui dois modos reais:
 
-- Evidencia: GET /api/v1/provas/:provaId/resultados, POST /api/v1/provas/:provaId/resultados/exportar, POST /api/v1/provas/:provaId/resultados/liberar-email e POST /api/v1/provas/:provaId/anexos/exportar.
-- Requisitos: RF017, RF027, RF028, RF009, RF026.
+| Modo | Funcionamento |
+|---|---|
+| Teste | Aceita headers `x-user-role`, `x-user-id`, `x-user-email`, `x-user-name` ou tokens `test-professor`/`test-coordenador`. |
+| Normal | Valida Bearer Token JWT com `jose`, usando `SUPABASE_JWT_SECRET` e, opcionalmente, `SUPABASE_JWT_ISSUER`. Depois busca o usuário em `professor` ou `coordenador`. |
 
-| Padrao | Evidencia no backend | Requisitos centrais |
-|--------|----------------------|---------------------|
-| Repository | repositories/*.repository.ts | RF001, RF003, RF014, RF017 |
-| Service Layer | services/*.service.ts | RF001, RF007, RF009, RF017 |
-| DTO/Zod | schemas/*.schema.ts e rotas Fastify | RF004, RF007, RF009, RF015 |
-| Strategy | CorrecaoService e CorrecaoRepository | RF014, RF015 |
-| State | ProvaService, RespostaAlunoService e triggers | RF001, RF008, RF026 |
-| Chain of Responsibility | middlewares/auth.ts e requireRole | RF002, RF018, RF019 |
-| Singleton | database/pool.ts | RNF desempenho/capacidade |
-| Observer | triggers, AvaliacaoLogRepository, AnalyticsService | RF008, RF019, RF020 |
-| Facade | ResultadoService, EmailResultadoService, AnexoExportarService | RF017, RF027, RF028 |
+Esse padrão centraliza autenticação e autorização, evitando repetição de validação de token dentro de cada controller.
+
+### 6. Adapter Pattern
+
+O projeto possui uma interface `EmailAdapter` em `src/services/email-adapter.ts`, com implementação concreta `FakeEmailAdapter`.
+
+```text
+EmailAdapter
+  -> FakeEmailAdapter
+```
+
+A interface define o contrato:
+
+```text
+send(para, assunto, corpo): Promise<{ success: boolean; error?: string }>
+```
+
+A implementação atual é simulada: se `EMAIL_FAIL_MODE=always`, retorna falha; caso contrário, retorna sucesso. Isso permite que `EmailResultadoService` dependa de um contrato de envio, sem ficar acoplado a um provedor real de e-mail. No futuro, uma implementação real poderia substituir o adapter fake sem alterar a regra de negócio principal.
+
+### 7. Singleton/Shared Resource para pool de conexão
+
+O arquivo `src/database/pool.ts` exporta uma única instância de `Pool` do pacote `pg`. Todos os repositories reutilizam essa instância, evitando criar uma nova conexão para cada operação manualmente.
+
+Esse padrão de recurso compartilhado aparece na prática como:
+
+```text
+pool.ts
+  -> export const pool = new Pool(...)
+repositories
+  -> importam pool
+transaction.ts
+  -> usa pool.connect()
+```
+
+A configuração também adapta SSL conforme o host: banco local (`localhost` ou `127.0.0.1`) usa SSL falso; banco remoto usa SSL com `rejectUnauthorized: false`.
+
+### 8. Unit of Work / Transaction Helper
+
+O helper `withTransaction` em `src/database/transaction.ts` implementa uma unidade de trabalho transacional. Ele abre uma conexão, executa `BEGIN`, roda o callback, aplica `COMMIT` em caso de sucesso e `ROLLBACK` em caso de erro, liberando o client no final.
+
+Esse padrão é importante em operações que precisam manter consistência entre múltiplos comandos SQL. Ele evita gravações parciais quando uma etapa falha.
+
+Fluxo implementado:
+
+```text
+pool.connect()
+BEGIN
+callback(client)
+COMMIT
+client.release()
+```
+
+Em caso de erro:
+
+```text
+ROLLBACK
+client.release()
+throw error
+```
+
+### 9. State Pattern aplicado ao ciclo de vida
+
+O sistema aplica uma lógica de estados para provas e tentativas de aluno. Embora não exista uma classe formal chamada `State`, o padrão aparece como modelagem explícita de estados, transições permitidas e ações associadas.
+
+Estados da prova:
+
+```text
+rascunho -> publicada -> encerrada -> antiga
+```
+
+Estados da tentativa do aluno:
+
+```text
+nao_iniciada -> em_andamento -> enviada -> corrigida
+```
+
+A lógica aparece em:
+
+| Local | Evidência |
+|---|---|
+| `prova_status` | Enum no banco. |
+| `prova_aluno_status` | Enum no banco. |
+| `ProvaService.publicar` | Permite publicar apenas prova em `rascunho`. |
+| `ProvaService.encerrar` | Permite encerrar apenas prova `publicada`. |
+| `ProvaService.arquivar` | Permite arquivar apenas prova `encerrada`. |
+| `ProvaQuestaoService` | Permite alterar questões apenas em prova `rascunho`. |
+| `RespostaAlunoService` | Permite salvar/enviar apenas tentativa em andamento. |
+| Triggers SQL | Reforçam transições e regras de publicação no banco. |
+
+### 10. Strategy Pattern aplicado à correção
+
+O domínio de correção possui duas estratégias reais:
+
+| Estratégia | Implementação |
+|---|---|
+| Correção automática | `POST /api/v1/provas/:provaId/correcao/objetivas`, usando `CorrecaoService.executarCorrecaoAutomatica` e `CorrecaoRepository.corrigirObjetivas`. |
+| Correção manual | `PUT /api/v1/respostas/:respostaId/correcao`, usando nota, observação e feedback do professor. |
+
+A correção automática atende questões objetivas, como múltipla escolha e verdadeiro/falso. A correção manual atende respostas que dependem da avaliação do professor, especialmente discursivas. As duas estratégias gravam dados na tabela `correcao`, diferenciadas pelo enum `correcao_tipo`.
+
+### 11. Template/Factory de resposta HTTP
+
+Os helpers HTTP padronizam a estrutura das respostas. Controllers não montam manualmente o envelope completo em todos os casos; eles usam funções auxiliares como `sendSuccess` e `sendCreated`.
+
+Isso padroniza o formato de retorno e torna a WebAPI mais previsível. Também reduz repetição nos controllers.
+
+### 12. Centralized Error Handling
+
+O tratamento de erros é centralizado em `src/app.ts` pelo `setErrorHandler`. O projeto não espalha `try/catch` de formatação HTTP por todas as rotas. Erros de domínio são lançados como `ApiError`, erros de validação Zod são convertidos para `VALIDATION_ERROR`, rotas inexistentes recebem `NOT_FOUND` e erros inesperados retornam `INTERNAL_ERROR`.
+
+Esse padrão melhora a consistência da API e facilita a documentação dos retornos.
 
 ## 3.3. Wireframes (sprint 2)
 
@@ -4607,39 +4974,92 @@ A WebAPI esta implementada em Fastify, documentada por Swagger UI em /docs e reg
 *Descreva as estratégias aplicadas no tratamento de falhas de rede: timeout, retry com backoff exponencial, circuit breaker e idempotência em operações críticas (`PUT`, `DELETE`, operações de pagamento etc.).*
 
 ## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
-
-A matriz abaixo consolida RF, RN, endpoint, tela e evidencia tecnica a partir das rotas reais em src/backend/src/routes. O status separa backend implementado de pendencias de frontend.
-
-| Persona | RF | RN | Endpoint real ou suporte tecnico | Tela relacionada | Evidencia | Status |
+| Persona | RF | RN | Endpoint real ou suporte técnico | Tela relacionada | Evidência | Status |
 |---------|----|----|----------------------------------|------------------|-----------|--------|
-| Professor, Coordenador | RF002 | RN18, RN19 | GET /api/v1/auth/google; GET /api/v1/auth/google/callback; GET /api/v1/auth/me; POST /api/v1/auth/logout | Login interno | auth.routes.ts, AuthService, requireRole | Implementado no backend |
-| Professor, Coordenador | RF001 | RN01 | POST/GET/PUT/DELETE /api/v1/provas; GET /api/v1/provas/:provaId/status-historico | Home/editor de provas | prova.routes.ts, ProvaService | Implementado no backend |
-| Professor, Coordenador | RF022 | RN02 | GET /api/v1/provas com filtros | Home com filtros | listProvasQuerySchema, ProvaRepository.findMany | Implementado no backend |
-| Coordenador | RF020 | RN01 | GET /api/v1/coordenador/provas; historico de status | Painel coordenador | coordenador.routes.ts, prova_status_historico | Implementado no backend |
-| Professor | RF021 | RN18 | POST/GET/PUT /api/v1/provas | Nova prova/editor | ProvaController, trigger professor-materia | Implementado no backend |
-| Professor | RF003 | RN20 | CRUD /api/v1/questoes; vinculos /api/v1/provas/:provaId/questoes | Banco de questoes | questao.routes.ts, prova.routes.ts | Implementado no backend |
-| Professor | RF004 | RN03 | POST/PUT /api/v1/questoes com enunciado.conteudoLatex | Editor questao | enunciado.conteudo_latex | Implementado no backend |
-| Professor | RF005 | RN03 | POST/PUT /api/v1/questoes com tipo | Editor questao | enum questao_tipo | Implementado no backend |
-| Professor | RF006 | RN04 | POST/PUT /api/v1/questoes com permite_anexo e limites | Configuracao questao | schema e migration | Implementado no backend |
-| Professor | RF007 | RN05 | PATCH /api/v1/provas/:provaId/configuracoes | Configuracoes prova | ProvaService | Implementado no backend |
-| Professor | RF023 | RN06 | PATCH /api/v1/provas/:provaId/configuracoes | Configuracoes prova | embaralhar_questoes/alternativas | Implementado no backend |
-| Professor | RF008 | RN07 | POST /api/v1/provas/:provaId/publicar | Compartilhar prova | url_acesso, qr_code | Implementado no backend |
-| Aluno | RF024 | RN09 | GET /api/v1/public/provas/:urlAcesso | Portal instrucoes | aluno-portal.routes.ts | Implementado no backend |
-| Aluno | RF009 | RN08 | POST /api/v1/public/provas/:urlAcesso/iniciar | Identificacao aluno | AlunoPortalService | Implementado no backend |
-| Aluno | RF025 | RN09 | Dados de tempo em GET /api/v1/public/provas/:urlAcesso | Timer | API entrega tempo limite | Backend implementado; timer depende do frontend |
-| Aluno | RF010 | RN10 | PUT /api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId | Responder prova | RespostaAlunoService | Backend implementado; zoom depende do frontend |
-| Aluno | RF011 | RN10 | Enunciado LaTeX no portal publico | Responder prova | enunciado.conteudo_latex | Backend implementado; renderizacao depende do frontend |
-| Aluno | RF012 | RN04 | POST /api/v1/public/respostas/:respostaId/anexos | Upload | RespostaAnexoService | Implementado no backend |
-| Aluno | RF013 | RN11 | POST /api/v1/public/respostas/:respostaId/anexos | Upload/compressao | validacao de arquivo | Backend implementado; compressao final depende do frontend/storage |
-| Aluno | RF026 | RN12 | GET/PUT respostas; POST enviar | Revisao final | resposta-aluno.routes.ts | Implementado no backend |
-| Professor | RF014 | RN13 | GET correcao/questoes e respostas por questao | Correcao | correcao.routes.ts | Implementado no backend |
-| Professor | RF015 | RN13 | PUT /api/v1/respostas/:respostaId/correcao | Correcao manual | CorrecaoRepository | Implementado no backend |
-| Professor | RF016 | RN13 | Respostas de correcao retornam anexos | Galeria/anexos | RespostaAnexoRepository | Implementado no backend |
-| Professor, Coordenador | RF017 | RN14 | GET resultados; POST resultados/exportar | Resultados | ResultadoService | Implementado no backend |
-| Coordenador | RF018 | RN17 | GET /api/v1/coordenador/provas; CRUD cadastros | Painel coordenador | coordenador/professor/materia routes | Implementado no backend |
-| Coordenador | RF019 | RN17 | GET /api/v1/provas/:provaId/analytics; POST /api/v1/logs | Analytics | AnalyticsService | Implementado no backend |
-| Professor, Coordenador | RF027 | RN15 | liberar-email, listar emails, reenviar | E-mails | EmailResultadoService | Implementado no backend |
-| Coordenador | RF028 | RN16 | POST /api/v1/provas/:provaId/anexos/exportar | Exportacao anexos | AnexoExportarService | Implementado no backend |
+| Professor, Coordenador | RF001 | RN01 | POST/GET/PUT/DELETE /api/v1/provas; GET /api/v1/provas/:provaId/status-historico; POST /api/v1/provas/:provaId/encerrar; POST /api/v1/provas/:provaId/arquivar | Wireframes de provas e editor | prova.routes.ts, ProvaController, ProvaService, prova_status_historico | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF001 | RN01 | GET /api/v1/provas/:provaId | Wireframe de detalhes da prova | prova.routes.ts, ProvaController.buscarPorId, ProvaService.buscarPorId | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF001 | RN01 | GET /api/v1/provas/:provaId/questoes | Wireframe de detalhes da prova | prova.routes.ts, ProvaQuestaoController.listar, ProvaQuestaoService.listar | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF001 | RN01 | POST /api/v1/provas/:provaId/encerrar | Wireframe de encerramento da prova | prova.routes.ts, ProvaController.encerrar, ProvaService.encerrar | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF001 | RN01 | POST /api/v1/provas/:provaId/arquivar | Wireframe de histórico de provas | prova.routes.ts, ProvaController.arquivar, ProvaService.arquivar | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF002 | RN18, RN19 | GET /api/v1/auth/google; GET /api/v1/auth/google/callback; GET /api/v1/auth/me; POST /api/v1/auth/logout | Wireframe de login do professor/coordenador | auth.routes.ts, AuthController, AuthService, requireRole | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | CRUD /api/v1/questoes; POST/GET/DELETE /api/v1/provas/:provaId/questoes | Wireframe de banco de questões | questao.routes.ts, prova.routes.ts, QuestaoService, ProvaQuestaoService | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | GET /api/v1/questoes/:questaoId | Wireframe de visualizar questão | questao.routes.ts, QuestaoService.buscarPorId, QuestaoRepository.findById | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | GET /api/v1/questoes com filtros materiaId, temaId, tipo e busca | Wireframe de banco de questões | listQuestoesQuerySchema, QuestaoRepository.findMany | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | POST /api/v1/provas/:provaId/questoes | Wireframe de vincular questão a prova | prova.routes.ts, ProvaQuestaoService.adicionar | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | DELETE /api/v1/provas/:provaId/questoes/:questaoId | Wireframe de remover questão da prova | prova.routes.ts, ProvaQuestaoService.remover | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF003 | RN20 | POST/GET/PUT/DELETE /api/v1/temas | Wireframe de banco de questões | tema.routes.ts, TemaController, TemaService, TemaRepository | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF003 | RN20 | GET /api/v1/temas com filtro materiaId | Wireframe de filtros do banco de questões | listTemasQuerySchema, TemaRepository.findAll | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF003 | RN20 | GET /api/v1/materias e GET /api/v1/materias/:materiaId | Wireframe de banco de questões e criação de prova | materia.routes.ts, MateriaController, MateriaService | Implementado no backend; frontend ainda não implementado |
+| Professor | RF004 | RN03 | POST/PUT /api/v1/questoes com enunciado.conteudoLatex | Wireframe de editor de questão | questao.schema.ts, tabela enunciado.conteudo_latex | Implementado no backend; frontend ainda não implementado |
+| Professor | RF004 | RN03 | POST/PUT /api/v1/questoes com alternativas[].conteudoLatex | Wireframe de editor de questão | questao.schema.ts, alternativa.conteudo_latex | Implementado no backend; frontend ainda não implementado |
+| Professor | RF005 | RN03 | POST/PUT /api/v1/questoes com tipo multipla_escolha, verdadeiro_falso ou discursiva | Wireframe de editor de questão | questao.schema.ts, enum questao_tipo | Implementado no backend; frontend ainda não implementado |
+| Professor | RF005 | RN03 | Questão objetiva com alternativas e exatamente uma correta | Wireframe de editor de questão objetiva | createQuestaoBodySchema, alternativas schema, alternativa_uma_correta_por_questao_index | Implementado no backend; frontend ainda não implementado |
+| Professor | RF005 | RN03 | Questão discursiva sem alternativas | Wireframe de editor de questão discursiva | createQuestaoBodySchema, enum questao_tipo | Implementado no backend; frontend ainda não implementado |
+| Professor | RF005 | RN03 | Questão verdadeiro/falso com exatamente duas alternativas | Wireframe de editor de questão VF | createQuestaoBodySchema, enum questao_tipo | Implementado no backend; frontend ainda não implementado |
+| Professor | RF006 | RN04 | POST/PUT /api/v1/questoes com permiteAnexo, limiteCaracteres e limitePalavras | Wireframe de configuração de questão | questao.schema.ts, questao.permite_anexo, resposta-anexo.routes.ts | Implementado no backend; frontend ainda não implementado |
+| Professor | RF006 | RN04 | Validação de tamanho e formato de anexos em upload público | Wireframe de configuração de anexos | resposta-anexo.routes.ts, multipart.ts, resposta_anexo_mime_type_check, resposta_anexo_tamanho_check | Implementado no backend; frontend ainda não implementado |
+| Professor | RF007 | RN05 | PATCH /api/v1/provas/:provaId/configuracoes com tempoLimiteMin, dataInicio e dataFim | Wireframe de configurações da prova | prova.schema.ts, ProvaService.atualizarConfiguracoes, prova.tempo_limite_min | Implementado no backend; frontend ainda não implementado |
+| Professor | RF007 | RN05 | PATCH /api/v1/provas/:provaId/configuracoes com tempoLimiteMin | Wireframe de configurações da prova | updateProvaConfiguracoesBodySchema, prova.tempo_limite_min | Implementado no backend; frontend ainda não implementado |
+| Professor | RF007 | RN05 | PATCH /api/v1/provas/:provaId/configuracoes com dataInicio e dataFim | Wireframe de configurações da prova | updateProvaConfiguracoesBodySchema, prova.data_inicio, prova.data_fim | Implementado no backend; frontend ainda não implementado |
+| Professor | RF008 | RN07 | POST /api/v1/provas/:provaId/publicar | Wireframe de compartilhar prova | ProvaService.publicar, prova.url_acesso, prova.qr_code | Implementado no backend; frontend ainda não implementado |
+| Professor | RF008 | RN07 | Compartilhamento por URL pública gerada ao publicar prova | Wireframe de compartilhar prova | ProvaService.publicar, prova.url_acesso | Implementado no backend; frontend ainda não implementado |
+| Professor | RF008 | RN07 | Payload de QR Code gerado a partir da URL pública | Wireframe de compartilhar prova | ProvaService.publicar, prova.qr_code, observação da migration sobre QR Code | Implementado no backend como payload; imagem depende do frontend/backend de renderização |
+| Aluno | RF009 | RN08 | POST /api/v1/public/provas/:urlAcesso/iniciar | Wireframe de identificação do aluno | aluno-portal.routes.ts, AlunoPortalService, tabela prova_aluno | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF009 | RN08 | Início de tentativa em POST /api/v1/public/provas/:urlAcesso/iniciar | Wireframe de identificação do aluno | AlunoPortalService, AlunoPortalRepository, tabela prova_aluno | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF009 | RN08 | Validação de acesso por urlAcesso, período da prova e dados do aluno | Wireframe de identificação do aluno | AlunoPortalService, alunoPortalParamsSchema, iniciarProvaBodySchema | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF010 | RN10 | PUT /api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId; GET /api/v1/public/provas-aluno/:provaAlunoId/respostas | Wireframe de responder prova | resposta-aluno.routes.ts, RespostaAlunoService | Backend implementado; experiência de zoom depende do frontend |
+| Aluno | RF010 | RN10 | Salvamento/atualização de respostas em PUT /api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId | Wireframe de responder prova | RespostaAlunoService.salvarRascunho, resposta_aluno.rascunho, resposta_aluno.sincronizada_em | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF010 | RN10 | Atualização de respostas discursivas com respostaTexto | Wireframe de responder prova | salvarRespostaBodySchema, resposta_aluno.resposta_texto | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF010 | RN10 | Atualização de respostas objetivas com alternativaId | Wireframe de responder prova | salvarRespostaBodySchema, resposta_aluno.alternativa_id | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF011 | RN10 | Enunciado e alternativas em LaTeX retornados no portal público e nas questões da prova | Wireframe de responder prova | enunciado.conteudo_latex, alternativa.conteudo_latex, questao.schema.ts | Backend implementado; renderização LaTeX depende do frontend |
+| Aluno | RF011 | RN10 | Conteúdo LaTeX disponível em enunciados e alternativas retornados pela API | Wireframe de responder prova | conteudoLatex na API, enunciado.conteudo_latex, alternativa.conteudo_latex | Backend implementado; renderização depende do frontend |
+| Aluno | RF012 | RN04 | POST /api/v1/public/respostas/:respostaId/anexos | Wireframe de upload | resposta-anexo.routes.ts, RespostaAnexoService, StorageService | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF012 | RN04 | Upload multipart em POST /api/v1/public/respostas/:respostaId/anexos | Wireframe de upload | resposta-anexo.routes.ts, multipart middleware, StorageService | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF013 | RN11 | POST /api/v1/public/respostas/:respostaId/anexos valida JPG, PNG, PDF e limite de 5MB | Wireframe de upload/compressão | resposta-anexo.schema.ts, multipart.ts, resposta_anexo.mime_type, resposta_anexo.tamanho_bytes | Backend implementado; compressão de imagem depende do frontend/storage |
+| Aluno | RF013 | RN11 | Validação de tipo de arquivo JPG, PNG e PDF | Wireframe de upload/compressão | respostaAnexoSchema, resposta_anexo_mime_type_check | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF013 | RN11 | Validação de limite de tamanho até 5MB | Wireframe de upload/compressão | bodyLimit 6MB, resposta_anexo_tamanho_check <= 5242880 | Implementado no backend; frontend ainda não implementado |
+| Professor | RF014 | RN13 | GET /api/v1/provas/:provaId/correcao/questoes; GET /api/v1/provas/:provaId/questoes/:questaoId/respostas | Wireframe de correção | correcao.routes.ts, CorrecaoController, CorrecaoService | Implementado no backend; frontend ainda não implementado |
+| Professor | RF014 | RN13 | Listagem de questões e respostas para correção | Wireframe de correção | CorrecaoService.listarQuestoesDaProva, CorrecaoService.listarRespostasPorQuestao | Implementado no backend; frontend ainda não implementado |
+| Professor | RF014 | RN13 | Consulta de respostas discursivas e anexos por questão | Wireframe de correção | CorrecaoRepository.findRespostasPorQuestao, correcaoRespostaSchema | Implementado no backend; frontend ainda não implementado |
+| Professor | RF014 | RN13 | POST /api/v1/provas/:provaId/correcao/objetivas | Wireframe de correção | correcao.routes.ts, CorrecaoController.executarObjetivas, CorrecaoService.executarCorrecaoAutomatica | Implementado no backend; frontend ainda não implementado |
+| Professor | RF015 | RN13 | PUT /api/v1/respostas/:respostaId/correcao com nota, observação e feedback | Wireframe de correção manual | correcao.schema.ts, CorrecaoRepository, tabela feedback | Implementado no backend; frontend ainda não implementado |
+| Professor | RF015 | RN13 | Lançamento manual de nota em PUT /api/v1/respostas/:respostaId/correcao | Wireframe de correção manual | salvarCorrecaoBodySchema.nota, CorrecaoRepository.upsertCorrecao | Implementado no backend; frontend ainda não implementado |
+| Professor | RF015 | RN13 | Feedback textual da correção por campo feedback e tabela feedback | Wireframe de correção manual | salvarCorrecaoBodySchema.feedback, tabela feedback.mensagem | Implementado no backend; frontend ainda não implementado |
+| Professor | RF016 | RN13 | GET /api/v1/provas/:provaId/questoes/:questaoId/respostas retorna anexos das respostas | Wireframe de galeria/anexos | CorrecaoRepository, RespostaAnexoRepository, resposta_anexo | Implementado no backend; frontend ainda não implementado |
+| Professor | RF016 | RN13 | Visualização de anexos enviados junto das respostas | Wireframe de galeria/anexos | correcaoRespostaSchema.anexos, resposta_anexo | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF017 | RN14 | GET /api/v1/provas/:provaId/resultados; POST /api/v1/provas/:provaId/resultados/exportar | Wireframe de resultados | resultado.routes.ts, ResultadoService, ResultadoRepository, StorageService | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF017 | RN14 | Exportação de resultados em CSV ou XLSX | Wireframe de resultados | ResultadoService.exportarPorProva, exportacao_resultado, StorageService | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF017 | RN14 | Consulta de desempenho por aluno em GET /api/v1/provas/:provaId/resultados | Wireframe de resultados | ResultadoRepository.findByProva, resultadoAlunoSchema | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | GET /api/v1/coordenador/provas; CRUD /api/v1/professores; CRUD /api/v1/materias; vínculos matéria-professor | Wireframe de painel do coordenador | coordenador.routes.ts, professor.routes.ts, materia.routes.ts, materia_professor | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | CRUD de professores em /api/v1/professores | Wireframe de painel coordenador | professor.routes.ts, ProfessorService, ProfessorRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | CRUD de matérias em /api/v1/materias | Wireframe de painel coordenador | materia.routes.ts, MateriaService, MateriaRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | Vínculo professor-matéria via tabela materia_professor | Wireframe de painel coordenador | migration.sql, materia_professor, professor/materia services | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | GET /api/v1/alunos; GET /api/v1/alunos/:alunoId; PUT /api/v1/alunos/:alunoId; DELETE /api/v1/alunos/:alunoId | Wireframe de gestão de alunos | aluno.routes.ts, AlunoController, AlunoService, AlunoRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | POST /api/v1/professores/:professorId/materias | Wireframe de vínculo professor-matéria | professor.routes.ts, ProfessorController.criarVinculo, materia_professor | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | DELETE /api/v1/professores/:professorId/materias/:materiaId | Wireframe de vínculo professor-matéria | professor.routes.ts, ProfessorController.removerVinculo, materia_professor | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | POST /api/v1/materias; PUT /api/v1/materias/:materiaId; DELETE /api/v1/materias/:materiaId | Wireframe de gestão de matérias | materia.routes.ts, MateriaController, MateriaService, MateriaRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF019 | RN17 | GET /api/v1/provas/:provaId/analytics; POST /api/v1/logs | Wireframe de analytics | analytics.routes.ts, AnalyticsService, avaliacao_log | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF019 | RN17 | Análise estatística de provas em GET /api/v1/provas/:provaId/analytics | Wireframe de analytics | AnalyticsService.obterPorProva, AnalyticsRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF019 | RN17 | Registro de logs de acesso em POST /api/v1/logs | Wireframe de analytics | analytics.routes.ts, AnalyticsService.registrarLog, avaliacao_log | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF020 | RN01 | GET /api/v1/coordenador/provas; GET /api/v1/provas/:provaId/status-historico | Wireframe de painel do coordenador | coordenador.routes.ts, ProvaController.listar, prova_status_historico | Implementado no backend; frontend ainda não implementado |
+| Professor | RF021 | RN18 | POST /api/v1/provas; GET /api/v1/provas/:provaId; PUT /api/v1/provas/:provaId | Wireframe de nova prova/editor | ProvaController, ProvaService, materia_professor | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF022 | RN02 | GET /api/v1/provas com filtros status, turma, semestre, materiaId e professorId | Wireframe de home com filtros | listProvasQuerySchema, ProvaRepository.findMany | Implementado no backend; frontend ainda não implementado |
+| Professor | RF023 | RN06 | PATCH /api/v1/provas/:provaId/configuracoes com embaralharQuestoes e embaralharAlternativas | Wireframe de configurações da prova | prova.schema.ts, prova.embaralhar_questoes, prova.embaralhar_alternativas | Implementado no backend; frontend ainda não implementado |
+| Professor | RF023 | RN06 | PATCH /api/v1/provas/:provaId/configuracoes com embaralharAlternativas | Wireframe de configurações da prova | updateProvaConfiguracoesBodySchema, prova.embaralhar_alternativas | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF024 | RN09 | GET /api/v1/public/provas/:urlAcesso | Wireframe de instruções do aluno | aluno-portal.routes.ts, AlunoPortalService, provaPublicaSchema | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF024 | RN09 | Visualização de instruções em GET /api/v1/public/provas/:urlAcesso | Wireframe de portal do aluno | aluno-portal.routes.ts, provaPublicaSchema.instrucoes | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF025 | RN09 | GET /api/v1/public/provas/:urlAcesso retorna tempoLimiteMin, dataInicio e dataFim | Wireframe de timer | aluno-portal.schema.ts, prova.tempo_limite_min, prova.data_inicio, prova.data_fim | Backend implementado; exibição do timer depende do frontend |
+| Aluno | RF025 | RN09 | Consulta de tempo da prova em GET /api/v1/public/provas/:urlAcesso | Wireframe de timer | tempoLimiteMin, dataInicio, dataFim | Backend implementado; exibição depende do frontend |
+| Aluno | RF026 | RN12 | GET /api/v1/public/provas-aluno/:provaAlunoId/respostas; POST /api/v1/public/provas-aluno/:provaAlunoId/enviar | Wireframe de revisão final e conclusão | resposta-aluno.routes.ts, RespostaAlunoService.enviarFinal | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF026 | RN12 | Revisão de respostas por GET /api/v1/public/provas-aluno/:provaAlunoId/respostas | Wireframe de revisão final | resposta-aluno.routes.ts, RespostaAlunoService.listarRespostas | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF026 | RN12 | Envio definitivo em POST /api/v1/public/provas-aluno/:provaAlunoId/enviar | Wireframe de finalização | resposta-aluno.routes.ts, RespostaAlunoService.enviarFinal | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF027 | RN15 | POST /api/v1/provas/:provaId/resultados/liberar-email; GET /api/v1/provas/:provaId/emails; POST /api/v1/emails/:emailEnvioId/reenviar | Wireframe de e-mails | email.routes.ts, EmailResultadoService, email_envio | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF027 | RN15 | Reenvio de e-mails de resultado em POST /api/v1/emails/:emailEnvioId/reenviar | Wireframe de e-mails | email.routes.ts, EmailResultadoService.reenviar | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF027 | RN15 | Consulta de histórico de e-mails em GET /api/v1/provas/:provaId/emails | Wireframe de e-mails | EmailResultadoService.listarEnvios, email_envio | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF027 | RN15 | POST /api/v1/provas/:provaId/resultados/liberar-email com confirmarPendencias | Wireframe de liberação de notas/e-mails | email.schema.ts, EmailResultadoService.liberar, EmailEnvioRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF028 | RN16 | POST /api/v1/provas/:provaId/anexos/exportar retorna lista dos anexos da prova | Wireframe de exportação de anexos | anexo-exportar.routes.ts, AnexoExportarService, AnexoExportarRepository | Implementado no backend como listagem/exportação de metadados; frontend ainda não implementado |
+| Coordenador | RF028 | RN16 | Exportacao/listagem dos anexos da prova em POST /api/v1/provas/:provaId/anexos/exportar | Wireframe de exportação de anexos | AnexoExportarService.exportar, AnexoExportarRepository.findAnexosPorProva | Implementado no backend como listagem/exportação de metadados; frontend ainda não implementado |
+
 
 # <a name="c4"></a>4. Desenvolvimento da Aplicação Web
 
