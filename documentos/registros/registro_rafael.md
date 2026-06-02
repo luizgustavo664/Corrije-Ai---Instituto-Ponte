@@ -188,3 +188,23 @@ Rafael: Atualizar o modelo ER, identificar entidades e relacionamentos principai
 
 
 - Alteração: Foram atualizados o MER e o DER na seção 3.6 do WAD para alinhar o modelo ER à migration principal (`src/backend/src/database/migrations/migration.sql`). Também foram documentadas as entidades principais por grupo, os relacionamentos centrais, as tabelas atuais do modelo físico e a substituição das estruturas antigas por `questao`, `prova_questao`, `prova_aluno`, `resposta_aluno`, `resultado_aluno`, `exportacao_resultado`, `email_envio` e `avaliacao_log`.
+
+### Data: 02/06/2026
+
+
+### Objetivo do Dia
+
+
+Rafael: Atualizar a seção 3.6 do WAD, com foco no refinamento do Diagrama Entidade-Relacionamento (DER) para refletir exatamente o estado atual da migration do banco de dados.
+
+
+### Modelagem do banco de dados
+
+
+### Alterações Realizadas
+
+
+#### Rafael:
+
+
+- Alteração: Foi atualizada a seção 3.6.2 do WAD para representar o DER físico conforme a migration principal (`src/backend/src/database/migrations/migration.sql`). A documentação passou a usar os nomes reais das 22 tabelas de domínio, suas chaves primárias, chaves estrangeiras, restrições `UNIQUE`, restrições `CHECK`, enums, relacionamentos reais e índices físicos relevantes. Também foi registrado que `prova_materia` e `prova_enunciado` não existem como tabelas físicas, evitando componentes fantasmas na documentação.
