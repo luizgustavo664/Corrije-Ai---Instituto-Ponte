@@ -1,5 +1,6 @@
 import { pool } from "../database/pool.js";
 
+/** Linha de contexto para validação de anexo com JOINs em resposta_aluno, prova_aluno, prova e questao. */
 type RespostaContextRow = {
   id: string;
   questao_id: string;
@@ -12,6 +13,7 @@ type RespostaContextRow = {
   data_fim: Date | string | null;
 };
 
+/** Linha bruta da tabela `resposta_anexo`. Campos em snake_case. */
 type RespostaAnexoRow = {
   id: string;
   url_arquivo: string;
@@ -19,6 +21,7 @@ type RespostaAnexoRow = {
   tamanho_bytes: number;
 };
 
+/** Converte uma RespostaAnexoRow (snake_case) para o formato de anexo (camelCase). */
 const mapRespostaAnexo = (row: RespostaAnexoRow) => ({
   id: row.id,
   urlArquivo: row.url_arquivo,
@@ -26,7 +29,20 @@ const mapRespostaAnexo = (row: RespostaAnexoRow) => ({
   tamanhoBytes: row.tamanho_bytes,
 });
 
+/**
+ * Repositório de anexos de arquivos das respostas do aluno.
+ *
+ * findRespostaContext valida em uma única consulta se a questão
+ * permite anexo, se o status permite edição e se a janela de
+ * tempo está vigente.
+ */
 export class RespostaAnexoRepository {
+  /**
+   * Busca contexto da resposta para validar permissão de anexo.
+   *
+   * @param respostaId - ID da resposta.
+   * @returns Contexto da resposta ou null.
+   */
   async findRespostaContext(respostaId: string) {
     const result = await pool.query<RespostaContextRow>(
       `
@@ -64,6 +80,12 @@ export class RespostaAnexoRepository {
       : null;
   }
 
+  /**
+   * Anexa um arquivo a uma resposta do aluno.
+   *
+   * @param input - Dados do anexo: respostaId, urlArquivo, nomeArquivo, mimeType, tamanhoBytes.
+   * @returns Dados do anexo criado.
+   */
   async create(input: {
     respostaId: string;
     urlArquivo: string;

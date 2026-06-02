@@ -46,6 +46,11 @@ export const provaDetailSchema = provaSchema.extend({
   questoes: z.array(z.unknown()).default([]).describe("Lista de questões associadas à prova."),
 });
 
+/**
+ * Auditoria de transições de status da prova.
+ * Cada registro documenta uma mudança no ciclo de vida:
+ * rascunho → publicada → encerrada → antiga.
+ */
 export const provaHistoricoSchema = z.object({
   id: z.string().uuid().describe("Identificador único do registro de histórico."),
   statusAnterior: provaStatusSchema.nullable().describe("Status anterior da prova antes da transição."),

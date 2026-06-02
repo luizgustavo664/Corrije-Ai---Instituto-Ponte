@@ -4115,73 +4115,383 @@ O coordenador precisa acessar relatórios de diferentes granularidades (RF019, U
 
 ## 3.4. Guia de estilos (sprint 3)
 
-*Descreva aqui orientações gerais para o leitor sobre como utilizar os componentes do guia de estilos de sua solução*
+O Style Guide da plataforma **Corrije Aí** foi desenvolvido para garantir consistência visual, acessibilidade e uma experiência intuitiva para todos os usuários (alunos, professores e coordenadores). O sistema de design segue princípios de design SaaS educacional com foco em simplicidade, confiança e organização.
+
+### Princípios de Design
+
+- **Visual minimalista:** uso generoso de espaço em branco para evitar sobrecarga cognitiva.
+- **Hierarquia clara:** tipografia responsiva em 7 níveis distintos.
+- **Bordas arredondadas:** radius entre 8px e 16px para suavidade visual.
+- **Acessibilidade:** contraste mínimo AA (WCAG 2.1) em todas as combinações de cores.
+- **Componentes modulares:** botões, inputs e cards reutilizáveis com estados bem definidos.
+- **Grid responsivo:** sistema adaptativo de 4, 8 ou 12 colunas conforme breakpoint.
+- **Espaçamento consistente:** escala baseada em múltiplos de 4px (4, 8, 16, 24, 32, 48, 64).
+
+### Breakpoints Responsivos
+
+| Dispositivo | Largura | Grid |
+|---|---:|---:|
+| Mobile | < 768px | 4 colunas |
+| Tablet | 768px – 1023px | 8 colunas |
+| Desktop | ≥ 1024px | 12 colunas |
 
 ### 3.4.1 Cores
 
-*Apresente aqui a paleta de cores, com seus códigos de aplicação e suas respectivas funções*
+A paleta de cores da Corrije Aí transmite confiança (azul escuro), energia positiva (amarelo), clareza (ciano) e simplicidade (tons neutros). Todas as combinações foram testadas para conformidade **WCAG AA**.
+
+#### Cores Principais
+
+| Nome | Função | Código HEX | Uso Principal | Contraste de Texto |
+|---|---|---|---|---|
+| Amarelo | Primária | `#FFDE59` | CTAs principais, destaques, badges | Texto escuro (`#05245F`) |
+| Ciano | Secundária | `#009799` | Links, elementos interativos, acentos | Texto branco (`#FFFFFF`) |
+| Azul Escuro | Estrutural | `#05245F` | Cabeçalhos, textos principais, bordas | Texto branco (`#FFFFFF`) |
+| Branco Suave | Background | `#F2F2F2` | Fundos de página, áreas de conteúdo | Texto escuro (`#000000`) |
+| Preto | Texto | `#000000` | Texto principal, ícones | Texto branco (`#FFFFFF`) |
+
+#### Cores de Feedback
+
+| Estado | Código HEX | Aplicação |
+|---|---|---|
+| Sucesso | `#22C55E` | Confirmações, aprovações, resultados positivos |
+| Erro | `#EF4444` | Validações falhadas, avisos críticos, exclusões |
+| Aviso | `#F59E0B` | Alertas moderados, campos obrigatórios |
+| Informação | `#3B82F6` | Tooltips, mensagens neutras, ajuda contextual |
+
+#### Exemplos de Uso
+
+```css
+/* Botão primário */
+background: #FFDE59;
+color: #05245F;
+
+/* Input com foco */
+border: 1.5px solid #009799;
+background: #F2F2F2;
+
+/* Input com erro */
+border: 1.5px solid #EF4444;
+background: #FEF2F2;
+```
 
 ### 3.4.2 Tipografia
 
-*Apresente aqui a tipografia da solução, com famílias de fontes e suas respectivas funções*
+A tipografia utiliza três famílias de fontes com funções específicas para garantir legibilidade e hierarquia visual em todos os dispositivos.
+
+#### Famílias de Fonte
+
+| Família | Pesos Usados | Função | Aplicação |
+|---|---|---|---|
+| Poppins | 300 (Light), 500 (Medium) | Títulos e subtítulos | H1, H2, H3, labels de botões |
+| Inter | 400 (Regular) | Corpo de texto | Parágrafos, inputs, descrições |
+| JetBrains Mono | 400 (Regular) | Código e dados técnicos | Badges, códigos hexadecimais, endpoints |
+
+#### Escala Tipográfica (Desktop)
+
+| Nível | Tag | Tamanho | Peso | Família | Uso |
+|---:|---|---:|---:|---|---|
+| 1 | H1 | 48px | 500 | Poppins | Títulos de página principal |
+| 2 | H2 | 32px | 500 | Poppins | Seções principais |
+| 3 | H3 | 24px | 500 | Poppins | Subsecções e cards |
+| 4 | Subtítulo | 20px | 300 | Poppins | Descrições de seção |
+| 5 | Padrão | 16px | 400 | Inter | Corpo de texto |
+| 6 | Secundário | 14px | 400 | Inter | Metadados, timestamps |
+| 7 | Pequeno | 12px | 400 | Inter | Labels, ajuda |
+
+#### Tipografia Responsiva
+
+| Elemento | Mobile (< 768px) | Tablet (768–1023px) | Desktop (≥ 1024px) |
+|---|---:|---:|---:|
+| H1 | 32px | 40px | 48px |
+| H2 | 24px | 28px | 32px |
+| H3 | 20px | 22px | 24px |
+| Subtítulo | 18px | 18px | 20px |
+| Texto padrão | 16px | 16px | 16px |
+| Texto secundário | 14px | 14px | 14px |
+| Texto pequeno | 12px | 12px | 12px |
+
+**Nota:** Títulos (H1–H3) aumentam progressivamente para aproveitar espaço em telas maiores, enquanto textos de corpo permanecem consistentes para manter legibilidade.
+
+#### Line-height (altura de linha)
+
+- **Títulos (Poppins):** 1.1 – 1.2 (compacto para impacto visual).
+- **Corpo de texto (Inter):** 1.6 – 1.7 (confortável para leitura prolongada).
+- **Código (JetBrains Mono):** 1.4 (otimizado para dados técnicos).
 
 ### 3.4.3 Iconografia e imagens 
 
-*(esta subseção é opcional, caso não existam ícones e imagens, apague esta subseção)*
+#### Sistema de Ícones
 
-*posicione aqui imagens e textos contendo exemplos padronizados de ícones e imagens, com seus respectivos atributos de aplicação, utilizadas na solução*
+A plataforma utiliza ícones lineares da biblioteca **Lucide React** (variante moderna do Heroicons), com estilo minimalista e *stroke* consistente.
+
+**Especificações técnicas:**
+
+- **Stroke width:** 1.5px
+- **Tamanhos padrão:** 14px (inline), 16px (texto), 20px (botões), 24px (cards)
+- **Cor primária:** `#05245F` (azul escuro)
+- **Cor secundária:** `#6B7280` (cinza neutro para metadados)
+
+**Ícones utilizados:**
+
+| Ícone | Componente Lucide | Contexto de Uso |
+|---|---|---|
+| 📄 | `FileText` | Provas, documentos, arquivos |
+| 👥 | `Users` | Submissões, alunos, turmas |
+
+#### Diretrizes de Uso
+
+- **Alinhamento:** ícones devem estar verticalmente centralizados com o texto adjacente.
+- **Espaçamento:** margem de 6–8px entre ícone e texto.
+- **Estados interativos:** reduzir opacidade para 70% em estado *disabled*.
+- **Containers de ícones:** background `#F2F2F2`, dimensões 44×44px, border-radius 12px.
+
+#### Imagens e Assets
+
+**Logotipo:**
+
+- **Formato:** PNG com fundo transparente.
+- **Dimensões máximas:** 340px (largura) × 100px (altura).
+- **Container:** fundo branco (`#FFFFFF`), padding 32px, border-radius 16px.
+- **Sombra:** `0 4px 16px rgba(0,0,0,0.1)`.
+
+<div align="center">
+  <strong>Figura 32 — Style guide.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue o
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=418-10782&t=6EwlpwAERlPfGWIS-0">
+      Link
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/style_Guide.png" width="850">
+</div>
+
+**Componente `ImageWithFallback`:** todas as imagens devem usar o componente `ImageWithFallback` para garantir tratamento de erros e carregamento progressivo:
+
+```tsx
+import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
+
+<ImageWithFallback
+  src={imageSrc}
+  alt="Descrição acessível"
+  className="w-full object-contain"
+/>
+```
+
+**Diretrizes para imagens:**
+
+- **Aspect ratio:** preservar proporção original.
+- **object-fit:** `contain` para logos/ícones; `cover` para backgrounds.
+- **Lazy loading:** nativo via `loading=\"lazy\"` quando apropriado.
+- **Alt text:** sempre descritivo e contextual para acessibilidade.
+
+#### Recursos Adicionais
+
+- Fonte Poppins: Google Fonts
+- Fonte Inter: Google Fonts
+- Fonte JetBrains Mono: Google Fonts
+- Ícones Lucide: https://lucide.dev
 
 ## 3.5 Protótipo de alta fidelidade (sprint 3)
 
-*posicione aqui algumas imagens demonstrativas de seu protótipo de alta fidelidade e o link para acesso ao protótipo completo (mantenha o link sempre público para visualização)*
+As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrije Aí. O protótipo completo pode ser visualizado no link público do Figma:
+
+<div align="center">
+  <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+    telas do protótipo
+  </a>
+  •
+  <a href="https://spool-cobalt-21834134.figma.site">
+    fluxo (coordenador/professor)
+  </a>
+  •
+  <a href="https://gravy-craft-64395734.figma.site">
+    fluxo (aluno)
+  </a>.
+</div>
+
+<div align="center">
+  <strong>Figura 33 — Tela de login do professor.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://spool-cobalt-21834134.figma.site">
+      fluxo (coordenador/professor)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela_de_login_do_professor.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 34 — Tela de home do professor.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://spool-cobalt-21834134.figma.site">
+      fluxo (coordenador/professor)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela_de_Home_do_coordenador.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 35 — Tela de nova prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://spool-cobalt-21834134.figma.site">
+      fluxo (coordenador/professor)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela_de_nova_prova.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 36 — Tela de instrução de prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://gravy-craft-64395734.figma.site">
+      fluxo (aluno)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela_de_instrução.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura 37 — Tela de início de prova.</strong><br><em>
+    Fonte: elaboração própria, feita usando a ferramenta do Figma, segue as
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+      telas do protótipo
+    </a>
+    e o
+    <a href="https://gravy-craft-64395734.figma.site">
+      fluxo (aluno)
+    </a>.
+  </em>
+</div>
+
+<div align="center">
+  <img src="../assets/Prototipo_imagens/Tela _Início_de_Prova.png" width="850">
+</div>
 
 ## 3.6. Modelagem do banco de dados (sprints 2 e 4)
 
-### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
+### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2, atualizado na sprint 4)
 
 
 Antes da implementação física do banco de dados, foi realizada a modelagem das informações do sistema por meio do Modelo Entidade-Relacionamento (MER) e do Diagrama Entidade-Relacionamento (DER). Esses diagramas têm como objetivo representar, em diferentes níveis de detalhamento, as principais entidades do projeto, seus atributos e os relacionamentos existentes entre elas.
 
-O Modelo Entidade-Relacionamento (MER) apresenta uma visão conceitual do banco de dados, focando nas entidades principais do domínio, como Pessoa, Aluno, Professor, Coordenador, Matéria, Prova, Enunciado, Alternativa, Resposta do Aluno, Correção, Feedback e Relatório. Nesse modelo, são demonstradas as relações gerais entre os elementos do sistema, como a associação entre professores e matérias, provas e enunciados, alunos e provas, além da especialização da entidade Pessoa em diferentes perfis de usuário.
+
+Na sprint 4, o modelo ER foi revisado para ficar alinhado à migration principal localizada em `src/backend/src/database/migrations/migration.sql`. A atualização substituiu a visão anterior baseada em tabelas associativas que não existem mais, como `prova_materia` e `prova_enunciado`, pela estrutura atual do banco, que utiliza `prova.materia_id`, `questao`, `enunciado`, `prova_questao`, `aluno`, `prova_aluno`, `resposta_aluno`, anexos, correções, resultados, exportações, e-mails e logs de avaliação.
+
+
+As entidades principais identificadas são:
+
+
+| Grupo | Entidades | Finalidade no domínio |
+| --- | --- | --- |
+| Usuários internos | `coordenador`, `professor` | Representam os perfis autenticados pelo Supabase Auth e responsáveis pela gestão e aplicação das provas. |
+| Organização pedagógica | `materia`, `tema`, `materia_professor` | Organizam as disciplinas, temas e vínculos entre professores e matérias. |
+| Banco de questões | `questao`, `enunciado`, `alternativa` | Armazenam questões reutilizáveis, enunciados em LaTeX/imagem e alternativas objetivas. |
+| Provas | `prova`, `prova_questao`, `prova_status_historico` | Controlam provas, questões selecionadas, ordem, pontuação e histórico de mudança de status. |
+| Participação do aluno | `aluno`, `prova_aluno`, `resposta_aluno`, `resposta_anexo` | Registram alunos, tentativas de prova, respostas, rascunhos e anexos enviados. |
+| Correção e retorno | `correcao`, `feedback`, `resultado_aluno`, `email_envio` | Guardam notas, feedbacks, resultados liberados e envio de e-mails. |
+| Gestão e auditoria | `relatorio`, `exportacao_resultado`, `avaliacao_log` | Apoiam relatórios, exportação de resultados e rastreabilidade de ações. |
+
+
+Os relacionamentos centrais identificados são:
+
+
+| Relacionamento | Cardinalidade | Descrição |
+| --- | --- | --- |
+| Coordenador - Professor | 1:N | Um coordenador pode gerenciar vários professores; cada professor pertence a um coordenador. |
+| Professor - Matéria | N:N | O vínculo é materializado por `materia_professor`. |
+| Matéria - Tema | 1:N | Uma matéria possui vários temas. |
+| Matéria - Questão | 1:N | Cada questão pertence a uma matéria. |
+| Tema - Questão | 0..1:N | Uma questão pode estar associada a um tema; um tema pode classificar várias questões. |
+| Questão - Enunciado | 1:1 | Cada questão possui um enunciado obrigatório. |
+| Questão - Alternativa | 1:N | Questões objetivas possuem alternativas. |
+| Professor - Prova | 1:N | Um professor elabora várias provas. |
+| Matéria - Prova | 1:N | Cada prova está vinculada a uma matéria principal. |
+| Prova - Questão | N:N | O vínculo é materializado por `prova_questao`, com ordem e pontuação. |
+| Prova - Aluno | N:N | O vínculo é materializado por `prova_aluno`, representando a tentativa do aluno. |
+| Prova do aluno - Resposta | 1:N | Cada tentativa contém respostas por questão. |
+| Resposta - Anexo | 1:N | Uma resposta pode possuir arquivos anexados. |
+| Resposta - Correção | 1:0..1 | Uma resposta pode receber uma correção. |
+| Correção - Feedback | 1:N | Uma correção pode possuir vários feedbacks. |
+| Prova do aluno - Resultado | 1:0..1 | A tentativa pode gerar um resultado consolidado. |
+| Prova/Coordenador - Relatório e Exportação | N:1 | Relatórios e exportações são gerados para uma prova por um coordenador. |
+| Prova/Prova do aluno - Log | 0..1:N | Logs registram ações associadas à prova ou à tentativa do aluno. |
+
 
 ```plantuml
 @startuml
-title Modelo Entidade-Relacionamento Conceitual - MER 
+title Modelo Entidade-Relacionamento Conceitual - MER
+
 
 hide circle
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
+
 ' =========================
 ' Usuários internos
 ' =========================
+
 
 entity "Professor" as professor {
   * id
   --
   nome
   email
-  ativo
+  auth_user_id
 }
+
 
 entity "Coordenador" as coordenador {
   * id
   --
   nome
   email
-  ativo
+  auth_user_id
 }
+
 
 ' =========================
 ' Organização pedagógica
 ' =========================
+
 
 entity "Matéria" as materia {
   * id
   --
   nome
   codigo
+  descrição
 }
+
 
 entity "Tema" as tema {
   * id
@@ -4190,75 +4500,97 @@ entity "Tema" as tema {
   descrição
 }
 
+
 ' =========================
 ' Prova
 ' =========================
 
-entity "Prova" as prova {
+
+entity "Aluno" as aluno {
   * id
   --
-  titulo
-  descrição
-  modalidade
-  turma
-  semestre
-  status
-  duração
-  início_agendado
-  fim_agendado
-  link_publicação
-  qr_code
+  nome
+  email
+  cpf
+  aceitou_termos_em
 }
+
+
+entity "Questão" as questao {
+  * id
+  --
+  tipo
+  pontuação_padrão
+  limite_caracteres
+  limite_palavras
+  permite_anexo
+  ativa
+}
+
 
 entity "Enunciado" as enunciado {
   * id
   --
-  tipo
-  texto
-  pontos
-  limite_caracteres
-  limite_palavras
-  ativo
+  conteúdo_latex
+  url_imagem
 }
+
 
 entity "Alternativa" as alternativa {
   * id
   --
-  texto
+  conteúdo_latex
+  url_imagem
   correta
-  ordem
+  ordem_original
 }
+
+
+entity "Prova" as prova {
+  * id
+  --
+  título
+  modalidade
+  turma
+  semestre
+  instruções
+  tempo_limite
+  período
+  status
+  url_acesso
+  qr_code
+}
+
 
 entity "Questão da Prova" as questao_prova {
-  * id
+  * prova_id
+  * questao_id
   --
-  ordem
-  pontos
+  ordem_original
+  pontuação_max
 }
 
-' =========================
-' Submissão do aluno
-' =========================
 
-entity "Submissão da Prova" as submissao {
+entity "Aplicação da Prova ao Aluno" as prova_aluno {
   * id
   --
-  nome_aluno_informado
-  email_aluno_informado
-  cpf_aluno_informado
-  aceite_lgpd
   status
-  iniciado_em
-  enviado_em
-  nota_total
+  início
+  envio
+  ordem_questões
+  ordem_alternativas
 }
 
-entity "Resposta da Submissão" as resposta {
+
+entity "Resposta do Aluno" as resposta {
   * id
   --
   texto_resposta
+  url_imagem
   rascunho
+  enviada_final
 }
+
 
 entity "Arquivo da Resposta" as arquivo_resposta {
   * id
@@ -4269,18 +4601,16 @@ entity "Arquivo da Resposta" as arquivo_resposta {
   tamanho
 }
 
-' =========================
-' Correção
-' =========================
 
 entity "Correção" as correcao {
   * id
   --
   nota
   observação
-  status
+  tipo
   corrigida_em
 }
+
 
 entity "Feedback" as feedback {
   * id
@@ -4288,492 +4618,599 @@ entity "Feedback" as feedback {
   mensagem
 }
 
+
 ' =========================
 ' Relatório
 ' =========================
 
+
 entity "Relatório" as relatorio {
   * id
   --
+  tipo
   título
   conteúdo
   arquivo
   gerado_em
 }
 
+
+entity "Resultado do Aluno" as resultado {
+  * id
+  --
+  nota_total
+  percentual
+  liberado
+}
+
+
+entity "Exportação de Resultado" as exportacao {
+  * id
+  --
+  formato
+  arquivo
+  gerado_em
+}
+
+
+entity "Envio de E-mail" as email_envio {
+  * id
+  --
+  destinatário
+  assunto
+  status
+}
+
+
+entity "Log de Avaliação" as avaliacao_log {
+  * id
+  --
+  ator_tipo
+  ator_id
+  ação
+  detalhes
+}
+
+
+entity "Histórico de Status da Prova" as prova_status_historico {
+  * id
+  --
+  status_anterior
+  status_novo
+  alterado_por
+}
+
+
 ' =========================
 ' Relacionamentos conceituais
 ' =========================
 
+
+coordenador ||--o{ professor : "1 Coordenador gerencia 0..N Professores"
+
+
 professor }o--o{ materia : "0..N Professores lecionam 0..N Matérias"
 
-professor ||--o{ prova : "1 Professor elabora 0..N Provas"
 
-prova }o--o{ materia : "0..N Provas abordam 0..N Matérias"
+professor ||--o{ prova : "1 Professor elabora 0..N Provas"
+materia ||--o{ prova : "1 Matéria possui 0..N Provas"
+
 
 materia ||--o{ tema : "1 Matéria possui 0..N Temas"
 
-materia ||--o{ enunciado : "1 Matéria possui 0..N Enunciados"
 
-tema |o--o{ enunciado : "0..1 Tema classifica 0..N Enunciados"
+materia ||--o{ questao : "1 Matéria possui 0..N Questões"
 
-professor ||--o{ enunciado : "1 Professor cria 0..N Enunciados"
+
+tema |o--o{ questao : "0..1 Tema classifica 0..N Questões"
+
+
+questao ||--|| enunciado : "1 Questão possui 1 Enunciado"
+
+
+questao ||--o{ alternativa : "1 Questão possui 0..N Alternativas"
+
 
 prova ||--o{ questao_prova : "1 Prova contém 0..N Questões"
 
-enunciado ||--o{ questao_prova : "1 Enunciado pode ser usado em 0..N Provas"
 
-enunciado ||--o{ alternativa : "1 Enunciado possui 0..N Alternativas"
+questao ||--o{ questao_prova : "1 Questão pode ser usada em 0..N Provas"
 
-prova ||--o{ submissao : "1 Prova recebe 0..N Submissões"
 
-submissao ||--o{ resposta : "1 Submissão contém 0..N Respostas"
+prova ||--o{ prova_status_historico : "1 Prova possui 0..N eventos de status"
 
-questao_prova ||--o{ resposta : "1 Questão da Prova recebe 0..N Respostas"
+
+prova ||--o{ prova_aluno : "1 Prova recebe 0..N Alunos"
+aluno ||--o{ prova_aluno : "1 Aluno participa de 0..N Provas"
+
+
+prova_aluno ||--o{ resposta : "1 Aplicação contém 0..N Respostas"
+
+
+questao ||--o{ resposta : "1 Questão recebe 0..N Respostas"
+
 
 alternativa |o--o{ resposta : "0..1 Alternativa pode aparecer em 0..N Respostas"
 
+
 resposta ||--o{ arquivo_resposta : "1 Resposta possui 0..N Arquivos"
+
 
 resposta ||--o| correcao : "1 Resposta recebe 0..1 Correção"
 
+
 professor ||--o{ correcao : "1 Professor realiza 0..N Correções"
+
 
 correcao ||--o{ feedback : "1 Correção possui 0..N Feedbacks"
 
+
 professor ||--o{ feedback : "1 Professor escreve 0..N Feedbacks"
+
 
 coordenador ||--o{ relatorio : "1 Coordenador gera 0..N Relatórios"
 
+
 prova ||--o{ relatorio : "1 Prova baseia 0..N Relatórios"
 
-' =========================
-' Observações conceituais
-' =========================
 
-note right of submissao
-O aluno não é uma entidade do modelo.
+prova_aluno ||--o| resultado : "1 Aplicação gera 0..1 Resultado"
 
-Os dados nome, e-mail e CPF são apenas
-informações digitadas no momento da submissão.
 
-Eles não são chave primária nem únicos,
-pois o aluno pode errar esses dados
-e ainda assim enviar a prova.
-end note
+prova_aluno ||--o{ email_envio : "1 Aplicação pode gerar 0..N E-mails"
+
+
+prova ||--o{ exportacao : "1 Prova gera 0..N Exportações"
+coordenador ||--o{ exportacao : "1 Coordenador solicita 0..N Exportações"
+
+
+prova |o--o{ avaliacao_log : "0..1 Prova possui 0..N Logs"
+prova_aluno |o--o{ avaliacao_log : "0..1 Aplicação possui 0..N Logs"
+
 
 note right of professor
 Professor é uma entidade independente.
 Não herda de Pessoa.
 end note
 
+
 note right of coordenador
 Coordenador é uma entidade independente.
 Não herda de Pessoa.
 end note
 
+
 note right of questao_prova
 Representa a associação entre
-Prova e Enunciado.
+Prova e Questão.
+
 
 Permite controlar ordem e pontuação
 da questão dentro de uma prova específica.
 end note
 
+
+note right of aluno
+Aluno voltou a ser entidade cadastral
+na migration atual.
+
+
+O acesso à prova continua ocorrendo
+pelo vínculo prova_aluno.
+end note
+
+
 @enduml
 ```
 
-### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
-Já o Diagrama Entidade-Relacionamento (DER) detalha essa estrutura em uma visão mais próxima da implementação no banco de dados. Nele, as entidades são representadas como tabelas, contendo seus principais atributos, tipos de dados, chaves primárias, chaves estrangeiras e restrições, como `UNIQUE` e relacionamentos obrigatórios ou opcionais. Além disso, o DER explicita tabelas associativas, como `Professor_Materia`, `Prova_Materia`, `Prova_Enunciado` e `Prova_Aluno`, utilizadas para representar relacionamentos muitos-para-muitos de forma adequada no modelo relacional.
+### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2, atualizado na sprint 4)
+
+
+Já o Diagrama Entidade-Relacionamento (DER) detalha essa estrutura em uma visão mais próxima da implementação no banco de dados. Nele, as entidades são representadas como tabelas, contendo seus principais atributos, tipos de dados, chaves primárias, chaves estrangeiras e restrições, como `UNIQUE`, `CHECK` e relacionamentos obrigatórios ou opcionais. O DER atualizado explicita as tabelas associativas existentes na migration atual, especialmente `materia_professor`, `prova_questao` e `prova_aluno`.
+
 
 Dessa forma, o MER contribui para a compreensão conceitual do domínio do sistema, enquanto o DER serve como base para a construção do modelo relacional e físico do banco de dados no PostgreSQL/Supabase. A partir desses diagramas, torna-se possível implementar as migrations DDL de maneira mais organizada, garantindo integridade referencial, clareza nas relações entre tabelas e consistência na estrutura dos dados.
 
+
 ```plantuml
 @startuml
-title Diagrama Entidade-Relacionamento - DER 
+title Diagrama Entidade-Relacionamento - DER
+
 
 hide circle
 skinparam linetype ortho
 skinparam classAttributeIconSize 0
 
-' =========================
-' Usuários internos
-' =========================
-
-entity "Professor" as professor {
-  * id : BIGSERIAL <<PK>>
-  --
-  nome : VARCHAR(150)
-  email : VARCHAR(255) <<UNIQUE>>
-  google_sub : VARCHAR(255) <<UNIQUE>>
-  ativo : BOOLEAN
-  criado_em : TIMESTAMPTZ
-  atualizado_em : TIMESTAMPTZ
-}
 
 entity "Coordenador" as coordenador {
-  * id : BIGSERIAL <<PK>>
+  * id : UUID <<PK>>
   --
-  nome : VARCHAR(150)
-  email : VARCHAR(255) <<UNIQUE>>
-  google_sub : VARCHAR(255) <<UNIQUE>>
-  ativo : BOOLEAN
+  auth_user_id : UUID <<UNIQUE, FK auth.users>>
+  nome : TEXT
+  email : CITEXT <<UNIQUE>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-' =========================
-' Organização pedagógica
-' =========================
+
+entity "Professor" as professor {
+  * id : UUID <<PK>>
+  --
+  auth_user_id : UUID <<UNIQUE, FK auth.users>>
+  coordenador_id : UUID <<FK>>
+  nome : TEXT
+  email : CITEXT <<UNIQUE>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
 
 entity "Materia" as materia {
-  * id : BIGSERIAL <<PK>>
+  * id : UUID <<PK>>
   --
-  nome : VARCHAR(120) <<UNIQUE>>
-  codigo : VARCHAR(30) <<UNIQUE>>
+  nome : TEXT <<UNIQUE>>
+  codigo : TEXT <<UNIQUE, NULL>>
+  descricao : TEXT <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
+
+
+entity "Materia_Professor" as materia_professor {
+  * materia_id : UUID <<PK, FK>>
+  * professor_id : UUID <<PK, FK>>
+  --
+  criado_em : TIMESTAMPTZ
+}
+
+
+entity "Aluno" as aluno {
+  * id : UUID <<PK>>
+  --
+  auth_user_id : UUID <<UNIQUE, FK auth.users>>
+  nome : TEXT
+  email : CITEXT <<UNIQUE>>
+  cpf : TEXT <<UNIQUE, NULL>>
+  aceitou_termos_em : TIMESTAMPTZ <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
 
 entity "Tema" as tema {
-  * id : BIGSERIAL <<PK>>
+  * id : UUID <<PK>>
   --
-  materia_id : BIGINT <<FK>>
-  nome : VARCHAR(120)
-  descricao : TEXT
+  materia_id : UUID <<FK>>
+  nome : TEXT
+  descricao : TEXT <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-entity "Professor_Materia" as professor_materia {
-  * professor_id : BIGINT <<PK, FK>>
-  * materia_id : BIGINT <<PK, FK>>
-  --
-  criado_em : TIMESTAMPTZ
-}
 
-' =========================
-' Provas
-' =========================
-
-entity "Prova" as prova {
-  * id : BIGSERIAL <<PK>>
+entity "Questao" as questao {
+  * id : UUID <<PK>>
   --
-  professor_id : BIGINT <<FK>>
-  titulo : VARCHAR(180)
-  descricao : TEXT
-  modalidade : VARCHAR(60)
-  turma : VARCHAR(80)
-  semestre : VARCHAR(20)
-  status : status_prova_enum
-  duracao_minutos : INTEGER
-  inicio_agendado : TIMESTAMPTZ
-  fim_agendado : TIMESTAMPTZ
-  embaralhar_questoes : BOOLEAN
-  embaralhar_alternativas : BOOLEAN
-  link_publicacao : UUID <<UNIQUE>>
-  qr_code_url : TEXT
-  publicada_em : TIMESTAMPTZ
-  encerrada_em : TIMESTAMPTZ
+  materia_id : UUID <<FK>>
+  tema_id : UUID <<FK, NULL>>
+  tipo : questao_tipo
+  limite_caracteres : INTEGER <<NULL>>
+  limite_palavras : INTEGER <<NULL>>
+  permite_anexo : BOOLEAN
+  pontuacao_padrao : NUMERIC(5,2)
+  ativa : BOOLEAN
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-entity "Prova_Materia" as prova_materia {
-  * prova_id : BIGINT <<PK, FK>>
-  * materia_id : BIGINT <<PK, FK>>
-  --
-  criado_em : TIMESTAMPTZ
-}
-
-' =========================
-' Banco de questões
-' =========================
 
 entity "Enunciado" as enunciado {
-  * id : BIGSERIAL <<PK>>
+  * id : UUID <<PK>>
   --
-  materia_id : BIGINT <<FK>>
-  tema_id : BIGINT <<FK, NULL>>
-  criado_por_professor_id : BIGINT <<FK>>
-  tipo : tipo_questao_enum
-  texto : TEXT
-  pontos_padrao : DECIMAL(6,2)
-  ordem_banco : INTEGER
-  limite_caracteres : INTEGER
-  limite_palavras : INTEGER
-  ativo : BOOLEAN
+  questao_id : UUID <<FK, UNIQUE>>
+  conteudo_latex : TEXT
+  url_imagem : TEXT <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
+
 
 entity "Alternativa" as alternativa {
-  * id : BIGSERIAL <<PK>>
+  * id : UUID <<PK>>
   --
-  enunciado_id : BIGINT <<FK>>
-  texto : TEXT
+  questao_id : UUID <<FK>>
+  ordem_original : INTEGER
+  conteudo_latex : TEXT
+  url_imagem : TEXT <<NULL>>
   correta : BOOLEAN
-  ordem : INTEGER
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-entity "Prova_Enunciado" as prova_enunciado {
-  * id : BIGSERIAL <<PK>>
+
+entity "Prova" as prova {
+  * id : UUID <<PK>>
   --
-  prova_id : BIGINT <<FK>>
-  enunciado_id : BIGINT <<FK>>
-  ordem : INTEGER
-  pontos : DECIMAL(6,2)
-  criado_em : TIMESTAMPTZ
-}
-
-' =========================
-' Submissão do aluno
-' =========================
-
-entity "Submissao_Prova" as submissao_prova {
-  * id : BIGSERIAL <<PK>>
-  --
-  prova_id : BIGINT <<FK>>
-
-  nome_aluno_informado : VARCHAR(150)
-  email_aluno_informado : VARCHAR(255)
-  cpf_aluno_informado : VARCHAR(14)
-
-  aceite_lgpd : BOOLEAN
-  aceite_lgpd_em : TIMESTAMPTZ
-
-  token_tentativa : UUID <<UNIQUE>>
-  status : status_submissao_enum
-  iniciado_em : TIMESTAMPTZ
-  enviado_em : TIMESTAMPTZ
-  nota_total : DECIMAL(6,2)
+  professor_id : UUID <<FK>>
+  materia_id : UUID <<FK>>
+  titulo : TEXT
+  modalidade : TEXT
+  turma : TEXT
+  semestre : TEXT
+  instrucoes : TEXT <<NULL>>
+  tempo_limite_min : INTEGER <<NULL>>
+  data_inicio : TIMESTAMPTZ <<NULL>>
+  data_fim : TIMESTAMPTZ <<NULL>>
+  embaralhar_questoes : BOOLEAN
+  embaralhar_alternativas : BOOLEAN
+  status : prova_status
+  url_acesso : TEXT <<UNIQUE, NULL>>
+  qr_code : TEXT <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-entity "Resposta_Submissao" as resposta_submissao {
-  * id : BIGSERIAL <<PK>>
+
+entity "Prova_Status_Historico" as prova_status_historico {
+  * id : UUID <<PK>>
   --
-  submissao_prova_id : BIGINT <<FK>>
-  prova_enunciado_id : BIGINT <<FK>>
-  alternativa_id : BIGINT <<FK, NULL>>
-  texto_resposta : TEXT
+  prova_id : UUID <<FK>>
+  status_anterior : prova_status <<NULL>>
+  status_novo : prova_status
+  alterado_por_auth_user_id : UUID <<FK auth.users, NULL>>
+  criado_em : TIMESTAMPTZ
+}
+
+
+entity "Prova_Questao" as prova_questao {
+  * prova_id : UUID <<PK, FK>>
+  * questao_id : UUID <<PK, FK>>
+  --
+  ordem_original : INTEGER
+  pontuacao_max : NUMERIC(5,2)
+  criado_em : TIMESTAMPTZ
+}
+
+
+entity "Prova_Aluno" as prova_aluno {
+  * id : UUID <<PK>>
+  --
+  prova_id : UUID <<FK>>
+  aluno_id : UUID <<FK>>
+  status : prova_aluno_status
+  inicio_em : TIMESTAMPTZ <<NULL>>
+  enviada_em : TIMESTAMPTZ <<NULL>>
+  ordem_questoes : JSONB
+  ordem_alternativas : JSONB
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Resposta_Aluno" as resposta_aluno {
+  * id : UUID <<PK>>
+  --
+  prova_aluno_id : UUID <<FK>>
+  questao_id : UUID <<FK>>
+  alternativa_id : UUID <<FK, NULL>>
+  resposta_texto : TEXT <<NULL>>
+  url_imagem : TEXT <<NULL>>
   rascunho : BOOLEAN
+  sincronizada_em : TIMESTAMPTZ <<NULL>>
+  enviada_final : BOOLEAN
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-entity "Arquivo_Resposta" as arquivo_resposta {
-  * id : BIGSERIAL <<PK>>
+
+entity "Resposta_Anexo" as resposta_anexo {
+  * id : UUID <<PK>>
   --
-  resposta_submissao_id : BIGINT <<FK>>
-  arquivo_url : TEXT
-  nome_original : VARCHAR(255)
-  tipo_mime : VARCHAR(100)
-  tamanho_bytes : BIGINT
+  resposta_id : UUID <<FK>>
+  url_arquivo : TEXT
+  nome_arquivo : TEXT <<NULL>>
+  mime_type : TEXT
+  tamanho_bytes : INTEGER
   criado_em : TIMESTAMPTZ
 }
 
-' =========================
-' Correção e feedback
-' =========================
 
 entity "Correcao" as correcao {
-  * id : BIGSERIAL <<PK>>
+  * id : UUID <<PK>>
   --
-  resposta_submissao_id : BIGINT <<FK, UNIQUE>>
-  professor_id : BIGINT <<FK>>
-  nota : DECIMAL(6,2)
-  observacao : TEXT
-  status : status_correcao_enum
-  corrigida_em : TIMESTAMPTZ
+  resposta_id : UUID <<FK, UNIQUE>>
+  professor_id : UUID <<FK>>
+  nota : NUMERIC(5,2)
+  observacao : TEXT <<NULL>>
+  tipo : correcao_tipo
+  corrigida_em : TIMESTAMPTZ <<NULL>>
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
+
 entity "Feedback" as feedback {
-  * id : BIGSERIAL <<PK>>
+  * id : UUID <<PK>>
   --
-  correcao_id : BIGINT <<FK>>
-  professor_id : BIGINT <<FK>>
+  correcao_id : UUID <<FK>>
+  professor_id : UUID <<FK>>
   mensagem : TEXT
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-' =========================
-' Relatórios
-' =========================
 
 entity "Relatorio" as relatorio {
-  * id : BIGSERIAL <<PK>>
+  * id : UUID <<PK>>
   --
-  coordenador_id : BIGINT <<FK>>
-  prova_id : BIGINT <<FK>>
-  titulo : VARCHAR(180)
-  conteudo : TEXT
-  arquivo_url : TEXT
+  prova_id : UUID <<FK>>
+  coordenador_id : UUID <<FK>>
+  tipo : relatorio_tipo
+  titulo : TEXT <<NULL>>
+  conteudo : TEXT <<NULL>>
+  url_arquivo : TEXT <<NULL>>
   gerado_em : TIMESTAMPTZ
   criado_em : TIMESTAMPTZ
   atualizado_em : TIMESTAMPTZ
 }
 
-' =========================
-' Observações importantes
-' =========================
 
-note right of professor
-Professor é uma entidade independente.
-Não existe herança com Pessoa.
-end note
+entity "Resultado_Aluno" as resultado_aluno {
+  * id : UUID <<PK>>
+  --
+  prova_aluno_id : UUID <<FK, UNIQUE>>
+  nota_total : NUMERIC(6,2)
+  percentual : NUMERIC(5,2) <<NULL>>
+  liberado : BOOLEAN
+  liberado_em : TIMESTAMPTZ <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
 
-note right of coordenador
-Coordenador é uma entidade independente.
-Não existe herança com Pessoa.
-end note
 
-note right of submissao_prova
-Aluno não é entidade cadastral.
+entity "Exportacao_Resultado" as exportacao_resultado {
+  * id : UUID <<PK>>
+  --
+  prova_id : UUID <<FK>>
+  coordenador_id : UUID <<FK>>
+  formato : TEXT
+  url_arquivo : TEXT <<NULL>>
+  gerado_em : TIMESTAMPTZ
+  criado_em : TIMESTAMPTZ
+}
 
-Nome, e-mail e CPF são dados informados
-no momento da submissão.
 
-Esses campos não são PK nem UNIQUE,
-pois podem ser digitados com erro.
+entity "Email_Envio" as email_envio {
+  * id : UUID <<PK>>
+  --
+  prova_aluno_id : UUID <<FK>>
+  destinatario : CITEXT
+  assunto : TEXT
+  corpo : TEXT <<NULL>>
+  status : email_status
+  erro : TEXT <<NULL>>
+  enviado_em : TIMESTAMPTZ <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
 
-Para iniciar a prova:
-- aceite_lgpd deve ser true;
-- aceite_lgpd_em deve estar preenchido;
-- token_tentativa identifica a tentativa.
-end note
 
-note right of prova_materia
-A matéria associada à prova deve estar
-entre as matérias lecionadas pelo professor
-que elaborou a prova.
+entity "Avaliacao_Log" as avaliacao_log {
+  * id : UUID <<PK>>
+  --
+  prova_id : UUID <<FK, NULL>>
+  prova_aluno_id : UUID <<FK, NULL>>
+  ator_tipo : TEXT
+  ator_id : UUID <<NULL>>
+  acao : TEXT
+  detalhes : JSONB
+  criado_em : TIMESTAMPTZ
+}
 
-Regra recomendada:
-EXISTS Professor_Materia
-(professor_id = prova.professor_id
-AND materia_id = prova_materia.materia_id)
-end note
-
-note right of enunciado
-Se tema_id estiver preenchido,
-o tema deve pertencer à mesma matéria
-do enunciado.
-
-Regra recomendada:
-tema.materia_id = enunciado.materia_id
-end note
-
-note right of prova_enunciado
-Recomenda-se:
-
-UNIQUE(prova_id, enunciado_id)
-UNIQUE(prova_id, ordem)
-
-O enunciado só pode ser associado
-à prova se sua matéria estiver entre
-as matérias da prova.
-end note
-
-note right of resposta_submissao
-Recomenda-se:
-
-UNIQUE(submissao_prova_id, prova_enunciado_id)
-
-A resposta deve pertencer à mesma prova
-da submissão.
-
-A alternativa marcada deve pertencer
-ao mesmo enunciado da questão respondida.
-
-alternativa_id é NULL em questões discursivas.
-end note
-
-note right of alternativa
-Para questões objetivas, recomenda-se validar:
-- mínimo de alternativas;
-- apenas uma correta, se for múltipla escolha simples;
-- alternativas compatíveis com o tipo da questão;
-- UNIQUE(enunciado_id, ordem).
-end note
-
-note right of prova
-Recomenda-se validar:
-- inicio_agendado < fim_agendado;
-- status seguindo transições permitidas;
-- prova publicada deve possuir ao menos uma questão;
-- prova publicada deve possuir ao menos uma matéria;
-- link_publicacao e qr_code_url obrigatórios
-  quando status = publicada.
-end note
-
-note right of correcao
-Cada resposta pode receber no máximo
-uma correção.
-
-Por isso, resposta_submissao_id
-deve ser UNIQUE.
-end note
 
 ' =========================
 ' Relacionamentos
 ' =========================
 
-professor ||--o{ prova : "elabora"
 
-professor ||--o{ professor_materia : "leciona"
-materia ||--o{ professor_materia : "é lecionada por"
+coordenador ||--o{ professor : "gerencia"
+
+
+materia ||--o{ materia_professor : "é lecionada"
+professor ||--o{ materia_professor : "leciona"
+
 
 materia ||--o{ tema : "possui"
-materia ||--o{ enunciado : "possui"
-tema |o--o{ enunciado : "classifica"
+materia ||--o{ questao : "possui"
+tema |o--o{ questao : "classifica"
 
-professor ||--o{ enunciado : "cria"
 
-prova ||--o{ prova_materia : "aborda"
-materia ||--o{ prova_materia : "aparece em"
+questao ||--|| enunciado : "possui"
+questao ||--o{ alternativa : "possui"
 
-enunciado ||--o{ alternativa : "possui"
 
-prova ||--o{ prova_enunciado : "contém"
-enunciado ||--o{ prova_enunciado : "é usado em"
+professor ||--o{ prova : "elabora"
+materia ||--o{ prova : "classifica"
 
-prova ||--o{ submissao_prova : "recebe"
-submissao_prova ||--o{ resposta_submissao : "contém"
 
-prova_enunciado ||--o{ resposta_submissao : "é respondido em"
-alternativa |o--o{ resposta_submissao : "é marcada em"
+prova ||--o{ prova_status_historico : "registra status"
 
-resposta_submissao ||--o{ arquivo_resposta : "possui anexos"
 
-resposta_submissao ||--o| correcao : "recebe"
+prova ||--o{ prova_questao : "contém"
+questao ||--o{ prova_questao : "é usada em"
+
+
+prova ||--o{ prova_aluno : "é aplicada"
+aluno ||--o{ prova_aluno : "realiza"
+
+
+prova_aluno ||--o{ resposta_aluno : "contém"
+questao ||--o{ resposta_aluno : "é respondida"
+alternativa |o--o{ resposta_aluno : "é marcada"
+
+
+resposta_aluno ||--o{ resposta_anexo : "possui"
+
+
+resposta_aluno ||--o| correcao : "recebe"
 professor ||--o{ correcao : "realiza"
+
 
 correcao ||--o{ feedback : "possui"
 professor ||--o{ feedback : "escreve"
 
+
 coordenador ||--o{ relatorio : "gera"
 prova ||--o{ relatorio : "baseia"
+
+
+prova_aluno ||--o| resultado_aluno : "consolida"
+prova_aluno ||--o{ email_envio : "notifica"
+
+
+prova ||--o{ exportacao_resultado : "exporta"
+coordenador ||--o{ exportacao_resultado : "solicita"
+
+
+prova |o--o{ avaliacao_log : "audita"
+prova_aluno |o--o{ avaliacao_log : "audita"
+
+
+note right of prova
+As colunas e enums seguem a migration atual:
+prova_status, prova_aluno_status, questao_tipo,
+correcao_tipo, relatorio_tipo e email_status.
+end note
+
+
+note right of resposta_aluno
+UNIQUE(prova_aluno_id, questao_id).
+A resposta pode ser objetiva, textual
+ou com imagem/anexo, conforme a questão.
+end note
+
 
 @enduml
 ```
 
+
 ### 3.6.3. Modelo Relacional e Modelo Físico
+
 
 Esta seção apresenta a modelagem física do banco de dados do projeto. O modelo foi estruturado para utilização com PostgreSQL/Supabase, contemplando as tabelas principais do sistema, seus atributos, tipos de dados, chaves primárias, chaves estrangeiras, restrições e índices.
 
 
+
+
 #### Modelo Físico
+
 
 O modelo físico descreve como o banco será implementado no PostgreSQL/Supabase, incluindo tipos de dados, constraints e relacionamentos.
 
+
 As principais decisões adotadas foram:
+
 
 - Utilização de `UUID` como chave primária nas tabelas principais;
 - Uso de `gen_random_uuid()` para geração automática dos identificadores;
@@ -4783,13 +5220,18 @@ As principais decisões adotadas foram:
 - Uso de `TIMESTAMPTZ` para armazenar datas e horários com fuso;
 - Uso de tabelas associativas para representar relacionamentos muitos-para-muitos.
 
+
 #### Principais Tabelas
+
 
 ##### Tabela `coordenador`
 
+
 A tabela `coordenador` armazena os coordenadores do sistema, responsáveis por gerenciar professores e configurar o ambiente.
 
+
 Principais atributos:
+
 
 - `id`: identificador único do coordenador (UUID, PK);
 - `auth_user_id`: referência ao Supabase Auth (`auth.users`);
@@ -4798,11 +5240,15 @@ Principais atributos:
 - `criado_em`: data de criação do registro;
 - `atualizado_em`: data da última atualização.
 
+
 ##### Tabela `professor`
+
 
 A tabela `professor` representa os professores cadastrados no sistema, vinculados a um coordenador.
 
+
 Principais atributos:
+
 
 - `id`: identificador único do professor (UUID, PK);
 - `auth_user_id`: referência ao Supabase Auth;
@@ -4812,11 +5258,15 @@ Principais atributos:
 - `criado_em`: data de criação do registro;
 - `atualizado_em`: data da última atualização.
 
+
 ##### Tabela `aluno`
+
 
 A tabela `aluno` representa os estudantes cadastrados no sistema, com dados próprios e independentes.
 
+
 Principais atributos:
+
 
 - `id`: identificador único do aluno (UUID, PK);
 - `auth_user_id`: referência ao Supabase Auth;
@@ -4827,32 +5277,114 @@ Principais atributos:
 - `criado_em`: data de criação do registro;
 - `atualizado_em`: data da última atualização.
 
+
 ##### Tabela `materia`
+
 
 A tabela `materia` armazena as disciplinas disponíveis no sistema.
 
+
 Principais atributos:
+
 
 - `id`: identificador único da matéria;
 - `nome`: nome da matéria;
 - demais campos relacionados à disciplina.
 
+
 ##### Tabela `materia_professor`
+
 
 A tabela `materia_professor` representa o relacionamento muitos-para-muitos entre matérias e professores.
 
+
 Principais atributos:
+
 
 - `materia_id`: referência à matéria;
 - `professor_id`: referência ao professor.
 
+
 A chave primária composta é formada por `materia_id` e `professor_id`, evitando que o mesmo professor seja associado à mesma matéria mais de uma vez.
 
-#### Migrations DDL
 
-As migrations DDL são os arquivos SQL responsáveis por criar a estrutura do banco de dados de forma reproduzível.
+##### Demais tabelas do modelo físico atualizado
 
-A migration principal do projeto está localizada em:
+
+Além das tabelas-base descritas acima, a migration atual também contempla:
+
+
+- `tema`: classifica questões por assunto dentro de uma matéria;
+- `questao`: armazena o tipo, limites, pontuação padrão e status ativo da questão;
+- `enunciado`: mantém o conteúdo em LaTeX e imagem opcional de cada questão;
+- `alternativa`: armazena alternativas, ordem original e marcação de alternativa correta;
+- `prova`: representa a avaliação criada pelo professor, vinculada a uma matéria e com status controlado pelo enum `prova_status`;
+- `prova_status_historico`: registra as transições de status da prova;
+- `prova_questao`: associa questões a provas, definindo ordem e pontuação máxima;
+- `prova_aluno`: associa alunos a provas e controla status, início, envio e ordenação sorteada;
+- `resposta_aluno`: registra respostas objetivas, discursivas, imagens, rascunhos e envio final;
+- `resposta_anexo`: registra arquivos anexados às respostas;
+- `correcao`: registra nota, professor responsável e tipo de correção;
+- `feedback`: registra mensagens associadas a uma correção;
+- `relatorio`: armazena relatórios gerados para uma prova;
+- `resultado_aluno`: consolida nota total, percentual e liberação do resultado;
+- `exportacao_resultado`: registra exportações em `xlsx` ou `csv`;
+- `email_envio`: controla o envio de e-mails de resultado;
+- `avaliacao_log`: registra ações de auditoria relacionadas à prova ou à aplicação da prova ao aluno.
+
+
+#### Complementos da implementação física atual
+
+
+A fonte de verdade da implementação é `src/backend/src/database/migrations/migration.sql`, que define tipos, tabelas, chaves primárias, chaves estrangeiras, índices, triggers, funções auxiliares e políticas de Row Level Security.
+
+
+Também foram preservadas as seguintes decisões físicas já documentadas:
+
+
+- UUID como chave primária nas entidades centrais.
+- TIMESTAMPTZ para datas de criação, atualização, publicação, envio e correção.
+- ENUMs para status de prova, tipo de questão, perfil, status de prova_aluno, formato de exportação e status de e-mail.
+- FOREIGN KEY entre coordenador, professor, matéria, questão, prova, aluno, respostas, correções e resultados.
+- Índices em professor_id, materia_id, tema_id, status, prova_id, questao_id e ações de log.
+- UNIQUE e índices parciais para e-mails, professor-matéria, questão em prova e alternativa correta por questão quando aplicável.
+- Triggers de validação para publicação, alternativas, vínculo professor/matéria, resposta, correção e transição de status.
+- RLS habilitado nas tabelas do domínio.
+
+
+Os agrupamentos físicos do banco também contemplam:
+
+
+| Grupo | Tabelas | Finalidade |
+|-------|---------|------------|
+| Identidade e acesso | coordenador, professor, aluno | Usuários internos e identificação do aluno. |
+| Catálogo acadêmico | materia, materia_professor, tema | Disciplinas, vínculos e temas. |
+| Banco de questões | questao, enunciado, alternativa | Questão, LaTeX/imagem e alternativas. |
+| Provas | prova, prova_status_historico, prova_questao | Metadados, ciclo de vida, URL/QR Code e composição. |
+| Aplicação ao aluno | prova_aluno, resposta_aluno, resposta_anexo | Início, respostas, envio final e anexos. |
+| Correção e feedback | correcao, feedback | Nota, observação e feedback do professor. |
+| Resultados e comunicação | resultado_aluno, exportacao_resultado, email_envio | Notas, exportações e e-mails. |
+| Auditoria e analytics | avaliacao_log, relatorio | Eventos de uso, logs e relatórios. |
+
+
+#### Relacionamentos principais preservados
+
+
+- coordenador 1:N professor.
+- professor N:N materia por materia_professor.
+- materia 1:N tema, questao e prova.
+- questao 1:1 enunciado e 1:N alternativa.
+- prova N:N questao por prova_questao.
+- prova 1:N prova_aluno e prova_status_historico.
+- aluno 1:N prova_aluno.
+- prova_aluno 1:N resposta_aluno.
+- resposta_aluno 1:N resposta_anexo e 1:1 correcao.
+- correcao 1:N feedback.
+- prova 1:N resultado_aluno, exportacao_resultado, email_envio e avaliacao_log.
+
+
+#### Migration DDL
+
 
 ```text
 src\backend\src\database\migrations\migration.sql
@@ -5030,9 +5562,12 @@ Os próximos passos são programar o frontend, implementar os endpoints principa
 
 ## 5.1. Relatório de testes de integração de endpoints automatizados (sprint 4)
 
-A estratégia de testes automatizados do backend foi implementada com Jest e organizada de acordo com a arquitetura em camadas do projeto. A suíte combina testes unitários white-box da camada Service, voltados à validação das regras de negócio, com testes de integração black-box dos endpoints HTTP por meio de Supertest. O objetivo é proteger tanto a lógica interna do domínio quanto o contrato público da API, mantendo os testes determinísticos, reproduzíveis e versionados no mesmo repositório da aplicação.
+*Liste e descreva os testes automatizados dos endpoints criados e planejados para sua solução, implementados com **Jest**. Cubra as duas abordagens:*
 
-Os testes unitários de Service estão localizados em `src/backend/src/tests/unit` e seguem a nomenclatura `*.service.spec.ts`. Os testes de integração de endpoints estão em `src/backend/src/tests` e seguem a nomenclatura `*.integration.spec.ts`. A cobertura é gerada pelo comando `npm test -- --coverage`, executado no diretório `src/backend`, com relatório produzido em `src/backend/coverage`.
+- ***White-box*** *— testes unitários de Service que exercitam ramos internos, exceções e regras de negócio (conhecimento da implementação).*
+- ***Black-box*** *— testes de integração dos endpoints via Jest + Supertest, verificando apenas o contrato HTTP (status, body, efeito observável), sem depender da implementação interna.*
+
+*Posicione aqui também o relatório de cobertura de testes Jest se houver (através de link ou transcrito para estrutura markdown).*
 
 ### 5.1.1. Estratégia de Testes
 
@@ -5042,13 +5577,13 @@ Os testes unitários de Service estão localizados em `src/backend/src/tests/uni
 | **Controller** | Black-box integração via HTTP | Jest + Supertest + `buildApp()` | Contrato HTTP (status, body, headers), schemas Zod, autorização |
 | **Repository** | White-box query (opcional) | Jest + pool direto | SQL não trivial: filtros dinâmicos, agregações, CTEs |
 
-**Service** — testado isoladamente com dependências mockadas. A maioria dos serviços recebe dependências por construtor e usa mocks criados com `jest.fn()` (ex.: `AlunoPortalService` em `aluno-portal.service.spec.ts`). Serviços com dependências importadas internamente usam `jest.unstable_mockModule` para substituir o módulo antes do `import()` dinâmico, com `jest.resetModules()` em `beforeEach` para limpar o cache (ex.: `ProvaService` em `prova.service.spec.ts`). Em ambos os casos, mocks são renovados a cada teste — por `beforeEach` com `mockReset()` ou pela recriação das funções via factory.
+**Service** — testado isoladamente com dependências mockadas. A maioria dos serviços recebe dependências por construtor e usa mocks criados com `jest.fn()` (ex.: `AlunoPortalService` em `aluno-portal.service.test.ts`). Serviços com dependências importadas internamente usam `jest.unstable_mockModule` para substituir o módulo antes do `import()` dinâmico, com `jest.resetModules()` em `beforeEach` para limpar o cache (ex.: `ProvaService` em `prova.service.test.ts`). Em ambos os casos, mocks são renovados a cada teste — por `beforeEach` com `mockReset()` ou pela recriação das funções via factory.
 
 **Controller** — endpoints testados via requisições HTTP reais contra a instância Fastify de `buildApp()`. Verifica exclusivamente o contrato público (status, body, headers). O banco é populado por `INSERT` direto via `pool.query()` em `beforeAll`/`beforeEach` e limpo por prefixo `TEST_PREFIX` em `afterAll`.
 
 **Repository** — testado apenas quando contém lógica SQL não trivial. Caso contrário, o teste de integração do controller já cobre o caminho.
 
-**AAA (Arrange, Act, Assert):** todo teste segue esta estrutura. Exemplo real de `aluno-portal.service.spec.ts`:
+**AAA (Arrange, Act, Assert):** todo teste segue esta estrutura. Exemplo real de `aluno-portal.service.test.ts`:
 
 ```ts
 // Arrange — beforeEach monta o cenário
@@ -5079,7 +5614,7 @@ it("CT05 - RN05 - deve obter dados públicos de prova disponível dentro do per�
 
 ### 5.1.2. Testes Unitários de Service
 
-Os testes unitários da camada Service foram versionados no mesmo repositório do projeto, em `src/backend/src/tests/unit`, utilizando a nomenclatura padronizada `*.service.spec.ts`. Esses testes exercitam a lógica de negócio de forma isolada, com dependências externas substituídas por mocks de repositories, storage, data/hora e serviços auxiliares.
+Os testes unitários da camada Service foram versionados no mesmo repositório do projeto, em `src/backend/src/tests/unit`, utilizando a nomenclatura padronizada `*.service.test.ts`. Esses testes exercitam a lógica de negócio de forma isolada, com dependências externas substituídas por mocks de repositories, storage, data/hora e serviços auxiliares.
 
 #### Relatório de cobertura Jest
 
@@ -5089,7 +5624,7 @@ A cobertura da camada Service foi evidenciada pelo relatório Jest gerado pelo c
 npm test -- --coverage
 ```
 
-Esse comando executa a suíte automatizada versionada no repositório, incluindo testes unitários de Service (`*.service.spec.ts`) e testes de integração (`*.integration.spec.ts`), e gera o relatório Jest em:
+Esse comando executa a suíte automatizada versionada no repositório, incluindo testes unitários de Service (`*.service.test.ts`) e testes de integração (`*.integration.test.ts`), e gera o relatório Jest em:
 
 ```text
 src/backend/coverage/lcov-report/index.html
@@ -5101,13 +5636,13 @@ O critério de aceite definido para esta seção é cobertura mínima de 80% na 
 
 | Camada avaliada | Statements | Branches | Functions | Lines | Critério | Situação |
 |-----------------|------------|----------|-----------|-------|----------|----------|
-| `src/services` | 98,47% | 95,71% | 100% | 98,62% | ≥ 80% | Aprovado |
+| `src/services` | 98,45% | 95,65% | 100% | 98,60% | ≥ 80% | Aprovado |
 
 Resumo da execução registrada pelo Jest:
 
 ```text
-Test Suites: 44 passed, 44 total
-Tests:       417 passed, 417 total
+Test Suites: 43 passed, 43 total
+Tests:       376 passed, 376 total
 ```
 
 Portanto, a camada Service atende ao requisito de cobertura mínima. Além disso, a medição é reproduzível, pois o comando, a nomenclatura dos testes e o caminho do relatório gerado estão documentados no próprio WAD.
@@ -5118,32 +5653,32 @@ A tabela abaixo vincula os casos de teste unitários de Service às Regras de Ne
 
 | CT | RN | Service / arquivo de teste | Caso de teste principal | Evidência |
 |----|----|----------------------------|-------------------------|-----------|
-| CT01 | RN01 | `ProvaService` — `prova.service.spec.ts` | Impede edição/publicação/arquivamento em estados inválidos e valida transições de status. | Cobertura direta da máquina de estados da prova. |
-| CT02 | RN02 | `ProvaService` — `prova.service.spec.ts` | Delega filtros de listagem ao repository com query recebida pelo Service. | Cobertura parcial no Service; combinação SQL dos filtros é responsabilidade do repository/integração. |
-| CT03 | RN03 | `QuestaoService` — `questao.service.spec.ts` | Valida criação de questões por tipo, alternativas, alternativa correta, ordem duplicada e limites de discursiva. | Cobertura direta das regras de criação de questão. |
-| CT04 | RN04 | `RespostaAnexoService` — `resposta-anexo.service.spec.ts` | Valida upload de anexo, tipo MIME, tamanho, vínculo da resposta e permissão de anexo na questão. | Cobertura direta do controle de upload no Service. |
-| CT05 | RN05 | `RespostaAlunoService` e `AlunoPortalService` — `resposta-aluno.service.spec.ts`, `aluno-portal.service.spec.ts` | Bloqueia resposta/início fora do período ou quando a prova não está publicada. | Cobertura direta de janela de tempo e disponibilidade. |
-| CT06 | RN06 | `ProvaService` — `prova.service.spec.ts` | Atualiza configurações de prova, incluindo flags de embaralhamento de questões e alternativas. | Cobertura direta da configuração; aplicação visual da ordem depende do fluxo de entrega da prova. |
-| CT07 | RN07 | `ProvaService` — `prova.service.spec.ts` | Publica prova em rascunho após validar pré-requisitos. | Cobertura direta da publicação; geração material de URL/QR Code é validada no repository/integração. |
-| CT08 | RN08 | `AlunoPortalService` — `aluno-portal.service.spec.ts` | Inicia prova para aluno e bloqueia nova tentativa quando já existe submissão final. | Cobertura direta da prevenção de múltiplas submissões. |
-| CT09 | RN09 | `AlunoPortalService` — `aluno-portal.service.spec.ts` | Retorna instruções, tempo limite e disponibilidade da prova pública antes do início. | Cobertura parcial no Service; exibição do cronômetro é responsabilidade do frontend. |
-| CT10 | RN10 | `QuestaoService` / `RespostaAlunoService` — `questao.service.spec.ts`, `resposta-aluno.service.spec.ts` | Mantém enunciado e respostas associados às questões, sem alterar conteúdo recebido. | Cobertura parcial no Service; renderização de fórmulas e ampliação de imagens dependem do frontend. |
-| CT11 | RN11 | `RespostaAnexoService` — `resposta-anexo.service.spec.ts` | Valida o recebimento de anexos já enviados ao backend e rejeita arquivos inválidos. | Cobertura parcial; compressão de imagem é client-side. |
-| CT12 | RN12 | `RespostaAlunoService` — `resposta-aluno.service.spec.ts` | Finaliza envio definitivo e retorna resumo de questões em branco vindo do repository. | Cobertura direta do envio final no Service. |
-| CT13 | RN13 | `CorrecaoService` — `correcao.service.spec.ts` | Salva correção manual, valida nota máxima, status da prova do aluno e vínculo do professor. | Cobertura direta da correção por questão. |
-| CT14 | RN14 | `ResultadoService` — `resultado.service.spec.ts` | Consolida resultados e exporta CSV/XLSX para storage. | Cobertura direta do processamento e exportação de resultados. |
-| CT15 | RN15 | `EmailResultadoService` — `email-resultado.service.spec.ts` | Bloqueia liberação com pendências sem confirmação e registra falhas de envio/reenvio. | Cobertura direta da divulgação controlada de resultados. |
-| CT16 | RN16 | `AnexoExportarService` — `anexo-exportar.service.spec.ts` | Exporta anexos somente quando a prova existe. | Cobertura parcial no Service; integridade aluno/questão é completada pelo repository/integração. |
-| CT17 | RN17 | `AnalyticsService` e `ResultadoService` — `analytics.service.spec.ts`, `resultado.service.spec.ts` | Valida acesso e retorna métricas/resultados consolidados. | Cobertura direta da camada de Service para relatórios e analytics. |
-| CT18 | RN18 | `ProvaService`, `QuestaoService`, `CorrecaoService` — respectivos `*.service.spec.ts` | Bloqueia ações de perfis indevidos e valida vínculo professor-matéria. | Cobertura direta de autorização de negócio no Service. |
-| CT19 | RN19 | `AuthService` — `auth.service.spec.ts` | Nega e-mail não autorizado e retorna sessão local para usuários autorizados em modo de teste. | Cobertura direta da verificação de e-mail autorizado no Service. |
-| CT20 | RN20 | `QuestaoService` e `ProvaQuestaoService` — `questao.service.spec.ts`, `prova-questao.service.spec.ts` | Lista questões com filtros e impede associação duplicada/incompatível a provas. | Cobertura direta das regras de banco de questões e vínculo ao editor da prova. |
+| CT01 | RN01 | `ProvaService` — `prova.service.test.ts` | Impede edição/publicação/arquivamento em estados inválidos e valida transições de status. | Cobertura direta da máquina de estados da prova. |
+| CT02 | RN02 | `ProvaService` — `prova.service.test.ts` | Delega filtros de listagem ao repository com query recebida pelo Service. | Cobertura parcial no Service; combinação SQL dos filtros é responsabilidade do repository/integração. |
+| CT03 | RN03 | `QuestaoService` — `questao.service.test.ts` | Valida criação de questões por tipo, alternativas, alternativa correta, ordem duplicada e limites de discursiva. | Cobertura direta das regras de criação de questão. |
+| CT04 | RN04 | `RespostaAnexoService` — `resposta-anexo.service.test.ts` | Valida upload de anexo, tipo MIME, tamanho, vínculo da resposta e permissão de anexo na questão. | Cobertura direta do controle de upload no Service. |
+| CT05 | RN05 | `RespostaAlunoService` e `AlunoPortalService` — `resposta-aluno.service.test.ts`, `aluno-portal.service.test.ts` | Bloqueia resposta/início fora do período ou quando a prova não está publicada. | Cobertura direta de janela de tempo e disponibilidade. |
+| CT06 | RN06 | `ProvaService` — `prova.service.test.ts` | Atualiza configurações de prova, incluindo flags de embaralhamento de questões e alternativas. | Cobertura direta da configuração; aplicação visual da ordem depende do fluxo de entrega da prova. |
+| CT07 | RN07 | `ProvaService` — `prova.service.test.ts` | Publica prova em rascunho após validar pré-requisitos. | Cobertura direta da publicação; geração material de URL/QR Code é validada no repository/integração. |
+| CT08 | RN08 | `AlunoPortalService` — `aluno-portal.service.test.ts` | Inicia prova para aluno e bloqueia nova tentativa quando já existe submissão final. | Cobertura direta da prevenção de múltiplas submissões. |
+| CT09 | RN09 | `AlunoPortalService` — `aluno-portal.service.test.ts` | Retorna instruções, tempo limite e disponibilidade da prova pública antes do início. | Cobertura parcial no Service; exibição do cronômetro é responsabilidade do frontend. |
+| CT10 | RN10 | `QuestaoService` / `RespostaAlunoService` — `questao.service.test.ts`, `resposta-aluno.service.test.ts` | Mantém enunciado e respostas associados às questões, sem alterar conteúdo recebido. | Cobertura parcial no Service; renderização de fórmulas e ampliação de imagens dependem do frontend. |
+| CT11 | RN11 | `RespostaAnexoService` — `resposta-anexo.service.test.ts` | Valida o recebimento de anexos já enviados ao backend e rejeita arquivos inválidos. | Cobertura parcial; compressão de imagem é client-side. |
+| CT12 | RN12 | `RespostaAlunoService` — `resposta-aluno.service.test.ts` | Finaliza envio definitivo e retorna resumo de questões em branco vindo do repository. | Cobertura direta do envio final no Service. |
+| CT13 | RN13 | `CorrecaoService` — `correcao.service.test.ts` | Salva correção manual, valida nota máxima, status da prova do aluno e vínculo do professor. | Cobertura direta da correção por questão. |
+| CT14 | RN14 | `ResultadoService` — `resultado.service.test.ts` | Consolida resultados e exporta CSV/XLSX para storage. | Cobertura direta do processamento e exportação de resultados. |
+| CT15 | RN15 | `EmailResultadoService` — `email-resultado.service.test.ts` | Bloqueia liberação com pendências sem confirmação e registra falhas de envio/reenvio. | Cobertura direta da divulgação controlada de resultados. |
+| CT16 | RN16 | `AnexoExportarService` — `anexo-exportar.service.test.ts` | Exporta anexos somente quando a prova existe. | Cobertura parcial no Service; integridade aluno/questão é completada pelo repository/integração. |
+| CT17 | RN17 | `AnalyticsService` e `ResultadoService` — `analytics.service.test.ts`, `resultado.service.test.ts` | Valida acesso e retorna métricas/resultados consolidados. | Cobertura direta da camada de Service para relatórios e analytics. |
+| CT18 | RN18 | `ProvaService`, `QuestaoService`, `CorrecaoService` — respectivos `*.service.test.ts` | Bloqueia ações de perfis indevidos e valida vínculo professor-matéria. | Cobertura direta de autorização de negócio no Service. |
+| CT19 | RN19 | `AuthService` — `auth.service.test.ts` | Nega e-mail não autorizado e retorna sessão local para usuários autorizados em modo de teste. | Cobertura direta da verificação de e-mail autorizado no Service. |
+| CT20 | RN20 | `QuestaoService` e `ProvaQuestaoService` — `questao.service.test.ts`, `prova-questao.service.test.ts` | Lista questões com filtros e impede associação duplicada/incompatível a provas. | Cobertura direta das regras de banco de questões e vínculo ao editor da prova. |
 
 #### Análise dos 5 casos prioritários
 
 **CT01 -> RN01 — Estados válidos da prova**
 
-O CT01 está concentrado em `prova.service.spec.ts` e valida a regra mais central do domínio: a prova não é um cadastro livre, ela passa por uma máquina de estados. A RN01 define que o sistema deve trabalhar com estados válidos (`rascunho`, `publicada`, `encerrada`, `antiga`), impedindo edição quando o estado não permite alteração. Por isso, o teste não verifica apenas se um método retorna sucesso; ele força o `ProvaService` a tomar decisões de negócio em cada transição.
+O CT01 está concentrado em `prova.service.test.ts` e valida a regra mais central do domínio: a prova não é um cadastro livre, ela passa por uma máquina de estados. A RN01 define que o sistema deve trabalhar com estados válidos (`rascunho`, `publicada`, `encerrada`, `antiga`), impedindo edição quando o estado não permite alteração. Por isso, o teste não verifica apenas se um método retorna sucesso; ele força o `ProvaService` a tomar decisões de negócio em cada transição.
 
 - **Cenários cobertos:** criação de prova sempre em `rascunho`; atualização permitida somente em `rascunho`; publicação permitida somente em `rascunho`; encerramento permitido somente quando a prova está `publicada`; arquivamento permitido somente quando está `encerrada`; remoção permitida somente para prova em `rascunho` sem submissões.
 - **AAA:** no Arrange, o teste monta provas com `makeProva()` e altera apenas o status necessário para cada cenário, além de configurar mocks como `mockFindById`, `mockHasAccess`, `mockUpdate`, `mockPublish`, `mockUpdateStatus` e `mockHasSubmissions`. No Act, chama diretamente métodos do Service (`atualizar`, `publicar`, `encerrar`, `arquivar`, `remover`). No Assert, verifica tanto o retorno do caminho feliz quanto a exceção esperada no caminho inválido.
@@ -5191,178 +5726,6 @@ O CT05 cobre a regra temporal da aplicação. A RN05 exige que a prova só possa
 - **RN coberta:** RN05 é coberta diretamente, pois o Service bloqueia acesso quando `provaStatus` não é `publicada`, quando faltam datas, quando `now` está fora de `dataInicio`/`dataFim` ou quando a sessão do aluno não está `em_andamento`.
 - **Caminho de falha:** os caminhos negativos cobrem "Link de prova não encontrado.", "Prova ainda não disponível ou encerrada.", "Prova do aluno não encontrada.", "A prova do aluno não está em andamento.", "Prova indisponível para resposta." e "Prova fora do período de resposta.". Assim, o teste prova que a regra temporal falha de forma explícita e rastreável, não por erro genérico.
 
-### 5.1.3. Testes de Integração de Endpoints
-
-Os testes de integração de endpoints foram implementados com Jest + Supertest, exercitando a aplicação Fastify real construída por `buildApp()`. Esses testes percorrem a pilha HTTP completa: rota, validação Zod, autenticação/autorização, controller, service, repository e banco de dados de teste. Os arquivos seguem a nomenclatura exigida `*.integration.spec.ts` e estão versionados em `src/backend/src/tests`.
-
-A execução de referência foi realizada no diretório `src/backend` com:
-
-```bash
-npm test
-```
-
-Resultado da execução:
-
-```text
-Test Suites: 44 passed, 44 total
-Tests:       417 passed, 417 total
-```
-
-Também foi executado o comando de cobertura:
-
-```bash
-npm test -- --coverage
-```
-
-Resultado relevante para a evidência:
-
-```text
-Test Suites: 44 passed, 44 total
-Tests:       417 passed, 417 total
-```
-
-#### Critério dos quatro cenários-chave
-
-Para cada endpoint principal, a suíte evidencia os quatro cenários exigidos:
-
-| Cenário-chave | Status esperado | O que comprova |
-|---------------|-----------------|----------------|
-| Sucesso | `200`, `201` ou `204` | O contrato HTTP funciona quando entrada, autenticação e estado do domínio são válidos. |
-| Falha de validação | `400` ou `422` | O schema de entrada rejeita payload, parâmetro ou query inválidos. |
-| Regra de negócio violada | `409` ou equivalente (`403` quando a regra é autorização/permissão de negócio) | O backend bloqueia ação semanticamente inválida mesmo com payload estruturalmente correto. |
-| Recurso não encontrado | `404` | O endpoint responde corretamente quando o identificador informado não corresponde a recurso existente. |
-
-#### Matriz de cobertura por endpoint principal
-
-Foram considerados endpoints principais aqueles diretamente associados aos fluxos de domínio avaliados nas RN/RF: provas, questões, respostas, anexos, correções, resultados, e-mails, analytics, alunos, professores, matérias, temas e vínculos professor-matéria. Endpoints auxiliares de infraestrutura, autenticação, saúde ou listagem administrativa (`infra-auth`, `health`, `coordenador-prova`) possuem testes próprios, mas não compõem a matriz dos quatro cenários por não representarem recurso principal com ciclo completo de sucesso, validação, regra de negócio e `404`.
-
-| Endpoint principal | Arquivo de teste | Sucesso | Validação | Regra de negócio | Não encontrado | Situação |
-|--------------------|------------------|---------|-----------|------------------|----------------|----------|
-| `POST /provas`, `GET /provas`, `GET/PUT/DELETE /provas/:id` | `prova.integration.spec.ts` | `201`, `200`, `204` | `422` | `403`/`409` | `404` | Atende |
-| `PATCH /provas/:id/configuracoes`, `POST /provas/:id/publicar`, `POST /provas/:id/encerrar`, `POST /provas/:id/arquivar` | `prova-publicacao.integration.spec.ts` | `200` | `422` | `409` | `404` | Atende |
-| `POST/GET/DELETE /provas/:id/questoes` | `prova-questao.integration.spec.ts` | `201`, `200`, `204` | `422` | `409` | `404` | Atende |
-| `POST/GET/PUT/DELETE /questoes` | `questao.integration.spec.ts` | `201`, `200`, `204` | `422` | `403` | `404` | Atende |
-| `POST/GET/PUT/DELETE /materias` | `materia.integration.spec.ts` | `201`, `200`, `204` | `422` | `409` | `404` | Atende |
-| `POST/GET/PUT/DELETE /temas` | `tema.integration.spec.ts` | `201`, `200`, `204` | `422` | `409` | `404` | Atende |
-| `POST/GET/PUT/DELETE /professores` | `professor.integration.spec.ts` | `201`, `200`, `204` | `422` | `409` | `404` | Atende |
-| `POST/DELETE /professores/:id/materias/:id` | `vinculo.integration.spec.ts` | `201`, `204` | `422` | `409` | `404` | Atende |
-| `GET/POST /public/provas/:urlAcesso` | `aluno-portal.integration.spec.ts` | `200`, `201` | `422` | `409` | `404` | Atende |
-| `PUT/GET/POST /public/provas-aluno/:id/respostas` | `resposta-aluno.integration.spec.ts` | `200` | `422` | `409` | `404` | Atende |
-| `POST /respostas/:id/anexos` | `resposta-anexo.integration.spec.ts` | `201` | `422` | `409` | `404` | Atende |
-| `GET/PUT /provas/:id/correcao`, `PUT /respostas/:id/correcao` | `correcao.integration.spec.ts` | `200` | `422` | `409`/`403` | `404` | Atende |
-| `POST /provas/:id/correcao-automatica` | `correcao-automatica.integration.spec.ts` | `200` | `422` | `403` | `404` | Atende |
-| `GET /provas/:id/resultados`, `POST /provas/:id/resultados/exportar` | `resultado.integration.spec.ts` | `200`, `201` | `422` | `403` | `404` | Atende |
-| `POST /provas/:id/resultados/liberar-email`, `GET /provas/:id/emails`, `POST /emails/:id/reenviar` | `email-resultado.integration.spec.ts` | `200` | `422` | `409`/`403` | `404` | Atende |
-| `GET /provas/:id/analytics`, `POST /logs` | `analytics.integration.spec.ts` | `200`, `201` | `422` | `403` | `404` | Atende |
-| `POST /provas/:id/anexos/exportar` | `anexo-exportar.integration.spec.ts` | `200` | `422` | `403` | `404` | Atende |
-| `GET/PUT/DELETE /alunos` | `aluno.integration.spec.ts` | `200`, `204` | `422` | `403` | `404` | Atende |
-
-#### Análise crítica do atendimento
-
-A suíte atende completamente ao requisito dos endpoints principais. Os grupos relevantes do domínio (`provas`, `publicação`, `questões`, `vínculos`, `respostas`, `anexos`, `correção`, `correção automática`, `resultados`, `e-mails`, `analytics`, `matérias`, `temas`, `professores` e `alunos`) possuem evidência dos quatro cenários-chave.
-
-Exemplos de cobertura completa:
-
-- `prova.integration.spec.ts`: cobre criação/listagem/detalhe/edição/remoção, validação `422`, perfil indevido `403`, conflito de estado `409` e prova inexistente `404`.
-- `prova-publicacao.integration.spec.ts`: cobre configuração, publicação, encerramento e arquivamento com sucesso, validação `422`, conflito de estado `409` e prova inexistente `404`.
-- `correcao-automatica.integration.spec.ts`: cobre execução automática com sucesso `200`, parâmetro inválido `422`, professor sem acesso `403` e prova inexistente `404`.
-- `resultado.integration.spec.ts`: cobre consolidação e exportação, formato inválido `422`, perfil indevido `403` e prova inexistente `404`.
-- `email-resultado.integration.spec.ts`: cobre liberação/listagem/reenvio, parâmetros inválidos `422`, pendências ou status inválido `409`, acesso indevido `403` e recurso inexistente `404`.
-- `anexo-exportar.integration.spec.ts`: cobre exportação de anexos com sucesso `200`, professor sem permissão `403`, prova inexistente `404` e `provaId` inválido `422`.
-
-Portanto, o ponto 5.1.3 atende completamente ao requisito definido: todos os endpoints principais possuem cobertura de sucesso, validação, violação de regra de negócio e recurso inexistente.
-
-### 5.1.4. Evidências de Execução
-
-Esta seção consolida as evidências finais de execução da suíte automatizada. Foram considerados os testes versionados no repositório em `src/backend/src/tests`, incluindo testes unitários de Service (`*.service.spec.ts`) e testes de integração de endpoints (`*.integration.spec.ts`).
-
-#### Output de `npm test`
-
-A execução geral da suíte foi realizada no diretório `src/backend` com o comando:
-
-```bash
-npm test
-```
-
-Resultado registrado:
-
-```text
-Test Suites: 44 passed, 44 total
-Tests:       417 passed, 417 total
-Snapshots:   0 total
-```
-
-Portanto, todos os casos automatizados versionados no backend passaram.
-
-#### Relatório de cobertura por camada
-
-O relatório de cobertura foi gerado no diretório `src/backend` com o comando:
-
-```bash
-npm test -- --coverage
-```
-
-Resultado registrado:
-
-```text
-Test Suites: 44 passed, 44 total
-Tests:       417 passed, 417 total
-Snapshots:   0 total
-```
-
-O relatório Jest foi gerado em:
-
-```text
-src/backend/coverage/lcov-report/index.html
-src/backend/coverage/lcov.info
-src/backend/coverage/coverage-final.json
-```
-
-Resumo de cobertura por camada:
-
-| Camada | Statements | Branches | Functions | Lines | Situação |
-|--------|------------|----------|-----------|-------|----------|
-| `src/controllers` | 97,68% | 82,14% | 95,00% | 97,68% | Aprovado |
-| `src/routes` | 100,00% | 100,00% | 100,00% | 100,00% | Aprovado |
-| `src/services` | 98,47% | 95,71% | 100,00% | 98,62% | Aprovado |
-| `src/repositories` | 92,41% | 67,01% | 97,79% | 94,17% | Aprovado |
-| `src/schemas` | 100,00% | 100,00% | 100,00% | 100,00% | Aprovado |
-| `src/middlewares` | 97,01% | 94,91% | 100,00% | 97,01% | Aprovado |
-| `src/helpers` | 96,87% | 92,59% | 100,00% | 96,77% | Aprovado |
-| `src/errors` | 100,00% | 50,00% | 100,00% | 100,00% | Aprovado |
-| `src/database` | 24,56% | 28,57% | 20,00% | 24,56% | Baixa cobertura esperada para scripts de migração/infraestrutura |
-
-Observação: a camada `src/database` inclui arquivos de infraestrutura e migração, como `migrate.ts`, que não representam regra de negócio nem contrato HTTP. O critério formal de cobertura mínima definido para Service permanece atendido com ampla margem, e as camadas diretamente ligadas à API (`controllers`, `routes`, `services`, `schemas`, `middlewares`) apresentam cobertura elevada.
-
-#### Mapeamento CT -> RN -> RF
-
-O mapeamento abaixo é isolado para as evidências de teste e usa a mesma ordem de prioridade das RNs já adotada na seção 5.1.2. Ele conecta cada caso de teste principal à RN coberta e ao RF correspondente da matriz RF -> RN -> Endpoint da seção 3.1.4.
-
-| CT | RN | RF | Evidência principal | Arquivo(s) de teste |
-|----|----|----|---------------------|---------------------|
-| CT01 | RN01 | RF001, RF020 | Estados da prova, listagem por status e transições válidas. | `prova.service.spec.ts`, `prova.integration.spec.ts`, `prova-publicacao.integration.spec.ts` |
-| CT02 | RN02 | RF022 | Filtros combinados de provas por status, turma, semestre, matéria e professor. | `prova.service.spec.ts`, `prova.integration.spec.ts` |
-| CT03 | RN03 | RF004, RF005 | Criação e validação de questões por tipo, alternativas e gabarito. | `questao.service.spec.ts`, `questao.integration.spec.ts` |
-| CT04 | RN04 | RF006, RF012 | Controle de anexos, permissão por questão, tipo MIME, tamanho e vínculo com resposta. | `resposta-anexo.service.spec.ts`, `resposta-anexo.integration.spec.ts` |
-| CT05 | RN05 | RF007 | Controle de tempo, janela de acesso e bloqueio fora do período. | `aluno-portal.service.spec.ts`, `resposta-aluno.service.spec.ts`, `aluno-portal.integration.spec.ts` |
-| CT06 | RN06 | RF023 | Configuração de embaralhamento de questões e alternativas. | `prova.service.spec.ts`, `prova-publicacao.integration.spec.ts` |
-| CT07 | RN07 | RF008 | Publicação de prova com URL única e QR Code. | `prova.service.spec.ts`, `prova-publicacao.integration.spec.ts` |
-| CT08 | RN08 | RF009 | Identificação do aluno e prevenção de múltiplas submissões. | `aluno-portal.service.spec.ts`, `aluno-portal.integration.spec.ts` |
-| CT09 | RN09 | RF024, RF025 | Portal público, instruções da prova e dados de tempo para o aluno. | `aluno-portal.service.spec.ts`, `aluno-portal.integration.spec.ts` |
-| CT10 | RN10 | RF010, RF011 | Preservação de conteúdo de questões/respostas para exibição e renderização. | `questao.service.spec.ts`, `resposta-aluno.service.spec.ts`, `questao.integration.spec.ts` |
-| CT11 | RN11 | RF013 | Validação de recebimento de arquivo pelo backend; compressão permanece responsabilidade client-side. | `resposta-anexo.service.spec.ts`, `resposta-anexo.integration.spec.ts` |
-| CT12 | RN12 | RF026 | Envio final da prova e retorno de questões em branco. | `resposta-aluno.service.spec.ts`, `resposta-aluno.integration.spec.ts` |
-| CT13 | RN13 | RF014, RF015, RF016 | Correção por questão, nota máxima, status da prova do aluno e acesso aos anexos. | `correcao.service.spec.ts`, `correcao.integration.spec.ts` |
-| CT14 | RN14 | RF017 | Consolidação de resultados e exportação CSV/XLSX. | `resultado.service.spec.ts`, `resultado.integration.spec.ts` |
-| CT15 | RN15 | RF027 | Liberação, envio e reenvio de resultados por e-mail. | `email-resultado.service.spec.ts`, `email-resultado.integration.spec.ts` |
-| CT16 | RN16 | RF028 | Exportação de anexos e integridade da relação prova/aluno/questão. | `anexo-exportar.service.spec.ts`, `anexo-exportar.integration.spec.ts` |
-| CT17 | RN17 | RF018, RF019 | Visão de coordenador, relatórios, analytics e resultados consolidados. | `analytics.service.spec.ts`, `resultado.service.spec.ts`, `analytics.integration.spec.ts`, `coordenador-prova.integration.spec.ts` |
-| CT18 | RN18 | RF002, RF021 | Autorização por perfil e vínculo professor-matéria nas rotas protegidas. | `prova.service.spec.ts`, `questao.service.spec.ts`, `correcao.service.spec.ts`, `middlewares-auth.spec.ts` |
-| CT19 | RN19 | RF002 | Verificação de e-mail autorizado e sessão de usuário autenticado. | `auth.service.spec.ts`, `infra-auth.integration.spec.ts` |
-| CT20 | RN20 | RF003 | Busca e vínculo de questões ao editor da prova sem duplicação indevida. | `questao.service.spec.ts`, `prova-questao.service.spec.ts`, `prova-questao.integration.spec.ts` |
-
-Esse mapeamento demonstra a rastreabilidade entre os casos de teste automatizados, as regras de negócio e os requisitos funcionais correspondentes. A relação foi mantida coerente com a matriz RF -> RN -> Endpoint da seção 3.1.4, sem depender da RTM da seção 3.9.
-
 ## 5.2. Testes de usabilidade (sprint 5)
 
 ### 5.2.1. Relatório de testes de guerrilha
@@ -5377,20 +5740,51 @@ Esse mapeamento demonstra a rastreabilidade entre os casos de teste automatizado
 
 ## 6.1 Resumo Executivo
 
-*Preencher com até 300 palavras, sem necessidade de fonte*
+O projeto propõe uma aplicação web para centralizar a criação, aplicação, entrega, correção e análise de avaliações remotas do Instituto Ponte. A oportunidade identificada está no crescimento da atuação nacional da instituição, que atende centenas de estudantes em diferentes estados brasileiros, exigindo processos digitais mais escaláveis, seguros e padronizados.
 
-*Apresente de forma clara e objetiva os principais destaques do projeto: oportunidades de mercado, diferenciais competitivos da aplicação web e os objetivos estratégicos pretendidos.*
+Atualmente, parte do fluxo avaliativo ocorre por canais dispersos, como WhatsApp e e-mail, o que gera risco de perda de arquivos, dificuldade de organização das respostas, retrabalho para professores e menor isonomia na correção. A aplicação atende esse problema ao reunir, em uma única plataforma, o acesso às provas, o envio de respostas e anexos, o acompanhamento do progresso, a correção por questão e a visualização de resultados.
+
+Os principais diferenciais competitivos da solução são a interface simples e responsiva para alunos, o acesso facilitado por link, o suporte a respostas com anexos e fórmulas, o salvamento estruturado das submissões, o banco de questões, a correção padronizada por item e os painéis de desempenho para professores e coordenadores. Esses recursos fortalecem a equidade do processo avaliativo e reduzem a carga operacional da equipe pedagógica.
+
+Como objetivos estratégicos, o projeto busca aumentar a confiabilidade das avaliações remotas, reduzir falhas operacionais, melhorar a eficiência da correção, apoiar decisões pedagógicas com dados e contribuir para a missão do Instituto Ponte de promover ascensão social por meio da educação de qualidade.
+
 
 ## 6.2 Análise de Mercado
 
-*a) Visão Geral do Setor (até 250 palavras)*
-*Contextualize o setor no qual a aplicação está inserida, considerando aspectos econômicos, tecnológicos e regulatórios. Utilize fontes confiáveis.*
+### 6.2.1 Visão Geral do Setor
+A aplicação está inserida no setor de tecnologia educacional aplicada ao terceiro setor, com foco em avaliação remota, inclusão digital e gestão pedagógica. Economicamente, organizações sociais de educação, como o Instituto Ponte, atuam em um contexto de alta demanda por oportunidades educacionais e dependência de doações, parcerias e comprovação de impacto. Por isso, soluções digitais que aumentam eficiência, transparência e geração de indicadores tornam-se estratégicas para fortalecer a confiança de financiadores e apoiar a expansão institucional.
+No aspecto tecnológico, o setor educacional brasileiro vem ampliando o uso de recursos digitais, mas ainda enfrenta desigualdades de acesso, infraestrutura e letramento tecnológico. A pesquisa TIC Educação 2023 indica avanço da conectividade nas escolas, mas também evidencia que a adoção de tecnologias exige ferramentas simples, acessíveis e adequadas a diferentes realidades de uso. Nesse cenário, uma plataforma responsiva para provas remotas, envio de anexos, correção por questão e relatórios automatizados atende diretamente à necessidade de organizar processos avaliativos em ambientes híbridos.
+Do ponto de vista regulatório, a aplicação deve observar a Lei Geral de Proteção de Dados (LGPD), especialmente por tratar dados educacionais de adolescentes, exigindo segurança, finalidade clara e tratamento no melhor interesse do estudante. Além disso, por dialogar com uma OSCIP, o projeto se conecta a um setor regulado por normas de transparência, prestação de contas e finalidade pública.
 
-*b) Tamanho e Crescimento do Mercado (até 250 palavras)*
-*Apresente dados quantitativos sobre o tamanho atual e projeções de crescimento do mercado. Utilize fontes confiáveis.*
+Fontes: Estão na seção (referências)
 
-*c) Tendências de Mercado (até 300 palavras)*
-*Identifique e analise tendências relevantes (tecnológicas, comportamentais e mercadológicas) que influenciam o setor. Utilize fontes confiáveis.*
+
+
+### 6.2.2 Tamanho e Crescimento do Mercado 
+O mercado no qual a aplicação do Instituto Ponte se insere combina EdTech, avaliação digital e gestão educacional para organizações de impacto social. Em escala global, o segmento de softwares educacionais foi estimado em US$ 30,1 bilhões em 2023 e deve alcançar US$ 75,9 bilhões até 2030, com crescimento médio anual de 14,1% entre 2024 e 2030. Dentro desse setor, o mercado de avaliações educacionais K-12 também apresenta expansão relevante: foi avaliado em US$ 13,85 bilhões em 2024 e tem projeção de chegar a US$ 32,04 bilhões em 2033, com CAGR de 9,9%.
+
+Na América Latina, o setor de EdTechs demonstra maturação e escala regional. Segundo o Report EdTech 2025, do Distrito, existem 1.326 startups educacionais ativas na região; entre 2014 e o início de 2025, o setor captou US$ 912,4 milhões em 553 rodadas, sendo o Brasil responsável por US$ 656,4 milhões em 320 rodadas. Esses dados indicam que o país é um dos pólos mais relevantes para soluções educacionais digitais.
+
+Para o Instituto Ponte, esse crescimento reforça a oportunidade de adotar uma plataforma própria de avaliações remotas, capaz de reduzir perdas operacionais, padronizar correções, gerar indicadores e escalar o acompanhamento pedagógico de estudantes em diferentes estados.
+
+Fontes: Estão na seção (referências)
+
+### 6.2.3 Tendências de Mercado
+
+O setor de tecnologia educacional apresenta três tendências relevantes para a aplicação do Instituto Ponte. A primeira é a consolidação de modelos híbridos e mobile-first. Como muitos estudantes acessam atividades educacionais por dispositivos próprios e com diferentes condições de conectividade, plataformas simples, responsivas e de baixo atrito tendem a ganhar importância. Para o projeto, isso reforça decisões como acesso por link, envio de anexos pelo celular, interface objetiva e salvamento estruturado das respostas.
+
+
+A segunda tendência é o uso crescente de dados para gestão pedagógica e prestação de contas. Instituições educacionais e organizações sociais precisam demonstrar impacto, acompanhar desempenho e identificar dificuldades de aprendizagem com mais rapidez. Assim, relatórios automáticos, dashboards e histórico de avaliações tornam-se diferenciais estratégicos, pois apoiam professores, coordenadores e financiadores na tomada de decisão.
+
+
+A terceira tendência é a incorporação cuidadosa de automação e inteligência artificial em processos educacionais. A UNESCO aponta que o uso de IA generativa na educação exige governança, proteção de dados, transparência e supervisão humana. Nesse sentido, a aplicação pode evoluir para recursos de apoio à correção e análise de desempenho, desde que preserve a isonomia avaliativa e a responsabilidade pedagógica dos professores.
+
+
+Por fim, observa-se maior exigência por segurança, privacidade e conformidade regulatória. Como a plataforma lida com dados de estudantes e avaliações, a aderência à LGPD e a boas práticas de proteção de dados deixa de ser apenas requisito técnico e passa a ser um fator de confiança institucional.
+
+
+Fontes: Estão na seção (referências).
+
 
 ## 6.3 Análise da Concorrência
 
@@ -5481,6 +5875,22 @@ TRANSPARÊNCIA BRASIL. **Organizações da Sociedade Civil: dados e transparênc
 UNICEF – United Nations Children's Fund. **Relatório Situação da Infância e Adolescência Brasileira 2022**. Brasília: UNICEF, 2022. Disponível em: https://www.unicef.org/brazil/relatorios. Acesso em: 1 mai. 2025.
 
 W3C – World Wide Web Consortium. **Web Content Accessibility Guidelines (WCAG) 2.1**. W3C Recommendation, 5 June 2018. Disponível em: https://www.w3.org/TR/WCAG21. Acesso em: 1 mai. 2025.
+
+COMITÊ GESTOR DA INTERNET NO BRASIL. [Pesquisa sobre o uso das tecnologias de informação e comunicação nas escolas brasileiras: TIC Educação 2023](https://cgi.br/publicacao/pesquisa-sobre-o-uso-das-tecnologias-de-informacao-e-comunicacao-nas-escolas-brasileiras-tic-educacao-2023/). São Paulo: CGI.br, 2024. Acesso em: 1 jun. 2026.
+
+TODOS PELA EDUCAÇÃO. [Anuário Brasileiro da Educação Básica 2024](https://anuario.todospelaeducacao.org.br/2024/index.html). São Paulo: Todos Pela Educação, 2024. Acesso em: 1 jun. 2026.
+
+BRASIL. [Lei nº 13.709, de 14 de agosto de 2018: Lei Geral de Proteção de Dados Pessoais (LGPD)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Brasília, DF: Presidência da República, 2018. Acesso em: 1 jun. 2026.
+
+BRASIL. [Lei nº 9.790, de 23 de março de 1999](https://www.planalto.gov.br/ccivil_03/leis/L9790.htm). Dispõe sobre a qualificação de pessoas jurídicas de direito privado, sem fins lucrativos, como Organizações da Sociedade Civil de Interesse Público. Brasília, DF: Presidência da República, 1999. Acesso em: 1 jun. 2026.
+
+GRAND VIEW RESEARCH. [Global EdTech Software Market Size & Outlook, 2023-2030](https://www.grandviewresearch.com/horizon/outlook/edtech-software-market-size/global). San Francisco: Grand View Research, 2024. Acesso em: 1 jun. 2026.
+
+RESEARCH AND MARKETS. [K-12 Testing and Assessment Market Forecast to 2033](https://www.researchandmarkets.com/reports/6189457/k-12-testing-assessment-market-forecast). Dublin: Research and Markets, 2025. Acesso em: 1 jun. 2026.
+
+ASSOCIAÇÃO BRASILEIRA DE INTERNET. [Distrito destaca que edtechs se reinventam em meio à queda de fundações e investimentos, com foco em inovação](https://abranet.org.br/noticias/distrito-destaca-que-edtechs-se-reinventam-em-meio-a-queda-de-fundacoes-e-investimentos-com-foco-em-inovacao/). Abranet, 2025. Acesso em: 1 jun. 2026.
+
+INSTITUTO PONTE. [Relatório Anual 2025](https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf). Vitória: Instituto Ponte, 2026. Acesso em: 1 jun. 2026.
 
 # <a name="c9"></a>Anexos
 

@@ -1,7 +1,8 @@
 import { pool } from "../database/pool.js";
 import { toIsoString } from "../helpers/date.js";
-import type { AuthUser } from "../middlewares/auth.js";
+import type { AuthUser } from "../models/auth.model.js";
 
+/** Linha bruta da tabela `email_envio` com JOIN opcional em `aluno`. */
 type EmailEnvioRow = {
   id: string;
   prova_aluno_id: string;
@@ -16,6 +17,7 @@ type EmailEnvioRow = {
   aluno_nome?: string;
 };
 
+/** Linha de aluno com resultado para envio de email. */
 type AlunoResultadoRow = {
   prova_aluno_id: string;
   aluno_id: string;
@@ -23,6 +25,8 @@ type AlunoResultadoRow = {
   aluno_email: string;
 };
 
+/** Converte uma EmailEnvioRow (snake_case) para o formato de envio (camelCase).
+ *  Inclui objeto `aluno` condicionalmente quando aluno_id está presente (JOIN). */
 const mapEnvio = (row: EmailEnvioRow) => ({
   id: row.id,
   provaAlunoId: row.prova_aluno_id,
@@ -37,7 +41,20 @@ const mapEnvio = (row: EmailEnvioRow) => ({
     : {}),
 });
 
+/**
+ * Repositório de envio de e-mails de notificação com resultado.
+ *
+ * Ciclo de vida: pendente → enviado | erro. O disparo é delegado
+ * a um adaptador externo. Filtra apenas alunos com prova corrigida.
+ */
 export class EmailEnvioRepository {
+  /**
+   * Verifica se o usuário tem acesso para gerenciar envios da prova.
+   *
+   * @param provaId - ID da prova.
+   * @param user - Usuário autenticado.
+   * @returns true se tiver acesso.
+   */
   async hasAccessToProva(provaId: string, user: AuthUser) {
     if (user.perfil === "coordenador") return true;
 
@@ -59,11 +76,23 @@ export class EmailEnvioRepository {
     return result.rows[0]?.exists ?? false;
   }
 
+  /**
+   * Verifica se uma prova existe pelo ID.
+   *
+   * @param provaId - ID da prova.
+   * @returns true se a prova existir.
+   */
   async findProvaExists(provaId: string) {
     const result = await pool.query('SELECT 1 FROM "prova" WHERE "id" = $1', [provaId]);
     return result.rows.length > 0;
   }
 
+  /**
+   * Lista alunos com prova corrigida para envio de e-mail.
+   *
+   * @param provaId - ID da prova.
+   * @returns Lista de alunos com resultado disponível.
+   */
   async findAlunosComResultado(provaId: string) {
     const result = await pool.query<AlunoResultadoRow>(
       `SELECT
@@ -81,6 +110,12 @@ export class EmailEnvioRepository {
     return result.rows;
   }
 
+  /**
+   * Conta respostas sem correção pendentes em uma prova.
+   *
+   * @param provaId - ID da prova.
+   * @returns Número de pendências de correção.
+   */
   async countPendenciasCorrecaoPorProva(provaId: string) {
     const result = await pool.query(
       `SELECT COUNT(*) AS "total"
@@ -95,6 +130,15 @@ export class EmailEnvioRepository {
     return Number(result.rows[0].total);
   }
 
+  /**
+   * Cria um registro de envio de e-mail com status "pendente".
+   *
+   * @param provaAlunoId - ID do vínculo prova-aluno.
+   * @param destinatario - E-mail do destinatário.
+   * @param assunto - Assunto do e-mail.
+   * @param corpo - Corpo do e-mail.
+   * @returns ID do registro criado.
+   */
   async createEnvio(provaAlunoId: string, destinatario: string, assunto: string, corpo: string) {
     const result = await pool.query<{ id: string }>(
       `INSERT INTO "email_envio" ("prova_aluno_id", "destinatario", "assunto", "corpo", "status")
@@ -105,6 +149,11 @@ export class EmailEnvioRepository {
     return result.rows[0].id;
   }
 
+  /**
+   * Marca um envio como "enviado" com timestamp atual.
+   *
+   * @param id - ID do registro de envio.
+   */
   async markAsSent(id: string) {
     await pool.query(
       `UPDATE "email_envio" SET "status" = 'enviado', "enviado_em" = CURRENT_TIMESTAMP, "erro" = NULL
@@ -113,6 +162,12 @@ export class EmailEnvioRepository {
     );
   }
 
+  /**
+   * Marca um envio como "erro" com a mensagem de erro.
+   *
+   * @param id - ID do registro de envio.
+   * @param error - Mensagem de erro.
+   */
   async markAsError(id: string, error: string) {
     await pool.query(
       `UPDATE "email_envio" SET "status" = 'erro', "erro" = $1 WHERE "id" = $2`,
@@ -120,6 +175,12 @@ export class EmailEnvioRepository {
     );
   }
 
+  /**
+   * Lista todos os envios de e-mail de uma prova com dados do aluno.
+   *
+   * @param provaId - ID da prova.
+   * @returns Lista de envios.
+   */
   async findEnviosByProva(provaId: string) {
     const result = await pool.query<EmailEnvioRow>(
       `SELECT
@@ -143,6 +204,12 @@ export class EmailEnvioRepository {
     return result.rows.map(mapEnvio);
   }
 
+  /**
+   * Busca um envio de e-mail pelo ID.
+   *
+   * @param id - ID do registro de envio.
+   * @returns Dados do envio ou null.
+   */
   async findById(id: string) {
     const result = await pool.query<EmailEnvioRow>(
       `SELECT "id", "prova_aluno_id", "destinatario", "assunto", "status", "erro", "enviado_em", "criado_em"

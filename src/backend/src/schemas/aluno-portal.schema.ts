@@ -22,6 +22,12 @@ export const provaPublicaSchema = z.object({
   disponivel: z.boolean().describe("Indica se a prova está dentro do período de realização."),
 });
 
+/**
+ * Questão exibida ao aluno no portal de provas.
+ * Diferente da resposta interna (`questaoResponseSchema`),
+ * este schema OMITE o campo `correta` das alternativas
+ * para não revelar o gabarito.
+ */
 export const questaoPublicaSchema = z.object({
   id: z.string().uuid().describe("Identificador único da questão."),
   ordem: z.number().int().positive().describe("Ordem da questão na prova."),
@@ -40,6 +46,11 @@ export const questaoPublicaSchema = z.object({
   ).describe("Lista de alternativas disponíveis."),
 });
 
+/**
+ * DTO retornado ao aluno após iniciar a prova.
+ * Status reflete a visão do aluno: em_andamento (prova em aberto),
+ * enviada (aguardando correção), corrigida (nota já disponível).
+ */
 export const provaIniciadaSchema = z.object({
   provaAlunoId: z.string().uuid().describe("Identificador único da relação prova-aluno."),
   status: z.enum(["em_andamento", "enviada", "corrigida"]).describe("Status atual da prova para este aluno."),

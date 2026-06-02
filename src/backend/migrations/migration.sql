@@ -23,7 +23,7 @@ END $$;
 
 DO $$
 BEGIN
-    CREATE TYPE "questao_tipo" AS ENUM ('objetiva', 'discursiva');
+    CREATE TYPE "questao_tipo" AS ENUM ('multipla_escolha', 'verdadeiro_falso', 'discursiva');
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -179,6 +179,9 @@ CREATE TABLE "questao" (
     "materia_id" UUID NOT NULL,
     "tema_id" UUID NULL,
     "tipo" "questao_tipo" NOT NULL,
+    "limite_caracteres" INTEGER NULL,
+    "limite_palavras" INTEGER NULL,
+    "permite_anexo" BOOLEAN NOT NULL DEFAULT FALSE,
     "pontuacao_padrao" NUMERIC(5, 2) NOT NULL DEFAULT 1,
     "ativa" BOOLEAN NOT NULL DEFAULT TRUE,
     "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -261,6 +264,9 @@ CREATE TABLE "prova" (
     "professor_id" UUID NOT NULL,
     "materia_id" UUID NOT NULL,
     "titulo" TEXT NOT NULL,
+    "modalidade" TEXT NOT NULL DEFAULT 'online',
+    "turma" TEXT NOT NULL,
+    "semestre" TEXT NOT NULL,
     "instrucoes" TEXT NULL,
     "tempo_limite_min" INTEGER NULL,
     "data_inicio" TIMESTAMPTZ NULL,
@@ -406,6 +412,8 @@ CREATE TABLE "resposta_aluno" (
     "resposta_texto" TEXT NULL,
     "url_imagem" TEXT NULL,
     "rascunho" BOOLEAN NOT NULL DEFAULT TRUE,
+    "enviada_final" BOOLEAN NOT NULL DEFAULT FALSE,
+    "sincronizada_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "criado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -723,8 +731,8 @@ BEGIN
         RAISE EXCEPTION 'Questao % nao encontrada.', NEW."questao_id";
     END IF;
 
-    IF v_tipo <> 'objetiva' THEN
-        RAISE EXCEPTION 'Somente questoes objetivas podem ter alternativas.';
+    IF v_tipo = 'discursiva' THEN
+        RAISE EXCEPTION 'Questoes discursivas nao podem ter alternativas.';
     END IF;
 
     RETURN NEW;
@@ -884,7 +892,7 @@ BEGIN
     JOIN "questao" q
         ON q."id" = pq."questao_id"
     WHERE pq."prova_id" = NEW."id"
-      AND q."tipo" = 'objetiva'
+      AND q."tipo" IN ('multipla_escolha', 'verdadeiro_falso')
       AND (
           (SELECT COUNT(*) FROM "alternativa" a WHERE a."questao_id" = q."id") < 2
           OR
@@ -892,7 +900,7 @@ BEGIN
       );
 
     IF v_objetivas_invalidas > 0 THEN
-        RAISE EXCEPTION 'Questoes objetivas precisam ter pelo menos duas alternativas e exatamente uma correta.';
+        RAISE EXCEPTION 'Questoes de multipla escolha e verdadeiro/falso precisam ter pelo menos duas alternativas e exatamente uma correta.';
     END IF;
 
     SELECT COUNT(*)
@@ -1076,8 +1084,8 @@ BEGIN
         END IF;
     END IF;
 
-    IF v_tipo_questao = 'objetiva' AND NEW."alternativa_id" IS NULL THEN
-        RAISE EXCEPTION 'Questoes objetivas precisam de alternativa marcada.';
+    IF v_tipo_questao IN ('multipla_escolha', 'verdadeiro_falso') AND NEW."alternativa_id" IS NULL THEN
+        RAISE EXCEPTION 'Questoes de multipla escolha e verdadeiro/falso precisam de alternativa marcada.';
     END IF;
 
     IF v_tipo_questao = 'discursiva' AND NEW."alternativa_id" IS NOT NULL THEN
