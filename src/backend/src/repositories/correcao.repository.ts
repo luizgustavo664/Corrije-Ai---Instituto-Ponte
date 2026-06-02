@@ -98,6 +98,22 @@ const mapCorrecao = (row: CorrecaoRow): CorrecaoSalva => ({
  */
 export class CorrecaoRepository {
   /**
+<<<<<<< HEAD
+   * Verifica se a prova existe antes de avaliar permissão de correção.
+   *
+   * @param provaId - ID da prova.
+   * @returns true se a prova existir.
+   */
+  async findProvaExists(provaId: string) {
+    const result = await pool.query('SELECT EXISTS (SELECT 1 FROM "prova" WHERE "id" = $1) AS "exists"', [
+      provaId,
+    ]);
+    return result.rows[0]?.exists ?? false;
+  }
+
+  /**
+=======
+>>>>>>> 8dae14724ffd55296dada49851573a72dfab1450
    * Verifica se o usuário tem acesso à prova para correção.
    *
    * @param provaId - ID da prova.

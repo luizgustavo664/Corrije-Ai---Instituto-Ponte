@@ -223,6 +223,26 @@ describe("ProvaPublicacaoController - integração", () => {
     expect(response.body.error.code).toBe("VALIDATION_ERROR");
   });
 
+  it("deve retornar 404 ao configurar prova inexistente", async () => {
+    const response = await request(app.server)
+      .patch(`/api/v1/provas/${randomUUID()}/configuracoes`)
+      .set("Authorization", seed.tokenProfessor)
+      .send({ tempoLimiteMin: 60 });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve rejeitar com 409 configuração de prova que não está em rascunho", async () => {
+    const response = await request(app.server)
+      .patch(`/api/v1/provas/${seed.provaPublicadaId}/configuracoes`)
+      .set("Authorization", seed.tokenProfessor)
+      .send({ tempoLimiteMin: 60 });
+
+    expect(response.statusCode).toBe(409);
+    expect(response.body.error.code).toBe("CONFLICT");
+  });
+
   it("deve publicar prova válida e gerar urlAcesso único e qrCode", async () => {
     const response = await request(app.server)
       .post(`/api/v1/provas/${seed.provaId}/publicar`)
@@ -261,6 +281,16 @@ describe("ProvaPublicacaoController - integração", () => {
     expect(response.body.error.message).toContain("objetivas");
   });
 
+  it("deve retornar 404 ao publicar prova inexistente", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/provas/${randomUUID()}/publicar`)
+      .set("Authorization", seed.tokenProfessor)
+      .send({ baseUrlAluno: "https://app.test/prova" });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
   it("deve encerrar prova publicada (status encerrada) e depois arquivá-la (status antiga)", async () => {
     const encerrar = await request(app.server)
       .post(`/api/v1/provas/${seed.provaPublicadaId}/encerrar`)
@@ -281,5 +311,41 @@ describe("ProvaPublicacaoController - integração", () => {
       id: seed.provaPublicadaId,
       status: "antiga",
     });
+  });
+
+  it("deve retornar 404 ao encerrar prova inexistente", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/provas/${randomUUID()}/encerrar`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve rejeitar com 409 encerramento de prova que não está publicada", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/provas/${seed.provaId}/encerrar`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(409);
+    expect(response.body.error.code).toBe("CONFLICT");
+  });
+
+  it("deve retornar 404 ao arquivar prova inexistente", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/provas/${randomUUID()}/arquivar`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve rejeitar com 409 arquivamento de prova que não está encerrada", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/provas/${seed.provaPublicadaId}/arquivar`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(409);
+    expect(response.body.error.code).toBe("CONFLICT");
   });
 });

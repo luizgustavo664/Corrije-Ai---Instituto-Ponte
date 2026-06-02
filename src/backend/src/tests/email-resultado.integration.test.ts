@@ -1,10 +1,11 @@
 import { randomUUID } from "node:crypto";
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "@jest/globals";
+import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from "@jest/globals";
 import request from "supertest";
 import { buildApp } from "../app.js";
 import { pool } from "../database/pool.js";
 
 const TEST_PREFIX = "email-api-test";
+jest.setTimeout(15000);
 
 type Seed = {
   provaId: string;
@@ -47,6 +48,7 @@ const cleanup = async () => {
 
 const createSeed = async (comPendencias = true): Promise<Seed> => {
   const suffix = randomUUID();
+  const cpfPrefix = suffix.replace(/\D/g, "").padEnd(10, "0").slice(0, 10);
   const coordenador = await pool.query<{ id: string }>(
     `INSERT INTO "coordenador" ("nome", "email") VALUES ($1, $2) RETURNING "id"`,
     ["Coordenador Email", `${TEST_PREFIX}-coord-${suffix}@example.com`],
@@ -103,7 +105,7 @@ const createSeed = async (comPendencias = true): Promise<Seed> => {
     const aluno = await pool.query<{ id: string }>(
       `INSERT INTO "aluno" ("nome", "email", "cpf", "aceitou_termos_em")
        VALUES ($1, $2, $3, CURRENT_TIMESTAMP) RETURNING "id"`,
-      [`Aluno Email ${index}`, `${TEST_PREFIX}-aluno-${index}-${suffix}@example.com`, `5000000000${index}`],
+      [`Aluno Email ${index}`, `${TEST_PREFIX}-aluno-${index}-${suffix}@example.com`, `${cpfPrefix}${index}`],
     );
     const pa = await pool.query<{ id: string }>(
       `INSERT INTO "prova_aluno" ("prova_id", "aluno_id", "status")
@@ -230,6 +232,16 @@ describe("EmailResultadoController - integração", () => {
 
       expect(response.statusCode).toBe(401);
     });
+
+    it("deve retornar 404 quando a prova não existe ao liberar e-mails", async () => {
+      const response = await request(app.server)
+        .post(`/api/v1/provas/${randomUUID()}/resultados/liberar-email`)
+        .set("Authorization", seed.coordenadorToken)
+        .send({});
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body.error.code).toBe("NOT_FOUND");
+    });
   });
 
   describe("GET /api/v1/provas/:provaId/emails", () => {
@@ -261,6 +273,15 @@ describe("EmailResultadoController - integração", () => {
         .set("Authorization", seed.naoVinculadoToken);
 
       expect(response.statusCode).toBe(403);
+    });
+
+    it("deve retornar 404 quando a prova não existe ao listar e-mails", async () => {
+      const response = await request(app.server)
+        .get(`/api/v1/provas/${randomUUID()}/emails`)
+        .set("Authorization", seed.coordenadorToken);
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body.error.code).toBe("NOT_FOUND");
     });
   });
 
@@ -305,6 +326,15 @@ describe("EmailResultadoController - integração", () => {
 
       expect(response.statusCode).toBe(422);
       expect(response.body.error.code).toBe("VALIDATION_ERROR");
+    });
+
+    it("deve retornar 404 quando envio de e-mail não existe", async () => {
+      const response = await request(app.server)
+        .post(`/api/v1/emails/${randomUUID()}/reenviar`)
+        .set("Authorization", seed.coordenadorToken);
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body.error.code).toBe("NOT_FOUND");
     });
   });
 

@@ -289,6 +289,29 @@ describe("QuestaoController - integração", () => {
     expect(exists.rows).toHaveLength(0);
   });
 
+  it("deve retornar 404 ao detalhar questão inexistente", async () => {
+    const response = await request(app.server)
+      .get(`/api/v1/questoes/${randomUUID()}`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve retornar 404 ao atualizar questão inexistente", async () => {
+    const response = await request(app.server)
+      .put(`/api/v1/questoes/${randomUUID()}`)
+      .set("Authorization", seed.tokenProfessor)
+      .send({
+        materiaId: seed.materiaId,
+        tipo: "discursiva",
+        enunciado: { conteudoLatex: "Questão inexistente.", urlImagem: null },
+      });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
   it("deve bloquear com 403 criação de questão quando professor não tem vínculo com a matéria", async () => {
     const response = await request(app.server)
       .post("/api/v1/questoes")
