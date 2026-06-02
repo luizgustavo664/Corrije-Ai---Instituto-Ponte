@@ -3032,344 +3032,262 @@ actor "Professor / Coordenador" as Usuario
 boundary "Tela de Login" as Tela
 boundary "AuthController" as Controller
 control "AuthService" as Service
-participant "Supabase Auth\n(Google OAuth)" as Supabase
-database "UsuarioRepository" as UsuarioRepository
+participant "Google OAuth\n(via Supabase)" as Google
+control "requireAuth\n(middleware)" as Middleware
+database "AuthRepository" as AuthRepository
 database "Banco de Dados" as Banco
 
 == Iniciar autenticação ==
-
-Usuario -> Tela: selecionar "Entrar com Google"
-activate Tela
-
 Tela -> Controller: GET /auth/google
 activate Controller
 
-Controller -> Supabase: redirecionarOAuth()
+Controller -> Service: getGoogleRedirectUrl()
+activate Service
+Service --> Controller: redirectUrl
+deactivate Service
+
+Controller --> Tela: 200 OK\n{ redirectUrl }
 deactivate Controller
 
-Supabase --> Usuario: exibir consentimento Google
+Tela -> Google: redirecionar para URL OAuth\n(client_id, redirect_uri, scope)
 deactivate Tela
+
+Google --> Usuario: exibir tela de consentimento Google
 
 == Validar retorno OAuth ==
 
-Usuario -> Supabase: autenticar conta Google
-activate Supabase
+Usuario -> Google: autorizar acesso
+activate Google
 
-Supabase -> Controller: callbackOAuth(accessToken, authUserId)
-deactivate Supabase
+Google -> Controller: GET /auth/google/callback?code=...
+deactivate Google
 activate Controller
 
-Controller -> Service: resolverPerfil(authUserId)
+Controller -> Service: handleGoogleCallback(code)
 activate Service
 
-Service -> UsuarioRepository: buscarPorAuthUserId(authUserId)
-activate UsuarioRepository
+Service -> AuthRepository: findUserByEmail(email)
+activate AuthRepository
 
-UsuarioRepository -> Banco: SELECT 'professor' AS perfil, id\n  FROM professor\n  WHERE auth_user_id = $1\nUNION ALL\nSELECT 'coordenador', id\n  FROM coordenador\n  WHERE auth_user_id = $1
+AuthRepository -> Banco: SELECT id, nome, email, 'professor' AS perfil\n  FROM professor WHERE email = $1\nUNION ALL\nSELECT id, nome, email, 'coordenador'\n  FROM coordenador WHERE email = $1\nLIMIT 1
 activate Banco
-Banco --> UsuarioRepository: perfilEncontrado | null
+Banco --> AuthRepository: usuarioEncontrado | null
 deactivate Banco
 
-UsuarioRepository --> Service: PerfilDTO | null
-deactivate UsuarioRepository
+AuthRepository --> Service: AuthUser | null
+deactivate AuthRepository
 
-alt perfil = "professor"
-    Service --> Controller: PerfilDTO(perfil = "professor", usuarioId)
+alt usuário encontrado — perfil = "professor"
+    Service --> Controller: { accessToken, usuario, redirectTo: "/professor" }
     deactivate Service
-
-    Controller --> Usuario: redirecionar para /painel/professor
+    Controller --> Tela: 200 OK\n{ accessToken, redirectTo }
     deactivate Controller
+    Tela --> Usuario: redirecionar para /professor
 
-else perfil = "coordenador"
-    Service --> Controller: PerfilDTO(perfil = "coordenador", usuarioId)
+else usuário encontrado — perfil = "coordenador"
+    Service --> Controller: { accessToken, usuario, redirectTo: "/coordenador" }
     deactivate Service
-
-    Controller --> Usuario: redirecionar para /painel/coordenador
+    Controller --> Tela: 200 OK\n{ accessToken, redirectTo }
     deactivate Controller
+    Tela --> Usuario: redirecionar para /coordenador
 
-else auth_user_id não encontrado nas tabelas internas
-    Service --> Controller: acessoNegado
+else e-mail não autorizado (null)
+    Service --> Controller: 403 Forbidden\n"E-mail não autorizado."
     deactivate Service
-
-    Controller --> Usuario: exibir mensagem de erro\n"Usuário não autorizado"
+    Controller --> Tela: 403 Forbidden
     deactivate Controller
+    Tela --> Usuario: exibir mensagem de erro\n"Usuário não autorizado"
 end
 
-note right of Supabase
-  O JWT de sessão é emitido
-  pelo Supabase Auth e gerenciado
-  no cliente — não é criado
-  pelo domínio da aplicação.
+== Acesso a rota protegida com sessão expirada (CR-03) ==
+
+Usuario -> Tela: tentar acessar página protegida
+activate Tela
+Tela -> Middleware: Bearer <token expirado>
+activate Middleware
+Middleware --> Tela: 401 Unauthorized\n"Token de autenticação inválido."
+deactivate Middleware
+Tela --> Usuario: redirecionar para tela de login
+deactivate Tela
+
+note right of Google
+  O JWT de sessão é emitido pelo
+  Supabase Auth e gerenciado no
+  cliente — não é criado pelo
+  domínio da aplicação.
+  Em ambiente de teste, o token
+  usa formato "test-professor:id:...".
 end note
 
 @enduml
 ```
-
-<div align="center">
-  <strong>Figura X — Diagrama de Sequência — UC01.</strong><br><em>Fonte: elaboração própria.</em>
-</div>
 
 ---
 
 ## UC02 — Listar e filtrar provas por status
-
-```plantuml
-@startuml DiagramaSequenciaUC02
-title UC02 — Listar e filtrar provas por status
-
-autonumber
-skinparam sequenceArrowThickness 2
-skinparam sequenceMessageAlign center
-skinparam responseMessageBelowArrow true
-skinparam ParticipantPadding 25
-skinparam BoxPadding 10
-
-actor "Professor / Coordenador" as Usuario
-boundary "Home de Provas" as Tela
 boundary "ProvaController" as Controller
 control "ProvaService" as Service
 database "ProvaRepository" as ProvaRepository
-entity "Prova" as Prova
 database "Banco de Dados" as Banco
 
-== Carregar listagem inicial ==
+== Carregar listagem ==
 
-Usuario -> Tela: acessar tela inicial de provas
+Usuario -> Tela: acessar tela inicial de provas\n(opcionalmente com filtros)
 activate Tela
 
-Tela -> Controller: GET /provas
+Tela -> Controller: GET /provas?[status=][turma=][semestre=]\n[materiaId=][professorId=][page=][limit=]
 activate Controller
 
-Controller -> Service: listarProvas(usuarioId)
+Controller -> Service: listar(query, user)
 activate Service
 
-Service -> ProvaRepository: buscarPorUsuario(usuarioId)
+Service -> ProvaRepository: findMany(query, user)
 activate ProvaRepository
 
 note right of ProvaRepository
-  A RLS do banco filtra automaticamente
-  os resultados pelo perfil do usuário
-  autenticado (professor vê apenas
-  suas provas; coordenador vê todas).
+  Para professores, o repository aplica
+  WHERE professor_id = $userId
+  OR vinculo via materia_professor.
+  Coordenadores visualizam todas as provas.
+  Filtros opcionais (status, turma, semestre,
+  materiaId, professorId) são aplicados
+  via AND adicionais na mesma query.
 end note
 
-ProvaRepository -> Banco: SELECT * FROM prova\n(filtrado via RLS por auth_user_id)
+ProvaRepository -> Banco: SELECT p.*, m.nome AS materia_nome,\n  pr.nome AS professor_nome,\n  COUNT(*) OVER() AS total\nFROM prova p\nJOIN materia m ON m.id = p.materia_id\nJOIN professor pr ON pr.id = p.professor_id\n[WHERE filtros + autorização]\nORDER BY p.criado_em DESC\nLIMIT $limit OFFSET $offset
 activate Banco
-Banco --> ProvaRepository: provasEncontradas
+Banco --> ProvaRepository: provas[]
 deactivate Banco
 
-ProvaRepository --> Service: List<Prova>
+ProvaRepository --> Service: { data: List<Prova>, total }
 deactivate ProvaRepository
 
-Service -> Prova: agruparPorStatus()
-activate Prova
-Prova --> Service: provasAgrupadas\n{rascunho, publicada, encerrada, antiga}
-deactivate Prova
+alt há provas compatíveis
+    Service --> Controller: { data: List<Prova>, total }
+    deactivate Service
+    Controller --> Tela: 200 OK\n{ data, page, limit, total }
+    deactivate Controller
+    Tela --> Usuario: exibir provas agrupadas por status\n(Rascunho, Publicada, Encerrada, Antiga)
+    deactivate Tela
 
-Service --> Controller: ListaProvasDTO
-deactivate Service
-
-Controller --> Tela: 200 OK\nListaProvasDTO
-deactivate Controller
-
-Tela --> Usuario: exibir Rascunho,\nPublicada, Encerrada e Antiga
-deactivate Tela
-
-== Aplicar filtros opcionais ==
-
-opt usuário aplica filtros
-    Usuario -> Tela: informar turma, semestre,\nmateriaId ou professorId
-    activate Tela
-
-    Tela -> Controller: GET /provas?turma=&semestre=&materiaId=&professorId=
-    activate Controller
-
-    Controller -> Service: filtrarProvas(usuarioId, filtros)
-    activate Service
-
-    Service -> ProvaRepository: buscarComFiltros(usuarioId, filtros)
-    activate ProvaRepository
-
-    ProvaRepository -> Banco: SELECT * FROM prova\nWHERE status IN (...)\n  AND turma = $turma\n  AND semestre = $semestre\n  AND materia_id = $materiaId\n  AND professor_id = $professorId\n(filtros opcionais, via RLS)
-    activate Banco
-    Banco --> ProvaRepository: provasFiltradas
-    deactivate Banco
-
-    ProvaRepository --> Service: List<Prova>
-    deactivate ProvaRepository
-
-    alt há provas compatíveis
-        Service -> Prova: agruparPorStatus()
-        activate Prova
-        Prova --> Service: provasAgrupadas
-        deactivate Prova
-
-        Service --> Controller: ListaProvasDTO
-        deactivate Service
-
-        Controller --> Tela: 200 OK\nListaProvasDTO
-        deactivate Controller
-
-        Tela --> Usuario: atualizar listagem filtrada
-        deactivate Tela
-    else nenhum resultado encontrado
-        Service --> Controller: ListaProvasDTO(vazia)
-        deactivate Service
-
-        Controller --> Tela: 200 OK\nestadoVazio
-        deactivate Controller
-
-        Tela --> Usuario: exibir mensagem de estado vazio
-        deactivate Tela
-    end
+else nenhum resultado encontrado
+    Service --> Controller: { data: [], total: 0 }
+    deactivate Service
+    Controller --> Tela: 200 OK\n{ data: [], total: 0 }
+    deactivate Controller
+    Tela --> Usuario: exibir mensagem de estado vazio
+    deactivate Tela
 end
+
+note right of Tela
+  O agrupamento visual por status
+  (Rascunho / Publicada / Encerrada / Antiga)
+  é responsabilidade do frontend,
+  a partir da lista plana retornada pela API.
+end note
 
 @enduml
 ```
 
-<div align="center">
-  <strong>Figura X+1 — Diagrama de Sequência — UC02.</strong><br><em>Fonte: elaboração própria.</em>
-</div>
-
 ---
 
 ## UC03 — Criar prova a partir da home
-
-```plantuml
-@startuml DiagramaSequenciaUC03
-title UC03 — Criar prova a partir da home
-
-autonumber
-skinparam sequenceArrowThickness 2
-skinparam sequenceMessageAlign center
-skinparam responseMessageBelowArrow true
-skinparam ParticipantPadding 25
-skinparam BoxPadding 10
-
-actor "Professor" as Professor
-boundary "Home / Nova Prova" as Tela
 boundary "ProvaController" as Controller
 control "ProvaService" as Service
 database "ProvaRepository" as ProvaRepository
-database "MateriaRepository" as MateriaRepository
-entity "Prova" as Prova
 database "Banco de Dados" as Banco
 
-== Abrir formulário de criação ==
+== Criar prova como rascunho ==
 
 Professor -> Tela: clicar em "Criar prova"
 activate Tela
 
-Tela -> Controller: GET /provas/nova
-activate Controller
-
-Controller -> Service: buscarDadosFormulario(professorId)
-activate Service
-
-Service -> MateriaRepository: listarPorProfessor(professorId)
-activate MateriaRepository
-
-MateriaRepository -> Banco: SELECT m.*\nFROM materia m\nJOIN materia_professor mp\n  ON mp.materia_id = m.id\nWHERE mp.professor_id = $1
-activate Banco
-Banco --> MateriaRepository: materiasVinculadas
-deactivate Banco
-
-MateriaRepository --> Service: List<Materia>
-deactivate MateriaRepository
-
-Service --> Controller: FormularioProvaDTO
-deactivate Service
-
-Controller --> Tela: 200 OK\nFormularioProvaDTO
-deactivate Controller
-
-Tela --> Professor: exibir campos obrigatórios\n(titulo, modalidade, materia, turma, semestre)
+Tela --> Professor: exibir formulário com campos obrigatórios\n(titulo, materiaId, turma, semestre)\ne opcionais (modalidade, instrucoes, etc.)
 deactivate Tela
 
-== Criar prova como rascunho ==
-
-Professor -> Tela: preencher titulo, modalidade,\nmateriaId, turma e semestre
+Professor -> Tela: preencher titulo, materiaId,\nturma, semestre [e opcionais]
 activate Tela
 
-Tela -> Controller: POST /provas\nCriarProvaDTO\n{titulo, modalidade, materiaId, turma, semestre}
+Tela -> Controller: POST /provas\n{ titulo, materiaId, turma, semestre,\n  [modalidade], [instrucoes], [...] }
 activate Controller
 
-Controller -> Service: criarRascunho(professorId, dto)
+Controller -> Service: create(input, user)
 activate Service
 
-Service -> Service: validarCamposObrigatorios(dto)
+Service -> Service: validar perfil\n(apenas professor pode criar)
 
-alt campos válidos
-    Service -> Prova: criarRascunho(dto, professorId)
-    activate Prova
-    Prova --> Service: Prova(status = "rascunho")
-    deactivate Prova
+Service -> ProvaRepository: professorExists(professorId)
+activate ProvaRepository
+ProvaRepository -> Banco: SELECT EXISTS (SELECT 1 FROM professor WHERE id = $1)
+activate Banco
+Banco --> ProvaRepository: true | false
+deactivate Banco
+ProvaRepository --> Service: boolean
+deactivate ProvaRepository
 
-    Service -> ProvaRepository: salvar(Prova)
+Service -> ProvaRepository: materiaExists(materiaId)
+activate ProvaRepository
+ProvaRepository -> Banco: SELECT EXISTS (SELECT 1 FROM materia WHERE id = $1)
+activate Banco
+Banco --> ProvaRepository: true | false
+deactivate Banco
+ProvaRepository --> Service: boolean
+deactivate ProvaRepository
+
+Service -> ProvaRepository: professorMateriaVinculados(professorId, materiaId)
+activate ProvaRepository
+ProvaRepository -> Banco: SELECT EXISTS (SELECT 1 FROM materia_professor\n  WHERE professor_id = $1 AND materia_id = $2)
+activate Banco
+Banco --> ProvaRepository: true | false
+deactivate Banco
+ProvaRepository --> Service: boolean
+deactivate ProvaRepository
+
+alt campos válidos e professor vinculado à matéria
+
+    Service -> ProvaRepository: create({ ...input, professorId, modalidade: 'online' })
     activate ProvaRepository
 
     note right of ProvaRepository
-      O banco executa automaticamente
-      o trigger validar_professor_materia_prova,
-      garantindo que o professor está
-      vinculado à matéria informada.
+      O banco executa automaticamente o trigger
+      validar_professor_materia_prova_trigger
+      como segunda barreira de consistência.
+      O status é fixado como 'rascunho' pelo INSERT.
     end note
 
-    ProvaRepository -> Banco: INSERT INTO prova\n(professor_id, materia_id, titulo,\n modalidade, turma, semestre,\n status = 'rascunho')
+    ProvaRepository -> Banco: INSERT INTO prova\n(professor_id, materia_id, titulo,\n modalidade, turma, semestre,\n status = 'rascunho', ...)
     activate Banco
     Banco --> ProvaRepository: provaPersistida
     deactivate Banco
-
-    ProvaRepository --> Service: Prova
-    deactivate ProvaRepository
-
-    Service --> Controller: ProvaDTO
-    deactivate Service
-
-    Controller --> Tela: 201 Created\nProvaDTO
-    deactivate Controller
-
     Tela --> Professor: redirecionar para editor da prova
     deactivate Tela
 
-else campo obrigatório ausente
-    Service --> Controller: erroValidacao
+else campo obrigatório ausente ou inválido (Zod 422)
+
+    Service --> Controller: 422 Unprocessable Entity\nmensagensDeErro
     deactivate Service
 
-    Controller --> Tela: 400 Bad Request\nmensagensDeErro
+    Controller --> Tela: 422 Unprocessable Entity\nmensagensDeErro
     deactivate Controller
 
     Tela --> Professor: destacar campos inválidos
     deactivate Tela
 
-else professor não vinculado à matéria (erro de trigger)
-    Service -> ProvaRepository: salvar(Prova)
-    activate ProvaRepository
+else professor não vinculado à matéria (403)
 
-    ProvaRepository -> Banco: INSERT INTO prova (...)
-    activate Banco
-    Banco --> ProvaRepository: EXCEPTION — professor não\nvinculado à matéria
-    deactivate Banco
-
-    ProvaRepository --> Service: erroVinculo
-    deactivate ProvaRepository
-
-    Service --> Controller: erroVinculo
+    Service --> Controller: 403 Forbidden\n"Professor informado não está\nvinculado à matéria informada."
     deactivate Service
 
-    Controller --> Tela: 422 Unprocessable Entity\n"Professor não vinculado à matéria"
+    Controller --> Tela: 403 Forbidden
     deactivate Controller
 
     Tela --> Professor: exibir mensagem de erro
     deactivate Tela
+
 end
 
 @enduml
 ```
-
-<div align="center">
-  <strong>Figura X+2 — Diagrama de Sequência — UC03.</strong><br><em>Fonte: elaboração própria.</em>
-</div>
 
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
