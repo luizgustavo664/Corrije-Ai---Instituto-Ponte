@@ -5261,25 +5261,6 @@ Principais atributos:
 - `atualizado_em`: data da última atualização.
 
 
-##### Tabela `aluno`
-
-
-A tabela `aluno` representa os estudantes cadastrados no sistema, com dados próprios e independentes.
-
-
-Principais atributos:
-
-
-- `id`: identificador único do aluno (UUID, PK);
-- `auth_user_id`: referência ao Supabase Auth;
-- `nome`: nome completo;
-- `email`: e-mail único;
-- `cpf`: CPF do aluno (único, opcional);
-- `aceitou_termos_em`: data de aceite dos termos;
-- `criado_em`: data de criação do registro;
-- `atualizado_em`: data da última atualização.
-
-
 ##### Tabela `materia`
 
 

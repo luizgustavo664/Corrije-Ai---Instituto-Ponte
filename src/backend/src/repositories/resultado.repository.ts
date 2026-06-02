@@ -58,14 +58,11 @@ const mapResultado = (row: ResultadoRow): ResultadoAluno => {
  * notas agregadas por aluno e fazer upsert em resultado_aluno.
  */
 export class ResultadoRepository {
-<<<<<<< HEAD
   async findProvaExists(provaId: string) {
     const result = await pool.query('SELECT 1 FROM "prova" WHERE "id" = $1', [provaId]);
     return result.rows.length > 0;
   }
 
-=======
->>>>>>> 8dae14724ffd55296dada49851573a72dfab1450
   /**
    * Verifica se o usuário tem acesso aos resultados da prova.
    *
