@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { AuthController } from "../controllers/auth.controller.js";
-import { requireRole } from "../middlewares/auth.js";
+import { requireAuth, requireRole } from "../middlewares/auth.js";
 import { errorResponseSchema, successResponseSchema } from "../schemas/common.schema.js";
 
 const usuarioSchema = z.object({
@@ -63,7 +63,7 @@ export async function authRoutes(app: FastifyInstance) {
   app.withTypeProvider().get(
     "/auth/me",
     {
-      preHandler: requireRole("professor", "coordenador"),
+      preHandler: requireAuth,
       schema: {
         tags: ["Autenticação"],
         summary: "Consultar usuário autenticado",
@@ -81,7 +81,7 @@ export async function authRoutes(app: FastifyInstance) {
   app.withTypeProvider().post(
     "/auth/logout",
     {
-      preHandler: requireRole("professor", "coordenador"),
+      preHandler: requireAuth,
       schema: {
         tags: ["Autenticação"],
         summary: "Encerrar sessão",

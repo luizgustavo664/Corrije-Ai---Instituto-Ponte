@@ -198,20 +198,57 @@ O trabalho de wireframe exigiu atenção aos detalhes de espaçamento e alinhame
 
 ---
 
+---
+
+### Data: 18/05/2026 (Segunda-feira)
+
+### Objetivo do Dia
+Corrigir a descrição do modelo físico na seção 3.6.3 do WAD para refletir a estrutura real do banco de dados.
+
+### Alterações Realizadas
+Identifiquei que a seção 3.6.3 descrevia uma tabela `pessoa` que não existe no migration.sql real — as tabelas `coordenador`, `professor` e `aluno` são independentes, cada uma com `auth_user_id` para autenticação via Supabase. Removi todas as referências à tabela `pessoa`, adicionei a tabela `coordenador` (que estava ausente) e corrigi os atributos de `aluno` e `professor` conforme o migration.sql, incluindo chaves estrangeiras, tipos de dados e constraints. Também corrigi o caminho do arquivo de migration para refletir a localização real no projeto.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/148
+
+### Observações:
+A inconsistência foi detectada durante a revisão de coerência dos artefatos. O migration.sql utiliza um modelo sem herança de `pessoa`, diferentemente do que estava documentado.
+
+---
+
 ### Data: 20/05/2026 (Quarta-feira)
 
 ### Objetivo do Dia
-Criar o Diagrama de Classes Arquitetural da aplicação na subseção 3.2.3.1 do WAD, modelando os componentes centrais das camadas Controller, Service, Repository e Model.
+Criar o Diagrama de Classes Arquitetural (subseção 3.2.3.1) e substituir a consulta #1 da seção 3.6.4 por um SELECT real com lógica proposicional.
 
 ### Alterações Realizadas
 Desenvolvi o Diagrama de Classes Arquitetural complementar ao diagrama de domínio já existente, adicionando a subseção 3.2.3.1 no WAD. Modelei as principais classes de cada camada arquitetural: os Controllers responsáveis pelas rotas da API, os Services com a lógica de negócio, os Repositories para abstração do banco de dados, e os Models representando as entidades do domínio. Utilizei estereótipos UML (&lt;&lt;controller&gt;&gt;, &lt;&lt;service&gt;&gt;, &lt;&lt;repository&gt;&gt;, &lt;&lt;model&gt;&gt;) para identificar cada camada e setas de dependência para mostrar as relações entre elas (Controller → Service → Repository → Model). Segui a mesma notação PlantUML e estilo visual do diagrama de domínio para manter consistência no documento. O diagrama foi inserido logo após a seção 3.2.3, mantendo a numeração sequencial das subseções.
 
+Além disso, substituí a consulta #1 da seção 3.6.4 por uma consulta SELECT real extraída do migration.sql, com condições WHERE compostas (AND/OR) e documentei as proposições lógicas correspondentes.
+
 ### Links:
 https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/112
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/149
 documentos/wad.md (seção 3.2.3.1)
 
 ### Observações:
-O diagrama arquitetural complementa a visão de domínio já documentada, mostrando como as entidades se organizam nas camadas do backend. A modelagem seguiu o padrão definido em conjunto com a equipe e foi revisada antes do fechamento do issue.
+O diagrama arquitetural complementa a visão de domínio já documentada. A consulta SELECT real substitui o exemplo sintético anterior, alinhando a seção 3.6.4 com o código fonte do projeto.
+
+---
+
+### Data: 21/05/2026 (Quinta-feira)
+
+### Objetivo do Dia
+Substituir consultas SQL sintéticas da seção 3.6.4 por consultas reais UPDATE e DELETE extraídas do código-fonte, com expressões proposicionais e tabelas verdade.
+
+### Alterações Realizadas
+Substituí a consulta #3 (UPDATE) por um UPSERT real do `correcao.repository.ts` que faz INSERT...SELECT...ON CONFLICT DO UPDATE com JOIN entre 5 tabelas e condições com IN e IS NOT NULL, utilizado na correção automática de questões objetivas. Substituí a consulta #4 (DELETE) por um DELETE real do `prova-questao.repository.ts` com duas condições combinadas por AND. Atualizei as proposições lógicas e tabelas verdade correspondentes, expandindo a tabela da query #3 para 4 variáveis (16 linhas).
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/150
+
+### Observações:
+Foi necessário adaptar as consultas longas para o formato de tabela do WAD, mantendo a legibilidade sem perder a fidelidade ao código fonte. O UPSERT com INSERT...SELECT demonstra a complexidade real das consultas do sistema.
 
 ---
 
@@ -242,4 +279,71 @@ https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/123
 documentos/wad.md (seção 3.2.7)
 
 ### Observações:
-A documentação dos padrões foi validada com a equipe para garantir que cada padrão descrito corresponde a uma implementação real no código do backend. A seção 3.2.7 ficou posicionada após os diagramas de implantação, seguindo a estrutura definida para o WAD.
+A documentação dos padrões foi validada com a equipe para garantir que cada padrão descrito corresponde a uma implementação real no código do backend.
+
+---
+
+### Data: 26/05/2026 (Terça-feira)
+
+### Objetivo do Dia
+Adicionar introdução explicativa sobre a metodologia de tabelas verdade na seção 3.6.4 do WAD.
+
+### Alterações Realizadas
+Incluí um parágrafo introdutório na seção 3.6.4 explicando como as tabelas verdade mapeiam condições SQL para proposições lógicas (A, B, C, D) combinadas por conectivos (∧ = AND, ∨ = OR, ¬ = NOT). A introdução contextualiza o leitor sobre a notação utilizada nas 5 consultas documentadas, facilitando a compreensão dos critérios de avaliação do Art. 6.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/151
+
+### Observações:
+A introdução torna a seção mais didática e alinhada com os requisitos de documentação do artefato.
+
+---
+
+### Data: 27/05/2026 (Quarta-feira)
+
+### Objetivo do Dia
+Garantir a diversidade de operadores lógicos nas consultas SQL da seção 3.6.4, incluindo IN e LIKE/ILIKE.
+
+### Alterações Realizadas
+Substituí a consulta #2 (SELECT simples) por uma consulta real do `questao.repository.ts` que utiliza IN com subconsulta (`WHERE materia_id IN (SELECT ...)`) e ILIKE para busca textual (`conteudo_latex ILIKE '%geometria%'`), demonstrando dois operadores adicionais exigidos pelo Art. 6. Com esta alteração, a seção 3.6.4 passou a cobrir todos os operadores solicitados: AND, OR, NOT, IN e LIKE.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/152
+
+### Observações:
+A diversidade de operadores é um dos critérios de pontuação do Art. 6 (até 3,0 pontos). As consultas agora utilizam dados e tabelas reais do sistema, não exemplos hipotéticos.
+
+---
+
+### Data: 28/05/2026 (Quinta-feira)
+
+### Objetivo do Dia
+Revisar a coerência entre RFs, RNs, endpoints e diagramas no WAD, e corrigir inconsistências na Matriz de Rastreabilidade (seção 3.9) e no caminho da migration.
+
+### Alterações Realizadas
+Realizei a verificação cruzada dos artefatos: cruzei os RFs mapeados na seção 3.1.1 com os endpoints implementados, verifiquei se as RNs da seção 3.1.2 estão refletidas nos diagramas e chequei a matriz RF→RN→Endpoint (3.1.4), registrando as inconsistências encontradas.
+
+Em seguida, apliquei as correções necessárias: atualizei a seção 3.9 (RTM) com status mais precisos de implementação, alterando entradas de "Não implementado" para "Parcial" com evidências específicas de cada componente implementado (controllers, services, repositories, rotas, migrations). Corrigi o texto introdutório da RTM para refletir o estado real do backend ao final da Sprint 3 e ajustei o caminho do arquivo de migration na seção 3.6.3 para `src/backend/src/database/migrations/migration.sql`.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/153
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/154
+
+### Observações:
+A revisão identificou inconsistências que foram corrigidas nos mesmos dia. A RTM estava desatualizada em relação ao código implementado — a correção garante coerência entre a documentação e o estado real do projeto.
+
+---
+
+### Data: 29/05/2026 (Sexta-feira)
+
+### Objetivo do Dia
+Revisão final dos artefatos da Sprint 3 e atualização dos registros diários.
+
+### Alterações Realizadas
+Realizei a verificação cruzada final de todos os artefatos alterados ao longo da sprint: correção do modelo físico (3.6.3), consultas SQL reais com lógica proposicional (3.6.4), tabelas verdade, diversidade de operadores, RTM atualizada (3.9) e coerência geral do WAD. Atualizei este arquivo de registro com todas as entradas pendentes da Sprint 3, documentando o trabalho realizado em cada dia útil do período.
+
+### Links:
+https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/-/issues/155
+
+### Observações:
+A sprint exigiu correções significativas nos artefatos para alinhar a documentação com a implementação real. Os MRs foram submetidos para revisão do Rafael.

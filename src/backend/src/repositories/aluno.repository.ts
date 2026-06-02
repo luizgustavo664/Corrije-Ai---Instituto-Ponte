@@ -1,5 +1,7 @@
 import { pool } from "../database/pool.js";
+import type { Aluno } from "../models/aluno.model.js";
 
+/** Linha bruta da tabela `aluno`. Campos em snake_case mapeados do PostgreSQL. */
 type AlunoRow = {
   id: string;
   nome: string;
@@ -10,7 +12,9 @@ type AlunoRow = {
   atualizado_em: Date;
 };
 
-const mapAluno = (row: AlunoRow) => ({
+/** Converte uma AlunoRow (snake_case) para o modelo Aluno (camelCase).
+ *  aceitou_termos_em é opcional (pode ser null) — usa encadeamento opcional com fallback para null. */
+const mapAluno = (row: AlunoRow): Aluno => ({
   id: row.id,
   nome: row.nome,
   email: row.email,
@@ -20,7 +24,19 @@ const mapAluno = (row: AlunoRow) => ({
   atualizadoEm: row.atualizado_em.toISOString(),
 });
 
+/**
+ * Repositório de alunos cadastrados.
+ *
+ * Oferece CRUD básico e buscas por email e CPF (chaves alternativas).
+ * O campo aceitou_termos_em registra a aceitação dos termos de uso.
+ */
 export class AlunoRepository {
+  /**
+   * Lista todos os alunos com paginação.
+   *
+   * @param options - Opções de paginação (page e limit).
+   * @returns Lista paginada de alunos com total de registros.
+   */
   async findAll(options?: { page?: number; limit?: number }) {
     const page = options?.page ?? 1;
     const limit = options?.limit ?? 20;
@@ -34,6 +50,12 @@ export class AlunoRepository {
     return { data: result.rows.map(mapAluno), total };
   }
 
+  /**
+   * Busca aluno por ID.
+   *
+   * @param id - ID do aluno.
+   * @returns Aluno encontrado ou null.
+   */
   async findById(id: string) {
     const result = await pool.query<AlunoRow>(
       'SELECT * FROM "aluno" WHERE "id" = $1',
@@ -42,6 +64,12 @@ export class AlunoRepository {
     return result.rows[0] ? mapAluno(result.rows[0]) : null;
   }
 
+  /**
+   * Busca aluno por email.
+   *
+   * @param email - Email do aluno.
+   * @returns Aluno encontrado ou null.
+   */
   async findByEmail(email: string) {
     const result = await pool.query<AlunoRow>(
       'SELECT * FROM "aluno" WHERE "email" = $1',
@@ -50,6 +78,12 @@ export class AlunoRepository {
     return result.rows[0] ? mapAluno(result.rows[0]) : null;
   }
 
+  /**
+   * Busca aluno por CPF.
+   *
+   * @param cpf - CPF do aluno.
+   * @returns Aluno encontrado ou null.
+   */
   async findByCpf(cpf: string) {
     const result = await pool.query<AlunoRow>(
       'SELECT * FROM "aluno" WHERE "cpf" = $1',
@@ -58,6 +92,13 @@ export class AlunoRepository {
     return result.rows[0] ? mapAluno(result.rows[0]) : null;
   }
 
+  /**
+   * Atualiza dados de um aluno, alterando apenas os campos fornecidos.
+   *
+   * @param id - ID do aluno a ser atualizado.
+   * @param input - Campos opcionais: nome, email, cpf.
+   * @returns Aluno atualizado ou null se não encontrado.
+   */
   async update(
     id: string,
     input: { nome?: string; email?: string; cpf?: string | null },
@@ -93,6 +134,12 @@ export class AlunoRepository {
     return result.rows[0] ? mapAluno(result.rows[0]) : null;
   }
 
+  /**
+   * Remove um aluno pelo ID.
+   *
+   * @param id - ID do aluno a ser removido.
+   * @returns true se removido, false se não encontrado.
+   */
   async delete(id: string) {
     const result = await pool.query(
       'DELETE FROM "aluno" WHERE "id" = $1',
