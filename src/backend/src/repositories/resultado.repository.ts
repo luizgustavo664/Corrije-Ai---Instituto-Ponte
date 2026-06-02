@@ -45,6 +45,18 @@ const mapResultado = (row: ResultadoRow) => {
 };
 
 export class ResultadoRepository {
+  async findProvaExists(provaId: string) {
+    const result = await pool.query('SELECT 1 FROM "prova" WHERE "id" = $1', [provaId]);
+    return result.rows.length > 0;
+  }
+
+  /**
+   * Verifica se o usuário tem acesso aos resultados da prova.
+   *
+   * @param provaId - ID da prova.
+   * @param user - Usuário autenticado.
+   * @returns true se tiver acesso.
+   */
   async hasAccessToProva(provaId: string, user: AuthUser) {
     if (user.perfil === "coordenador") return true;
 

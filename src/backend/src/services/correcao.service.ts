@@ -56,6 +56,10 @@ export class CorrecaoService {
   private async ensureProvaAccess(provaId: string, user: AuthUser) {
     const hasAccess = await this.correcaoRepository.hasAccessToProva(provaId, user);
     if (!hasAccess) {
+      const provaExists = await this.correcaoRepository.findProvaExists(provaId);
+      if (!provaExists) {
+        throw notFound("Prova não encontrada.");
+      }
       throw forbidden("Usuário sem permissão para acessar esta prova.");
     }
   }

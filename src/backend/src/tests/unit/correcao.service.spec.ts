@@ -2,6 +2,7 @@ import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import type { AuthUser } from "../../middlewares/auth.js";
 
 const mockHasAccessToProva = jest.fn<any>();
+const mockFindProvaExists = jest.fn<any>();
 const mockFindQuestoesDaProva = jest.fn<any>();
 const mockFindRespostasPorQuestao = jest.fn<any>();
 const mockFindRespostaContext = jest.fn<any>();
@@ -12,6 +13,7 @@ const mockCorrigirObjetivas = jest.fn<any>();
 jest.unstable_mockModule("../../repositories/correcao.repository.js", () => ({
   CorrecaoRepository: jest.fn().mockImplementation(() => ({
     hasAccessToProva: mockHasAccessToProva,
+    findProvaExists: mockFindProvaExists,
     findQuestoesDaProva: mockFindQuestoesDaProva,
     findRespostasPorQuestao: mockFindRespostasPorQuestao,
     findRespostaContext: mockFindRespostaContext,
@@ -41,6 +43,7 @@ const coordenador: AuthUser = {
 beforeEach(async () => {
   jest.resetModules();
   mockHasAccessToProva.mockReset();
+  mockFindProvaExists.mockReset();
   mockFindQuestoesDaProva.mockReset();
   mockFindRespostasPorQuestao.mockReset();
   mockFindRespostaContext.mockReset();
@@ -65,11 +68,22 @@ describe("CorrecaoService - unitário", () => {
 
     it("deve lançar forbidden quando sem acesso", async () => {
       mockHasAccessToProva.mockResolvedValue(false);
+      mockFindProvaExists.mockResolvedValue(true);
 
       const service = new CorrecaoService();
       await expect(
         service.listarQuestoesDaProva("prova-1", professor),
       ).rejects.toThrow("Usuário sem permissão para acessar esta prova.");
+    });
+
+    it("deve lançar notFound quando prova não existe", async () => {
+      mockHasAccessToProva.mockResolvedValue(false);
+      mockFindProvaExists.mockResolvedValue(false);
+
+      const service = new CorrecaoService();
+      await expect(
+        service.listarQuestoesDaProva("prova-x", professor),
+      ).rejects.toThrow("Prova não encontrada.");
     });
   });
 
@@ -86,6 +100,7 @@ describe("CorrecaoService - unitário", () => {
 
     it("deve lançar forbidden quando sem acesso", async () => {
       mockHasAccessToProva.mockResolvedValue(false);
+      mockFindProvaExists.mockResolvedValue(true);
 
       const service = new CorrecaoService();
       await expect(
@@ -213,11 +228,22 @@ describe("CorrecaoService - unitário", () => {
 
     it("deve lançar forbidden quando sem acesso à prova", async () => {
       mockHasAccessToProva.mockResolvedValue(false);
+      mockFindProvaExists.mockResolvedValue(true);
 
       const service = new CorrecaoService();
       await expect(
         service.executarCorrecaoAutomatica("prova-1", professor),
       ).rejects.toThrow("Usuário sem permissão para acessar esta prova.");
+    });
+
+    it("deve lançar notFound quando prova da correção automática não existe", async () => {
+      mockHasAccessToProva.mockResolvedValue(false);
+      mockFindProvaExists.mockResolvedValue(false);
+
+      const service = new CorrecaoService();
+      await expect(
+        service.executarCorrecaoAutomatica("prova-x", professor),
+      ).rejects.toThrow("Prova não encontrada.");
     });
   });
 });

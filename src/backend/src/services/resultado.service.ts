@@ -1,4 +1,4 @@
-import { forbidden } from "../errors/api-error.js";
+import { forbidden, notFound } from "../errors/api-error.js";
 import type { AuthUser } from "../middlewares/auth.js";
 import { ResultadoRepository } from "../repositories/resultado.repository.js";
 import type { ExportarResultadoInput } from "../schemas/resultado.schema.js";
@@ -54,6 +54,11 @@ export class ResultadoService {
   ) {}
 
   async consolidarPorProva(provaId: string, user: AuthUser) {
+    const provaExiste = await this.resultadoRepository.findProvaExists(provaId);
+    if (!provaExiste) {
+      throw notFound("Prova não encontrada.");
+    }
+
     const hasAccess = await this.resultadoRepository.hasAccessToProva(provaId, user);
     if (!hasAccess) {
       throw forbidden("Usuário sem permissão para acessar os resultados desta prova.");
@@ -65,6 +70,11 @@ export class ResultadoService {
   async exportarPorProva(provaId: string, input: ExportarResultadoInput, user: AuthUser) {
     if (user.perfil !== "coordenador") {
       throw forbidden("Somente coordenadores podem exportar resultados.");
+    }
+
+    const provaExiste = await this.resultadoRepository.findProvaExists(provaId);
+    if (!provaExiste) {
+      throw notFound("Prova não encontrada.");
     }
 
     const resultados = await this.resultadoRepository.findByProva(provaId);

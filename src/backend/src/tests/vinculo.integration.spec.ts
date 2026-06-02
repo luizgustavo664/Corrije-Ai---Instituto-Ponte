@@ -110,6 +110,26 @@ describe("VinculoController - integração", () => {
     expect(response.body.error.code).toBe("CONFLICT");
   });
 
+  it("deve rejeitar com 422 vínculo quando professorId não é UUID válido", async () => {
+    const response = await request(app.server)
+      .post("/api/v1/professores/profe-invalido/materias")
+      .set("Authorization", coordenadorToken)
+      .send({ materiaId });
+
+    expect(response.statusCode).toBe(422);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("deve rejeitar com 422 vínculo quando materiaId não é UUID válido", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/professores/${professorId}/materias`)
+      .set("Authorization", coordenadorToken)
+      .send({ materiaId: "materia-invalida" });
+
+    expect(response.statusCode).toBe(422);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
   it("deve rejeitar com 401 vínculo quando não há token de autenticação", async () => {
     const response = await request(app.server)
       .post(`/api/v1/professores/${professorId}/materias`)
