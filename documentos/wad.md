@@ -1468,12 +1468,10 @@ Identificou-se que o processo de correção de provas do Instituto Ponte é info
 | CONF — Confiabilidade    | O sistema deve garantir a integridade das respostas e arquivos enviados. | 100% das submissões confirmadas armazenadas; taxa de falha < 2%. | Salvamento automático de progresso (US10), confirmação visual de envio (US11), persistência transacional em banco e validação de integridade na exportação de anexos (RN16). |
 | DES — Desempenho         | O sistema deve responder de forma eficiente às ações principais do usuário, mesmo em conexões de baixa velocidade. | Endpoints de leitura (listagem de provas, questões) respondem em p95 < 500ms com até 200 registros; endpoints de escrita (submissão de prova) confirmam persistência em p95 < 1s; uploads de imagem processados com compressão client-side antes do envio. | Otimização de requisições, compressão de imagens client-side e cache de respostas frequentes. |
 | SUP — Suportabilidade    | O sistema deve permitir manutenção e evolução contínua ao longo das sprints, com cobertura de testes que proteja funcionalidades existentes contra regressões. | Cobertura de testes automatizados ≥ 60% nas camadas de serviço ao final da Sprint 4; tempo de onboarding de novo desenvolvedor ≤ 2h seguindo o README; nenhuma alteração em sprint posterior deve quebrar testes existentes aprovados. | Arquitetura modular em camadas (Controller/Service/Repository), versionamento Git com branches por funcionalidade e suite de testes Jest. |
-| SEG — Segurança          | O sistema deve restringir o acesso às provas, proteger dados pessoais dos alunos (CPF, e-mail) em conformidade com a LGPD, e validar todos os dados de entrada. | Acesso de alunos apenas via link UUID válido; 100% dos inputs validados no backend; tráfego obrigatoriamente via HTTPS; dados pessoais não armazenados em texto plano; consentimento LGPD registrado com timestamp por aluno. | URLs únicas por UUID, validação backend em todas as rotas, HTTPS obrigatório, hash de dados sensíveis e registro de consentimento explícito. |
-| CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 50 usuários simultâneos em testes iniciais; taxa de erros 5xx < 1% e p95 < 1s sob essa carga. | Arquitetura Node.js com I/O não-bloqueante; uploads com compressão client-side reduzem carga no servidor; testável com k6 ou Artillery. |
+| SEG — Segurança          | O sistema deve restringir o acesso às provas, proteger dados pessoais dos alunos (CPF, e-mail) em conformidade com a LGPD, e validar todos os dados de entrada. | Acesso de alunos apenas via link UUID válido; 100% dos inputs validados no backend; tráfego obrigatoriamente via HTTPS (TLS 1.2+); dados pessoais criptografados em repouso (AES-256) e em trânsito; consentimento LGPD registrado com timestamp por aluno; política de retenção definida. | URLs únicas por UUID, validação backend em todas as rotas, TLS 1.2+ obrigatório, criptografia AES-256 em armazenamento, política de retenção e registro de consentimento explícito. |
+| CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 200 usuários simultâneos em testes iniciais; taxa de erros 5xx < 1% e p95 < 1s sob essa carga. | Arquitetura Node.js com I/O não-bloqueante; uploads com compressão client-side reduzem carga no servidor; testável com k6 ou Artillery. |
 | REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Ausência de sistema de login/senha para alunos; ausência de chamadas a WebAPIs externas não autorizadas; verificável por revisão de código. | Fluxo do aluno via link UUID sem senha; OAuth2 apenas para usuários internos; nenhuma dependência de API externa no package.json além das bibliotecas autorizadas (KaTeX, MathJax). |
 | ORG — Organizacionais    | O sistema deve ser documentado e entregável de forma reproduzível, com README atualizado a cada sprint e instruções de instalação executáveis em ambiente limpo. | README com instruções de instalação executáveis em ambiente limpo Ubuntu/Node.js sem etapas adicionais; documentação sincronizada com o código a cada sprint; todas as variáveis de ambiente externalizadas em `.env.example`. | Documentação versionada junto ao código, variáveis de ambiente separadas e README com passo a passo de instalação verificado por membro externo ao time. |
-
----
 
 #### Explicação dos Requisitos Não Funcionais
 
@@ -1553,17 +1551,17 @@ A matriz abaixo foi atualizada a partir das rotas registradas no backend Fastify
 
 | RF | RN associadas | Endpoint(s) implementado(s) | Método(s) | Situação atual |
 |----|---------------|-----------------------------|-----------|----------------|
-| RF001 | RN01 | `/api/v1/provas`, `/api/v1/provas/{provaId}`, `/api/v1/provas/{provaId}/status-historico`, `/api/v1/provas/{provaId}/encerrar`, `/api/v1/provas/{provaId}/arquivar` | GET, PUT, DELETE, POST | Implementado no backend; evidências em `prova.routes.ts`, `prova.controller.ts`, `prova.service.ts` e `prova.repository.ts`. |
+| RF001 | RN01 | `/api/v1/provas`, `/api/v1/provas/{provaId}`, `/api/v1/provas/{provaId}/status-historico`, `/api/v1/provas/{provaId}/configuracoes`, `/api/v1/provas/{provaId}/publicar`, `/api/v1/provas/{provaId}/encerrar`, `/api/v1/provas/{provaId}/arquivar` | GET, PUT, DELETE, POST, PATCH | Implementado no backend; evidências em `prova.routes.ts`, `prova.controller.ts`, `prova.service.ts` e `prova.repository.ts`. |
 | RF002 | RN18, RN19 | `/api/v1/auth/google`, `/api/v1/auth/google/callback`, `/api/v1/auth/me`, `/api/v1/auth/logout` | GET, POST | Implementado no backend com OAuth Google/JWT e verificação de usuário interno cadastrado. |
-| RF003 | RN20 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/provas/{provaId}/questoes` | GET, POST, PUT, DELETE | Implementado no backend; banco de questões pesquisável por matéria, tema, tipo, status e busca textual. |
+| RF003 | RN20 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/provas/{provaId}/questoes`, `/api/v1/provas/{provaId}/questoes/{questaoId}` | GET, POST, PUT, DELETE | Implementado no backend; banco de questões pesquisável por matéria, tema, tipo, status e busca textual. |
 | RF004 | RN03 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}` | POST, PUT | Implementado no backend com enunciado em `conteudoLatex` validado por Zod e persistido em `enunciado.conteudo_latex`. |
 | RF005 | RN03 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}` | POST, PUT | Implementado no backend com tipos `multipla_escolha`, `verdadeiro_falso` e `discursiva`. |
-| RF006 | RN04 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/public/respostas/{respostaId}/anexos` | POST, PUT | Implementado parcialmente: backend controla `permiteAnexo` e upload; galeria visual é responsabilidade do frontend. |
+| RF006 | RN04 | `/api/v1/provas/{provaId}/questoes`, `/api/v1/public/respostas/{respostaId}/anexos` | GET, POST, DELETE | Implementado parcialmente: backend controla `permiteAnexo`, upload e vínculo da questão; galeria visual é responsabilidade do frontend. |
 | RF007 | RN05 | `/api/v1/provas/{provaId}/configuracoes`, `/api/v1/public/provas/{urlAcesso}`, `/api/v1/provas/{provaId}/encerrar` | PATCH, GET, POST | Implementado no backend; regras de período e encerramento ficam em service/repository. |
 | RF008 | RN07 | `/api/v1/provas/{provaId}/publicar` | POST | Implementado no backend; publicação gera URL única de acesso e payload de QR Code. |
 | RF009 | RN08 | `/api/v1/public/provas/{urlAcesso}/iniciar` | POST | Implementado no backend; aluno se identifica por nome, e-mail, CPF e aceite de termos. |
 | RF010 | RN10 | Sem endpoint próprio | N/A | Pendente no frontend; backend entrega os dados de questão/anexo necessários para visualização. |
-| RF011 | RN10 | `/api/v1/public/provas/{urlAcesso}/iniciar`, `/api/v1/questoes` | GET, POST | Implementado parcialmente no backend por armazenamento/retorno de LaTeX; renderização visual é frontend. |
+| RF011 | RN10 | `/api/v1/public/provas/{urlAcesso}`, `/api/v1/public/provas/{urlAcesso}/iniciar`, `/api/v1/public/provas-aluno/{provaAlunoId}/respostas/{questaoId}` | GET, POST, PUT | Implementado parcialmente no backend por armazenamento/retorno de LaTeX; renderização visual e zoom são responsabilidades do frontend. |
 | RF012 | RN04 | `/api/v1/public/respostas/{respostaId}/anexos` | POST | Implementado no backend com multipart, validação de tipo e limite de tamanho. |
 | RF013 | RN11 | Sem endpoint próprio | N/A | Pendente no frontend; backend recebe anexos, mas compressão client-side não é função da WebAPI. |
 | RF014 | RN13 | `/api/v1/provas/{provaId}/correcao/questoes`, `/api/v1/provas/{provaId}/questoes/{questaoId}/respostas` | GET | Implementado no backend para correção por item. |
@@ -4336,119 +4334,977 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
 
 ## 3.6. Modelagem do banco de dados (sprints 2 e 4)
 
-### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
+### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2, atualizado na sprint 4)
 
-O ER conceitual abaixo segue a migration atual e usa apenas entidades reais do backend: coordenador, professor, aluno, materia, tema, questao, enunciado, alternativa, prova, prova_questao, prova_aluno, resposta_aluno, resposta_anexo, correcao, feedback, resultado_aluno, exportacao_resultado, email_envio e avaliacao_log.
 
-~~~plantuml
-@startuml ERAtual
+Antes da implementação física do banco de dados, foi realizada a modelagem das informações do sistema por meio do Modelo Entidade-Relacionamento (MER) e do Diagrama Entidade-Relacionamento (DER). Esses diagramas têm como objetivo representar, em diferentes níveis de detalhamento, as principais entidades do projeto, seus atributos e os relacionamentos existentes entre elas.
+
+
+Na sprint 4, o modelo ER foi revisado para ficar alinhado à migration principal localizada em `src/backend/src/database/migrations/migration.sql`. A atualização substituiu a visão anterior baseada em tabelas associativas que não existem mais, como `prova_materia` e `prova_enunciado`, pela estrutura atual do banco, que utiliza `prova.materia_id`, `questao`, `enunciado`, `prova_questao`, `aluno`, `prova_aluno`, `resposta_aluno`, anexos, correções, resultados, exportações, e-mails e logs de avaliação.
+
+
+As entidades principais identificadas são:
+
+
+| Grupo | Entidades | Finalidade no domínio |
+| --- | --- | --- |
+| Usuários internos | `coordenador`, `professor` | Representam os perfis autenticados pelo Supabase Auth e responsáveis pela gestão e aplicação das provas. |
+| Organização pedagógica | `materia`, `tema`, `materia_professor` | Organizam as disciplinas, temas e vínculos entre professores e matérias. |
+| Banco de questões | `questao`, `enunciado`, `alternativa` | Armazenam questões reutilizáveis, enunciados em LaTeX/imagem e alternativas objetivas. |
+| Provas | `prova`, `prova_questao`, `prova_status_historico` | Controlam provas, questões selecionadas, ordem, pontuação e histórico de mudança de status. |
+| Participação do aluno | `aluno`, `prova_aluno`, `resposta_aluno`, `resposta_anexo` | Registram alunos, tentativas de prova, respostas, rascunhos e anexos enviados. |
+| Correção e retorno | `correcao`, `feedback`, `resultado_aluno`, `email_envio` | Guardam notas, feedbacks, resultados liberados e envio de e-mails. |
+| Gestão e auditoria | `relatorio`, `exportacao_resultado`, `avaliacao_log` | Apoiam relatórios, exportação de resultados e rastreabilidade de ações. |
+
+
+Os relacionamentos centrais identificados são:
+
+
+| Relacionamento | Cardinalidade | Descrição |
+| --- | --- | --- |
+| Coordenador - Professor | 1:N | Um coordenador pode gerenciar vários professores; cada professor pertence a um coordenador. |
+| Professor - Matéria | N:N | O vínculo é materializado por `materia_professor`. |
+| Matéria - Tema | 1:N | Uma matéria possui vários temas. |
+| Matéria - Questão | 1:N | Cada questão pertence a uma matéria. |
+| Tema - Questão | 0..1:N | Uma questão pode estar associada a um tema; um tema pode classificar várias questões. |
+| Questão - Enunciado | 1:1 | Cada questão possui um enunciado obrigatório. |
+| Questão - Alternativa | 1:N | Questões objetivas possuem alternativas. |
+| Professor - Prova | 1:N | Um professor elabora várias provas. |
+| Matéria - Prova | 1:N | Cada prova está vinculada a uma matéria principal. |
+| Prova - Questão | N:N | O vínculo é materializado por `prova_questao`, com ordem e pontuação. |
+| Prova - Aluno | N:N | O vínculo é materializado por `prova_aluno`, representando a tentativa do aluno. |
+| Prova do aluno - Resposta | 1:N | Cada tentativa contém respostas por questão. |
+| Resposta - Anexo | 1:N | Uma resposta pode possuir arquivos anexados. |
+| Resposta - Correção | 1:0..1 | Uma resposta pode receber uma correção. |
+| Correção - Feedback | 1:N | Uma correção pode possuir vários feedbacks. |
+| Prova do aluno - Resultado | 1:0..1 | A tentativa pode gerar um resultado consolidado. |
+| Prova/Coordenador - Relatório e Exportação | N:1 | Relatórios e exportações são gerados para uma prova por um coordenador. |
+| Prova/Prova do aluno - Log | 0..1:N | Logs registram ações associadas à prova ou à tentativa do aluno. |
+
+
+```plantuml
+@startuml
+title Modelo Entidade-Relacionamento Conceitual - MER
+
+
 hide circle
 skinparam linetype ortho
+skinparam classAttributeIconSize 0
 
-entity coordenador
-entity professor
-entity aluno
-entity materia
-entity materia_professor
-entity tema
-entity questao
-entity enunciado
-entity alternativa
-entity prova
-entity prova_status_historico
-entity prova_questao
-entity prova_aluno
-entity resposta_aluno
-entity resposta_anexo
-entity correcao
-entity feedback
-entity resultado_aluno
-entity exportacao_resultado
-entity email_envio
-entity avaliacao_log
 
-coordenador ||--o{ professor
-professor ||--o{ materia_professor
-materia ||--o{ materia_professor
-materia ||--o{ tema
-materia ||--o{ questao
-materia ||--o{ prova
-questao ||--|| enunciado
-questao ||--o{ alternativa
-prova ||--o{ prova_status_historico
-prova ||--o{ prova_questao
-questao ||--o{ prova_questao
-prova ||--o{ prova_aluno
-aluno ||--o{ prova_aluno
-prova_aluno ||--o{ resposta_aluno
-questao ||--o{ resposta_aluno
-alternativa |o--o{ resposta_aluno
-resposta_aluno ||--o{ resposta_anexo
-resposta_aluno ||--o| correcao
-correcao ||--o{ feedback
-prova_aluno ||--o| resultado_aluno
-prova ||--o{ exportacao_resultado
-prova_aluno ||--o{ email_envio
-prova ||--o{ avaliacao_log
+' =========================
+' Usuários internos
+' =========================
+
+
+entity "Professor" as professor {
+  * id
+  --
+  nome
+  email
+  auth_user_id
+}
+
+
+entity "Coordenador" as coordenador {
+  * id
+  --
+  nome
+  email
+  auth_user_id
+}
+
+
+' =========================
+' Organização pedagógica
+' =========================
+
+
+entity "Matéria" as materia {
+  * id
+  --
+  nome
+  codigo
+  descrição
+}
+
+
+entity "Tema" as tema {
+  * id
+  --
+  nome
+  descrição
+}
+
+
+' =========================
+' Prova
+' =========================
+
+
+entity "Aluno" as aluno {
+  * id
+  --
+  nome
+  email
+  cpf
+  aceitou_termos_em
+}
+
+
+entity "Questão" as questao {
+  * id
+  --
+  tipo
+  pontuação_padrão
+  limite_caracteres
+  limite_palavras
+  permite_anexo
+  ativa
+}
+
+
+entity "Enunciado" as enunciado {
+  * id
+  --
+  conteúdo_latex
+  url_imagem
+}
+
+
+entity "Alternativa" as alternativa {
+  * id
+  --
+  conteúdo_latex
+  url_imagem
+  correta
+  ordem_original
+}
+
+
+entity "Prova" as prova {
+  * id
+  --
+  título
+  modalidade
+  turma
+  semestre
+  instruções
+  tempo_limite
+  período
+  status
+  url_acesso
+  qr_code
+}
+
+
+entity "Questão da Prova" as questao_prova {
+  * prova_id
+  * questao_id
+  --
+  ordem_original
+  pontuação_max
+}
+
+
+entity "Aplicação da Prova ao Aluno" as prova_aluno {
+  * id
+  --
+  status
+  início
+  envio
+  ordem_questões
+  ordem_alternativas
+}
+
+
+entity "Resposta do Aluno" as resposta {
+  * id
+  --
+  texto_resposta
+  url_imagem
+  rascunho
+  enviada_final
+}
+
+
+entity "Arquivo da Resposta" as arquivo_resposta {
+  * id
+  --
+  arquivo_url
+  nome_original
+  tipo_arquivo
+  tamanho
+}
+
+
+entity "Correção" as correcao {
+  * id
+  --
+  nota
+  observação
+  tipo
+  corrigida_em
+}
+
+
+entity "Feedback" as feedback {
+  * id
+  --
+  mensagem
+}
+
+
+' =========================
+' Relatório
+' =========================
+
+
+entity "Relatório" as relatorio {
+  * id
+  --
+  tipo
+  título
+  conteúdo
+  arquivo
+  gerado_em
+}
+
+
+entity "Resultado do Aluno" as resultado {
+  * id
+  --
+  nota_total
+  percentual
+  liberado
+}
+
+
+entity "Exportação de Resultado" as exportacao {
+  * id
+  --
+  formato
+  arquivo
+  gerado_em
+}
+
+
+entity "Envio de E-mail" as email_envio {
+  * id
+  --
+  destinatário
+  assunto
+  status
+}
+
+
+entity "Log de Avaliação" as avaliacao_log {
+  * id
+  --
+  ator_tipo
+  ator_id
+  ação
+  detalhes
+}
+
+
+entity "Histórico de Status da Prova" as prova_status_historico {
+  * id
+  --
+  status_anterior
+  status_novo
+  alterado_por
+}
+
+
+' =========================
+' Relacionamentos conceituais
+' =========================
+
+
+coordenador ||--o{ professor : "1 Coordenador gerencia 0..N Professores"
+
+
+professor }o--o{ materia : "0..N Professores lecionam 0..N Matérias"
+
+
+professor ||--o{ prova : "1 Professor elabora 0..N Provas"
+materia ||--o{ prova : "1 Matéria possui 0..N Provas"
+
+
+materia ||--o{ tema : "1 Matéria possui 0..N Temas"
+
+
+materia ||--o{ questao : "1 Matéria possui 0..N Questões"
+
+
+tema |o--o{ questao : "0..1 Tema classifica 0..N Questões"
+
+
+questao ||--|| enunciado : "1 Questão possui 1 Enunciado"
+
+
+questao ||--o{ alternativa : "1 Questão possui 0..N Alternativas"
+
+
+prova ||--o{ questao_prova : "1 Prova contém 0..N Questões"
+
+
+questao ||--o{ questao_prova : "1 Questão pode ser usada em 0..N Provas"
+
+
+prova ||--o{ prova_status_historico : "1 Prova possui 0..N eventos de status"
+
+
+prova ||--o{ prova_aluno : "1 Prova recebe 0..N Alunos"
+aluno ||--o{ prova_aluno : "1 Aluno participa de 0..N Provas"
+
+
+prova_aluno ||--o{ resposta : "1 Aplicação contém 0..N Respostas"
+
+
+questao ||--o{ resposta : "1 Questão recebe 0..N Respostas"
+
+
+alternativa |o--o{ resposta : "0..1 Alternativa pode aparecer em 0..N Respostas"
+
+
+resposta ||--o{ arquivo_resposta : "1 Resposta possui 0..N Arquivos"
+
+
+resposta ||--o| correcao : "1 Resposta recebe 0..1 Correção"
+
+
+professor ||--o{ correcao : "1 Professor realiza 0..N Correções"
+
+
+correcao ||--o{ feedback : "1 Correção possui 0..N Feedbacks"
+
+
+professor ||--o{ feedback : "1 Professor escreve 0..N Feedbacks"
+
+
+coordenador ||--o{ relatorio : "1 Coordenador gera 0..N Relatórios"
+
+
+prova ||--o{ relatorio : "1 Prova baseia 0..N Relatórios"
+
+
+prova_aluno ||--o| resultado : "1 Aplicação gera 0..1 Resultado"
+
+
+prova_aluno ||--o{ email_envio : "1 Aplicação pode gerar 0..N E-mails"
+
+
+prova ||--o{ exportacao : "1 Prova gera 0..N Exportações"
+coordenador ||--o{ exportacao : "1 Coordenador solicita 0..N Exportações"
+
+
+prova |o--o{ avaliacao_log : "0..1 Prova possui 0..N Logs"
+prova_aluno |o--o{ avaliacao_log : "0..1 Aplicação possui 0..N Logs"
+
+
+note right of professor
+Professor é uma entidade independente.
+Não herda de Pessoa.
+end note
+
+
+note right of coordenador
+Coordenador é uma entidade independente.
+Não herda de Pessoa.
+end note
+
+
+note right of questao_prova
+Representa a associação entre
+Prova e Questão.
+
+
+Permite controlar ordem e pontuação
+da questão dentro de uma prova específica.
+end note
+
+
+note right of aluno
+Aluno voltou a ser entidade cadastral
+na migration atual.
+
+
+O acesso à prova continua ocorrendo
+pelo vínculo prova_aluno.
+end note
+
+
 @enduml
-~~~
+```
 
-### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
 
-O DER fisico preserva os nomes de tabela e campos implementados. As relacoes principais sao:
+### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2, atualizado na sprint 4)
 
-| Relacao | Implementacao fisica |
-|---------|----------------------|
-| Coordenador -> Professor | professor.coordenador_id referencia coordenador.id |
-| Professor <-> Materia | materia_professor(professor_id, materia_id) |
-| Materia -> Tema/Questao/Prova | tema.materia_id, questao.materia_id e prova.materia_id |
-| Questao -> Enunciado/Alternativa | enunciado.questao_id e alternativa.questao_id |
-| Prova <-> Questao | prova_questao(prova_id, questao_id) com ordem e pontuacao_max |
-| Prova -> ProvaAluno | prova_aluno.prova_id |
-| Aluno -> ProvaAluno | prova_aluno.aluno_id |
-| ProvaAluno -> RespostaAluno | resposta_aluno.prova_aluno_id |
-| RespostaAluno -> RespostaAnexo | resposta_anexo.resposta_id |
-| RespostaAluno -> Correcao | correcao.resposta_id unico por resposta |
-| Correcao -> Feedback | feedback.correcao_id |
-| ProvaAluno -> ResultadoAluno | resultado_aluno.prova_aluno_id |
-| Prova -> ExportacaoResultado/AvaliacaoLog | exportacao_resultado.prova_id e avaliacao_log.prova_id |
-| ProvaAluno -> EmailEnvio | email_envio.prova_aluno_id |
 
-Regras fisicas relevantes:
+Já o Diagrama Entidade-Relacionamento (DER) detalha essa estrutura em uma visão mais próxima da implementação no banco de dados. Nele, as entidades são representadas como tabelas, contendo seus principais atributos, tipos de dados, chaves primárias, chaves estrangeiras e restrições, como `UNIQUE`, `CHECK` e relacionamentos obrigatórios ou opcionais. O DER atualizado explicita as tabelas associativas existentes na migration atual, especialmente `materia_professor`, `prova_questao` e `prova_aluno`.
 
-- prova_questao impede duplicidade de questao na mesma prova e controla ordem.
-- resposta_aluno vincula a resposta a prova_aluno e questao; alternativa_id e opcional para discursivas.
-- correcao usa ON CONFLICT por resposta_id para permitir atualizacao de nota.
-- prova_status_historico registra transicoes de status.
-- avaliacao_log guarda eventos de auditoria/analytics.
 
-### 3.6.3. Modelo Relacional e Modelo Fisico
+Dessa forma, o MER contribui para a compreensão conceitual do domínio do sistema, enquanto o DER serve como base para a construção do modelo relacional e físico do banco de dados no PostgreSQL/Supabase. A partir desses diagramas, torna-se possível implementar as migrations DDL de maneira mais organizada, garantindo integridade referencial, clareza nas relações entre tabelas e consistência na estrutura dos dados.
 
-Esta secao apresenta a modelagem fisica implementada no PostgreSQL/Supabase. A fonte de verdade e src/backend/src/database/migrations/migration.sql, que define tipos, tabelas, PKs, FKs, indices, triggers, funcoes auxiliares e politicas de Row Level Security.
 
-#### Decisoes fisicas implementadas
+```plantuml
+@startuml
+title Diagrama Entidade-Relacionamento - DER
 
-- UUID como chave primaria nas entidades centrais.
-- TIMESTAMPTZ para datas de criacao, atualizacao, publicacao, envio e correcao.
-- ENUMs para status de prova, tipo de questao, perfil, status de prova_aluno, formato de exportacao e status de e-mail.
-- FOREIGN KEY entre coordenador, professor, materia, questao, prova, aluno, respostas, correcoes e resultados.
-- Indices em professor_id, materia_id, tema_id, status, prova_id, questao_id e acoes de log.
-- UNIQUE e indices parciais para e-mails, professor-materia, questao em prova e alternativa correta por questao quando aplicavel.
-- Triggers de validacao para publicacao, alternativas, vinculo professor/materia, resposta, correcao e transicao de status.
-- RLS habilitado nas tabelas do dominio.
+
+hide circle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+
+entity "Coordenador" as coordenador {
+  * id : UUID <<PK>>
+  --
+  auth_user_id : UUID <<UNIQUE, FK auth.users>>
+  nome : TEXT
+  email : CITEXT <<UNIQUE>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Professor" as professor {
+  * id : UUID <<PK>>
+  --
+  auth_user_id : UUID <<UNIQUE, FK auth.users>>
+  coordenador_id : UUID <<FK>>
+  nome : TEXT
+  email : CITEXT <<UNIQUE>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Materia" as materia {
+  * id : UUID <<PK>>
+  --
+  nome : TEXT <<UNIQUE>>
+  codigo : TEXT <<UNIQUE, NULL>>
+  descricao : TEXT <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Materia_Professor" as materia_professor {
+  * materia_id : UUID <<PK, FK>>
+  * professor_id : UUID <<PK, FK>>
+  --
+  criado_em : TIMESTAMPTZ
+}
+
+
+entity "Aluno" as aluno {
+  * id : UUID <<PK>>
+  --
+  auth_user_id : UUID <<UNIQUE, FK auth.users>>
+  nome : TEXT
+  email : CITEXT <<UNIQUE>>
+  cpf : TEXT <<UNIQUE, NULL>>
+  aceitou_termos_em : TIMESTAMPTZ <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Tema" as tema {
+  * id : UUID <<PK>>
+  --
+  materia_id : UUID <<FK>>
+  nome : TEXT
+  descricao : TEXT <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Questao" as questao {
+  * id : UUID <<PK>>
+  --
+  materia_id : UUID <<FK>>
+  tema_id : UUID <<FK, NULL>>
+  tipo : questao_tipo
+  limite_caracteres : INTEGER <<NULL>>
+  limite_palavras : INTEGER <<NULL>>
+  permite_anexo : BOOLEAN
+  pontuacao_padrao : NUMERIC(5,2)
+  ativa : BOOLEAN
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Enunciado" as enunciado {
+  * id : UUID <<PK>>
+  --
+  questao_id : UUID <<FK, UNIQUE>>
+  conteudo_latex : TEXT
+  url_imagem : TEXT <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Alternativa" as alternativa {
+  * id : UUID <<PK>>
+  --
+  questao_id : UUID <<FK>>
+  ordem_original : INTEGER
+  conteudo_latex : TEXT
+  url_imagem : TEXT <<NULL>>
+  correta : BOOLEAN
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Prova" as prova {
+  * id : UUID <<PK>>
+  --
+  professor_id : UUID <<FK>>
+  materia_id : UUID <<FK>>
+  titulo : TEXT
+  modalidade : TEXT
+  turma : TEXT
+  semestre : TEXT
+  instrucoes : TEXT <<NULL>>
+  tempo_limite_min : INTEGER <<NULL>>
+  data_inicio : TIMESTAMPTZ <<NULL>>
+  data_fim : TIMESTAMPTZ <<NULL>>
+  embaralhar_questoes : BOOLEAN
+  embaralhar_alternativas : BOOLEAN
+  status : prova_status
+  url_acesso : TEXT <<UNIQUE, NULL>>
+  qr_code : TEXT <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Prova_Status_Historico" as prova_status_historico {
+  * id : UUID <<PK>>
+  --
+  prova_id : UUID <<FK>>
+  status_anterior : prova_status <<NULL>>
+  status_novo : prova_status
+  alterado_por_auth_user_id : UUID <<FK auth.users, NULL>>
+  criado_em : TIMESTAMPTZ
+}
+
+
+entity "Prova_Questao" as prova_questao {
+  * prova_id : UUID <<PK, FK>>
+  * questao_id : UUID <<PK, FK>>
+  --
+  ordem_original : INTEGER
+  pontuacao_max : NUMERIC(5,2)
+  criado_em : TIMESTAMPTZ
+}
+
+
+entity "Prova_Aluno" as prova_aluno {
+  * id : UUID <<PK>>
+  --
+  prova_id : UUID <<FK>>
+  aluno_id : UUID <<FK>>
+  status : prova_aluno_status
+  inicio_em : TIMESTAMPTZ <<NULL>>
+  enviada_em : TIMESTAMPTZ <<NULL>>
+  ordem_questoes : JSONB
+  ordem_alternativas : JSONB
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Resposta_Aluno" as resposta_aluno {
+  * id : UUID <<PK>>
+  --
+  prova_aluno_id : UUID <<FK>>
+  questao_id : UUID <<FK>>
+  alternativa_id : UUID <<FK, NULL>>
+  resposta_texto : TEXT <<NULL>>
+  url_imagem : TEXT <<NULL>>
+  rascunho : BOOLEAN
+  sincronizada_em : TIMESTAMPTZ <<NULL>>
+  enviada_final : BOOLEAN
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Resposta_Anexo" as resposta_anexo {
+  * id : UUID <<PK>>
+  --
+  resposta_id : UUID <<FK>>
+  url_arquivo : TEXT
+  nome_arquivo : TEXT <<NULL>>
+  mime_type : TEXT
+  tamanho_bytes : INTEGER
+  criado_em : TIMESTAMPTZ
+}
+
+
+entity "Correcao" as correcao {
+  * id : UUID <<PK>>
+  --
+  resposta_id : UUID <<FK, UNIQUE>>
+  professor_id : UUID <<FK>>
+  nota : NUMERIC(5,2)
+  observacao : TEXT <<NULL>>
+  tipo : correcao_tipo
+  corrigida_em : TIMESTAMPTZ <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Feedback" as feedback {
+  * id : UUID <<PK>>
+  --
+  correcao_id : UUID <<FK>>
+  professor_id : UUID <<FK>>
+  mensagem : TEXT
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Relatorio" as relatorio {
+  * id : UUID <<PK>>
+  --
+  prova_id : UUID <<FK>>
+  coordenador_id : UUID <<FK>>
+  tipo : relatorio_tipo
+  titulo : TEXT <<NULL>>
+  conteudo : TEXT <<NULL>>
+  url_arquivo : TEXT <<NULL>>
+  gerado_em : TIMESTAMPTZ
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Resultado_Aluno" as resultado_aluno {
+  * id : UUID <<PK>>
+  --
+  prova_aluno_id : UUID <<FK, UNIQUE>>
+  nota_total : NUMERIC(6,2)
+  percentual : NUMERIC(5,2) <<NULL>>
+  liberado : BOOLEAN
+  liberado_em : TIMESTAMPTZ <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Exportacao_Resultado" as exportacao_resultado {
+  * id : UUID <<PK>>
+  --
+  prova_id : UUID <<FK>>
+  coordenador_id : UUID <<FK>>
+  formato : TEXT
+  url_arquivo : TEXT <<NULL>>
+  gerado_em : TIMESTAMPTZ
+  criado_em : TIMESTAMPTZ
+}
+
+
+entity "Email_Envio" as email_envio {
+  * id : UUID <<PK>>
+  --
+  prova_aluno_id : UUID <<FK>>
+  destinatario : CITEXT
+  assunto : TEXT
+  corpo : TEXT <<NULL>>
+  status : email_status
+  erro : TEXT <<NULL>>
+  enviado_em : TIMESTAMPTZ <<NULL>>
+  criado_em : TIMESTAMPTZ
+  atualizado_em : TIMESTAMPTZ
+}
+
+
+entity "Avaliacao_Log" as avaliacao_log {
+  * id : UUID <<PK>>
+  --
+  prova_id : UUID <<FK, NULL>>
+  prova_aluno_id : UUID <<FK, NULL>>
+  ator_tipo : TEXT
+  ator_id : UUID <<NULL>>
+  acao : TEXT
+  detalhes : JSONB
+  criado_em : TIMESTAMPTZ
+}
+
+
+' =========================
+' Relacionamentos
+' =========================
+
+
+coordenador ||--o{ professor : "gerencia"
+
+
+materia ||--o{ materia_professor : "é lecionada"
+professor ||--o{ materia_professor : "leciona"
+
+
+materia ||--o{ tema : "possui"
+materia ||--o{ questao : "possui"
+tema |o--o{ questao : "classifica"
+
+
+questao ||--|| enunciado : "possui"
+questao ||--o{ alternativa : "possui"
+
+
+professor ||--o{ prova : "elabora"
+materia ||--o{ prova : "classifica"
+
+
+prova ||--o{ prova_status_historico : "registra status"
+
+
+prova ||--o{ prova_questao : "contém"
+questao ||--o{ prova_questao : "é usada em"
+
+
+prova ||--o{ prova_aluno : "é aplicada"
+aluno ||--o{ prova_aluno : "realiza"
+
+
+prova_aluno ||--o{ resposta_aluno : "contém"
+questao ||--o{ resposta_aluno : "é respondida"
+alternativa |o--o{ resposta_aluno : "é marcada"
+
+
+resposta_aluno ||--o{ resposta_anexo : "possui"
+
+
+resposta_aluno ||--o| correcao : "recebe"
+professor ||--o{ correcao : "realiza"
+
+
+correcao ||--o{ feedback : "possui"
+professor ||--o{ feedback : "escreve"
+
+
+coordenador ||--o{ relatorio : "gera"
+prova ||--o{ relatorio : "baseia"
+
+
+prova_aluno ||--o| resultado_aluno : "consolida"
+prova_aluno ||--o{ email_envio : "notifica"
+
+
+prova ||--o{ exportacao_resultado : "exporta"
+coordenador ||--o{ exportacao_resultado : "solicita"
+
+
+prova |o--o{ avaliacao_log : "audita"
+prova_aluno |o--o{ avaliacao_log : "audita"
+
+
+note right of prova
+As colunas e enums seguem a migration atual:
+prova_status, prova_aluno_status, questao_tipo,
+correcao_tipo, relatorio_tipo e email_status.
+end note
+
+
+note right of resposta_aluno
+UNIQUE(prova_aluno_id, questao_id).
+A resposta pode ser objetiva, textual
+ou com imagem/anexo, conforme a questão.
+end note
+
+
+@enduml
+```
+
+
+### 3.6.3. Modelo Relacional e Modelo Físico
+
+
+Esta seção apresenta a modelagem física do banco de dados do projeto. O modelo foi estruturado para utilização com PostgreSQL/Supabase, contemplando as tabelas principais do sistema, seus atributos, tipos de dados, chaves primárias, chaves estrangeiras, restrições e índices.
+
+
+
+
+#### Modelo Físico
+
+
+O modelo físico descreve como o banco será implementado no PostgreSQL/Supabase, incluindo tipos de dados, constraints e relacionamentos.
+
+
+As principais decisões adotadas foram:
+
+
+- Utilização de `UUID` como chave primária nas tabelas principais;
+- Uso de `gen_random_uuid()` para geração automática dos identificadores;
+- Definição de campos obrigatórios com `NOT NULL`;
+- Uso de `FOREIGN KEY` para garantir integridade entre tabelas relacionadas;
+- Uso de `UNIQUE` para impedir duplicidade em campos como e-mail;
+- Uso de `TIMESTAMPTZ` para armazenar datas e horários com fuso;
+- Uso de tabelas associativas para representar relacionamentos muitos-para-muitos.
+
+
+#### Principais Tabelas
+
+
+##### Tabela `coordenador`
+
+
+A tabela `coordenador` armazena os coordenadores do sistema, responsáveis por gerenciar professores e configurar o ambiente.
+
+
+Principais atributos:
+
+
+- `id`: identificador único do coordenador (UUID, PK);
+- `auth_user_id`: referência ao Supabase Auth (`auth.users`);
+- `nome`: nome completo;
+- `email`: e-mail único;
+- `criado_em`: data de criação do registro;
+- `atualizado_em`: data da última atualização.
+
+
+##### Tabela `professor`
+
+
+A tabela `professor` representa os professores cadastrados no sistema, vinculados a um coordenador.
+
+
+Principais atributos:
+
+
+- `id`: identificador único do professor (UUID, PK);
+- `auth_user_id`: referência ao Supabase Auth;
+- `coordenador_id`: referência à tabela `coordenador` (FK);
+- `nome`: nome completo;
+- `email`: e-mail único;
+- `criado_em`: data de criação do registro;
+- `atualizado_em`: data da última atualização.
+
+
+##### Tabela `aluno`
+
+
+A tabela `aluno` representa os estudantes cadastrados no sistema, com dados próprios e independentes.
+
+
+Principais atributos:
+
+
+- `id`: identificador único do aluno (UUID, PK);
+- `auth_user_id`: referência ao Supabase Auth;
+- `nome`: nome completo;
+- `email`: e-mail único;
+- `cpf`: CPF do aluno (único, opcional);
+- `aceitou_termos_em`: data de aceite dos termos;
+- `criado_em`: data de criação do registro;
+- `atualizado_em`: data da última atualização.
+
+
+##### Tabela `materia`
+
+
+A tabela `materia` armazena as disciplinas disponíveis no sistema.
+
+
+Principais atributos:
+
+
+- `id`: identificador único da matéria;
+- `nome`: nome da matéria;
+- demais campos relacionados à disciplina.
+
+
+##### Tabela `materia_professor`
+
+
+A tabela `materia_professor` representa o relacionamento muitos-para-muitos entre matérias e professores.
+
+
+Principais atributos:
+
+
+- `materia_id`: referência à matéria;
+- `professor_id`: referência ao professor.
+
+
+A chave primária composta é formada por `materia_id` e `professor_id`, evitando que o mesmo professor seja associado à mesma matéria mais de uma vez.
+
+
+##### Demais tabelas do modelo físico atualizado
+
+
+Além das tabelas-base descritas acima, a migration atual também contempla:
+
+
+- `tema`: classifica questões por assunto dentro de uma matéria;
+- `questao`: armazena o tipo, limites, pontuação padrão e status ativo da questão;
+- `enunciado`: mantém o conteúdo em LaTeX e imagem opcional de cada questão;
+- `alternativa`: armazena alternativas, ordem original e marcação de alternativa correta;
+- `prova`: representa a avaliação criada pelo professor, vinculada a uma matéria e com status controlado pelo enum `prova_status`;
+- `prova_status_historico`: registra as transições de status da prova;
+- `prova_questao`: associa questões a provas, definindo ordem e pontuação máxima;
+- `prova_aluno`: associa alunos a provas e controla status, início, envio e ordenação sorteada;
+- `resposta_aluno`: registra respostas objetivas, discursivas, imagens, rascunhos e envio final;
+- `resposta_anexo`: registra arquivos anexados às respostas;
+- `correcao`: registra nota, professor responsável e tipo de correção;
+- `feedback`: registra mensagens associadas a uma correção;
+- `relatorio`: armazena relatórios gerados para uma prova;
+- `resultado_aluno`: consolida nota total, percentual e liberação do resultado;
+- `exportacao_resultado`: registra exportações em `xlsx` ou `csv`;
+- `email_envio`: controla o envio de e-mails de resultado;
+- `avaliacao_log`: registra ações de auditoria relacionadas à prova ou à aplicação da prova ao aluno.
+
+
+#### Complementos da implementação física atual
+
+
+A fonte de verdade da implementação é `src/backend/src/database/migrations/migration.sql`, que define tipos, tabelas, chaves primárias, chaves estrangeiras, índices, triggers, funções auxiliares e políticas de Row Level Security.
+
+
+Também foram preservadas as seguintes decisões físicas já documentadas:
+
+
+- UUID como chave primária nas entidades centrais.
+- TIMESTAMPTZ para datas de criação, atualização, publicação, envio e correção.
+- ENUMs para status de prova, tipo de questão, perfil, status de prova_aluno, formato de exportação e status de e-mail.
+- FOREIGN KEY entre coordenador, professor, matéria, questão, prova, aluno, respostas, correções e resultados.
+- Índices em professor_id, materia_id, tema_id, status, prova_id, questao_id e ações de log.
+- UNIQUE e índices parciais para e-mails, professor-matéria, questão em prova e alternativa correta por questão quando aplicável.
+- Triggers de validação para publicação, alternativas, vínculo professor/matéria, resposta, correção e transição de status.
+- RLS habilitado nas tabelas do domínio.
+
+
+Os agrupamentos físicos do banco também contemplam:
+
 
 | Grupo | Tabelas | Finalidade |
 |-------|---------|------------|
-| Identidade e acesso | coordenador, professor, aluno | Usuarios internos e identificacao do aluno. |
-| Catalogo academico | materia, materia_professor, tema | Disciplinas, vinculos e temas. |
-| Banco de questoes | questao, enunciado, alternativa | Questao, LaTeX/imagem e alternativas. |
-| Provas | prova, prova_status_historico, prova_questao | Metadados, ciclo de vida, URL/QR Code e composicao. |
-| Aplicacao ao aluno | prova_aluno, resposta_aluno, resposta_anexo | Inicio, respostas, envio final e anexos. |
-| Correcao e feedback | correcao, feedback | Nota, observacao e feedback do professor. |
-| Resultados e comunicacao | resultado_aluno, exportacao_resultado, email_envio | Notas, exportacoes e e-mails. |
-| Auditoria e analytics | avaliacao_log, relatorio | Eventos de uso, logs e relatorios. |
+| Identidade e acesso | coordenador, professor, aluno | Usuários internos e identificação do aluno. |
+| Catálogo acadêmico | materia, materia_professor, tema | Disciplinas, vínculos e temas. |
+| Banco de questões | questao, enunciado, alternativa | Questão, LaTeX/imagem e alternativas. |
+| Provas | prova, prova_status_historico, prova_questao | Metadados, ciclo de vida, URL/QR Code e composição. |
+| Aplicação ao aluno | prova_aluno, resposta_aluno, resposta_anexo | Início, respostas, envio final e anexos. |
+| Correção e feedback | correcao, feedback | Nota, observação e feedback do professor. |
+| Resultados e comunicação | resultado_aluno, exportacao_resultado, email_envio | Notas, exportações e e-mails. |
+| Auditoria e analytics | avaliacao_log, relatorio | Eventos de uso, logs e relatórios. |
 
-#### Relacionamentos principais
+
+#### Relacionamentos principais preservados
+
 
 - coordenador 1:N professor.
 - professor N:N materia por materia_professor.
@@ -4462,11 +5318,13 @@ Esta secao apresenta a modelagem fisica implementada no PostgreSQL/Supabase. A f
 - correcao 1:N feedback.
 - prova 1:N resultado_aluno, exportacao_resultado, email_envio e avaliacao_log.
 
+
 #### Migration DDL
 
-~~~text
+
+```text
 src\backend\src\database\migrations\migration.sql
-~~~
+```
 
 ### 3.6.4. Consultas SQL e logica proposicional (sprint 2)
 
@@ -4607,39 +5465,92 @@ A WebAPI esta implementada em Fastify, documentada por Swagger UI em /docs e reg
 *Descreva as estratégias aplicadas no tratamento de falhas de rede: timeout, retry com backoff exponencial, circuit breaker e idempotência em operações críticas (`PUT`, `DELETE`, operações de pagamento etc.).*
 
 ## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
-
-A matriz abaixo consolida RF, RN, endpoint, tela e evidencia tecnica a partir das rotas reais em src/backend/src/routes. O status separa backend implementado de pendencias de frontend.
-
-| Persona | RF | RN | Endpoint real ou suporte tecnico | Tela relacionada | Evidencia | Status |
+| Persona | RF | RN | Endpoint real ou suporte técnico | Tela relacionada | Evidência | Status |
 |---------|----|----|----------------------------------|------------------|-----------|--------|
-| Professor, Coordenador | RF002 | RN18, RN19 | GET /api/v1/auth/google; GET /api/v1/auth/google/callback; GET /api/v1/auth/me; POST /api/v1/auth/logout | Login interno | auth.routes.ts, AuthService, requireRole | Implementado no backend |
-| Professor, Coordenador | RF001 | RN01 | POST/GET/PUT/DELETE /api/v1/provas; GET /api/v1/provas/:provaId/status-historico | Home/editor de provas | prova.routes.ts, ProvaService | Implementado no backend |
-| Professor, Coordenador | RF022 | RN02 | GET /api/v1/provas com filtros | Home com filtros | listProvasQuerySchema, ProvaRepository.findMany | Implementado no backend |
-| Coordenador | RF020 | RN01 | GET /api/v1/coordenador/provas; historico de status | Painel coordenador | coordenador.routes.ts, prova_status_historico | Implementado no backend |
-| Professor | RF021 | RN18 | POST/GET/PUT /api/v1/provas | Nova prova/editor | ProvaController, trigger professor-materia | Implementado no backend |
-| Professor | RF003 | RN20 | CRUD /api/v1/questoes; vinculos /api/v1/provas/:provaId/questoes | Banco de questoes | questao.routes.ts, prova.routes.ts | Implementado no backend |
-| Professor | RF004 | RN03 | POST/PUT /api/v1/questoes com enunciado.conteudoLatex | Editor questao | enunciado.conteudo_latex | Implementado no backend |
-| Professor | RF005 | RN03 | POST/PUT /api/v1/questoes com tipo | Editor questao | enum questao_tipo | Implementado no backend |
-| Professor | RF006 | RN04 | POST/PUT /api/v1/questoes com permite_anexo e limites | Configuracao questao | schema e migration | Implementado no backend |
-| Professor | RF007 | RN05 | PATCH /api/v1/provas/:provaId/configuracoes | Configuracoes prova | ProvaService | Implementado no backend |
-| Professor | RF023 | RN06 | PATCH /api/v1/provas/:provaId/configuracoes | Configuracoes prova | embaralhar_questoes/alternativas | Implementado no backend |
-| Professor | RF008 | RN07 | POST /api/v1/provas/:provaId/publicar | Compartilhar prova | url_acesso, qr_code | Implementado no backend |
-| Aluno | RF024 | RN09 | GET /api/v1/public/provas/:urlAcesso | Portal instrucoes | aluno-portal.routes.ts | Implementado no backend |
-| Aluno | RF009 | RN08 | POST /api/v1/public/provas/:urlAcesso/iniciar | Identificacao aluno | AlunoPortalService | Implementado no backend |
-| Aluno | RF025 | RN09 | Dados de tempo em GET /api/v1/public/provas/:urlAcesso | Timer | API entrega tempo limite | Backend implementado; timer depende do frontend |
-| Aluno | RF010 | RN10 | PUT /api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId | Responder prova | RespostaAlunoService | Backend implementado; zoom depende do frontend |
-| Aluno | RF011 | RN10 | Enunciado LaTeX no portal publico | Responder prova | enunciado.conteudo_latex | Backend implementado; renderizacao depende do frontend |
-| Aluno | RF012 | RN04 | POST /api/v1/public/respostas/:respostaId/anexos | Upload | RespostaAnexoService | Implementado no backend |
-| Aluno | RF013 | RN11 | POST /api/v1/public/respostas/:respostaId/anexos | Upload/compressao | validacao de arquivo | Backend implementado; compressao final depende do frontend/storage |
-| Aluno | RF026 | RN12 | GET/PUT respostas; POST enviar | Revisao final | resposta-aluno.routes.ts | Implementado no backend |
-| Professor | RF014 | RN13 | GET correcao/questoes e respostas por questao | Correcao | correcao.routes.ts | Implementado no backend |
-| Professor | RF015 | RN13 | PUT /api/v1/respostas/:respostaId/correcao | Correcao manual | CorrecaoRepository | Implementado no backend |
-| Professor | RF016 | RN13 | Respostas de correcao retornam anexos | Galeria/anexos | RespostaAnexoRepository | Implementado no backend |
-| Professor, Coordenador | RF017 | RN14 | GET resultados; POST resultados/exportar | Resultados | ResultadoService | Implementado no backend |
-| Coordenador | RF018 | RN17 | GET /api/v1/coordenador/provas; CRUD cadastros | Painel coordenador | coordenador/professor/materia routes | Implementado no backend |
-| Coordenador | RF019 | RN17 | GET /api/v1/provas/:provaId/analytics; POST /api/v1/logs | Analytics | AnalyticsService | Implementado no backend |
-| Professor, Coordenador | RF027 | RN15 | liberar-email, listar emails, reenviar | E-mails | EmailResultadoService | Implementado no backend |
-| Coordenador | RF028 | RN16 | POST /api/v1/provas/:provaId/anexos/exportar | Exportacao anexos | AnexoExportarService | Implementado no backend |
+| Professor, Coordenador | RF001 | RN01 | POST/GET/PUT/DELETE /api/v1/provas; GET /api/v1/provas/:provaId/status-historico; POST /api/v1/provas/:provaId/encerrar; POST /api/v1/provas/:provaId/arquivar | Wireframes de provas e editor | prova.routes.ts, ProvaController, ProvaService, prova_status_historico | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF001 | RN01 | GET /api/v1/provas/:provaId | Wireframe de detalhes da prova | prova.routes.ts, ProvaController.buscarPorId, ProvaService.buscarPorId | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF001 | RN01 | GET /api/v1/provas/:provaId/questoes | Wireframe de detalhes da prova | prova.routes.ts, ProvaQuestaoController.listar, ProvaQuestaoService.listar | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF001 | RN01 | POST /api/v1/provas/:provaId/encerrar | Wireframe de encerramento da prova | prova.routes.ts, ProvaController.encerrar, ProvaService.encerrar | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF001 | RN01 | POST /api/v1/provas/:provaId/arquivar | Wireframe de histórico de provas | prova.routes.ts, ProvaController.arquivar, ProvaService.arquivar | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF002 | RN18, RN19 | GET /api/v1/auth/google; GET /api/v1/auth/google/callback; GET /api/v1/auth/me; POST /api/v1/auth/logout | Wireframe de login do professor/coordenador | auth.routes.ts, AuthController, AuthService, requireRole | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | CRUD /api/v1/questoes; POST/GET/DELETE /api/v1/provas/:provaId/questoes | Wireframe de banco de questões | questao.routes.ts, prova.routes.ts, QuestaoService, ProvaQuestaoService | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | GET /api/v1/questoes/:questaoId | Wireframe de visualizar questão | questao.routes.ts, QuestaoService.buscarPorId, QuestaoRepository.findById | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | GET /api/v1/questoes com filtros materiaId, temaId, tipo e busca | Wireframe de banco de questões | listQuestoesQuerySchema, QuestaoRepository.findMany | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | POST /api/v1/provas/:provaId/questoes | Wireframe de vincular questão a prova | prova.routes.ts, ProvaQuestaoService.adicionar | Implementado no backend; frontend ainda não implementado |
+| Professor | RF003 | RN20 | DELETE /api/v1/provas/:provaId/questoes/:questaoId | Wireframe de remover questão da prova | prova.routes.ts, ProvaQuestaoService.remover | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF003 | RN20 | POST/GET/PUT/DELETE /api/v1/temas | Wireframe de banco de questões | tema.routes.ts, TemaController, TemaService, TemaRepository | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF003 | RN20 | GET /api/v1/temas com filtro materiaId | Wireframe de filtros do banco de questões | listTemasQuerySchema, TemaRepository.findAll | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF003 | RN20 | GET /api/v1/materias e GET /api/v1/materias/:materiaId | Wireframe de banco de questões e criação de prova | materia.routes.ts, MateriaController, MateriaService | Implementado no backend; frontend ainda não implementado |
+| Professor | RF004 | RN03 | POST/PUT /api/v1/questoes com enunciado.conteudoLatex | Wireframe de editor de questão | questao.schema.ts, tabela enunciado.conteudo_latex | Implementado no backend; frontend ainda não implementado |
+| Professor | RF004 | RN03 | POST/PUT /api/v1/questoes com alternativas[].conteudoLatex | Wireframe de editor de questão | questao.schema.ts, alternativa.conteudo_latex | Implementado no backend; frontend ainda não implementado |
+| Professor | RF005 | RN03 | POST/PUT /api/v1/questoes com tipo multipla_escolha, verdadeiro_falso ou discursiva | Wireframe de editor de questão | questao.schema.ts, enum questao_tipo | Implementado no backend; frontend ainda não implementado |
+| Professor | RF005 | RN03 | Questão objetiva com alternativas e exatamente uma correta | Wireframe de editor de questão objetiva | createQuestaoBodySchema, alternativas schema, alternativa_uma_correta_por_questao_index | Implementado no backend; frontend ainda não implementado |
+| Professor | RF005 | RN03 | Questão discursiva sem alternativas | Wireframe de editor de questão discursiva | createQuestaoBodySchema, enum questao_tipo | Implementado no backend; frontend ainda não implementado |
+| Professor | RF005 | RN03 | Questão verdadeiro/falso com exatamente duas alternativas | Wireframe de editor de questão VF | createQuestaoBodySchema, enum questao_tipo | Implementado no backend; frontend ainda não implementado |
+| Professor | RF006 | RN04 | POST/PUT /api/v1/questoes com permiteAnexo, limiteCaracteres e limitePalavras | Wireframe de configuração de questão | questao.schema.ts, questao.permite_anexo, resposta-anexo.routes.ts | Implementado no backend; frontend ainda não implementado |
+| Professor | RF006 | RN04 | Validação de tamanho e formato de anexos em upload público | Wireframe de configuração de anexos | resposta-anexo.routes.ts, multipart.ts, resposta_anexo_mime_type_check, resposta_anexo_tamanho_check | Implementado no backend; frontend ainda não implementado |
+| Professor | RF007 | RN05 | PATCH /api/v1/provas/:provaId/configuracoes com tempoLimiteMin, dataInicio e dataFim | Wireframe de configurações da prova | prova.schema.ts, ProvaService.atualizarConfiguracoes, prova.tempo_limite_min | Implementado no backend; frontend ainda não implementado |
+| Professor | RF007 | RN05 | PATCH /api/v1/provas/:provaId/configuracoes com tempoLimiteMin | Wireframe de configurações da prova | updateProvaConfiguracoesBodySchema, prova.tempo_limite_min | Implementado no backend; frontend ainda não implementado |
+| Professor | RF007 | RN05 | PATCH /api/v1/provas/:provaId/configuracoes com dataInicio e dataFim | Wireframe de configurações da prova | updateProvaConfiguracoesBodySchema, prova.data_inicio, prova.data_fim | Implementado no backend; frontend ainda não implementado |
+| Professor | RF008 | RN07 | POST /api/v1/provas/:provaId/publicar | Wireframe de compartilhar prova | ProvaService.publicar, prova.url_acesso, prova.qr_code | Implementado no backend; frontend ainda não implementado |
+| Professor | RF008 | RN07 | Compartilhamento por URL pública gerada ao publicar prova | Wireframe de compartilhar prova | ProvaService.publicar, prova.url_acesso | Implementado no backend; frontend ainda não implementado |
+| Professor | RF008 | RN07 | Payload de QR Code gerado a partir da URL pública | Wireframe de compartilhar prova | ProvaService.publicar, prova.qr_code, observação da migration sobre QR Code | Implementado no backend como payload; imagem depende do frontend/backend de renderização |
+| Aluno | RF009 | RN08 | POST /api/v1/public/provas/:urlAcesso/iniciar | Wireframe de identificação do aluno | aluno-portal.routes.ts, AlunoPortalService, tabela prova_aluno | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF009 | RN08 | Início de tentativa em POST /api/v1/public/provas/:urlAcesso/iniciar | Wireframe de identificação do aluno | AlunoPortalService, AlunoPortalRepository, tabela prova_aluno | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF009 | RN08 | Validação de acesso por urlAcesso, período da prova e dados do aluno | Wireframe de identificação do aluno | AlunoPortalService, alunoPortalParamsSchema, iniciarProvaBodySchema | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF010 | RN10 | PUT /api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId; GET /api/v1/public/provas-aluno/:provaAlunoId/respostas | Wireframe de responder prova | resposta-aluno.routes.ts, RespostaAlunoService | Backend implementado; experiência de zoom depende do frontend |
+| Aluno | RF010 | RN10 | Salvamento/atualização de respostas em PUT /api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId | Wireframe de responder prova | RespostaAlunoService.salvarRascunho, resposta_aluno.rascunho, resposta_aluno.sincronizada_em | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF010 | RN10 | Atualização de respostas discursivas com respostaTexto | Wireframe de responder prova | salvarRespostaBodySchema, resposta_aluno.resposta_texto | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF010 | RN10 | Atualização de respostas objetivas com alternativaId | Wireframe de responder prova | salvarRespostaBodySchema, resposta_aluno.alternativa_id | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF011 | RN10 | Enunciado e alternativas em LaTeX retornados no portal público e nas questões da prova | Wireframe de responder prova | enunciado.conteudo_latex, alternativa.conteudo_latex, questao.schema.ts | Backend implementado; renderização LaTeX depende do frontend |
+| Aluno | RF011 | RN10 | Conteúdo LaTeX disponível em enunciados e alternativas retornados pela API | Wireframe de responder prova | conteudoLatex na API, enunciado.conteudo_latex, alternativa.conteudo_latex | Backend implementado; renderização depende do frontend |
+| Aluno | RF012 | RN04 | POST /api/v1/public/respostas/:respostaId/anexos | Wireframe de upload | resposta-anexo.routes.ts, RespostaAnexoService, StorageService | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF012 | RN04 | Upload multipart em POST /api/v1/public/respostas/:respostaId/anexos | Wireframe de upload | resposta-anexo.routes.ts, multipart middleware, StorageService | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF013 | RN11 | POST /api/v1/public/respostas/:respostaId/anexos valida JPG, PNG, PDF e limite de 5MB | Wireframe de upload/compressão | resposta-anexo.schema.ts, multipart.ts, resposta_anexo.mime_type, resposta_anexo.tamanho_bytes | Backend implementado; compressão de imagem depende do frontend/storage |
+| Aluno | RF013 | RN11 | Validação de tipo de arquivo JPG, PNG e PDF | Wireframe de upload/compressão | respostaAnexoSchema, resposta_anexo_mime_type_check | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF013 | RN11 | Validação de limite de tamanho até 5MB | Wireframe de upload/compressão | bodyLimit 6MB, resposta_anexo_tamanho_check <= 5242880 | Implementado no backend; frontend ainda não implementado |
+| Professor | RF014 | RN13 | GET /api/v1/provas/:provaId/correcao/questoes; GET /api/v1/provas/:provaId/questoes/:questaoId/respostas | Wireframe de correção | correcao.routes.ts, CorrecaoController, CorrecaoService | Implementado no backend; frontend ainda não implementado |
+| Professor | RF014 | RN13 | Listagem de questões e respostas para correção | Wireframe de correção | CorrecaoService.listarQuestoesDaProva, CorrecaoService.listarRespostasPorQuestao | Implementado no backend; frontend ainda não implementado |
+| Professor | RF014 | RN13 | Consulta de respostas discursivas e anexos por questão | Wireframe de correção | CorrecaoRepository.findRespostasPorQuestao, correcaoRespostaSchema | Implementado no backend; frontend ainda não implementado |
+| Professor | RF014 | RN13 | POST /api/v1/provas/:provaId/correcao/objetivas | Wireframe de correção | correcao.routes.ts, CorrecaoController.executarObjetivas, CorrecaoService.executarCorrecaoAutomatica | Implementado no backend; frontend ainda não implementado |
+| Professor | RF015 | RN13 | PUT /api/v1/respostas/:respostaId/correcao com nota, observação e feedback | Wireframe de correção manual | correcao.schema.ts, CorrecaoRepository, tabela feedback | Implementado no backend; frontend ainda não implementado |
+| Professor | RF015 | RN13 | Lançamento manual de nota em PUT /api/v1/respostas/:respostaId/correcao | Wireframe de correção manual | salvarCorrecaoBodySchema.nota, CorrecaoRepository.upsertCorrecao | Implementado no backend; frontend ainda não implementado |
+| Professor | RF015 | RN13 | Feedback textual da correção por campo feedback e tabela feedback | Wireframe de correção manual | salvarCorrecaoBodySchema.feedback, tabela feedback.mensagem | Implementado no backend; frontend ainda não implementado |
+| Professor | RF016 | RN13 | GET /api/v1/provas/:provaId/questoes/:questaoId/respostas retorna anexos das respostas | Wireframe de galeria/anexos | CorrecaoRepository, RespostaAnexoRepository, resposta_anexo | Implementado no backend; frontend ainda não implementado |
+| Professor | RF016 | RN13 | Visualização de anexos enviados junto das respostas | Wireframe de galeria/anexos | correcaoRespostaSchema.anexos, resposta_anexo | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF017 | RN14 | GET /api/v1/provas/:provaId/resultados; POST /api/v1/provas/:provaId/resultados/exportar | Wireframe de resultados | resultado.routes.ts, ResultadoService, ResultadoRepository, StorageService | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF017 | RN14 | Exportação de resultados em CSV ou XLSX | Wireframe de resultados | ResultadoService.exportarPorProva, exportacao_resultado, StorageService | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF017 | RN14 | Consulta de desempenho por aluno em GET /api/v1/provas/:provaId/resultados | Wireframe de resultados | ResultadoRepository.findByProva, resultadoAlunoSchema | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | GET /api/v1/coordenador/provas; CRUD /api/v1/professores; CRUD /api/v1/materias; vínculos matéria-professor | Wireframe de painel do coordenador | coordenador.routes.ts, professor.routes.ts, materia.routes.ts, materia_professor | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | CRUD de professores em /api/v1/professores | Wireframe de painel coordenador | professor.routes.ts, ProfessorService, ProfessorRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | CRUD de matérias em /api/v1/materias | Wireframe de painel coordenador | materia.routes.ts, MateriaService, MateriaRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | Vínculo professor-matéria via tabela materia_professor | Wireframe de painel coordenador | migration.sql, materia_professor, professor/materia services | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | GET /api/v1/alunos; GET /api/v1/alunos/:alunoId; PUT /api/v1/alunos/:alunoId; DELETE /api/v1/alunos/:alunoId | Wireframe de gestão de alunos | aluno.routes.ts, AlunoController, AlunoService, AlunoRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | POST /api/v1/professores/:professorId/materias | Wireframe de vínculo professor-matéria | professor.routes.ts, ProfessorController.criarVinculo, materia_professor | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | DELETE /api/v1/professores/:professorId/materias/:materiaId | Wireframe de vínculo professor-matéria | professor.routes.ts, ProfessorController.removerVinculo, materia_professor | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF018 | RN17 | POST /api/v1/materias; PUT /api/v1/materias/:materiaId; DELETE /api/v1/materias/:materiaId | Wireframe de gestão de matérias | materia.routes.ts, MateriaController, MateriaService, MateriaRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF019 | RN17 | GET /api/v1/provas/:provaId/analytics; POST /api/v1/logs | Wireframe de analytics | analytics.routes.ts, AnalyticsService, avaliacao_log | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF019 | RN17 | Análise estatística de provas em GET /api/v1/provas/:provaId/analytics | Wireframe de analytics | AnalyticsService.obterPorProva, AnalyticsRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF019 | RN17 | Registro de logs de acesso em POST /api/v1/logs | Wireframe de analytics | analytics.routes.ts, AnalyticsService.registrarLog, avaliacao_log | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF020 | RN01 | GET /api/v1/coordenador/provas; GET /api/v1/provas/:provaId/status-historico | Wireframe de painel do coordenador | coordenador.routes.ts, ProvaController.listar, prova_status_historico | Implementado no backend; frontend ainda não implementado |
+| Professor | RF021 | RN18 | POST /api/v1/provas; GET /api/v1/provas/:provaId; PUT /api/v1/provas/:provaId | Wireframe de nova prova/editor | ProvaController, ProvaService, materia_professor | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF022 | RN02 | GET /api/v1/provas com filtros status, turma, semestre, materiaId e professorId | Wireframe de home com filtros | listProvasQuerySchema, ProvaRepository.findMany | Implementado no backend; frontend ainda não implementado |
+| Professor | RF023 | RN06 | PATCH /api/v1/provas/:provaId/configuracoes com embaralharQuestoes e embaralharAlternativas | Wireframe de configurações da prova | prova.schema.ts, prova.embaralhar_questoes, prova.embaralhar_alternativas | Implementado no backend; frontend ainda não implementado |
+| Professor | RF023 | RN06 | PATCH /api/v1/provas/:provaId/configuracoes com embaralharAlternativas | Wireframe de configurações da prova | updateProvaConfiguracoesBodySchema, prova.embaralhar_alternativas | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF024 | RN09 | GET /api/v1/public/provas/:urlAcesso | Wireframe de instruções do aluno | aluno-portal.routes.ts, AlunoPortalService, provaPublicaSchema | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF024 | RN09 | Visualização de instruções em GET /api/v1/public/provas/:urlAcesso | Wireframe de portal do aluno | aluno-portal.routes.ts, provaPublicaSchema.instrucoes | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF025 | RN09 | GET /api/v1/public/provas/:urlAcesso retorna tempoLimiteMin, dataInicio e dataFim | Wireframe de timer | aluno-portal.schema.ts, prova.tempo_limite_min, prova.data_inicio, prova.data_fim | Backend implementado; exibição do timer depende do frontend |
+| Aluno | RF025 | RN09 | Consulta de tempo da prova em GET /api/v1/public/provas/:urlAcesso | Wireframe de timer | tempoLimiteMin, dataInicio, dataFim | Backend implementado; exibição depende do frontend |
+| Aluno | RF026 | RN12 | GET /api/v1/public/provas-aluno/:provaAlunoId/respostas; POST /api/v1/public/provas-aluno/:provaAlunoId/enviar | Wireframe de revisão final e conclusão | resposta-aluno.routes.ts, RespostaAlunoService.enviarFinal | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF026 | RN12 | Revisão de respostas por GET /api/v1/public/provas-aluno/:provaAlunoId/respostas | Wireframe de revisão final | resposta-aluno.routes.ts, RespostaAlunoService.listarRespostas | Implementado no backend; frontend ainda não implementado |
+| Aluno | RF026 | RN12 | Envio definitivo em POST /api/v1/public/provas-aluno/:provaAlunoId/enviar | Wireframe de finalização | resposta-aluno.routes.ts, RespostaAlunoService.enviarFinal | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF027 | RN15 | POST /api/v1/provas/:provaId/resultados/liberar-email; GET /api/v1/provas/:provaId/emails; POST /api/v1/emails/:emailEnvioId/reenviar | Wireframe de e-mails | email.routes.ts, EmailResultadoService, email_envio | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF027 | RN15 | Reenvio de e-mails de resultado em POST /api/v1/emails/:emailEnvioId/reenviar | Wireframe de e-mails | email.routes.ts, EmailResultadoService.reenviar | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF027 | RN15 | Consulta de histórico de e-mails em GET /api/v1/provas/:provaId/emails | Wireframe de e-mails | EmailResultadoService.listarEnvios, email_envio | Implementado no backend; frontend ainda não implementado |
+| Professor, Coordenador | RF027 | RN15 | POST /api/v1/provas/:provaId/resultados/liberar-email com confirmarPendencias | Wireframe de liberação de notas/e-mails | email.schema.ts, EmailResultadoService.liberar, EmailEnvioRepository | Implementado no backend; frontend ainda não implementado |
+| Coordenador | RF028 | RN16 | POST /api/v1/provas/:provaId/anexos/exportar retorna lista dos anexos da prova | Wireframe de exportação de anexos | anexo-exportar.routes.ts, AnexoExportarService, AnexoExportarRepository | Implementado no backend como listagem/exportação de metadados; frontend ainda não implementado |
+| Coordenador | RF028 | RN16 | Exportacao/listagem dos anexos da prova em POST /api/v1/provas/:provaId/anexos/exportar | Wireframe de exportação de anexos | AnexoExportarService.exportar, AnexoExportarRepository.findAnexosPorProva | Implementado no backend como listagem/exportação de metadados; frontend ainda não implementado |
+
 
 # <a name="c4"></a>4. Desenvolvimento da Aplicação Web
 
@@ -4706,9 +5617,15 @@ Integrar o frontend as rotas ja documentadas e produzir evidencias navegaveis: l
 
 ## 6.1 Resumo Executivo
 
-*Preencher com até 300 palavras, sem necessidade de fonte*
+O projeto propõe uma aplicação web para centralizar a criação, aplicação, entrega, correção e análise de avaliações remotas do Instituto Ponte. A oportunidade identificada está no crescimento da atuação nacional da instituição, que atende centenas de estudantes em diferentes estados brasileiros, exigindo processos digitais mais escaláveis, seguros e padronizados.
 
-*Apresente de forma clara e objetiva os principais destaques do projeto: oportunidades de mercado, diferenciais competitivos da aplicação web e os objetivos estratégicos pretendidos.*
+Atualmente, parte do fluxo avaliativo ocorre por canais dispersos, como WhatsApp e e-mail, o que gera risco de perda de arquivos, dificuldade de organização das respostas, retrabalho para professores e menor isonomia na correção. A aplicação atende esse problema ao reunir, em uma única plataforma, o acesso às provas, o envio de respostas e anexos, o acompanhamento do progresso, a correção por questão e a visualização de resultados.
+
+Os principais diferenciais competitivos da solução são a interface simples e responsiva para alunos, o acesso facilitado por link, o suporte a respostas com anexos e fórmulas, o salvamento estruturado das submissões, o banco de questões, a correção padronizada por item e os painéis de desempenho para professores e coordenadores. Esses recursos fortalecem a equidade do processo avaliativo e reduzem a carga operacional da equipe pedagógica.
+
+Como objetivos estratégicos, o projeto busca aumentar a confiabilidade das avaliações remotas, reduzir falhas operacionais, melhorar a eficiência da correção, apoiar decisões pedagógicas com dados e contribuir para a missão do Instituto Ponte de promover ascensão social por meio da educação de qualidade.
+
+Fonte: Instituto Ponte, Relatório Anual 2025; documentação WAD do projeto. https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf
 
 ## 6.2 Análise de Mercado
 
