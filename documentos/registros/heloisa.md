@@ -236,3 +236,99 @@ Heloísa: atualização dos requisitos funcionais na seção 3.1.3 e da tabela R
 
 - Alteração: Atualização dos requisitos funcionais, agora sendo considerados todas as etapas do projeto e o desenvolvimento mais aprofundado do projeto.
 E atualização da matriz RF->RN->endpoint, atualizando os endpoint para condizer com o resto do projeto.
+
+### Banco De Dados artefato 13 
+
+### Data: 02/06/2026
+
+### Objetivo do Dia
+
+Heloísa: atualizar o diagrama de sequência e o modelo relacional e o físico.
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa: 
+
+- Alteração: Atualiza diagrama de sequência UML e o Modelo relacional e o modelo físico.
+
+### Banco De Dados artefato 13 
+
+### Data: 08/06/2026
+
+### Objetivo do Dia
+
+Heloísa:
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa: 
+
+- Alteração:
+
+### Banco De Dados artefato 13 
+
+### Data: 09/06/2026
+
+### Objetivo do Dia
+
+Heloísa:
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa: 
+
+- Alteração:
+
+### Banco De Dados artefato 13 
+
+### Data: 10/06/2026
+
+### Objetivo do Dia
+
+Heloísa:
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa: 
+
+- Alteração:
+
+### Banco De Dados artefato 13 
+
+### Data: 11/06/2026
+
+### Objetivo do Dia
+
+Heloísa:
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa: 
+
+- Alteração:
+
+### Banco De Dados artefato 13 
+
+### Data: 12/06/2026
+
+### Objetivo do Dia
+
+Heloísa:
+
+### Banco de dados
+
+### Alterações Realizadas
+
+#### Heloísa: 
+
+- Alteração:

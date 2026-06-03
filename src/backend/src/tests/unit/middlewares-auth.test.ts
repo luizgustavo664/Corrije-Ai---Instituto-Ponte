@@ -153,7 +153,7 @@ describe("requireAuth em modo produção com JWT real", () => {
       headers: { authorization: "Bearer jwt-sem-sub" },
     });
     await expect(auth.requireAuth(req, makeReply())).rejects.toThrow(
-      "Token de autenticação inválido ou expirado.",
+      "Token inválido: sem identificador de usuário.",
     );
   });
 
@@ -167,7 +167,7 @@ describe("requireAuth em modo produção com JWT real", () => {
       headers: { authorization: "Bearer jwt-expirado" },
     });
     await expect(auth.requireAuth(req, makeReply())).rejects.toThrow(
-      "Token de autenticação inválido ou expirado.",
+      "Token expirado.",
     );
   });
 

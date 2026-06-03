@@ -217,7 +217,7 @@ describe("ProvaService - unitário", () => {
   });
 
   describe("listar", () => {
-    it("deve delegar para repository.findMany", async () => {
+    it("CT02 - RN02 - deve preservar filtros de prova ao delegar para repository.findMany", async () => {
       mockFindMany.mockResolvedValue({ data: [], total: 0 });
 
       const service = new ProvaService();
@@ -243,7 +243,7 @@ describe("ProvaService - unitário", () => {
       expect(result!.titulo).toBe("Prova Atualizada");
     });
 
-    it("deve lançar conflict quando prova não está em rascunho", async () => {
+    it("CT01 - RN01 - deve lançar conflict quando prova não está em rascunho", async () => {
       mockFindById.mockResolvedValue(makeProva({ status: "publicada" }));
       mockHasAccess.mockResolvedValue(true);
 

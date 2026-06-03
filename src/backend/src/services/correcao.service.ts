@@ -1,5 +1,5 @@
 import { businessRule, conflict, forbidden, notFound } from "../errors/api-error.js";
-import type { AuthUser } from "../middlewares/auth.js";
+import type { AuthUser } from "../models/auth.model.js";
 import { CorrecaoRepository } from "../repositories/correcao.repository.js";
 import type { SalvarCorrecaoInput } from "../schemas/correcao.schema.js";
 

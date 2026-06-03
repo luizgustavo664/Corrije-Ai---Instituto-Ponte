@@ -6,7 +6,23 @@ type UploadInput = {
 
 const normalizeBaseUrl = (url: string) => url.replace(/\/$/, "");
 
+/**
+ * Upload de arquivos para o Supabase Storage.
+ *
+ * Se as variáveis de ambiente SUPABASE_STORAGE_URL ou
+ * SUPABASE_SERVICE_ROLE_KEY não estiverem configuradas,
+ * retorna um caminho local simulado (fallback para dev/test).
+ */
 export class StorageService {
+  /**
+   * Faz upload de um arquivo para o Supabase Storage.
+   *
+   * @param input.path - Caminho de destino no bucket (ex.: "provas/{id}/resultados-{timestamp}.csv").
+   * @param input.content - Conteúdo do arquivo (string ou Buffer).
+   * @param input.contentType - Tipo MIME do arquivo.
+   * @returns URL pública do arquivo no storage, ou caminho local simulado em dev/test quando sem config.
+   * @throws Error - Se a requisição HTTP ao Supabase Storage falhar.
+   */
   async upload({ path, content, contentType }: UploadInput) {
     const storageUrl = process.env.SUPABASE_STORAGE_URL;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;

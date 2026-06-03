@@ -1,22 +1,19 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { jwtVerify } from "jose";
-import { forbidden, unauthorized } from "../errors/api-error.js";
+import { ApiError, forbidden, unauthorized } from "../errors/api-error.js";
 import { pool } from "../database/pool.js";
 
-export type AuthRole = "professor" | "coordenador";
+import type { AuthRole, AuthUser } from "../models/auth.model.js";
 
-export type AuthUser = {
-  id: string;
-  nome: string;
-  email: string;
-  perfil: AuthRole;
-};
+export type { AuthRole, AuthUser };
 
 declare module "fastify" {
   interface FastifyRequest {
     user?: AuthUser;
   }
 }
+
+/** Funções auxiliares para o middleware de autenticação. */
 
 const getSupabaseJwtSecret = () => {
   const secret = process.env.SUPABASE_JWT_SECRET;
@@ -85,7 +82,7 @@ const validateSupabaseJwt = async (authorization?: string): Promise<SupabaseJwtP
 
     return payload as unknown as SupabaseJwtPayload;
   } catch (error) {
-    if (error instanceof Error && error.message.startsWith("Usuário")) {
+    if (error instanceof ApiError) {
       throw error;
     }
     throw unauthorized("Token de autenticação inválido ou expirado.");

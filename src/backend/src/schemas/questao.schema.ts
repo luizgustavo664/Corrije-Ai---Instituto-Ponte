@@ -38,7 +38,10 @@ export const createQuestaoBodySchema = z
   })
   .strict();
 
-export const updateQuestaoBodySchema = createQuestaoBodySchema;
+export const updateQuestaoBodySchema = createQuestaoBodySchema.partial().refine(
+  (data) => Object.keys(data).length > 0,
+  { message: "Informe ao menos um campo para atualização." },
+);
 
 export const questaoParamsSchema = z.object({
   questaoId: z.string().uuid("O questaoId deve ser um UUID válido.").describe("Identificador único da questão."),
