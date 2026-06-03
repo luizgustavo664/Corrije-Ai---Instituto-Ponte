@@ -5163,11 +5163,32 @@ Fontes: Estão na seção (referências).
 
 ## 6.4 Público-Alvo
 
-*a) Segmentação de Mercado (até 250 palavras)*
-Descreva os principais segmentos de mercado a serem atendidos pela aplicação. Utilize bases de dados e fontes confiáveis.*
+### a) Segmentação de Mercado
 
-*b) Perfil do Público-Alvo (até 250 palavras)*
-*Caracterize o público-alvo com dados demográficos, psicográficos e comportamentais, incluindo necessidades específicas. Utilize fontes obrigatórias.*
+A aplicação web será desenvolvida exclusivamente para o Instituto Ponte, organização social voltada à educação de jovens em situação de vulnerabilidade social. Dessa forma, o projeto não busca atender múltiplos mercados ou instituições, mas sim suprir necessidades específicas dos diferentes grupos internos vinculados ao Instituto Ponte. 
+
+Os principais segmentos atendidos pela plataforma serão os estudantes, os professores e a equipe de gestão educacional da instituição. Os estudantes utilizarão o sistema para acessar avaliações remotas, responder questões discursivas e objetivas e realizar upload de arquivos e imagens. Já os professores utilizarão a plataforma para criação, aplicação e correção das provas, com foco em maior organização e padronização do processo avaliativo. 
+
+Além disso, a Gerência Educacional e o Núcleo de Experiência do Aluno também serão impactados pela solução, principalmente em aspectos relacionados à acessibilidade, centralização das informações e garantia de equidade nas avaliações. 
+
+A plataforma foi planejada considerando a realidade tecnológica dos alunos atendidos pelo Instituto Ponte, priorizando acessibilidade, compatibilidade com dispositivos móveis e funcionamento em aparelhos de baixo desempenho, reduzindo barreiras tecnológicas durante a realização das provas. 
+
+
+---
+
+
+### b) Perfil do Público-Alvo
+
+O público-alvo da aplicação é composto pelos estudantes atendidos pelo Instituto Ponte, além dos professores e coordenadores responsáveis pela aplicação, acompanhamento e correção das avaliações.
+
+Os estudantes são, majoritariamente, adolescentes e jovens adultos entre 14 e 24 anos, em situação de vulnerabilidade social e distribuídos em diferentes estados do Brasil. Muitos utilizam celulares como principal meio de acesso à internet e podem possuir limitações relacionadas à conexão ou desempenho dos aparelhos, o que exige uma plataforma leve, acessível e intuitiva. Além disso, valorizam praticidade e igualdade de condições durante o processo avaliativo, necessitando de uma experiência simples para envio de respostas e arquivos.
+
+Os professores são responsáveis pela elaboração, aplicação e correção das avaliações. Esse público busca ferramentas que ofereçam maior organização, praticidade e padronização no processo avaliativo, reduzindo a carga operacional e facilitando a correção das respostas dos alunos.
+
+Já os coordenadores e gestores educacionais atuam no acompanhamento pedagógico e supervisão das avaliações. Esses profissionais valorizam eficiência, transparência e confiabilidade no gerenciamento das informações, priorizando ferramentas que centralizem os dados e permitam maior controle dos processos acadêmicos.
+
+De forma geral, todos os públicos possuem contato frequente com ferramentas digitais, porém enfrentam dificuldades quando os sistemas exigem alto consumo de internet ou processos descentralizados. Por isso, a aplicação prioriza usabilidade, acessibilidade e centralização das informações.
+
 
 
 ## 6.5 Posicionamento
