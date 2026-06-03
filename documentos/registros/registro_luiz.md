@@ -194,3 +194,20 @@ Finalizei o protótipo de alta fidelidade utilizando o guia de estilos finalizad
 ### Links
 
 [Protótipo](https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=MEPAxCd0Se83aeVP-0)
+
+# Sprint 4
+
+## 📅 02/06/2026
+
+### Objetivo do Dia
+Criar as estratégias de marketing do projeto.
+
+### Alteração
+Foram desenvolvidas e documentadas as estratégias de marketing da solução, contemplando os quatro pilares do composto mercadológico (4Ps): Produto, Preço, Praça e Promoção.
+
+Foi definida a proposta de valor da aplicação, destacando seus benefícios, funcionalidades e diferenciais. Também foi estabelecido o modelo de precificação, os canais digitais de distribuição e as estratégias de divulgação da plataforma, incluindo ações de SEO, redes sociais, marketing de conteúdo e campanhas pagas.
+
+### Links
+- Documento de Estratégias de Marketing
+- Artefato de Planejamento de Negócios
+
