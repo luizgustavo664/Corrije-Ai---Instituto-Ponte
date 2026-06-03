@@ -2589,7 +2589,7 @@ Esse fluxo evita que as rotas executem SQL diretamente. As rotas apenas descreve
 
 O diagrama de dominio abaixo foi alinhado ao backend atual e a migration src/backend/src/database/migrations/migration.sql. Coordenador, professor e aluno sao entidades/tabelas independentes. A composicao da prova usa prova_questao, a tentativa do aluno usa prova_aluno, os anexos usam resposta_anexo e a exportacao/resultado/e-mail usam tabelas proprias.
 
-~~~plantuml
+```plantuml
 @startuml DiagramaDeClassesDominioAtual
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
@@ -2769,557 +2769,125 @@ Prova "1" -- "0..*" ExportacaoResultado
 ProvaAluno "1" -- "0..*" EmailEnvio
 Prova "1" -- "0..*" AvaliacaoLog
 @enduml
-~~~
+```
 
 #### 3.2.3.1 Diagrama de Classes Arquitetural
 
 ```plantuml
-@startuml ArquiteturaGeral
-skinparam linetype ortho
-skinparam classAttributeIconSize 0
+@startuml ClassesArquiteturaisAtualizadas
+title Classes Arquiteturais Reais - Controllers, Services e Repositories
 
-package "Controller" #D6EAF8 {
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+left to right direction
+
+package "Controllers\nsrc/controllers" {
+  class HealthController
   class AuthController
-  class ProfessorController
-  class ProvaController
-  class MateriaController
-  class TemaController
   class AlunoController
   class AlunoPortalController
-  class QuestaoController
+  class AnalyticsController
+  class AnexoExportarController
+  class CorrecaoController
+  class EmailResultadoController
+  class MateriaController
+  class ProfessorController
+  class ProvaController
   class ProvaQuestaoController
+  class QuestaoController
   class RespostaAlunoController
   class RespostaAnexoController
-  class CorrecaoController
   class ResultadoController
-  class AnexoExportarController
-  class EmailResultadoController
-  class AnalyticsController
+  class TemaController
 }
 
-package "Service" #FEF9E7 {
+package "Services\nsrc/services" {
+  class HealthService
   class AuthService
-  class ProfessorService
-  class MateriaService
-  class TemaService
   class AlunoService
   class AlunoPortalService
-  class QuestaoService
+  class AnalyticsService
+  class AvaliacaoLogService
+  class AnexoExportarService
+  class CorrecaoService
+  class EmailResultadoService
+  interface EmailAdapter
+  class FakeEmailAdapter
+  class MateriaService
+  class ProfessorService
   class ProvaService
   class ProvaQuestaoService
+  class QuestaoService
   class RespostaAlunoService
   class RespostaAnexoService
-  class CorrecaoService
   class ResultadoService
-  class AnexoExportarService
-  class EmailResultadoService
-  class AnalyticsService
+  class StorageService
+  class TemaService
 }
 
-package "Repository" #E8F8E8 {
+package "Repositories\nsrc/repositories" {
+  class DatabaseRepository
   class AuthRepository
-  class ProfessorRepository
-  class MateriaRepository
-  class TemaRepository
   class AlunoRepository
   class AlunoPortalRepository
-  class QuestaoRepository
-  class ProvaRepository
-  class ProvaQuestaoRepository
-  class RespostaAlunoRepository
-  class RespostaAnexoRepository
-  class CorrecaoRepository
-  class ResultadoRepository
+  class AnalyticsRepository
   class AnexoExportarRepository
-  class EmailEnvioRepository
   class AvaliacaoLogRepository
-}
-
-package "Model" #FDEDEC {
-  class Coordenador
-  class Professor
-  class Materia
-  class Tema
-  class Aluno
-  class Questao
-  class Enunciado
-  class Alternativa
-  class Prova
-  class ProvaAluno
-  class RespostaAluno
-  class Correcao
-  class ResultadoAluno
-  class Feedback
-  class Relatorio
-}
-
-Controller ..> Service
-Service ..> Repository
-Repository ..> Model
-
-@enduml
-```
-
-```plantuml
-@startuml Controllers
-class AlunoPortalController {
-  + obterProvaPublica()
-  + iniciarProva()
-}
-
-class RespostaAlunoController {
-  + salvar()
-  + listar()
-  + enviar()
-}
-
-class RespostaAnexoController {
-  + upload()
-}
-
-class CorrecaoController {
-  + listarQuestoes()
-  + executarObjetivas()
-  + listarRespostasPorQuestao()
-  + salvar()
-}
-
-class ResultadoController {
-  + listarPorProva()
-  + exportar()
-}
-
-class AnexoExportarController {
-  + exportar()
-}
-
-class EmailResultadoController {
-  + liberar()
-  + listarEnvios()
-  + reenviar()
-}
-
-class AnalyticsController {
-  + metricas()
-  + participacao()
-  + desempenhoPorQuestao()
-}
-
-package "Services" {
-  class AuthService
-  class ProfessorService
-  class MateriaService
-  class TemaService
-  class AlunoService
-  class AlunoPortalService
-  class QuestaoService
-  class ProvaService
-  class ProvaQuestaoService
-  class RespostaAlunoService
-  class RespostaAnexoService
-  class CorrecaoService
-  class ResultadoService
-  class AnexoExportarService
-  class EmailResultadoService
-  class AnalyticsService
-}
-
-AuthController ..> AuthService
-ProfessorController ..> ProfessorService
-MateriaController ..> MateriaService
-TemaController ..> TemaService
-AlunoController ..> AlunoService
-AlunoPortalController ..> AlunoPortalService
-QuestaoController ..> QuestaoService
-ProvaController ..> ProvaService
-ProvaQuestaoController ..> ProvaQuestaoService
-RespostaAlunoController ..> RespostaAlunoService
-RespostaAnexoController ..> RespostaAnexoService
-CorrecaoController ..> CorrecaoService
-ResultadoController ..> ResultadoService
-AnexoExportarController ..> AnexoExportarService
-EmailResultadoController ..> EmailResultadoService
-AnalyticsController ..> AnalyticsService
-
-@enduml
-```
-
-```plantuml
-@startuml Services
-
-class ResultadoService {
-  + listarPorProva()
-  + exportar()
-}
-
-class AnexoExportarService {
-  + exportar()
-}
-
-class EmailResultadoService {
-  + liberar()
-  + listarEnvios()
-  + reenviar()
-}
-
-class AnalyticsService {
-  + metricas()
-  + participacao()
-}
-
-package "Repositories" {
-  class ProfessorRepository
+  class CorrecaoRepository
+  class EmailEnvioRepository
   class MateriaRepository
-  class TemaRepository
-  class QuestaoRepository
+  class ProfessorRepository
   class ProvaRepository
   class ProvaQuestaoRepository
-  class AlunoPortalRepository
+  class QuestaoRepository
   class RespostaAlunoRepository
   class RespostaAnexoRepository
-  class CorrecaoRepository
   class ResultadoRepository
-  class AnexoExportarRepository
-  class EmailEnvioRepository
-  class AvaliacaoLogRepository
+  class TemaRepository
 }
 
-QuestaoService ..> QuestaoRepository
-QuestaoService ..> MateriaRepository
-QuestaoService ..> TemaRepository
-
-ProvaService ..> ProvaRepository
-ProvaService ..> QuestaoRepository
-
-ProvaQuestaoService ..> ProvaQuestaoRepository
-AlunoPortalService ..> AlunoPortalRepository
-RespostaAlunoService ..> RespostaAlunoRepository
-RespostaAnexoService ..> RespostaAnexoRepository
-
-CorrecaoService ..> CorrecaoRepository
-CorrecaoService ..> RespostaAlunoRepository
-
-ResultadoService ..> ResultadoRepository
-ResultadoService ..> CorrecaoRepository
-
-AnexoExportarService ..> AnexoExportarRepository
-EmailResultadoService ..> EmailEnvioRepository
-AnalyticsService ..> AvaliacaoLogRepository
-
-ProvaService ..> QuestaoService
-CorrecaoService ..> RespostaAlunoService
-ResultadoService ..> CorrecaoService
-EmailResultadoService ..> ResultadoService
-
-@enduml
-```
-
-```plantuml
-@startuml Repositories
-
-scale 0.55
-left to right direction
-
-skinparam dpi 120
-skinparam shadowing false
-skinparam linetype ortho
-skinparam classAttributeIconSize 0
-skinparam classFontSize 8
-skinparam packageStyle rectangle
-
-package "Repositories" {
-
-class AuthRepository {
-  + buscarProfessorPorAuthId()
-  + buscarCoordenadorPorAuthId()
-  + buscarProfessorPorEmail()
-  + buscarCoordenadorPorEmail()
-}
-
-class ProfessorRepository {
-  + findById()
-  + findAll()
-  + findByEmail()
-  + save()
-  + update()
-  + delete()
-}
-
-class MateriaRepository {
-  + findById()
-  + findAll()
-  + findByProfessor()
-  + save()
-  + update()
-  + delete()
-  + associarProfessor()
-}
-
-class TemaRepository {
-  + findById()
-  + findByMateria()
-  + save()
-  + update()
-  + delete()
-}
-
-class AlunoRepository {
-  + findById()
-  + findByCpf()
-  + findByEmail()
-  + save()
-  + update()
-}
-
-class QuestaoRepository {
-  + findById()
-  + findAll()
-  + save()
-  + update()
-  + delete()
-  + saveEnunciado()
-  + saveAlternativa()
-}
-
-class ProvaRepository {
-  + findById()
-  + findAll()
-  + save()
-  + update()
-  + delete()
-  + updateStatus()
-}
-
-class ProvaQuestaoRepository {
-  + adicionar()
-  + listar()
-  + remover()
-}
-
-class AlunoPortalRepository {
-  + obterProvaPublica()
-  + iniciarProva()
-}
-
-class RespostaAlunoRepository {
-  + findById()
-  + save()
-  + update()
-  + saveResposta()
-}
-
-class RespostaAnexoRepository {
-  + findResposta()
-  + saveAnexo()
-}
-
-class CorrecaoRepository {
-  + findById()
-  + save()
-  + update()
-  + upsert()
-  + saveFeedback()
-}
-
-class ResultadoRepository {
-  + findByProvaAluno()
-  + findByProva()
-  + save()
-  + update()
-  + upsert()
-  + saveExportacao()
-}
-
-class AnexoExportarRepository {
-  + listarAnexosPorProva()
-}
-
-class EmailEnvioRepository {
-  + findById()
-  + save()
-  + update()
-}
-
-class AvaliacaoLogRepository {
-  + save()
-  + findByProva()
-  + findByAcao()
-}
-
-}
-
-package "Models" {
-
-class Professor
-class Coordenador
-class Materia
-class Tema
-class Aluno
-class Questao
-class Enunciado
-class Alternativa
-class Prova
-class ProvaAluno
-class RespostaAluno
-class RespostaAnexo
-class Correcao
-class Feedback
-class ResultadoAluno
-class ExportacaoResultado
-class Relatorio
-class EmailEnvio
-class AvaliacaoLog
-
-}
-
-AuthRepository ..> Professor
-AuthRepository ..> Coordenador
-
-ProfessorRepository ..> Professor
-
-MateriaRepository ..> Materia
-TemaRepository ..> Tema
-AlunoRepository ..> Aluno
-
-QuestaoRepository ..> Questao
-QuestaoRepository ..> Enunciado
-QuestaoRepository ..> Alternativa
-
-ProvaRepository ..> Prova
-
-ProvaQuestaoRepository ..> Prova
-ProvaQuestaoRepository ..> Questao
-AlunoPortalRepository ..> ProvaAluno
-AlunoPortalRepository ..> Aluno
-RespostaAlunoRepository ..> RespostaAluno
-RespostaAnexoRepository ..> RespostaAnexo
-
-CorrecaoRepository ..> Correcao
-CorrecaoRepository ..> Feedback
-
-ResultadoRepository ..> ResultadoAluno
-ResultadoRepository ..> ExportacaoResultado
-
-AnexoExportarRepository ..> RespostaAnexo
-
-EmailEnvioRepository ..> EmailEnvio
-
-AvaliacaoLogRepository ..> AvaliacaoLog
-
-@enduml
-```
-
-```plantuml
-@startuml Dominio
-skinparam classAttributeIconSize 0
-
-class Coordenador
-class Professor
-class Materia
-class Tema
-class Questao
-class Enunciado
-class Alternativa
-class Prova
-class ProvaQuestao
-class ProvaAluno
-class RespostaAluno
-class RespostaAnexo
-class Correcao
-class Feedback
-class ResultadoAluno
-class Relatorio
-class ExportacaoResultado
-class EmailEnvio
-class AvaliacaoLog
-class Aluno
-
-Coordenador ||--o{ Professor
-Materia ||--o{ Tema
-Materia ||--o{ Questao
-Tema ||--o{ Questao
-
-Questao ||--|| Enunciado
-Questao ||--o{ Alternativa
-
-Professor ||--o{ Prova
-Materia ||--o{ Prova
-
-Prova ||--o{ ProvaQuestao
-Questao ||--o{ ProvaQuestao
-
-Aluno ||--o{ ProvaAluno
-Prova ||--o{ ProvaAluno
-
-ProvaAluno ||--o{ RespostaAluno
-Questao ||--o{ RespostaAluno
-
-RespostaAluno ||--o{ RespostaAnexo
-RespostaAluno ||--|| Correcao
-
-Correcao ||--o{ Feedback
-
-ProvaAluno ||--|| ResultadoAluno
-
-Prova ||--o{ Relatorio
-Prova ||--o{ ExportacaoResultado
-ProvaAluno ||--o{ EmailEnvio
-Prova ||--o{ AvaliacaoLog
-
-@enduml
-```
-
-```plantuml
-@startuml FluxoCorrecao
-
-left to right direction
-scale 0.8
-
-skinparam shadowing false
-skinparam linetype ortho
-
-class Professor
-class Prova
-class ProvaAluno
-class RespostaAluno
-class Correcao
-class Feedback
-class ResultadoAluno
-
-Professor --> Correcao : corrige
-Prova --> ProvaAluno
-ProvaAluno --> RespostaAluno
-RespostaAluno --> Correcao
-Correcao --> Feedback
-Correcao --> ResultadoAluno
-
-@enduml
-```
-
-```plantuml
-@startuml FluxoAplicacaoProva
-
-left to right direction
-scale 0.8
-
-skinparam shadowing false
-skinparam linetype ortho
-
-class Aluno
-class Prova
-class ProvaAluno
-class Questao
-class RespostaAluno
-class RespostaAnexo
-
-Aluno --> ProvaAluno
-Prova --> ProvaAluno
-Prova --> Questao
-
-ProvaAluno --> RespostaAluno
-Questao --> RespostaAluno
-
-RespostaAluno --> RespostaAnexo
+HealthController --> HealthService
+AuthController --> AuthService
+AlunoController --> AlunoService
+AlunoPortalController --> AlunoPortalService
+AnalyticsController --> AnalyticsService
+AnalyticsController --> AvaliacaoLogService
+AnexoExportarController --> AnexoExportarService
+CorrecaoController --> CorrecaoService
+EmailResultadoController --> EmailResultadoService
+MateriaController --> MateriaService
+ProfessorController --> ProfessorService
+ProvaController --> ProvaService
+ProvaQuestaoController --> ProvaQuestaoService
+QuestaoController --> QuestaoService
+RespostaAlunoController --> RespostaAlunoService
+RespostaAnexoController --> RespostaAnexoService
+ResultadoController --> ResultadoService
+TemaController --> TemaService
+
+HealthService --> DatabaseRepository
+AuthService --> AuthRepository
+AlunoService --> AlunoRepository
+AlunoPortalService --> AlunoPortalRepository
+AnalyticsService --> AnalyticsRepository
+AvaliacaoLogService --> AvaliacaoLogRepository
+AnexoExportarService --> AnexoExportarRepository
+CorrecaoService --> CorrecaoRepository
+EmailResultadoService --> EmailEnvioRepository
+EmailResultadoService --> ResultadoRepository
+EmailResultadoService --> EmailAdapter
+FakeEmailAdapter ..|> EmailAdapter
+MateriaService --> MateriaRepository
+ProfessorService --> ProfessorRepository
+ProvaService --> ProvaRepository
+ProvaQuestaoService --> ProvaQuestaoRepository
+QuestaoService --> QuestaoRepository
+RespostaAlunoService --> RespostaAlunoRepository
+RespostaAnexoService --> RespostaAnexoRepository
+RespostaAnexoService --> StorageService
+ResultadoService --> ResultadoRepository
+ResultadoService --> EmailEnvioRepository
+TemaService --> TemaRepository
 
 @enduml
 ```
