@@ -2,7 +2,7 @@ import { describe, expect, it, jest } from "@jest/globals";
 import { AvaliacaoLogService } from "../../services/avaliacao-log.service.js";
 
 describe("AvaliacaoLogService - unitário", () => {
-  it("deve registrar log delegando campos ao repository", async () => {
+  it("deve repassar campos do log para o repository", async () => {
     const repo = {
       create: jest.fn<any>().mockResolvedValue({ id: "log-1" }),
     };
@@ -12,7 +12,7 @@ describe("AvaliacaoLogService - unitário", () => {
       provaAlunoId: "pa-1",
       atorTipo: "aluno",
       atorId: "aluno-1",
-      acao: "acesso",
+      acao: "iniciou",
       detalhes: { ip: "127.0.0.1" },
     };
 

@@ -299,4 +299,36 @@ describe("ProvaQuestaoController - integração", () => {
     );
     expect(persisted.rows).toHaveLength(0);
   });
+
+  it("deve retornar 422 ao remover questão com provaId inválido", async () => {
+    const response = await request(app.server)
+      .delete(`/api/v1/provas/prova-invalida/questoes/${seed.questaoId}`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(422);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("deve retornar 404 ao remover questão que não está vinculada à prova", async () => {
+    const response = await request(app.server)
+      .delete(`/api/v1/provas/${seed.provaId}/questoes/${seed.questaoId}`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve bloquear com 409 remoção de questão quando a prova já foi publicada", async () => {
+    const vinculada = await pool.query<{ questao_id: string }>(
+      'SELECT "questao_id" FROM "prova_questao" WHERE "prova_id" = $1 LIMIT 1',
+      [seed.provaPublicadaId],
+    );
+
+    const response = await request(app.server)
+      .delete(`/api/v1/provas/${seed.provaPublicadaId}/questoes/${vinculada.rows[0].questao_id}`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(409);
+    expect(response.body.error.code).toBe("CONFLICT");
+  });
 });

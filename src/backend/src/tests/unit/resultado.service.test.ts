@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
-import type { AuthUser } from "../../models/auth.model.js";
+import type { AuthUser } from "../../middlewares/auth.js";
 import { ResultadoService } from "../../services/resultado.service.js";
 
 const professor: AuthUser = { id: "prof-1", nome: "Professor", email: "prof@test.com", perfil: "professor" };
@@ -23,6 +23,7 @@ const resultados = [
 ];
 
 const makeRepo = () => ({
+  findProvaExists: jest.fn<any>().mockResolvedValue(true),
   hasAccessToProva: jest.fn<any>().mockResolvedValue(true),
   findByProva: jest.fn<any>().mockResolvedValue(resultados),
   createExportacao: jest.fn<any>().mockResolvedValue({ id: "exp-1", urlArquivo: "/exports/a.csv" }),
@@ -61,6 +62,12 @@ describe("ResultadoService - unitário", () => {
     );
   });
 
+  it("deve lançar notFound ao consolidar prova inexistente", async () => {
+    repo.findProvaExists.mockResolvedValue(false);
+
+    await expect(service.consolidarPorProva("prova-x", professor)).rejects.toThrow("Prova não encontrada.");
+  });
+
   it("deve exportar CSV para coordenador", async () => {
     const result = await service.exportarPorProva("prova-1", { formato: "csv" } as any, coordenador);
 
@@ -87,5 +94,11 @@ describe("ResultadoService - unitário", () => {
     await expect(service.exportarPorProva("prova-1", { formato: "csv" } as any, professor)).rejects.toThrow(
       "Somente coordenadores podem exportar resultados.",
     );
+  });
+
+  it("deve lançar notFound ao exportar prova inexistente", async () => {
+    repo.findProvaExists.mockResolvedValue(false);
+
+    await expect(service.exportarPorProva("prova-x", { formato: "csv" } as any, coordenador)).rejects.toThrow("Prova não encontrada.");
   });
 });

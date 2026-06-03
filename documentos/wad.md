@@ -4934,9 +4934,58 @@ Essa consulta insere uma nova questão ativa de múltipla escolha no banco de da
 
 ## 3.7. WebAPI e endpoints (sprints 3 e 4)
 
-*Utilize um link para outra página de documentação contendo a descrição completa de cada endpoint. Ou descreva aqui cada endpoint criado para seu sistema.* 
+A WebAPI esta implementada em Fastify, documentada por Swagger UI em /docs e registrada sob o prefixo /api/v1. A documentacao OpenAPI e gerada a partir dos schemas Zod usados nas rotas.
 
-*Cada endpoint deve conter endereço, método (GET, POST, PUT, PATCH, DELETE), header, body, formatos de response e os status codes possíveis (200, 201, 204, 400, 401, 403, 404, 409, 422, 500).*
+| Item | Padrao |
+|------|--------|
+| Base URL | /api/v1 |
+| Swagger UI | /docs |
+| Header protegido | Authorization: Bearer <token> |
+| Content-Type | application/json; uploads usam multipart/form-data |
+| Sucesso | { "success": true, "data": ..., "meta": ... } |
+| Erro | { "success": false, "error": { "code": "...", "message": "...", "details": ... } } |
+| Status comuns | 200, 201, 204, 400, 401, 403, 404, 409, 422 e 500 |
+
+| Dominio | Metodo | Rota | Entrada | Resposta | Status | RF/RN |
+|---------|--------|------|---------|----------|--------|-------|
+| Saude | GET | /api/v1/health | Sem body | Status da aplicacao | 200 | RNF disponibilidade |
+| Saude | GET | /api/v1/health/db | Sem body | Status do PostgreSQL | 200, 500 | RNF disponibilidade |
+| Auth | GET | /api/v1/auth/google | Sem body | Inicio OAuth | 200, 302 | RF002/RN18 |
+| Auth | GET | /api/v1/auth/google/callback | Query OAuth | Token/sessao | 200, 401, 422 | RF002/RN18 |
+| Auth | GET | /api/v1/auth/me | Bearer token | Usuario autenticado | 200, 401 | RF002/RN18/RN19 |
+| Auth | POST | /api/v1/auth/logout | Bearer token | Logout | 200, 401 | RF002 |
+| Provas | POST | /api/v1/provas | Body da prova | Prova em rascunho | 201, 401, 403, 422 | RF001/RF021 |
+| Provas | GET | /api/v1/provas | Filtros status, turma, semestre, materia, professor | Lista filtrada | 200, 401, 403, 422 | RF001/RF022 |
+| Provas | GET/PUT/DELETE | /api/v1/provas/:provaId | Path e body quando edicao | Detalhe, edicao ou remocao | 200, 204, 401, 403, 404, 409, 422 | RF001/RF021 |
+| Provas | GET | /api/v1/provas/:provaId/status-historico | Path provaId | Historico | 200, 401, 403, 404, 422 | RF020 |
+| Provas | PATCH | /api/v1/provas/:provaId/configuracoes | Datas, tempo e embaralhamento | Configuracoes | 200, 401, 403, 404, 409, 422 | RF007/RF023 |
+| Provas | POST | /api/v1/provas/:provaId/publicar | Configuracao | URL e QR Code | 200, 401, 403, 404, 409, 422 | RF008 |
+| Provas | POST | /api/v1/provas/:provaId/encerrar | Path provaId | Prova encerrada | 200, 401, 403, 404, 409, 422 | RF001 |
+| Provas | POST | /api/v1/provas/:provaId/arquivar | Path provaId | Prova antiga | 200, 401, 403, 404, 409, 422 | RF001 |
+| Questoes | POST/GET | /api/v1/questoes | Body ou filtros | Questao criada/listada | 200, 201, 401, 403, 422 | RF003-RF006 |
+| Questoes | GET/PUT/DELETE | /api/v1/questoes/:questaoId | Path e body quando edicao | Detalhe, edicao ou remocao | 200, 204, 401, 403, 404, 409, 422 | RF003-RF006 |
+| Prova-questao | POST/GET | /api/v1/provas/:provaId/questoes | questaoId, ordem, pontuacao | Vinculo/lista | 200, 201, 401, 403, 404, 409, 422 | RF003 |
+| Prova-questao | DELETE | /api/v1/provas/:provaId/questoes/:questaoId | Path provaId/questaoId | Sem conteudo | 204, 401, 403, 404, 409, 422 | RF003 |
+| Portal aluno | GET | /api/v1/public/provas/:urlAcesso | Link publico | Dados publicos da prova | 200, 404, 409, 422 | RF009/RF024/RF025 |
+| Portal aluno | POST | /api/v1/public/provas/:urlAcesso/iniciar | Nome, e-mail, CPF e aceite | prova_aluno e questoes | 201, 404, 409, 422 | RF009 |
+| Respostas | PUT | /api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId | Texto, alternativa ou metadados | Resposta salva | 200, 404, 409, 422 | RF010/RF011/RF026 |
+| Respostas | GET | /api/v1/public/provas-aluno/:provaAlunoId/respostas | Path provaAlunoId | Respostas salvas | 200, 404, 422 | RF026 |
+| Respostas | POST | /api/v1/public/provas-aluno/:provaAlunoId/enviar | Confirmacao | Prova enviada | 200, 404, 409, 422 | RF026 |
+| Anexos | POST | /api/v1/public/respostas/:respostaId/anexos | multipart/form-data | Anexo registrado | 201, 400, 404, 409, 422 | RF012/RF013 |
+| Correcao | GET | /api/v1/provas/:provaId/correcao/questoes | Path provaId | Questoes para correcao | 200, 401, 403, 422 | RF014 |
+| Correcao | POST | /api/v1/provas/:provaId/correcao/objetivas | Path provaId | Objetivas corrigidas | 200, 401, 403, 422 | RF014 |
+| Correcao | GET | /api/v1/provas/:provaId/questoes/:questaoId/respostas | Path prova/questao | Respostas para correcao | 200, 401, 403, 422 | RF014/RF016 |
+| Correcao | PUT | /api/v1/respostas/:respostaId/correcao | Nota, observacao, feedback | Correcao salva | 200, 401, 403, 404, 409, 422 | RF015 |
+| Resultados | GET | /api/v1/provas/:provaId/resultados | Path provaId | Resultados consolidados | 200, 401, 403, 422 | RF017/RF019 |
+| Resultados | POST | /api/v1/provas/:provaId/resultados/exportar | Formato | Exportacao registrada | 201, 401, 403, 422 | RF017 |
+| E-mail | POST | /api/v1/provas/:provaId/resultados/liberar-email | Configuracao | E-mails gerados | 200, 401, 403, 422 | RF027 |
+| E-mail | GET | /api/v1/provas/:provaId/emails | Path provaId | Historico de e-mails | 200, 401, 403, 422 | RF027 |
+| E-mail | POST | /api/v1/emails/:emailEnvioId/reenviar | Path emailEnvioId | Reenvio | 200, 401, 403, 404, 422 | RF027 |
+| Analytics | GET | /api/v1/provas/:provaId/analytics | Path provaId | Metricas | 200, 401, 403, 422 | RF019 |
+| Analytics | POST | /api/v1/logs | Evento e contexto | Log registrado | 201, 401, 403, 422 | RF019/RF020 |
+| Anexos | POST | /api/v1/provas/:provaId/anexos/exportar | Filtros/formato | Exportacao de anexos | 201, 401, 403, 422 | RF028 |
+| Coordenador | GET | /api/v1/coordenador/provas | Filtros | Painel de provas | 200, 401, 403, 422 | RF018 |
+| Cadastros | CRUD | /api/v1/professores, /materias, /temas, /alunos | Path/body/query | Cadastro criado/listado/editado/removido | 200, 201, 204, 401, 403, 404, 409, 422 | RF003/RF018/RF009 |
 
 ## 3.8. Autenticação, Autorização e Resiliência (sprint 5)
 
@@ -5042,163 +5091,6 @@ Os próximos passos são programar o frontend, implementar os endpoints principa
 - ***Black-box*** *— testes de integração dos endpoints via Jest + Supertest, verificando apenas o contrato HTTP (status, body, efeito observável), sem depender da implementação interna.*
 
 *Posicione aqui também o relatório de cobertura de testes Jest se houver (através de link ou transcrito para estrutura markdown).*
-
-### 5.1.1. Estratégia de Testes
-
-| Camada | Técnica | Ferramenta | Escopo |
-|--------|---------|------------|--------|
-| **Service** | White-box unitário com mocks | Jest | Regras de negócio, exceções, fluxos alternativos, máquina de estados |
-| **Controller** | Black-box integração via HTTP | Jest + Supertest + `buildApp()` | Contrato HTTP (status, body, headers), schemas Zod, autorização |
-| **Repository** | White-box query (opcional) | Jest + pool direto | SQL não trivial: filtros dinâmicos, agregações, CTEs |
-
-**Service** — testado isoladamente com dependências mockadas. A maioria dos serviços recebe dependências por construtor e usa mocks criados com `jest.fn()` (ex.: `AlunoPortalService` em `aluno-portal.service.test.ts`). Serviços com dependências importadas internamente usam `jest.unstable_mockModule` para substituir o módulo antes do `import()` dinâmico, com `jest.resetModules()` em `beforeEach` para limpar o cache (ex.: `ProvaService` em `prova.service.test.ts`). Em ambos os casos, mocks são renovados a cada teste — por `beforeEach` com `mockReset()` ou pela recriação das funções via factory.
-
-**Controller** — endpoints testados via requisições HTTP reais contra a instância Fastify de `buildApp()`. Verifica exclusivamente o contrato público (status, body, headers). O banco é populado por `INSERT` direto via `pool.query()` em `beforeAll`/`beforeEach` e limpo por prefixo `TEST_PREFIX` em `afterAll`.
-
-**Repository** — testado apenas quando contém lógica SQL não trivial. Caso contrário, o teste de integração do controller já cobre o caminho.
-
-**AAA (Arrange, Act, Assert):** todo teste segue esta estrutura. Exemplo real de `aluno-portal.service.test.ts`:
-
-```ts
-// Arrange — beforeEach monta o cenário
-beforeEach(() => {
-  dateSpy = jest.spyOn(Date, "now").mockReturnValue(new Date("2026-06-01T12:00:00Z").getTime());
-  repo = makeRepo();
-  service = new AlunoPortalService(repo as any);
-});
-
-// Act & Assert — it executa e verifica
-it("CT05 - RN05 - deve obter dados públicos de prova disponível dentro do período", async () => {
-  await expect(service.obterProvaPublica("url-1")).resolves.toEqual({
-    titulo: "Prova",
-    instrucoes: "Leia",
-    tempoLimiteMin: 60,
-    dataInicio: prova.dataInicio,
-    dataFim: prova.dataFim,
-    disponivel: true,
-  });
-});
-```
-
-**Determinismo:**
-- **Ordem** — testes unitários isolam estado com `beforeEach` + `mockReset()` (ou recriação de mocks). Testes de integração limpam banco por prefixo `TEST_PREFIX` em `beforeEach` + `afterAll`.
-- **Relógio** — datas controladas via `jest.spyOn(Date, "now").mockReturnValue(...)`, restaurado com `mockRestore()` em `afterEach`. Usado em 4 arquivos de teste (aluno-portal, resposta-aluno, resposta-anexo, resultado).
-- **Rede externa** — storage, e-mail e APIs externas são sempre mockados (`jest.fn()` ou `unstable_mockModule`).
-- **Dados residuais** — testes de integração usam `randomUUID()` + `TEST_PREFIX` único por arquivo, com `DELETE` por prefixo em `afterAll`.
-
-### 5.1.2. Testes Unitários de Service
-
-Os testes unitários da camada Service foram versionados no mesmo repositório do projeto, em `src/backend/src/tests/unit`, utilizando a nomenclatura padronizada `*.service.test.ts`. Esses testes exercitam a lógica de negócio de forma isolada, com dependências externas substituídas por mocks de repositories, storage, data/hora e serviços auxiliares.
-
-#### Relatório de cobertura Jest
-
-A cobertura da camada Service foi evidenciada pelo relatório Jest gerado pelo comando completo de testes com cobertura. A execução foi realizada no diretório `src/backend`, com o comando exigido para a evidência:
-
-```bash
-npm test -- --coverage
-```
-
-Esse comando executa a suíte automatizada versionada no repositório, incluindo testes unitários de Service (`*.service.test.ts`) e testes de integração (`*.integration.test.ts`), e gera o relatório Jest em:
-
-```text
-src/backend/coverage/lcov-report/index.html
-src/backend/coverage/lcov.info
-src/backend/coverage/coverage-final.json
-```
-
-O critério de aceite definido para esta seção é cobertura mínima de 80% na camada `src/services`. O resultado obtido ultrapassa o mínimo exigido em todos os indicadores principais:
-
-| Camada avaliada | Statements | Branches | Functions | Lines | Critério | Situação |
-|-----------------|------------|----------|-----------|-------|----------|----------|
-| `src/services` | 98,45% | 95,65% | 100% | 98,60% | ≥ 80% | Aprovado |
-
-Resumo da execução registrada pelo Jest:
-
-```text
-Test Suites: 43 passed, 43 total
-Tests:       376 passed, 376 total
-```
-
-Portanto, a camada Service atende ao requisito de cobertura mínima. Além disso, a medição é reproduzível, pois o comando, a nomenclatura dos testes e o caminho do relatório gerado estão documentados no próprio WAD.
-
-#### Casos de teste vinculados às Regras de Negócio
-
-A tabela abaixo vincula os casos de teste unitários de Service às Regras de Negócio (RN) na ordem de prioridade definida no artefato 1. Quando a RN possui parte relevante no frontend ou em integração de endpoint, a coluna de evidência informa o limite da cobertura unitária de Service.
-
-| CT | RN | Service / arquivo de teste | Caso de teste principal | Evidência |
-|----|----|----------------------------|-------------------------|-----------|
-| CT01 | RN01 | `ProvaService` — `prova.service.test.ts` | Impede edição/publicação/arquivamento em estados inválidos e valida transições de status. | Cobertura direta da máquina de estados da prova. |
-| CT02 | RN02 | `ProvaService` — `prova.service.test.ts` | Delega filtros de listagem ao repository com query recebida pelo Service. | Cobertura parcial no Service; combinação SQL dos filtros é responsabilidade do repository/integração. |
-| CT03 | RN03 | `QuestaoService` — `questao.service.test.ts` | Valida criação de questões por tipo, alternativas, alternativa correta, ordem duplicada e limites de discursiva. | Cobertura direta das regras de criação de questão. |
-| CT04 | RN04 | `RespostaAnexoService` — `resposta-anexo.service.test.ts` | Valida upload de anexo, tipo MIME, tamanho, vínculo da resposta e permissão de anexo na questão. | Cobertura direta do controle de upload no Service. |
-| CT05 | RN05 | `RespostaAlunoService` e `AlunoPortalService` — `resposta-aluno.service.test.ts`, `aluno-portal.service.test.ts` | Bloqueia resposta/início fora do período ou quando a prova não está publicada. | Cobertura direta de janela de tempo e disponibilidade. |
-| CT06 | RN06 | `ProvaService` — `prova.service.test.ts` | Atualiza configurações de prova, incluindo flags de embaralhamento de questões e alternativas. | Cobertura direta da configuração; aplicação visual da ordem depende do fluxo de entrega da prova. |
-| CT07 | RN07 | `ProvaService` — `prova.service.test.ts` | Publica prova em rascunho após validar pré-requisitos. | Cobertura direta da publicação; geração material de URL/QR Code é validada no repository/integração. |
-| CT08 | RN08 | `AlunoPortalService` — `aluno-portal.service.test.ts` | Inicia prova para aluno e bloqueia nova tentativa quando já existe submissão final. | Cobertura direta da prevenção de múltiplas submissões. |
-| CT09 | RN09 | `AlunoPortalService` — `aluno-portal.service.test.ts` | Retorna instruções, tempo limite e disponibilidade da prova pública antes do início. | Cobertura parcial no Service; exibição do cronômetro é responsabilidade do frontend. |
-| CT10 | RN10 | `QuestaoService` / `RespostaAlunoService` — `questao.service.test.ts`, `resposta-aluno.service.test.ts` | Mantém enunciado e respostas associados às questões, sem alterar conteúdo recebido. | Cobertura parcial no Service; renderização de fórmulas e ampliação de imagens dependem do frontend. |
-| CT11 | RN11 | `RespostaAnexoService` — `resposta-anexo.service.test.ts` | Valida o recebimento de anexos já enviados ao backend e rejeita arquivos inválidos. | Cobertura parcial; compressão de imagem é client-side. |
-| CT12 | RN12 | `RespostaAlunoService` — `resposta-aluno.service.test.ts` | Finaliza envio definitivo e retorna resumo de questões em branco vindo do repository. | Cobertura direta do envio final no Service. |
-| CT13 | RN13 | `CorrecaoService` — `correcao.service.test.ts` | Salva correção manual, valida nota máxima, status da prova do aluno e vínculo do professor. | Cobertura direta da correção por questão. |
-| CT14 | RN14 | `ResultadoService` — `resultado.service.test.ts` | Consolida resultados e exporta CSV/XLSX para storage. | Cobertura direta do processamento e exportação de resultados. |
-| CT15 | RN15 | `EmailResultadoService` — `email-resultado.service.test.ts` | Bloqueia liberação com pendências sem confirmação e registra falhas de envio/reenvio. | Cobertura direta da divulgação controlada de resultados. |
-| CT16 | RN16 | `AnexoExportarService` — `anexo-exportar.service.test.ts` | Exporta anexos somente quando a prova existe. | Cobertura parcial no Service; integridade aluno/questão é completada pelo repository/integração. |
-| CT17 | RN17 | `AnalyticsService` e `ResultadoService` — `analytics.service.test.ts`, `resultado.service.test.ts` | Valida acesso e retorna métricas/resultados consolidados. | Cobertura direta da camada de Service para relatórios e analytics. |
-| CT18 | RN18 | `ProvaService`, `QuestaoService`, `CorrecaoService` — respectivos `*.service.test.ts` | Bloqueia ações de perfis indevidos e valida vínculo professor-matéria. | Cobertura direta de autorização de negócio no Service. |
-| CT19 | RN19 | `AuthService` — `auth.service.test.ts` | Nega e-mail não autorizado e retorna sessão local para usuários autorizados em modo de teste. | Cobertura direta da verificação de e-mail autorizado no Service. |
-| CT20 | RN20 | `QuestaoService` e `ProvaQuestaoService` — `questao.service.test.ts`, `prova-questao.service.test.ts` | Lista questões com filtros e impede associação duplicada/incompatível a provas. | Cobertura direta das regras de banco de questões e vínculo ao editor da prova. |
-
-#### Análise dos 5 casos prioritários
-
-**CT01 -> RN01 — Estados válidos da prova**
-
-O CT01 está concentrado em `prova.service.test.ts` e valida a regra mais central do domínio: a prova não é um cadastro livre, ela passa por uma máquina de estados. A RN01 define que o sistema deve trabalhar com estados válidos (`rascunho`, `publicada`, `encerrada`, `antiga`), impedindo edição quando o estado não permite alteração. Por isso, o teste não verifica apenas se um método retorna sucesso; ele força o `ProvaService` a tomar decisões de negócio em cada transição.
-
-- **Cenários cobertos:** criação de prova sempre em `rascunho`; atualização permitida somente em `rascunho`; publicação permitida somente em `rascunho`; encerramento permitido somente quando a prova está `publicada`; arquivamento permitido somente quando está `encerrada`; remoção permitida somente para prova em `rascunho` sem submissões.
-- **AAA:** no Arrange, o teste monta provas com `makeProva()` e altera apenas o status necessário para cada cenário, além de configurar mocks como `mockFindById`, `mockHasAccess`, `mockUpdate`, `mockPublish`, `mockUpdateStatus` e `mockHasSubmissions`. No Act, chama diretamente métodos do Service (`atualizar`, `publicar`, `encerrar`, `arquivar`, `remover`). No Assert, verifica tanto o retorno do caminho feliz quanto a exceção esperada no caminho inválido.
-- **Determinismo:** não há banco real, API externa ou dependência de horário. O resultado depende apenas dos objetos literais e dos valores retornados pelos mocks. Isso torna o teste repetível em qualquer máquina e evita falso positivo por estado residual do banco.
-- **RN coberta:** RN01 é protegida porque o teste garante que uma prova não pula etapas nem sofre alteração em estado indevido. Se alguém remover a validação de status no `ProvaService`, a suíte quebra imediatamente.
-- **Caminho de falha:** os principais caminhos negativos verificam mensagens como "Apenas provas em rascunho podem ser editadas.", "Apenas provas em rascunho podem ser publicadas.", "Apenas provas publicadas podem ser encerradas.", "Apenas provas encerradas podem ser arquivadas." e "Não é possível remover prova com submissões de alunos.".
-
-**CT02 -> RN02 — Filtros combinados de prova**
-
-A RN02 exige que filtros combinados sejam aplicados em listagens de prova. Na arquitetura do projeto, o `ProvaService` não executa SQL diretamente; sua responsabilidade é receber a query validada pelo controller/schema, preservar os critérios informados e delegar a consulta ao repository com o usuário autenticado. O CT02 documenta exatamente esse contrato entre Service e Repository.
-
-- **Cenários cobertos:** listagem com query contendo paginação e status; delegação integral da query para `repository.findMany`; retorno do objeto paginado gerado pelo repository.
-- **AAA:** no Arrange, o teste configura `mockFindMany` para retornar `{ data: [], total: 0 }` e monta uma query como `{ page: 1, limit: 10, status: "rascunho" }`. No Act, executa `ProvaService.listar(query, professor)`. No Assert, verifica `toHaveBeenCalledWith(query, professor)` e confirma que o retorno do Service é exatamente o retorno do repository.
-- **Determinismo:** o conjunto de resultados não depende de dados reais, ordem de banco, índices ou fixtures. A resposta é controlada por mock, e o foco do teste fica no comportamento do Service: não perder, reescrever ou ignorar filtros.
-- **RN coberta:** a cobertura da RN02 é parcial na camada Service, mas relevante: ela garante que os filtros chegam à camada de consulta. A combinação final por `turma`, `semestre`, `materiaId` e `professorId` deve ser validada complementarmente nos testes de repository/integração, pois ali está a composição SQL.
-- **Caminho de falha:** o risco protegido aqui é regressão por quebra de contrato, por exemplo o Service chamar `findMany` sem repassar o `user`, descartar filtros ou montar uma query diferente da recebida. Esse tipo de falha impediria a RN02 de ser atendida mesmo que o repository estivesse correto.
-
-**CT03 -> RN03 — Criação correta de questões**
-
-O CT03 é um dos testes mais importantes da suíte unitária porque a RN03 concentra várias regras de consistência do banco de questões. O `QuestaoService` valida antes de persistir, evitando que o repository receba questões semanticamente inválidas. Isso reduz erro em cascata na publicação da prova e na correção automática.
-
-- **Cenários cobertos:** criação válida de múltipla escolha com pelo menos duas alternativas e exatamente uma correta; criação válida de discursiva sem alternativas; rejeição de alternativas com `ordemOriginal` duplicada; rejeição de discursiva com alternativas; rejeição de múltipla escolha sem exatamente uma correta; rejeição de verdadeiro/falso sem exatamente duas alternativas; rejeição de limites/anexo em questão objetiva; validação de matéria inexistente; validação de tema fora da matéria; validação de professor sem vínculo.
-- **AAA:** no Arrange, os testes montam objetos de entrada com `materiaId`, `tipo`, `enunciado` e `alternativas`, além de configurar mocks como `materiaExists`, `temaBelongsToMateria` e `professorMateriaVinculados`. No Act, chamam `QuestaoService.criar` ou `QuestaoService.atualizar`. No Assert, verificam se `repo.create`/`repo.update` foi chamado nos casos válidos ou se a exceção de regra de negócio foi lançada nos casos inválidos.
-- **Determinismo:** as entradas são literais e pequenas, sem geração aleatória. As respostas de vínculo com matéria, tema e professor são controladas por mock. Não existe dependência de banco, ordem de execução ou estado anterior de alternativas.
-- **RN coberta:** RN03 é coberta diretamente, pois o teste protege as invariantes de criação da questão: tipo válido, alternativas coerentes com o tipo, exatamente uma alternativa correta nas objetivas e ausência de alternativas em discursivas.
-- **Caminho de falha:** os caminhos negativos simulam erros reais de uso do editor de questão. As mensagens verificadas incluem "Ordem de alternativa duplicada.", "Questões discursivas não devem ter alternativas.", "Questões de múltipla escolha precisam ter pelo menos duas alternativas e exatamente uma correta.", "Questões de verdadeiro/falso precisam ter exatamente duas alternativas e uma correta.", "Limites e anexos só são válidos para questões discursivas.", "Matéria informada não existe.", "Tema informado não pertence à matéria da questão." e "Professor não está vinculado à matéria informada.".
-
-**CT04 -> RN04 — Controle de envio de anexos**
-
-O CT04 verifica a parte de Service da RN04: controlar se um arquivo pode ou não ser anexado a uma resposta. A regra não é apenas "receber arquivo"; antes do vínculo ser criado, o Service precisa confirmar contexto da resposta, status da prova do aluno, disponibilidade da prova, permissão de anexo na questão, MIME permitido e tamanho máximo.
-
-- **Cenários cobertos:** upload válido de PDF/JPEG/PNG; sanitização do nome do arquivo; resposta inexistente; prova do aluno fora de `em_andamento`; prova não publicada; prova fora da janela de tempo; questão que não permite anexo; MIME inválido; arquivo vazio; falha ao registrar log de erro sem esconder a exceção principal.
-- **AAA:** no Arrange, o teste cria `validContext` com `provaAlunoStatus`, `provaStatus`, `dataInicio`, `dataFim` e `permiteAnexo`, além de criar um `MultipartFile` com `filename`, `mimeType` e `content`. No Act, chama `RespostaAnexoService.salvarAnexo(respostaId, file)`. No Assert, confirma `repo.create` com `nomeArquivo` sanitizado e metadados corretos ou valida a exceção lançada.
-- **Determinismo:** `Date.now()` é mockado para `2026-06-01T12:00:00Z`, deixando a janela de tempo previsível. O conteúdo do arquivo é um `Buffer` fixo e o repository/log são mocks. O teste não grava arquivo no disco nem usa storage externo.
-- **RN coberta:** RN04 é coberta diretamente na camada Service, porque o teste garante que upload só passa quando habilitado e válido. Também protege o vínculo correto com `respostaId` e o registro de metadados como MIME, tamanho e URL.
-- **Caminho de falha:** os caminhos negativos verificam mensagens como "Resposta não encontrada.", "A prova do aluno não está em andamento.", "Prova indisponível para upload de anexo.", "Prova fora do período de resposta.", "A questão respondida não permite anexo.", "Tipo de arquivo inválido." e "Arquivo deve ter até 5MB.". Além disso, o teste confirma que falha de log não mascara o erro original do upload.
-
-**CT05 -> RN05 — Tempo e acesso à prova**
-
-O CT05 cobre a regra temporal da aplicação. A RN05 exige que a prova só possa ser iniciada/respondida dentro do período configurado e quando o estado permitir acesso. Essa regra aparece em dois pontos de Service: no `AlunoPortalService`, antes de exibir/iniciar a prova pública, e no `RespostaAlunoService`, antes de salvar rascunho ou finalizar envio.
-
-- **Cenários cobertos:** prova pública disponível no intervalo correto; link inexistente; prova não publicada; prova antes do início; resposta salva durante a janela válida; prova do aluno inexistente; sessão do aluno já enviada/corrigida; prova indisponível para resposta; prova fora do período; envio final com retorno de questões em branco.
-- **AAA:** no Arrange, o teste monta contextos com `status`, `provaStatus`, `dataInicio` e `dataFim`, além de respostas de repository como `findPublicByUrl`, `findProvaAlunoContext`, `findQuestaoDaProva` e `markAsSubmitted`. No Act, chama `AlunoPortalService.obterProvaPublica`, `AlunoPortalService.iniciarProva`, `RespostaAlunoService.salvarRascunho` ou `RespostaAlunoService.enviarFinal`. No Assert, verifica retorno de disponibilidade/envio ou exceções de conflito/notFound.
-- **Determinismo:** `Date.now()` é congelado nos testes, então uma prova que está dentro ou fora da janela sempre terá o mesmo resultado. Isso evita teste intermitente por causa do relógio real da máquina ou mudança de dia.
-- **RN coberta:** RN05 é coberta diretamente, pois o Service bloqueia acesso quando `provaStatus` não é `publicada`, quando faltam datas, quando `now` está fora de `dataInicio`/`dataFim` ou quando a sessão do aluno não está `em_andamento`.
-- **Caminho de falha:** os caminhos negativos cobrem "Link de prova não encontrado.", "Prova ainda não disponível ou encerrada.", "Prova do aluno não encontrada.", "A prova do aluno não está em andamento.", "Prova indisponível para resposta." e "Prova fora do período de resposta.". Assim, o teste prova que a regra temporal falha de forma explícita e rastreável, não por erro genérico.
 
 ## 5.2. Testes de usabilidade (sprint 5)
 

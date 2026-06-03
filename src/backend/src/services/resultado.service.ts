@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import { forbidden, notFound } from "../errors/api-error.js";
 import type { AuthUser } from "../middlewares/auth.js";
-=======
-import { forbidden } from "../errors/api-error.js";
-import type { AuthUser } from "../models/auth.model.js";
->>>>>>> 8dae14724ffd55296dada49851573a72dfab1450
 import { ResultadoRepository } from "../repositories/resultado.repository.js";
 import type { ExportarResultadoInput } from "../schemas/resultado.schema.js";
 import { StorageService } from "./storage.service.js";

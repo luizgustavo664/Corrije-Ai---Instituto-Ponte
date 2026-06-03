@@ -1,7 +1,7 @@
 import { pool } from "../database/pool.js";
 import { withTransaction } from "../database/transaction.js";
 import { toIsoString } from "../helpers/date.js";
-import type { AuthUser } from "../models/auth.model.js";
+import type { AuthUser } from "../middlewares/auth.js";
 import type { CorrecaoQuestao, CorrecaoResposta, CorrecaoSalva, CorrecaoAutomatica } from "../models/correcao.model.js";
 import type { SalvarCorrecaoInput } from "../schemas/correcao.schema.js";
 
@@ -98,7 +98,6 @@ const mapCorrecao = (row: CorrecaoRow): CorrecaoSalva => ({
  */
 export class CorrecaoRepository {
   /**
-<<<<<<< HEAD
    * Verifica se a prova existe antes de avaliar permissão de correção.
    *
    * @param provaId - ID da prova.
@@ -112,8 +111,6 @@ export class CorrecaoRepository {
   }
 
   /**
-=======
->>>>>>> 8dae14724ffd55296dada49851573a72dfab1450
    * Verifica se o usuário tem acesso à prova para correção.
    *
    * @param provaId - ID da prova.

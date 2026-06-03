@@ -1,6 +1,6 @@
 import { pool } from "../database/pool.js";
 import { withTransaction } from "../database/transaction.js";
-import type { AuthUser } from "../models/auth.model.js";
+import type { AuthUser } from "../middlewares/auth.js";
 import type { ResultadoAluno, ExportacaoResultado } from "../models/resultado.model.js";
 
 /** Linha agregada de resultado com dados do aluno, notas e pendências. */
