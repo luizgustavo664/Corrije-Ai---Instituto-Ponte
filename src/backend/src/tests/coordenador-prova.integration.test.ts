@@ -166,6 +166,16 @@ describe("CoordenadorProvaController - integração", () => {
     expect(response.body.data.some((prova: { id: string }) => prova.id === seed.provaRascunhoId)).toBe(false);
   });
 
+  it("deve rejeitar com 422 status inválido na query de listagem do coordenador", async () => {
+    const response = await request(app.server)
+      .get("/api/v1/coordenador/provas")
+      .query({ status: "cancelada" })
+      .set("Authorization", seed.tokenCoordenador);
+
+    expect(response.statusCode).toBe(422);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
   it("deve bloquear com 403 professor na rota /coordenador/provas", async () => {
     const response = await request(app.server)
       .get("/api/v1/coordenador/provas")

@@ -257,6 +257,24 @@ describe("RespostaAlunoController - integração", () => {
     expect(response.body.error.code).toBe("BUSINESS_RULE_ERROR");
   });
 
+  it("deve retornar 404 ao salvar resposta para provaAluno inexistente", async () => {
+    const response = await request(app.server)
+      .put(`/api/v1/public/provas-aluno/${randomUUID()}/respostas/${seed.objetivaId}`)
+      .send({ alternativaId: seed.alternativaId, rascunho: true });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve retornar 404 ao salvar resposta para questão que não pertence à prova do aluno", async () => {
+    const response = await request(app.server)
+      .put(`/api/v1/public/provas-aluno/${seed.provaAlunoId}/respostas/${randomUUID()}`)
+      .send({ respostaTexto: "Resposta", rascunho: true });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
   it("deve salvar resposta discursiva com respostaTexto e persistir no banco", async () => {
     const response = await request(app.server)
       .put(`/api/v1/public/provas-aluno/${seed.provaAlunoId}/respostas/${seed.discursivaId}`)
@@ -311,6 +329,13 @@ describe("RespostaAlunoController - integração", () => {
     });
   });
 
+  it("deve retornar 404 ao listar respostas de provaAluno inexistente", async () => {
+    const response = await request(app.server).get(`/api/v1/public/provas-aluno/${randomUUID()}/respostas`);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
   it("deve enviar prova final, listar questões em branco e bloquear novas alterações após envio", async () => {
     await request(app.server)
       .put(`/api/v1/public/provas-aluno/${seed.provaAlunoId}/respostas/${seed.objetivaId}`)
@@ -335,5 +360,14 @@ describe("RespostaAlunoController - integração", () => {
       .put(`/api/v1/public/provas-aluno/${seed.provaAlunoId}/respostas/${seed.discursivaId}`)
       .send({ respostaTexto: "Depois do envio", rascunho: true });
     expect(blocked.statusCode).toBe(409);
+  });
+
+  it("deve retornar 404 ao enviar provaAluno inexistente", async () => {
+    const response = await request(app.server)
+      .post(`/api/v1/public/provas-aluno/${randomUUID()}/enviar`)
+      .send({ confirmarEnvio: true });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
   });
 });

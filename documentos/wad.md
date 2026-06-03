@@ -5596,12 +5596,240 @@ Integrar o frontend as rotas ja documentadas e produzir evidencias navegaveis: l
 
 ## 5.1. Relatório de testes de integração de endpoints automatizados (sprint 4)
 
-*Liste e descreva os testes automatizados dos endpoints criados e planejados para sua solução, implementados com **Jest**. Cubra as duas abordagens:*
+A suíte automatizada da WebAPI foi estruturada com Jest, TypeScript e Supertest, acompanhando a arquitetura em camadas do backend. A estratégia combina testes unitários white-box para a camada Service, voltados às regras de negócio e aos caminhos de falha internos, com testes de integração black-box dos endpoints HTTP, voltados ao contrato público da API.
 
-- ***White-box*** *— testes unitários de Service que exercitam ramos internos, exceções e regras de negócio (conhecimento da implementação).*
-- ***Black-box*** *— testes de integração dos endpoints via Jest + Supertest, verificando apenas o contrato HTTP (status, body, efeito observável), sem depender da implementação interna.*
+Os testes estão versionados no mesmo repositório da aplicação, em `src/backend/src/tests`. Na configuração atual do Jest, o padrão executado é `*.test.ts`, conforme `src/backend/jest.config.ts`. Os testes unitários de Service ficam em `src/backend/src/tests/unit` e os testes de integração de endpoints ficam diretamente em `src/backend/src/tests`.
 
-*Posicione aqui também o relatório de cobertura de testes Jest se houver (através de link ou transcrito para estrutura markdown).*
+### 5.1.1. Estratégia de Testes
+
+| Camada | Estratégia | Ferramenta | Escopo |
+|--------|------------|------------|--------|
+| Service | White-box unitário | Jest + mocks | Regras de negócio, exceções, permissões, transições de estado e fluxos alternativos. |
+| Controller/Endpoint | Black-box de integração | Jest + Supertest + `buildApp()` | Contrato HTTP: status code, body, headers, validação Zod, autenticação/autorização e efeito observável no banco. |
+| Repository | Opcional, quando há query não trivial | Jest + mocks ou banco de teste | Consultas com filtros, agregações, transações, CTEs ou regras SQL relevantes. |
+
+Os testes unitários de Service isolam dependências externas por meio de mocks (`jest.fn()`, spies e factories locais). Isso permite validar diretamente decisões internas da regra de negócio, como bloqueio por perfil, status inválido, ausência de recurso, duplicidade e falhas de integração simuladas.
+
+Os testes de integração exercitam a aplicação Fastify real criada por `buildApp()`, realizando requisições HTTP com Supertest. Nesse nível, o teste não depende da implementação interna do controller; ele observa apenas o comportamento público do endpoint.
+
+O padrão AAA é seguido pela estrutura dos testes:
+
+- **Arrange:** criação dos dados de teste, mocks, usuários autenticados, tokens, fixtures e registros no banco.
+- **Act:** execução do método de Service ou requisição HTTP ao endpoint.
+- **Assert:** verificação do retorno, status HTTP, body, erro, chamada ao mock ou persistência no banco.
+
+O determinismo é tratado com as seguintes práticas:
+
+- **Ordem de execução:** cada teste monta seu próprio cenário e os testes de integração limpam dados por prefixo/UUID.
+- **Relógio:** cenários temporais usam datas controladas ou janelas fixas de execução.
+- **Rede externa:** e-mail, storage e integrações externas são substituídos por mocks ou adapters falsos.
+- **Dados residuais:** os testes usam `randomUUID()`, `TEST_PREFIX`, `beforeEach` e `afterAll` para evitar dependência de dados anteriores.
+
+Exemplos concretos dessa estratégia aparecem nos arquivos versionados. Em `prova.service.test.ts`, `correcao.service.test.ts`, `resultado.service.test.ts` e `email-resultado.service.test.ts`, os Services são exercitados diretamente com mocks de repository, storage ou adapter, caracterizando teste unitário white-box. Em `aluno-portal.integration.test.ts`, `resultado.integration.test.ts`, `correcao.integration.test.ts` e `anexo-exportar.integration.test.ts`, os endpoints são chamados por Supertest contra `buildApp()`, caracterizando teste black-box do contrato HTTP. Nos testes de integração, os dados são criados com `randomUUID()` e prefixos como `TEST_PREFIX`, limpos em `beforeEach`/`afterAll`, enquanto dependências externas como envio de e-mail e upload para storage são simuladas. Assim, a suíte não depende da ordem de execução, de rede externa real, de dados residuais do banco ou de horário não controlado.
+
+### 5.1.2. Testes Unitários de Service (white-box)
+
+A cobertura mínima exigida para a camada Service é de 80%. A execução com cobertura foi realizada no diretório `src/backend` por meio do comando:
+
+```bash
+npm test -- --coverage
+```
+
+O relatório Jest foi gerado em:
+
+```text
+src/backend/coverage/lcov-report/index.html
+src/backend/coverage/lcov.info
+src/backend/coverage/coverage-final.json
+```
+
+Na execução registrada, a camada `src/services` ultrapassou o mínimo exigido:
+
+| Camada avaliada | Statements | Branches | Functions | Lines | Critério | Situação |
+|-----------------|------------|----------|-----------|-------|----------|----------|
+| `src/services` | 96,59% | 92,40% | 100,00% | 96,53% | ≥ 80% | Aprovado |
+
+Como validação adicional da camada Service, a execução isolada dos testes unitários de Service por meio de `npm test -- --coverage src/tests/unit/*.service.test.ts` também ultrapassou o mínimo exigido, atingindo `95,40%` de statements, `86,07%` de branches, `99,09%` de functions e `95,32%` de lines em `src/services`.
+
+#### Casos de teste vinculados às RN
+
+Como a seção 3.1.2 define as RNs sem uma coluna própria de prioridade, a ordenação abaixo usa a prioridade dos RFs associados na seção 3.1.1 como critério objetivo: primeiro RNs vinculadas a RFs de prioridade Alta, depois Média e, por fim, Baixa. Em empates, foi preservada a ordem de aparição da RN no artefato 1.
+
+| CT | RN coberta | RF associado(s) e prioridade | Ordem no artefato 1 | Evidência principal | Arquivo(s) de teste |
+|----|------------|------------------------------|---------------------|---------------------|---------------------|
+| CT01 | RN01 | RF001 Alta, RF020 Alta | RN01 | Estados da prova, listagem por status e transições válidas. | `prova.service.test.ts`, `prova-publicacao.integration.test.ts` |
+| CT02 | RN18 | RF002 Alta, RF021 Alta | RN18 | Autorização por perfil, OAuth2 e proteção de rotas de professor/coordenador. | `auth.service.test.ts`, `middlewares-auth.test.ts`, `prova.service.test.ts` |
+| CT03 | RN19 | RF002 Alta | RN19 | Bloqueio de e-mail não autorizado e validação da sessão autenticada. | `auth.service.test.ts`, `infra-auth.test.ts` |
+| CT04 | RN20 | RF003 Alta | RN20 | Busca de questões por critérios e vínculo ao editor da prova sem duplicação indevida. | `prova-questao.integration.test.ts`, `questao.integration.test.ts` |
+| CT05 | RN03 | RF004 Alta, RF005 Alta | RN03 | Criação e validação de questões por tipo, alternativas, gabarito e conteúdo LaTeX. | `questao.service.test.ts`, `questao.integration.test.ts` |
+| CT06 | RN04 | RF006 Alta, RF012 Alta | RN04 | Controle de anexos, permissão por questão, tipo MIME, tamanho e vínculo com resposta. | `resposta-anexo.service.test.ts`, `resposta-anexo.integration.test.ts` |
+| CT07 | RN05 | RF007 Alta | RN05 | Controle de tempo, janela de acesso e bloqueio fora do período. | `aluno-portal.service.test.ts`, `resposta-aluno.service.test.ts`, `resposta-aluno.integration.test.ts` |
+| CT08 | RN07 | RF008 Alta | RN07 | Publicação de prova com URL única e QR Code. | `prova.service.test.ts`, `prova-publicacao.integration.test.ts` |
+| CT09 | RN08 | RF009 Alta | RN08 | Identificação do aluno e prevenção de múltiplas submissões. | `aluno-portal.service.test.ts`, `aluno-portal.integration.test.ts` |
+| CT10 | RN10 | RF010 Alta, RF011 Alta | RN10 | Preservação de conteúdo de questões/respostas para exibição e renderização. | `questao.integration.test.ts`, `resposta-aluno.integration.test.ts` |
+| CT11 | RN11 | RF013 Alta | RN11 | Validação backend de anexos; compressão permanece responsabilidade client-side. | `resposta-anexo.service.test.ts`, `resposta-anexo.integration.test.ts` |
+| CT12 | RN13 | RF014 Alta, RF015 Alta, RF016 Alta | RN13 | Correção por questão, nota máxima, status da prova do aluno e acesso aos anexos. | `correcao.service.test.ts`, `correcao.integration.test.ts` |
+| CT13 | RN14 | RF017 Alta | RN14 | Consolidação de resultados e exportação CSV/XLSX. | `resultado.service.test.ts`, `resultado.integration.test.ts` |
+| CT14 | RN17 | RF018 Alta, RF019 Alta | RN17 | Visão de coordenador, relatórios, analytics e resultados consolidados. | `analytics.service.test.ts`, `analytics.integration.test.ts`, `coordenador-prova.integration.test.ts` |
+| CT15 | RN02 | RF022 Média | RN02 | Filtros combinados de provas por status, turma, semestre, matéria e professor. | `prova.service.test.ts` |
+| CT16 | RN06 | RF023 Média | RN06 | Configuração de embaralhamento de questões e alternativas. | `prova.service.test.ts`, `prova-publicacao.integration.test.ts` |
+| CT17 | RN09 | RF024 Média, RF025 Média | RN09 | Portal público, instruções da prova e dados de tempo para o aluno. | `aluno-portal.service.test.ts`, `aluno-portal.integration.test.ts` |
+| CT18 | RN12 | RF026 Média | RN12 | Envio final da prova e retorno de questões em branco. | `resposta-aluno.service.test.ts`, `resposta-aluno.integration.test.ts` |
+| CT19 | RN15 | RF027 Média | RN15 | Liberação, envio e reenvio de resultados por e-mail. | `email-resultado.service.test.ts`, `email-resultado.integration.test.ts` |
+| CT20 | RN16 | RF028 Baixa | RN16 | Exportação de anexos e integridade da relação prova/aluno/questão. | `anexo-exportar.service.test.ts`, `anexo-exportar.integration.test.ts` |
+
+#### Análise dos 5 casos prioritários
+
+**CT01 -> RN01 — Estados válidos da prova**
+
+| Critério | Evidência |
+|----------|-----------|
+| AAA | **Arrange:** os testes preparam provas com estados conhecidos (`rascunho`, `publicada`, `encerrada` ou `antiga`) e mocks/fixtures de repository coerentes com cada transição. **Act:** executam operações de ciclo de vida como atualizar, publicar, encerrar, arquivar ou remover. **Assert:** verificam retorno esperado nos fluxos válidos e exceção/status de conflito quando a transição viola o estado atual da prova. |
+| Determinismo | Os cenários usam dados controlados, identificadores fixos/mocks e não dependem de rede externa, ordem de execução ou registros residuais. Quando há data/status, o valor é preparado pelo próprio teste. |
+| RN coberta | Cobre a RN01 porque valida que a prova só muda de estado dentro do ciclo permitido e que provas encerradas/antigas não aceitam operações indevidas. |
+| Caminho de falha | Exercita prova inexistente, status inválido e tentativa de remover/alterar prova em estado incompatível ou com submissões associadas. |
+
+**CT02 -> RN18 — Autorização por perfil e rotas protegidas**
+
+| Critério | Evidência |
+|----------|-----------|
+| AAA | **Arrange:** os testes montam usuários com perfis distintos (`professor`, `coordenador` ou ausência de perfil) e rotas/services que exigem papel específico. **Act:** executam chamadas protegidas ou invocam a validação de autorização. **Assert:** confirmam sucesso para o perfil permitido e rejeição para usuário sem autenticação ou sem papel autorizado. |
+| Determinismo | OAuth real não é chamado; tokens, usuários e perfis são simulados de forma fixa. Assim, o resultado não depende de provedor externo, sessão prévia ou ordem dos testes. |
+| RN coberta | Cobre a RN18 porque demonstra que permissões administrativas são aplicadas no backend, separando ações de professor, coordenador e usuários sem autorização. |
+| Caminho de falha | Exercita autenticação ausente, perfil insuficiente, tentativa de acesso a rota protegida e operação administrativa executada por papel não autorizado. |
+
+**CT03 -> RN19 — E-mail autorizado e sessão autenticada**
+
+| Critério | Evidência |
+|----------|-----------|
+| AAA | **Arrange:** os testes configuram retorno de autenticação, payload JWT/OAuth e repositório com usuário autorizado ou inexistente. **Act:** executam login, callback, consulta de sessão ou validação do usuário corrente. **Assert:** verificam criação/retorno de sessão para e-mail permitido e erro para e-mail não cadastrado ou token inválido. |
+| Determinismo | O provedor Google/OAuth é substituído por mocks, e os usuários consultados vêm de fixtures/repositórios controlados. Não há dependência de rede externa nem de sessão real do navegador. |
+| RN coberta | Cobre a RN19 porque o acesso só é concedido quando o e-mail retornado pela autenticação existe na lista de usuários autorizados. |
+| Caminho de falha | Exercita e-mail não autorizado, token ausente/inválido e sessão que não consegue ser resolvida para um usuário válido. |
+
+**CT04 -> RN20 — Banco de questões e vínculo ao editor**
+
+| Critério | Evidência |
+|----------|-----------|
+| AAA | **Arrange:** os testes preparam questões com matéria, tema, tipo e status conhecidos, além de provas e vínculos já existentes quando o cenário exige duplicidade. **Act:** executam busca/listagem de questões ou criação de vínculo entre prova e questão. **Assert:** validam filtros aplicados, vínculo criado e rejeição de duplicidade ou incompatibilidade. |
+| Determinismo | Os registros usados são criados pelo próprio teste ou simulados por mocks, com IDs controlados. Não há dependência de ordem de execução, dados residuais ou busca em base externa. |
+| RN coberta | Cobre a RN20 porque garante que o professor encontra questões por critérios definidos e que a seleção para o editor não duplica questão indevidamente. |
+| Caminho de falha | Exercita questão inexistente, prova inexistente, matéria incompatível com a prova e tentativa de vincular uma questão já associada. |
+
+**CT05 -> RN03 — Criação correta de questões**
+
+| Critério | Evidência |
+|----------|-----------|
+| AAA | **Arrange:** os testes montam payloads de questões discursivas, múltipla escolha e verdadeiro/falso, com alternativas válidas e inválidas. **Act:** chamam criação ou atualização de questão. **Assert:** verificam sucesso para payload correto e erro para configuração incompatível com o tipo da questão. |
+| Determinismo | Os payloads são literais, pequenos e independentes de relógio, rede externa ou dados residuais. Os mocks de repository retornam respostas previsíveis para cada cenário. |
+| RN coberta | Cobre a RN03 porque valida tipo da questão, alternativas, gabarito e consistência do conteúdo cadastrado. |
+| Caminho de falha | Exercita ausência de alternativa correta, alternativas duplicadas, tipo incompatível, limites inválidos para discursiva e payload semanticamente inválido mesmo quando a requisição tem estrutura geral válida. |
+
+### 5.1.3. Testes de Integração de Endpoints (black-box)
+
+Os testes de integração foram implementados com Jest + Supertest e executam requisições HTTP reais contra a aplicação Fastify criada por `buildApp()`. Eles verificam o comportamento público dos endpoints, cobrindo status HTTP, body, autenticação/autorização, validação Zod e efeitos observáveis no banco de teste.
+
+O critério definido para endpoints principais é a presença dos quatro cenários-chave:
+
+| Cenário-chave | Status esperado | Interpretação |
+|---------------|-----------------|---------------|
+| Sucesso | `200`, `201` ou `204` | Entrada válida e estado de domínio compatível. |
+| Falha de validação | `400` ou `422` | Payload, parâmetro ou query rejeitado pelo schema. |
+| Regra de negócio violada | `409` ou equivalente, incluindo `403` para autorização de negócio | A entrada é estruturalmente válida, mas viola uma regra do domínio ou permissão. |
+| Recurso não encontrado | `404` | O identificador informado não corresponde a recurso existente. |
+
+O status `204` foi registrado como sucesso equivalente para endpoints de remoção, pois representa execução bem-sucedida sem corpo de resposta. Em endpoints puramente de coleção, como `GET /api/v1/coordenador/provas`, o cenário de `404` não se aplica diretamente por não haver identificador de recurso no path; nesses casos, o grupo de endpoints relacionado cobre `404` nas rotas de detalhe da mesma entidade e a exceção é explicitada na matriz.
+
+| Grupo de endpoint principal | Arquivo de teste | Sucesso | Validação | Regra de negócio | Não encontrado | Situação |
+|-----------------------------|------------------|---------|-----------|------------------|----------------|----------|
+| Portal público do aluno | `aluno-portal.integration.test.ts` | `200`, `201` | `422` | `409` | `404` | Atende |
+| Alunos | `aluno.integration.test.ts` | `200`, `204` | `422` | `403` | `404` | Atende |
+| Analytics e logs | `analytics.integration.test.ts` | `200`, `201` | `422` | `403` | `404` | Atende |
+| Exportação de anexos | `anexo-exportar.integration.test.ts` | `200` | `422` | `403` | `404` | Atende |
+| Correção automática | `correcao-automatica.integration.test.ts` | `200` | `422` | `403` | `404` | Atende |
+| Correção manual/listagem | `correcao.integration.test.ts` | `200` | `422` | `409`/`403` | `404` | Atende |
+| Painel de provas do coordenador | `coordenador-prova.integration.test.ts` | `200` | `422` | `403` | Não aplicável ao endpoint de coleção; `404` coberto no grupo Provas CRUD | Atende com justificativa |
+| E-mails de resultado | `email-resultado.integration.test.ts` | `200` | `422` | `409`/`403` | `404` | Atende |
+| Matérias | `materia.integration.test.ts` | `200`, `201`, `204` | `422` | `409` | `404` | Atende |
+| Professores | `professor.integration.test.ts` | `200`, `201`, `204` | `422` | `409` | `404` | Atende |
+| Provas CRUD | `prova.integration.test.ts` | `200`, `201`, `204` | `422` | `409`/`403` | `404` | Atende |
+| Publicação/configuração de prova | `prova-publicacao.integration.test.ts` | `200` | `422` | `409` | `404` | Atende |
+| Vínculo prova-questão | `prova-questao.integration.test.ts` | `200`, `201`, `204` | `422` | `409` | `404` | Atende |
+| Questões | `questao.integration.test.ts` | `200`, `201`, `204` | `422` | `403` | `404` | Atende |
+| Respostas do aluno | `resposta-aluno.integration.test.ts` | `200` | `422` | `409` | `404` | Atende |
+| Anexos de resposta | `resposta-anexo.integration.test.ts` | `201` | `422` | `409` | `404` | Atende |
+| Resultados | `resultado.integration.test.ts` | `200`, `201` | `422` | `403` | `404` | Atende |
+| Temas | `tema.integration.test.ts` | `200`, `201`, `204` | `422` | `409` | `404` | Atende |
+| Vínculo professor-matéria | `vinculo.integration.test.ts` | `201`, `204` | `422` | `409` | `404` | Atende |
+
+Os arquivos de integração estão no repositório e exercitam os principais fluxos da WebAPI. A matriz acima evidencia os quatro cenários obrigatórios para os grupos de endpoints principais: sucesso, validação, regra de negócio violada e recurso não encontrado.
+
+### 5.1.4. Evidências de Execução
+
+#### Output de `npm test`
+
+A suíte foi executada no diretório `src/backend` com o comando:
+
+```bash
+npm test
+```
+
+O resultado registrado na execução direta de `npm test`, sem filtro e sem cobertura, foi:
+
+```text
+Test Suites: 44 passed, 44 total
+Tests:       373 passed, 373 total
+Snapshots:   0 total
+```
+
+#### Relatório de cobertura por camada
+
+O relatório de cobertura foi gerado com:
+
+```bash
+npm test -- --coverage
+```
+
+Resumo por camada:
+
+| Camada | Statements | Branches | Functions | Lines | Situação |
+|--------|------------|----------|-----------|-------|----------|
+| `src/controllers` | 97,68% | 78,12% | 95,00% | 97,68% | Aprovado |
+| `src/routes` | 100,00% | 100,00% | 100,00% | 100,00% | Aprovado |
+| `src/services` | 96,59% | 92,40% | 100,00% | 96,53% | Aprovado |
+| `src/repositories` | 92,82% | 67,36% | 97,79% | 94,63% | Aprovado com ressalva em branches |
+| `src/schemas` | 100,00% | 100,00% | 100,00% | 100,00% | Aprovado |
+| `src/middlewares` | 95,52% | 93,44% | 100,00% | 95,52% | Aprovado |
+| `src/helpers` | 96,87% | 92,59% | 100,00% | 96,77% | Aprovado |
+| `src/errors` | 100,00% | 50,00% | 100,00% | 100,00% | Aprovado com ressalva em branches |
+| `src/database` | 24,56% | 28,57% | 20,00% | 24,56% | Baixa cobertura esperada para infraestrutura/migração |
+
+#### Mapeamento CT -> RN -> RF
+
+O mapeamento abaixo conecta os casos de teste às RNs, RFs e endpoints da Matriz RF -> RN -> Endpoint da seção 3.1.4 e mantém a mesma cadeia de rastreabilidade da RTM da seção 3.9.
+
+| CT | RN | RF | Endpoint(s) rastreados em 3.1.4/3.9 | Evidência de teste |
+|----|----|----|-------------------------------------|--------------------|
+| CT01 | RN01 | RF001, RF020 | `/api/v1/provas`, `/api/v1/provas/{provaId}`, `/api/v1/coordenador/provas`, `/api/v1/provas?status=` | `prova.integration.test.ts`, `prova-publicacao.integration.test.ts`, `coordenador-prova.integration.test.ts` |
+| CT02 | RN18 | RF002, RF021 | `/api/v1/auth/*`, `/api/v1/provas`, `/api/v1/provas/{provaId}` | `auth.service.test.ts`, `middlewares-auth.test.ts`, `prova.integration.test.ts` |
+| CT03 | RN19 | RF002 | `/api/v1/auth/google`, `/api/v1/auth/google/callback`, `/api/v1/auth/me`, `/api/v1/auth/logout` | `auth.service.test.ts`, `infra-auth.test.ts` |
+| CT04 | RN20 | RF003 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}`, `/api/v1/provas/{provaId}/questoes` | `questao.integration.test.ts`, `prova-questao.integration.test.ts` |
+| CT05 | RN03 | RF004, RF005 | `/api/v1/questoes`, `/api/v1/questoes/{questaoId}` | `questao.service.test.ts`, `questao.integration.test.ts` |
+| CT06 | RN04 | RF006, RF012 | `/api/v1/provas/{provaId}/questoes`, `/api/v1/public/respostas/{respostaId}/anexos` | `resposta-anexo.service.test.ts`, `resposta-anexo.integration.test.ts` |
+| CT07 | RN05 | RF007 | `/api/v1/provas/{provaId}/configuracoes`, `/api/v1/public/provas/{urlAcesso}`, `/api/v1/provas/{provaId}/encerrar` | `aluno-portal.service.test.ts`, `resposta-aluno.service.test.ts`, `prova-publicacao.integration.test.ts` |
+| CT08 | RN07 | RF008 | `/api/v1/provas/{provaId}/publicar` | `prova.service.test.ts`, `prova-publicacao.integration.test.ts` |
+| CT09 | RN08 | RF009 | `/api/v1/public/provas/{urlAcesso}/iniciar` | `aluno-portal.service.test.ts`, `aluno-portal.integration.test.ts` |
+| CT10 | RN10 | RF010, RF011 | `/api/v1/public/provas/{urlAcesso}`, `/api/v1/public/provas-aluno/{provaAlunoId}/respostas/{questaoId}` | `questao.integration.test.ts`, `resposta-aluno.integration.test.ts` |
+| CT11 | RN11 | RF013 | `/api/v1/public/respostas/{respostaId}/anexos` | `resposta-anexo.service.test.ts`, `resposta-anexo.integration.test.ts` |
+| CT12 | RN13 | RF014, RF015, RF016 | `/api/v1/provas/{provaId}/correcao/questoes`, `/api/v1/respostas/{respostaId}/correcao`, `/api/v1/provas/{provaId}/questoes/{questaoId}/respostas` | `correcao.service.test.ts`, `correcao.integration.test.ts` |
+| CT13 | RN14 | RF017 | `/api/v1/provas/{provaId}/resultados`, `/api/v1/provas/{provaId}/resultados/exportar` | `resultado.service.test.ts`, `resultado.integration.test.ts` |
+| CT14 | RN17 | RF018, RF019 | `/api/v1/coordenador/provas`, `/api/v1/provas/{provaId}/analytics`, `/api/v1/logs` | `analytics.service.test.ts`, `analytics.integration.test.ts`, `coordenador-prova.integration.test.ts` |
+| CT15 | RN02 | RF022 | `/api/v1/provas?turma=&semestre=&materiaId=&professorId=` | `prova.service.test.ts`, `prova.integration.test.ts` |
+| CT16 | RN06 | RF023 | `/api/v1/provas/{provaId}/configuracoes` | `prova.service.test.ts`, `prova-publicacao.integration.test.ts` |
+| CT17 | RN09 | RF024, RF025 | `/api/v1/public/provas/{urlAcesso}` | `aluno-portal.service.test.ts`, `aluno-portal.integration.test.ts` |
+| CT18 | RN12 | RF026 | `/api/v1/public/provas-aluno/{provaAlunoId}/respostas`, `/api/v1/public/provas-aluno/{provaAlunoId}/enviar` | `resposta-aluno.service.test.ts`, `resposta-aluno.integration.test.ts` |
+| CT19 | RN15 | RF027 | `/api/v1/provas/{provaId}/resultados/liberar-email`, `/api/v1/provas/{provaId}/emails`, `/api/v1/emails/{emailEnvioId}/reenviar` | `email-resultado.service.test.ts`, `email-resultado.integration.test.ts` |
+| CT20 | RN16 | RF028 | `/api/v1/provas/{provaId}/anexos/exportar` | `anexo-exportar.service.test.ts`, `anexo-exportar.integration.test.ts` |
 
 ## 5.2. Testes de usabilidade (sprint 5)
 

@@ -270,6 +270,57 @@ describe("CorrecaoController - integração", () => {
     expect(response.body.error.code).toBe("BUSINESS_RULE_ERROR");
   });
 
+  it("deve retornar 422 quando respostaId não é UUID válido", async () => {
+    const response = await request(app.server)
+      .put("/api/v1/respostas/resposta-invalida/correcao")
+      .set("Authorization", seed.tokenProfessor)
+      .send({ nota: 1 });
+
+    expect(response.statusCode).toBe(422);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("deve retornar 404 ao corrigir resposta inexistente", async () => {
+    const response = await request(app.server)
+      .put(`/api/v1/respostas/${randomUUID()}/correcao`)
+      .set("Authorization", seed.tokenProfessor)
+      .send({ nota: 1 });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve bloquear com 409 correção antes do envio final da prova", async () => {
+    const aluno = await pool.query<{ id: string }>(
+      `
+        INSERT INTO "aluno" ("nome", "email", "cpf", "aceitou_termos_em")
+        VALUES ('Aluno Em Andamento', $1, '30000000002', CURRENT_TIMESTAMP)
+        RETURNING "id"
+      `,
+      [`${TEST_PREFIX}-andamento-${randomUUID()}@example.com`],
+    );
+    const provaAluno = await pool.query<{ id: string }>(
+      'INSERT INTO "prova_aluno" ("prova_id", "aluno_id", "status") VALUES ($1, $2, $3) RETURNING "id"',
+      [seed.provaId, aluno.rows[0].id, "em_andamento"],
+    );
+    const resposta = await pool.query<{ id: string }>(
+      `
+        INSERT INTO "resposta_aluno" ("prova_aluno_id", "questao_id", "resposta_texto", "rascunho")
+        VALUES ($1, $2, 'Resposta ainda não enviada', FALSE)
+        RETURNING "id"
+      `,
+      [provaAluno.rows[0].id, seed.discursivaId],
+    );
+
+    const response = await request(app.server)
+      .put(`/api/v1/respostas/${resposta.rows[0].id}/correcao`)
+      .set("Authorization", seed.tokenProfessor)
+      .send({ nota: 1 });
+
+    expect(response.statusCode).toBe(409);
+    expect(response.body.error.code).toBe("CONFLICT");
+  });
+
   it("deve bloquear com 403 professor sem vínculo com a matéria da prova", async () => {
     const response = await request(app.server)
       .put(`/api/v1/respostas/${seed.respostaId}/correcao`)
