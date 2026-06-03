@@ -9,10 +9,12 @@ const TEST_PREFIX = "prova-api-test";
 type Seed = {
   coordenadorId: string;
   professorId: string;
+  outroProfessorId: string;
   materiaId: string;
   provaRascunhoId: string;
   provaEncerradaId: string;
   tokenProfessor: string;
+  tokenOutroProfessor: string;
   tokenCoordenador: string;
 };
 
@@ -68,6 +70,10 @@ const createSeed = async (): Promise<Seed> => {
     'INSERT INTO "professor" ("coordenador_id", "nome", "email") VALUES ($1, $2, $3) RETURNING "id"',
     [coordenador.rows[0].id, "Professor Prova", `${TEST_PREFIX}-prof-${suffix}@example.com`],
   );
+  const outroProfessor = await pool.query<{ id: string }>(
+    'INSERT INTO "professor" ("coordenador_id", "nome", "email") VALUES ($1, $2, $3) RETURNING "id"',
+    [coordenador.rows[0].id, "Outro Professor Prova", `${TEST_PREFIX}-outro-prof-${suffix}@example.com`],
+  );
   const materia = await pool.query<{ id: string }>(
     'INSERT INTO "materia" ("nome", "codigo") VALUES ($1, $2) RETURNING "id"',
     [`Matemática Prova ${suffix}`, `${TEST_PREFIX}-${suffix}`],
@@ -88,10 +94,12 @@ const createSeed = async (): Promise<Seed> => {
   return {
     coordenadorId: coordenador.rows[0].id,
     professorId: professor.rows[0].id,
+    outroProfessorId: outroProfessor.rows[0].id,
     materiaId: materia.rows[0].id,
     provaRascunhoId,
     provaEncerradaId,
     tokenProfessor: `Bearer test-professor:${professor.rows[0].id}:professor@example.com:Professor Prova`,
+    tokenOutroProfessor: `Bearer test-professor:${outroProfessor.rows[0].id}:outro-professor@example.com:Outro Professor Prova`,
     tokenCoordenador: `Bearer test-coordenador:${coordenador.rows[0].id}:coord@example.com:Coordenador Prova`,
   };
 };
@@ -216,6 +224,60 @@ describe("ProvaController - integração", () => {
   it("deve retornar 404 ao detalhar prova inexistente", async () => {
     const response = await request(app.server)
       .get(`/api/v1/provas/${randomUUID()}`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("deve listar histórico de status da prova quando usuário tem acesso", async () => {
+    await pool.query(
+      `
+        INSERT INTO "prova_status_historico" ("prova_id", "status_anterior", "status_novo")
+        VALUES ($1, NULL, 'rascunho'), ($1, 'rascunho', 'publicada')
+      `,
+      [seed.provaRascunhoId],
+    );
+
+    const response = await request(app.server)
+      .get(`/api/v1/provas/${seed.provaRascunhoId}/status-historico`)
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          statusNovo: "rascunho",
+        }),
+        expect.objectContaining({
+          statusAnterior: "rascunho",
+          statusNovo: "publicada",
+        }),
+      ]),
+    );
+  });
+
+  it("deve retornar 422 no histórico quando provaId não é UUID válido", async () => {
+    const response = await request(app.server)
+      .get("/api/v1/provas/id-invalido/status-historico")
+      .set("Authorization", seed.tokenProfessor);
+
+    expect(response.statusCode).toBe(422);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("deve bloquear com 403 histórico de prova sem acesso para professor não vinculado", async () => {
+    const response = await request(app.server)
+      .get(`/api/v1/provas/${seed.provaRascunhoId}/status-historico`)
+      .set("Authorization", seed.tokenOutroProfessor);
+
+    expect(response.statusCode).toBe(403);
+  });
+
+  it("deve retornar 404 no histórico quando a prova não existe", async () => {
+    const response = await request(app.server)
+      .get(`/api/v1/provas/${randomUUID()}/status-historico`)
       .set("Authorization", seed.tokenProfessor);
 
     expect(response.statusCode).toBe(404);

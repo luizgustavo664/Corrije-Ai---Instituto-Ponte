@@ -1,7 +1,10 @@
+import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
 import request from "supertest";
 import { buildApp } from "../app.js";
 import { pool } from "../database/pool.js";
+
+const TEST_PREFIX = "infra-auth-test";
 
 describe("API - integração", () => {
   const app = buildApp();
@@ -15,6 +18,8 @@ describe("API - integração", () => {
   });
 
   afterAll(async () => {
+    await pool.query('DELETE FROM "professor" WHERE "email" LIKE $1', [`${TEST_PREFIX}%`]);
+    await pool.query('DELETE FROM "coordenador" WHERE "email" LIKE $1', [`${TEST_PREFIX}%`]);
     await app.close();
     await pool.end();
   });
@@ -87,6 +92,50 @@ describe("API - integração", () => {
     });
   });
 
+  it("deve iniciar OAuth Google retornando URL de redirecionamento", async () => {
+    const response = await request(app.server).get("/api/v1/auth/google");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toMatchObject({
+      success: true,
+      data: {
+        redirectUrl: expect.stringContaining("https://accounts.google.com/o/oauth2/v2/auth?"),
+      },
+    });
+  });
+
+  it("deve concluir callback OAuth em modo teste quando e-mail está autorizado", async () => {
+    const suffix = randomUUID();
+    const coordenador = await pool.query<{ id: string }>(
+      'INSERT INTO "coordenador" ("nome", "email") VALUES ($1, $2) RETURNING "id"',
+      ["Coordenador Auth", `${TEST_PREFIX}-coord-${suffix}@example.com`],
+    );
+    const email = `${TEST_PREFIX}-prof-${suffix}@example.com`;
+    const professor = await pool.query<{ id: string }>(
+      'INSERT INTO "professor" ("coordenador_id", "nome", "email") VALUES ($1, $2, $3) RETURNING "id"',
+      [coordenador.rows[0].id, "Professor Auth", email],
+    );
+
+    const response = await request(app.server)
+      .get("/api/v1/auth/google/callback")
+      .query({ code: email });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toMatchObject({
+      success: true,
+      data: {
+        usuario: {
+          id: professor.rows[0].id,
+          nome: "Professor Auth",
+          email,
+          perfil: "professor",
+        },
+        redirectTo: "/professor",
+      },
+    });
+    expect(response.body.data.accessToken).toContain(`test-professor:${professor.rows[0].id}`);
+  });
+
   it("deve retornar 422 para GET /provas/:id com id inválido (não UUID)", async () => {
     const response = await request(app.server)
       .get("/api/v1/provas/id-invalido")
@@ -157,6 +206,23 @@ describe("API - integração", () => {
         nome: "Professor Local",
         email: "professor@local.test",
         perfil: "professor",
+      },
+    });
+  });
+
+  it("deve encerrar sessão autenticada", async () => {
+    const response = await request(app.server)
+      .post("/api/v1/auth/logout")
+      .set(
+        "Authorization",
+        "Bearer test-professor:11111111-1111-4111-8111-111111111111:professor@local.test:Professor Local",
+      );
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      success: true,
+      data: {
+        message: "Sessão encerrada com sucesso.",
       },
     });
   });

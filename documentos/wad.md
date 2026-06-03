@@ -5409,8 +5409,8 @@ A WebAPI esta implementada em Fastify, documentada por Swagger UI em /docs e reg
 |---------|--------|------|---------|----------|--------|-------|
 | Saude | GET | /api/v1/health | Sem body | Status da aplicacao | 200 | RNF disponibilidade |
 | Saude | GET | /api/v1/health/db | Sem body | Status do PostgreSQL | 200, 500 | RNF disponibilidade |
-| Auth | GET | /api/v1/auth/google | Sem body | Inicio OAuth | 200, 302 | RF002/RN18 |
-| Auth | GET | /api/v1/auth/google/callback | Query OAuth | Token/sessao | 200, 401, 422 | RF002/RN18 |
+| Auth | GET | /api/v1/auth/google | Sem body | Inicio OAuth | 200 | RF002/RN18 |
+| Auth | GET | /api/v1/auth/google/callback | Query OAuth | Token/sessao | 200, 403, 422 | RF002/RN18 |
 | Auth | GET | /api/v1/auth/me | Bearer token | Usuario autenticado | 200, 401 | RF002/RN18/RN19 |
 | Auth | POST | /api/v1/auth/logout | Bearer token | Logout | 200, 401 | RF002 |
 | Provas | POST | /api/v1/provas | Body da prova | Prova em rascunho | 201, 401, 403, 422 | RF001/RF021 |
@@ -5600,6 +5600,8 @@ A suíte automatizada da WebAPI foi estruturada com Jest, TypeScript e Supertest
 
 Os testes estão versionados no mesmo repositório da aplicação, em `src/backend/src/tests`. Na configuração atual do Jest, o padrão executado é `*.test.ts`, conforme `src/backend/jest.config.ts`. Os testes unitários de Service ficam em `src/backend/src/tests/unit` e os testes de integração de endpoints ficam diretamente em `src/backend/src/tests`.
 
+Quanto à nomenclatura das entregas adicionais, os testes principais seguem o padrão solicitado: arquivos de Service usam o sufixo `.service.test.ts`, como `prova.service.test.ts`, `questao.service.test.ts`, `correcao.service.test.ts` e `anexo-exportar.service.test.ts`; arquivos de integração de endpoints usam o sufixo `.integration.test.ts`, como `prova.integration.test.ts`, `aluno-portal.integration.test.ts`, `resultado.integration.test.ts` e `anexo-exportar.integration.test.ts`. Arquivos auxiliares como `infra-auth.test.ts`, `date.test.ts` e `multipart.test.ts` não representam entregas principais de Service nem de endpoint; eles cobrem infraestrutura, helpers e middlewares e, por isso, permanecem no padrão geral executado pelo Jest (`*.test.ts`).
+
 ### 5.1.1. Estratégia de Testes
 
 | Camada | Estratégia | Ferramenta | Escopo |
@@ -5647,13 +5649,13 @@ Na execução registrada, a camada `src/services` ultrapassou o mínimo exigido:
 
 | Camada avaliada | Statements | Branches | Functions | Lines | Critério | Situação |
 |-----------------|------------|----------|-----------|-------|----------|----------|
-| `src/services` | 96,59% | 92,40% | 100,00% | 96,53% | ≥ 80% | Aprovado |
+| `src/services` | 96,93% | 92,91% | 100,00% | 96,88% | ≥ 80% | Aprovado |
 
 Como validação adicional da camada Service, a execução isolada dos testes unitários de Service por meio de `npm test -- --coverage src/tests/unit/*.service.test.ts` também ultrapassou o mínimo exigido, atingindo `95,40%` de statements, `86,07%` de branches, `99,09%` de functions e `95,32%` de lines em `src/services`.
 
 #### Casos de teste vinculados às RN
 
-Como a seção 3.1.2 define as RNs sem uma coluna própria de prioridade, a ordenação abaixo usa a prioridade dos RFs associados na seção 3.1.1 como critério objetivo: primeiro RNs vinculadas a RFs de prioridade Alta, depois Média e, por fim, Baixa. Em empates, foi preservada a ordem de aparição da RN no artefato 1.
+Como a seção 3.1.2 define as RNs sem uma coluna própria de prioridade, a ordenação abaixo usa um critério formal e rastreável, não uma inferência livre: cada RN herda a maior prioridade dos RFs associados na seção 3.1.1. Assim, entram primeiro RNs vinculadas a RFs de prioridade Alta, depois Média e, por fim, Baixa. Em empates, foi preservada a ordem de aparição da RN no artefato 1. Esse critério mantém coerência com a Matriz RF -> RN -> Endpoint da seção 3.1.4 e com a RTM da seção 3.9.
 
 | CT | RN coberta | RF associado(s) e prioridade | Ordem no artefato 1 | Evidência principal | Arquivo(s) de teste |
 |----|------------|------------------------------|---------------------|---------------------|---------------------|
@@ -5735,12 +5737,14 @@ O critério definido para endpoints principais é a presença dos quatro cenári
 |---------------|-----------------|---------------|
 | Sucesso | `200`, `201` ou `204` | Entrada válida e estado de domínio compatível. |
 | Falha de validação | `400` ou `422` | Payload, parâmetro ou query rejeitado pelo schema. |
-| Regra de negócio violada | `409` ou equivalente, incluindo `403` para autorização de negócio | A entrada é estruturalmente válida, mas viola uma regra do domínio ou permissão. |
+| Regra de negócio violada | `409` ou equivalente | A entrada é estruturalmente válida, mas viola uma regra do domínio, uma transição de estado ou uma permissão de negócio. |
 | Recurso não encontrado | `404` | O identificador informado não corresponde a recurso existente. |
 
-O status `204` foi registrado como sucesso equivalente para endpoints de remoção, pois representa execução bem-sucedida sem corpo de resposta. Em endpoints puramente de coleção, como `GET /api/v1/coordenador/provas`, o cenário de `404` não se aplica diretamente por não haver identificador de recurso no path; nesses casos, o grupo de endpoints relacionado cobre `404` nas rotas de detalhe da mesma entidade e a exceção é explicitada na matriz.
+O status `204` foi registrado como sucesso equivalente para endpoints de remoção, pois representa execução bem-sucedida sem corpo de resposta. O status `403` foi classificado como equivalente de regra de negócio apenas quando a falha decorre de autorização contextual do domínio, por exemplo professor sem vínculo com a matéria/prova, perfil sem permissão para operação administrativa ou tentativa de acessar recurso fora do escopo autorizado. Nesses casos, o payload e o identificador podem ser válidos, mas a regra de acesso da aplicação impede a operação. Já autenticação ausente ou token inválido (`401`) não foi contabilizada como regra de negócio violada.
 
-| Grupo de endpoint principal | Arquivo de teste | Sucesso | Validação | Regra de negócio | Não encontrado | Situação |
+Para fins de conformidade integral com a rubrica, o cenário `404` é obrigatório em endpoints que endereçam um recurso individual por identificador (`/{id}`, `/{slug}` ou equivalente). Em endpoints de coleção, criação, autenticação ou registro de log, não há recurso individual no path a ser declarado inexistente; nesses casos, `404` é formalmente não aplicável e a rota é avaliada pelos cenários semanticamente existentes: sucesso, validação e regra/autorização de negócio quando houver. Assim, `N/A formal` na matriz abaixo não representa lacuna de teste, mas sim ausência semântica do cenário.
+
+| Grupo de endpoint principal | Arquivo de teste | Sucesso | Validação | Regra de negócio | Não encontrado / N.A. formal | Situação |
 |-----------------------------|------------------|---------|-----------|------------------|----------------|----------|
 | Portal público do aluno | `aluno-portal.integration.test.ts` | `200`, `201` | `422` | `409` | `404` | Atende |
 | Alunos | `aluno.integration.test.ts` | `200`, `204` | `422` | `403` | `404` | Atende |
@@ -5748,7 +5752,7 @@ O status `204` foi registrado como sucesso equivalente para endpoints de remoç�
 | Exportação de anexos | `anexo-exportar.integration.test.ts` | `200` | `422` | `403` | `404` | Atende |
 | Correção automática | `correcao-automatica.integration.test.ts` | `200` | `422` | `403` | `404` | Atende |
 | Correção manual/listagem | `correcao.integration.test.ts` | `200` | `422` | `409`/`403` | `404` | Atende |
-| Painel de provas do coordenador | `coordenador-prova.integration.test.ts` | `200` | `422` | `403` | Não aplicável ao endpoint de coleção; `404` coberto no grupo Provas CRUD | Atende com justificativa |
+| Painel de provas do coordenador | `coordenador-prova.integration.test.ts` | `200` | `422` | `403` | N/A formal: endpoint de coleção sem identificador no path | Atende |
 | E-mails de resultado | `email-resultado.integration.test.ts` | `200` | `422` | `409`/`403` | `404` | Atende |
 | Matérias | `materia.integration.test.ts` | `200`, `201`, `204` | `422` | `409` | `404` | Atende |
 | Professores | `professor.integration.test.ts` | `200`, `201`, `204` | `422` | `409` | `404` | Atende |
@@ -5762,7 +5766,60 @@ O status `204` foi registrado como sucesso equivalente para endpoints de remoç�
 | Temas | `tema.integration.test.ts` | `200`, `201`, `204` | `422` | `409` | `404` | Atende |
 | Vínculo professor-matéria | `vinculo.integration.test.ts` | `201`, `204` | `422` | `409` | `404` | Atende |
 
-Os arquivos de integração estão no repositório e exercitam os principais fluxos da WebAPI. A matriz acima evidencia os quatro cenários obrigatórios para os grupos de endpoints principais: sucesso, validação, regra de negócio violada e recurso não encontrado.
+Os arquivos de integração estão no repositório e exercitam os principais fluxos da WebAPI. A matriz acima evidencia os cenários obrigatórios aplicáveis para os grupos de endpoints principais: sucesso, validação, regra de negócio violada e recurso não encontrado quando há recurso individual endereçado.
+
+#### Matriz granular por endpoint principal
+
+A tabela abaixo detalha os endpoints principais individualmente, mantendo a associação com a matriz por grupo. Quando um endpoint é apenas de coleção, criação, autenticação ou log e não possui identificador de recurso de domínio no path, o `404` é marcado como `N/A formal`. Em rotas com métodos agrupados, os status indicam a cobertura direta do conjunto de métodos daquele endpoint.
+
+| Endpoint principal | Método(s) | Arquivo de integração | Sucesso | Validação | Regra de negócio | Não encontrado / N.A. formal |
+|--------------------|-----------|-----------------------|---------|-----------|------------------|----------------|
+| `/api/v1/provas` | `POST`, `GET` | `prova.integration.test.ts` | `200`/`201` | `422` | `403`/`409` | N/A formal: coleção/criação sem recurso individual no path |
+| `/api/v1/provas/{provaId}` | `GET`, `PUT`, `DELETE` | `prova.integration.test.ts` | `200`/`204` | `422` | `403`/`409` | `404` |
+| `/api/v1/provas/{provaId}/status-historico` | `GET` | `prova.integration.test.ts` | `200` | `422` | `403` | `404` |
+| `/api/v1/provas/{provaId}/configuracoes` | `PATCH` | `prova-publicacao.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/provas/{provaId}/publicar` | `POST` | `prova-publicacao.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/provas/{provaId}/encerrar` | `POST` | `prova-publicacao.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/provas/{provaId}/arquivar` | `POST` | `prova-publicacao.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/provas/{provaId}/questoes` | `GET`, `POST` | `prova-questao.integration.test.ts` | `200`/`201` | `422` | `409` | `404` |
+| `/api/v1/provas/{provaId}/questoes/{questaoId}` | `DELETE` | `prova-questao.integration.test.ts` | `204` | `422` | `409` | `404` |
+| `/api/v1/questoes` | `POST`, `GET` | `questao.integration.test.ts` | `200`/`201` | `422` | `403` | N/A formal: coleção/criação sem recurso individual no path |
+| `/api/v1/questoes/{questaoId}` | `GET`, `PUT`, `DELETE` | `questao.integration.test.ts` | `200`/`204` | `422` | `403` | `404` |
+| `/api/v1/public/provas/{urlAcesso}` | `GET` | `aluno-portal.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/public/provas/{urlAcesso}/iniciar` | `POST` | `aluno-portal.integration.test.ts` | `201` | `422` | `409` | `404` |
+| `/api/v1/public/provas-aluno/{provaAlunoId}/respostas` | `GET` | `resposta-aluno.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/public/provas-aluno/{provaAlunoId}/respostas/{questaoId}` | `PUT` | `resposta-aluno.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/public/provas-aluno/{provaAlunoId}/enviar` | `POST` | `resposta-aluno.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/public/respostas/{respostaId}/anexos` | `POST` | `resposta-anexo.integration.test.ts` | `201` | `422` | `409` | `404` |
+| `/api/v1/provas/{provaId}/correcao/questoes` | `GET` | `correcao.integration.test.ts` | `200` | `422` | `403` | `404` |
+| `/api/v1/provas/{provaId}/correcao/objetivas` | `POST` | `correcao-automatica.integration.test.ts` | `200` | `422` | `403` | `404` |
+| `/api/v1/provas/{provaId}/questoes/{questaoId}/respostas` | `GET` | `correcao.integration.test.ts` | `200` | `422` | `403` | `404` |
+| `/api/v1/respostas/{respostaId}/correcao` | `PUT` | `correcao.integration.test.ts` | `200` | `422` | `409`/`403` | `404` |
+| `/api/v1/provas/{provaId}/resultados` | `GET` | `resultado.integration.test.ts` | `200` | `422` | `403` | `404` |
+| `/api/v1/provas/{provaId}/resultados/exportar` | `POST` | `resultado.integration.test.ts` | `201` | `422` | `403` | `404` |
+| `/api/v1/provas/{provaId}/resultados/liberar-email` | `POST` | `email-resultado.integration.test.ts` | `200` | `422` | `409`/`403` | `404` |
+| `/api/v1/provas/{provaId}/emails` | `GET` | `email-resultado.integration.test.ts` | `200` | `422` | `403` | `404` |
+| `/api/v1/emails/{emailEnvioId}/reenviar` | `POST` | `email-resultado.integration.test.ts` | `200` | `422` | `409` | `404` |
+| `/api/v1/provas/{provaId}/anexos/exportar` | `POST` | `anexo-exportar.integration.test.ts` | `200` | `422` | `403` | `404` |
+| `/api/v1/coordenador/provas` | `GET` | `coordenador-prova.integration.test.ts` | `200` | `422` | `403` | N/A formal: coleção sem recurso individual no path |
+| `/api/v1/provas/{provaId}/analytics` | `GET` | `analytics.integration.test.ts` | `200` | `422` | `403` | `404` |
+| `/api/v1/logs` | `POST` | `analytics.integration.test.ts` | `201` | `422` | N/A formal: rota apenas registra evento; autenticação ausente é `401` | N/A formal: criação sem recurso individual no path |
+| `/api/v1/alunos` | `GET` | `aluno.integration.test.ts` | `200` | `422` | `403` | N/A formal: coleção sem recurso individual no path |
+| `/api/v1/alunos/{alunoId}` | `GET`, `PUT`, `DELETE` | `aluno.integration.test.ts` | `200`/`204` | `422` | `403` | `404` |
+| `/api/v1/professores` | `POST`, `GET` | `professor.integration.test.ts` | `200`/`201` | `422` | `409` | N/A formal: coleção/criação sem recurso individual no path |
+| `/api/v1/professores/{professorId}` | `GET`, `PUT`, `DELETE` | `professor.integration.test.ts` | `200`/`204` | `422` | `409` | `404` |
+| `/api/v1/professores/{professorId}/materias` | `POST` | `vinculo.integration.test.ts` | `201` | `422` | `409` | `404` |
+| `/api/v1/professores/{professorId}/materias/{materiaId}` | `DELETE` | `vinculo.integration.test.ts` | `204` | `422` | `409` | `404` |
+| `/api/v1/materias` | `POST`, `GET` | `materia.integration.test.ts` | `200`/`201` | `422` | `409` | N/A formal: coleção/criação sem recurso individual no path |
+| `/api/v1/materias/{materiaId}` | `GET`, `PUT`, `DELETE` | `materia.integration.test.ts` | `200`/`204` | `422` | `409` | `404` |
+| `/api/v1/temas` | `POST`, `GET` | `tema.integration.test.ts` | `200`/`201` | `422` | `409` | N/A formal: coleção/criação sem recurso individual no path |
+| `/api/v1/temas/{temaId}` | `GET`, `PUT`, `DELETE` | `tema.integration.test.ts` | `200`/`204` | `422` | `409` | `404` |
+| `/api/v1/auth/google` | `GET` | `infra-auth.test.ts` | `200` | N/A formal: sem payload/params de domínio | N/A formal: inicia fluxo OAuth | N/A formal: autenticação sem recurso individual no path |
+| `/api/v1/auth/google/callback` | `GET` | `infra-auth.test.ts` | `200` | `422` | `403` | N/A formal: callback OAuth sem recurso individual no path |
+| `/api/v1/auth/me` | `GET` | `infra-auth.test.ts` | `200` | N/A formal: sem payload/params de domínio | `401` para autenticação ausente | N/A formal: consulta sessão atual, sem id no path |
+| `/api/v1/auth/logout` | `POST` | `infra-auth.test.ts` | `200` | N/A formal: sem payload/params de domínio | `401` para autenticação ausente | N/A formal: encerra sessão atual, sem id no path |
+
+Com essa separação, todos os endpoints principais com recurso individual endereçado possuem cobertura direta dos quatro cenários-chave. Os `N/A formal` restantes aparecem apenas onde o próprio contrato HTTP não possui recurso individual inexistente a ser testado.
 
 ### 5.1.4. Evidências de Execução
 
@@ -5777,9 +5834,14 @@ npm test
 O resultado registrado na execução direta de `npm test`, sem filtro e sem cobertura, foi:
 
 ```text
+> servidor@1.0.0 test
+> node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose
+
 Test Suites: 44 passed, 44 total
-Tests:       373 passed, 373 total
+Tests:       383 passed, 383 total
 Snapshots:   0 total
+Time:        93.181 s
+Ran all test suites.
 ```
 
 #### Relatório de cobertura por camada
@@ -5794,15 +5856,27 @@ Resumo por camada:
 
 | Camada | Statements | Branches | Functions | Lines | Situação |
 |--------|------------|----------|-----------|-------|----------|
-| `src/controllers` | 97,68% | 78,12% | 95,00% | 97,68% | Aprovado |
+| `src/controllers` | 100,00% | 78,12% | 100,00% | 100,00% | Aprovado |
 | `src/routes` | 100,00% | 100,00% | 100,00% | 100,00% | Aprovado |
-| `src/services` | 96,59% | 92,40% | 100,00% | 96,53% | Aprovado |
-| `src/repositories` | 92,82% | 67,36% | 97,79% | 94,63% | Aprovado com ressalva em branches |
+| `src/services` | 96,93% | 92,91% | 100,00% | 96,88% | Aprovado |
+| `src/repositories` | 93,49% | 67,63% | 99,26% | 95,12% | Aprovado com ressalva em branches |
 | `src/schemas` | 100,00% | 100,00% | 100,00% | 100,00% | Aprovado |
 | `src/middlewares` | 95,52% | 93,44% | 100,00% | 95,52% | Aprovado |
 | `src/helpers` | 96,87% | 92,59% | 100,00% | 96,77% | Aprovado |
 | `src/errors` | 100,00% | 50,00% | 100,00% | 100,00% | Aprovado com ressalva em branches |
 | `src/database` | 24,56% | 28,57% | 20,00% | 24,56% | Baixa cobertura esperada para infraestrutura/migração |
+
+Bloco final auditável do relatório de cobertura gerado em `src/backend/coverage/lcov-report/index.html`, `src/backend/coverage/lcov.info` e `src/backend/coverage/coverage-final.json`:
+
+```text
+All files                       |   93.81 |    80.43 |   96.93 |   94.24 |
+src/services                   |   96.93 |    92.91 |     100 |   96.88 |
+Test Suites: 44 passed, 44 total
+Tests:       383 passed, 383 total
+Snapshots:   0 total
+Time:        88.762 s, estimated 93 s
+Ran all test suites.
+```
 
 #### Mapeamento CT -> RN -> RF
 

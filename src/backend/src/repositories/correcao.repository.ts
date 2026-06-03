@@ -2,8 +2,10 @@ import { pool } from "../database/pool.js";
 import { withTransaction } from "../database/transaction.js";
 import { toIsoString } from "../helpers/date.js";
 import type { AuthUser } from "../middlewares/auth.js";
+import type { CorrecaoQuestao, CorrecaoResposta, CorrecaoSalva, CorrecaoAutomatica } from "../models/correcao.model.js";
 import type { SalvarCorrecaoInput } from "../schemas/correcao.schema.js";
 
+/** Linha agregada de questão com contagem de respostas e correções. */
 type CorrecaoQuestaoRow = {
   questao_id: string;
   ordem_original: number;
@@ -12,6 +14,7 @@ type CorrecaoQuestaoRow = {
   corrigidas: string;
 };
 
+/** Linha bruta de resposta com JOINs para aluno, anexos e correção. */
 type CorrecaoRespostaRow = {
   resposta_id: string;
   aluno_id: string;
@@ -25,6 +28,7 @@ type CorrecaoRespostaRow = {
   correcao_corrigida_em: Date | string | null;
 };
 
+/** Linha de contexto para validação de permissão de correção. */
 type RespostaCorrecaoContextRow = {
   resposta_id: string;
   prova_id: string;
@@ -34,6 +38,7 @@ type RespostaCorrecaoContextRow = {
   prova_aluno_status: string;
 };
 
+/** Linha bruta da tabela `correcao`. Campos em snake_case. */
 type CorrecaoRow = {
   id: string;
   nota: string | number;
@@ -41,7 +46,9 @@ type CorrecaoRow = {
   corrigida_em: Date | string | null;
 };
 
-const mapQuestao = (row: CorrecaoQuestaoRow) => ({
+/** Converte uma CorrecaoQuestaoRow (snake_case) para o modelo CorrecaoQuestao (camelCase).
+ *  total_respostas, corrigidas e pontuacao_max são convertidas de string (COUNT/NUMERIC) para Number. */
+const mapQuestao = (row: CorrecaoQuestaoRow): CorrecaoQuestao => ({
   questaoId: row.questao_id,
   ordemOriginal: row.ordem_original,
   pontuacaoMax: Number(row.pontuacao_max),
@@ -51,7 +58,10 @@ const mapQuestao = (row: CorrecaoQuestaoRow) => ({
   },
 });
 
-const mapResposta = (row: CorrecaoRespostaRow) => ({
+/** Converte uma CorrecaoRespostaRow (snake_case) para o modelo CorrecaoResposta (camelCase).
+ *  Objetos aninhados aluno e correcao são populados; correcao só é montada se correcao_id existir.
+ *  nota é convertida de string (NUMERIC) para Number. */
+const mapResposta = (row: CorrecaoRespostaRow): CorrecaoResposta => ({
   respostaId: row.resposta_id,
   aluno: {
     id: row.aluno_id,
@@ -70,14 +80,43 @@ const mapResposta = (row: CorrecaoRespostaRow) => ({
     : null,
 });
 
-const mapCorrecao = (row: CorrecaoRow) => ({
+/** Converte uma CorrecaoRow (snake_case) para o modelo CorrecaoSalva (camelCase).
+ *  nota é convertida de string (NUMERIC) para Number. */
+const mapCorrecao = (row: CorrecaoRow): CorrecaoSalva => ({
   id: row.id,
   nota: Number(row.nota),
   tipo: row.tipo,
   corrigidaEm: toIsoString(row.corrigida_em) ?? "",
 });
 
+/**
+ * Repositório de correções manuais e automáticas de respostas.
+ *
+ * A correção automática (corrigirObjetivas) usa INSERT … ON CONFLICT
+ * para atribuir nota conforme alternativa correta. upsertCorrecao
+ * permite revisão de nota e inserção opcional de feedback.
+ */
 export class CorrecaoRepository {
+  /**
+   * Verifica se a prova existe antes de avaliar permissão de correção.
+   *
+   * @param provaId - ID da prova.
+   * @returns true se a prova existir.
+   */
+  async findProvaExists(provaId: string) {
+    const result = await pool.query('SELECT EXISTS (SELECT 1 FROM "prova" WHERE "id" = $1) AS "exists"', [
+      provaId,
+    ]);
+    return result.rows[0]?.exists ?? false;
+  }
+
+  /**
+   * Verifica se o usuário tem acesso à prova para correção.
+   *
+   * @param provaId - ID da prova.
+   * @param user - Usuário autenticado.
+   * @returns true se tiver acesso.
+   */
   async hasAccessToProva(provaId: string, user: AuthUser) {
     if (user.perfil === "coordenador") return true;
 
@@ -101,6 +140,12 @@ export class CorrecaoRepository {
     return result.rows[0]?.exists ?? false;
   }
 
+  /**
+   * Lista questões de uma prova com progresso de correção.
+   *
+   * @param provaId - ID da prova.
+   * @returns Lista de questões com total de respostas e corrigidas.
+   */
   async findQuestoesDaProva(provaId: string) {
     const result = await pool.query<CorrecaoQuestaoRow>(
       `
@@ -128,6 +173,13 @@ export class CorrecaoRepository {
     return result.rows.map(mapQuestao);
   }
 
+  /**
+   * Lista respostas de uma questão com dados do aluno, anexos e correção.
+   *
+   * @param provaId - ID da prova.
+   * @param questaoId - ID da questão.
+   * @returns Lista de respostas com dados completos.
+   */
   async findRespostasPorQuestao(provaId: string, questaoId: string) {
     const result = await pool.query<CorrecaoRespostaRow>(
       `
@@ -169,6 +221,12 @@ export class CorrecaoRepository {
     return result.rows.map(mapResposta);
   }
 
+  /**
+   * Busca contexto de uma resposta para validação de permissão de correção.
+   *
+   * @param respostaId - ID da resposta.
+   * @returns Contexto da resposta ou null.
+   */
   async findRespostaContext(respostaId: string) {
     const result = await pool.query<RespostaCorrecaoContextRow>(
       `
@@ -202,6 +260,13 @@ export class CorrecaoRepository {
       : null;
   }
 
+  /**
+   * Verifica se o professor possui vínculo com a matéria.
+   *
+   * @param professorId - ID do professor.
+   * @param materiaId - ID da matéria.
+   * @returns true se houver vínculo.
+   */
   async professorLinkedToMateria(professorId: string, materiaId: string) {
     const result = await pool.query(
       'SELECT EXISTS (SELECT 1 FROM "materia_professor" WHERE "professor_id" = $1 AND "materia_id" = $2) AS "exists"',
@@ -210,6 +275,15 @@ export class CorrecaoRepository {
     return result.rows[0]?.exists ?? false;
   }
 
+  /**
+   * Cria ou atualiza uma correção manual para uma resposta.
+   * Usa ON CONFLICT (resposta_id) para permitir revisão de nota.
+   *
+   * @param respostaId - ID da resposta a ser corrigida.
+   * @param professorId - ID do professor responsável.
+   * @param input - Dados da correção: nota, observacao e feedback opcional.
+   * @returns Dados da correção salva.
+   */
   async upsertCorrecao(respostaId: string, professorId: string, input: SalvarCorrecaoInput) {
     return withTransaction(async (client) => {
       const result = await client.query<CorrecaoRow>(
@@ -238,7 +312,16 @@ export class CorrecaoRepository {
     });
   }
 
-  async corrigirObjetivas(provaId: string, professorId: string) {
+  /**
+   * Corrige automaticamente questões objetivas (múltipla escolha e verdadeiro/falso).
+   * Atribui pontuacao_max se alternativa correta, zero caso contrário.
+   * Retorna total de pendências discursivas que exigem correção manual.
+   *
+   * @param provaId - ID da prova.
+   * @param professorId - ID do professor responsável.
+   * @returns Resumo com respostas corrigidas e pendências discursivas.
+   */
+  async corrigirObjetivas(provaId: string, professorId: string): Promise<CorrecaoAutomatica> {
     return withTransaction(async (client) => {
       await client.query(
         `
