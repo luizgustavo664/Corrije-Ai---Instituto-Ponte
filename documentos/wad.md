@@ -1584,7 +1584,7 @@ A matriz abaixo foi atualizada a partir das rotas registradas no backend Fastify
 
 ### 3.2.1. Diagrama de Arquitetura (sprints 3 e 4)
 
-A arquitetura atual do backend segue uma organização em camadas, implementada em TypeScript com Fastify, validação por Zod, documentação automática via Swagger/OpenAPI e persistência em PostgreSQL/Supabase. O código entregue nesta sprint está concentrado no diretório src, com separação explícita entre rotas, controllers, services, repositories, schemas, middlewares, helpers, database, errors e testes.
+A arquitetura atual do backend segue uma organização em camadas, implementada em TypeScript com Fastify, validação por Zod, documentação automática via Swagger/OpenAPI e persistência em PostgreSQL/Supabase. O código entregue nesta sprint está concentrado no diretório `src`, com separação explícita entre rotas, controllers, services, repositories, schemas, middlewares, helpers, database, errors e testes.
 
 A aplicação não possui, no código analisado, uma camada de frontend implementada dentro do artefato entregue. Por isso, o diagrama abaixo representa o estado real do backend e seus pontos de integração: clientes HTTP acessam a WebAPI, a WebAPI processa autenticação, validação, regras de negócio e persistência, e o banco PostgreSQL/Supabase armazena os dados da aplicação.
 
@@ -1883,25 +1883,27 @@ Pool --> DB
 @enduml
 ```
 
-A aplicação é inicializada por src/server.ts, que chama buildApp() em src/app.ts e sobe o servidor na porta definida por process.env.PORT, usando 3333 como padrão. Dentro de buildApp(), o Fastify registra CORS, Swagger, Swagger UI, compiladores de validação/serialização baseados em Zod e todas as rotas sob o prefixo /api/v1. A documentação OpenAPI fica disponível em /docs, gerada a partir dos schemas declarados diretamente nas rotas.
+A aplicação é inicializada por `src/server.ts`, que chama `buildApp()` em `src/app.ts` e sobe o servidor na porta definida por `process.env.PORT`, usando `3333` como padrão. Dentro de `buildApp()`, o Fastify registra CORS, Swagger, Swagger UI, compiladores de validação/serialização baseados em Zod e todas as rotas sob o prefixo `/api/v1`. A documentação OpenAPI fica disponível em `/docs`, gerada a partir dos schemas declarados diretamente nas rotas.
 
 A arquitetura observada no código é composta pelas seguintes camadas reais:
 
-Camada	Diretório/arquivo	Responsabilidade real no código
-Inicialização da aplicação	src/server.ts, src/app.ts	Cria a instância Fastify, registra plugins, configura Swagger, registra rotas, define tratamento global de erros e inicia o servidor HTTP.
-Rotas	src/routes/*.routes.ts	Declaram endpoints, métodos HTTP, schemas Zod de params, querystring, body e response, além de aplicar middlewares de autenticação/autorização quando necessário.
-Controllers	src/controllers/*.controller.ts	Recebem a requisição validada, extraem usuário autenticado ou parâmetros, chamam services e retornam respostas padronizadas por helpers HTTP.
-Services	src/services/*.service.ts	Concentraram regras de negócio, validações de fluxo, autorização de domínio, orquestração de repositories, cálculo de resultados, correção e envio de e-mails.
-Repositories	src/repositories/*.repository.ts	Encapsulam queries SQL, JOINs, INSERTs, UPDATEs, DELETEs, UPSERTs, paginação, consultas agregadas e acesso direto ao PostgreSQL.
-Schemas	src/schemas/*.schema.ts	Definem contratos de entrada e saída da WebAPI com Zod, alimentando tanto a validação em runtime quanto a documentação Swagger/OpenAPI.
-Middlewares	src/middlewares/auth.ts	Implementam autenticação por Bearer Token, validação de JWT Supabase, modo de teste e autorização por perfil (professor ou coordenador).
-Banco e transações	src/database/pool.ts, src/database/transaction.ts, src/database/migrations/*.sql	Configuram o pool PostgreSQL, transações manuais e estrutura persistente do banco, incluindo tabelas, enums, constraints, triggers, funções e RLS.
-Erros	src/errors/api-error.ts	Padronizam erros de domínio e infraestrutura com status HTTP e códigos como UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT e BUSINESS_RULE_ERROR.
-Helpers	src/helpers/http.ts, src/helpers/multipart.ts, src/helpers/date.ts	Padronizam envelope de resposta, obtenção do usuário autenticado, parsing de multipart e utilitários de data.
-Testes	src/tests e src/tests/unit	Cobrem integrações e unidades de services, repositories, controllers, middlewares, helpers, transações, autenticação, provas, questões, respostas, correção, resultados, e-mails e analytics.
+| Camada | Diretório/arquivo | Responsabilidade real no código |
+|---|---|---|
+| Inicialização da aplicação | `src/server.ts`, `src/app.ts` | Cria a instância Fastify, registra plugins, configura Swagger, registra rotas, define tratamento global de erros e inicia o servidor HTTP. |
+| Rotas | `src/routes/*.routes.ts` | Declaram endpoints, métodos HTTP, schemas Zod de `params`, `querystring`, `body` e `response`, além de aplicar middlewares de autenticação/autorização quando necessário. |
+| Controllers | `src/controllers/*.controller.ts` | Recebem a requisição validada, extraem usuário autenticado ou parâmetros, chamam services e retornam respostas padronizadas por helpers HTTP. |
+| Services | `src/services/*.service.ts` | Concentraram regras de negócio, validações de fluxo, autorização de domínio, orquestração de repositories, cálculo de resultados, correção e envio de e-mails. |
+| Repositories | `src/repositories/*.repository.ts` | Encapsulam queries SQL, `JOINs`, `INSERTs`, `UPDATEs`, `DELETEs`, `UPSERTs`, paginação, consultas agregadas e acesso direto ao PostgreSQL. |
+| Schemas | `src/schemas/*.schema.ts` | Definem contratos de entrada e saída da WebAPI com Zod, alimentando tanto a validação em runtime quanto a documentação Swagger/OpenAPI. |
+| Middlewares | `src/middlewares/auth.ts` | Implementam autenticação por Bearer Token, validação de JWT Supabase, modo de teste e autorização por perfil (`professor` ou `coordenador`). |
+| Banco e transações | `src/database/pool.ts`, `src/database/transaction.ts`, `src/database/migrations/*.sql` | Configuram o pool PostgreSQL, transações manuais e estrutura persistente do banco, incluindo tabelas, enums, constraints, triggers, funções e RLS. |
+| Erros | `src/errors/api-error.ts` | Padronizam erros de domínio e infraestrutura com status HTTP e códigos como `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT` e `BUSINESS_RULE_ERROR`. |
+| Helpers | `src/helpers/http.ts`, `src/helpers/multipart.ts`, `src/helpers/date.ts` | Padronizam envelope de resposta, obtenção do usuário autenticado, parsing de multipart e utilitários de data. |
+| Testes | `src/tests` e `src/tests/unit` | Cobrem integrações e unidades de services, repositories, controllers, middlewares, helpers, transações, autenticação, provas, questões, respostas, correção, resultados, e-mails e analytics. |
 
 A estrutura de dependência segue, na prática, o fluxo:
 
+```text
 Cliente HTTP
   -> Fastify route
   -> middleware de autenticação/autorização, quando aplicado
@@ -1911,8 +1913,11 @@ Cliente HTTP
   -> repository
   -> pool PostgreSQL
   -> banco PostgreSQL/Supabase
+```
 
 Esse fluxo evita que as rotas executem SQL diretamente. As rotas apenas descrevem o contrato HTTP e apontam para o controller. Os controllers chamam services. As services aplicam regra de negócio e chamam repositories. Os repositories fazem o acesso ao banco.
+
+---
 
 ### 3.2.2. Diagrama de Casos de Uso
 
@@ -3694,196 +3699,219 @@ end
 
 ### 3.2.7. Padroes de Projeto Aplicados (sprints 3 a 5)
 
-Esta seção lista apenas padrões que aparecem no código entregue.
+Esta seção lista apenas padrões que aparecem no código entregue. Não foram incluídos padrões sem evidência direta na estrutura do projeto.
 
-## 1. Layered Architecture
+### 1. Layered Architecture
 
-O projeto aplica arquitetura em camadas, separando rotas, controllers, services, repositories e infraestrutura de banco. Essa separação é visível na organização dos diretórios src/routes, src/controllers, src/services, src/repositories, src/schemas, src/middlewares e src/database.
+O projeto aplica arquitetura em camadas, separando rotas, controllers, services, repositories e infraestrutura de banco. Essa separação é visível na organização dos diretórios `src/routes`, `src/controllers`, `src/services`, `src/repositories`, `src/schemas`, `src/middlewares` e `src/database`.
 
 A camada de rotas declara endpoints e contratos. A camada de controllers recebe requisições e respostas. A camada de services concentra regras de negócio. A camada de repositories concentra SQL e acesso ao PostgreSQL. A infraestrutura de banco, autenticação e erros fica separada em módulos próprios.
 
 Exemplos reais:
 
-Fluxo	Encadeamento
-Criação de prova	prova.routes.ts → ProvaController → ProvaService → ProvaRepository → PostgreSQL
-Criação/listagem de questões	questao.routes.ts → QuestaoController → QuestaoService → QuestaoRepository → PostgreSQL
-Portal do aluno	aluno-portal.routes.ts → AlunoPortalController → AlunoPortalService → AlunoPortalRepository → PostgreSQL
-Correção	correcao.routes.ts → CorrecaoController → CorrecaoService → CorrecaoRepository → PostgreSQL
-Resultados	resultado.routes.ts → ResultadoController → ResultadoService → ResultadoRepository → PostgreSQL
+| Fluxo | Encadeamento |
+|---|---|
+| Criação de prova | `prova.routes.ts` → `ProvaController` → `ProvaService` → `ProvaRepository` → PostgreSQL |
+| Criação/listagem de questões | `questao.routes.ts` → `QuestaoController` → `QuestaoService` → `QuestaoRepository` → PostgreSQL |
+| Portal do aluno | `aluno-portal.routes.ts` → `AlunoPortalController` → `AlunoPortalService` → `AlunoPortalRepository` → PostgreSQL |
+| Correção | `correcao.routes.ts` → `CorrecaoController` → `CorrecaoService` → `CorrecaoRepository` → PostgreSQL |
+| Resultados | `resultado.routes.ts` → `ResultadoController` → `ResultadoService` → `ResultadoRepository` → PostgreSQL |
 
 Esse padrão reduz acoplamento e impede que regras de negócio fiquem espalhadas diretamente nas rotas HTTP.
 
-## 2. Repository Pattern
+### 2. Repository Pattern
 
-O padrão Repository é usado para isolar a persistência. Os repositories são responsáveis por montar queries SQL, executar comandos no banco, lidar com JOINs, paginação, agregações, UPSERTs e consultas especializadas.
+O padrão Repository é usado para isolar a persistência. Os repositories são responsáveis por montar queries SQL, executar comandos no banco, lidar com `JOINs`, paginação, agregações, `UPSERTs` e consultas especializadas.
 
 Repositories reais do código:
 
-Repository	Responsabilidade
-AlunoRepository	CRUD e consultas de alunos.
-AlunoPortalRepository	Consulta de prova pública, criação/reuso de aluno e tentativa da prova.
-AnalyticsRepository	Consulta de analytics de provas.
-AnexoExportarRepository	Busca e estrutura anexos para exportação.
-AuthRepository	Suporte à autenticação de usuários internos.
-AvaliacaoLogRepository	Persistência de logs operacionais.
-CorrecaoRepository	Consultas e gravações de correção, incluindo objetivas automáticas.
-EmailEnvioRepository	Registro, listagem e atualização de envios de e-mail.
-MateriaRepository	CRUD de matérias.
-ProfessorRepository	CRUD de professores e vínculos com matérias.
-ProvaRepository	CRUD, status, publicação, histórico e consultas de provas.
-ProvaQuestaoRepository	Vínculo entre provas e questões.
-QuestaoRepository	CRUD/listagem de questões, enunciados e alternativas.
-RespostaAlunoRepository	Salvamento, listagem e envio final de respostas.
-RespostaAnexoRepository	Registro de anexos vinculados a respostas.
-ResultadoRepository	Consolidação e exportação de resultados.
-TemaRepository	CRUD/listagem de temas.
+| Repository | Responsabilidade |
+|---|---|
+| `AlunoRepository` | CRUD e consultas de alunos. |
+| `AlunoPortalRepository` | Consulta de prova pública, criação/reuso de aluno e tentativa da prova. |
+| `AnalyticsRepository` | Consulta de analytics de provas. |
+| `AnexoExportarRepository` | Busca e estrutura anexos para exportação. |
+| `AuthRepository` | Suporte à autenticação de usuários internos. |
+| `AvaliacaoLogRepository` | Persistência de logs operacionais. |
+| `CorrecaoRepository` | Consultas e gravações de correção, incluindo objetivas automáticas. |
+| `EmailEnvioRepository` | Registro, listagem e atualização de envios de e-mail. |
+| `MateriaRepository` | CRUD de matérias. |
+| `ProfessorRepository` | CRUD de professores e vínculos com matérias. |
+| `ProvaRepository` | CRUD, status, publicação, histórico e consultas de provas. |
+| `ProvaQuestaoRepository` | Vínculo entre provas e questões. |
+| `QuestaoRepository` | CRUD/listagem de questões, enunciados e alternativas. |
+| `RespostaAlunoRepository` | Salvamento, listagem e envio final de respostas. |
+| `RespostaAnexoRepository` | Registro de anexos vinculados a respostas. |
+| `ResultadoRepository` | Consolidação e exportação de resultados. |
+| `TemaRepository` | CRUD/listagem de temas. |
 
 Esse padrão é importante porque o banco possui muitas regras relacionais e queries com múltiplas tabelas. Sem repositories, controllers e services ficariam acoplados à implementação SQL.
 
-## 3. Service Layer
+### 3. Service Layer
 
 O padrão Service Layer aparece em todos os domínios principais. As services não apenas repassam chamadas; elas aplicam regras e coordenam repositories.
 
 Exemplos reais:
 
-Service	Regras/orquestrações observáveis
-ProvaService	Cria prova, lista conforme perfil, atualiza metadados, valida status editável, publica, encerra, arquiva, remove e consulta histórico.
-ProvaQuestaoService	Garante que questões só sejam adicionadas/removidas em provas no status rascunho.
-QuestaoService	Valida acesso à matéria e coordena criação/edição/listagem de questões.
-AlunoPortalService	Valida se prova está publicada e disponível antes de exibir/iniciar prova pública.
-RespostaAlunoService	Garante que tentativa exista, esteja em andamento, salva rascunho e envia prova final.
-CorrecaoService	Controla acesso à prova, executa correção automática e salva correção manual.
-ResultadoService	Consolida resultados e restringe exportação a coordenadores.
-EmailResultadoService	Libera resultados por e-mail, trata pendências de correção, registra envios e permite reenvio apenas quando status é erro.
-RespostaAnexoService	Coordena upload de arquivo e registro do anexo.
+| Service | Regras/orquestrações observáveis |
+|---|---|
+| `ProvaService` | Cria prova, lista conforme perfil, atualiza metadados, valida status editável, publica, encerra, arquiva, remove e consulta histórico. |
+| `ProvaQuestaoService` | Garante que questões só sejam adicionadas/removidas em provas no status `rascunho`. |
+| `QuestaoService` | Valida acesso à matéria e coordena criação/edição/listagem de questões. |
+| `AlunoPortalService` | Valida se prova está publicada e disponível antes de exibir/iniciar prova pública. |
+| `RespostaAlunoService` | Garante que tentativa exista, esteja em andamento, salva rascunho e envia prova final. |
+| `CorrecaoService` | Controla acesso à prova, executa correção automática e salva correção manual. |
+| `ResultadoService` | Consolida resultados e restringe exportação a coordenadores. |
+| `EmailResultadoService` | Libera resultados por e-mail, trata pendências de correção, registra envios e permite reenvio apenas quando status é `erro`. |
+| `RespostaAnexoService` | Coordena upload de arquivo e registro do anexo. |
 
-Esse padrão mantém as regras de negócio fora dos controllers e facilita testes unitários, como demonstrado pelos arquivos em src/tests/unit.
+Esse padrão mantém as regras de negócio fora dos controllers e facilita testes unitários, como demonstrado pelos arquivos em `src/tests/unit`.
 
-## 4. DTO/Schema Validation com Zod
+### 4. DTO/Schema Validation com Zod
 
-A aplicação usa Zod como mecanismo de validação e documentação. Os schemas estão em src/schemas e são conectados ao Fastify por fastify-type-provider-zod.
+A aplicação usa Zod como mecanismo de validação e documentação. Os schemas estão em `src/schemas` e são conectados ao Fastify por `fastify-type-provider-zod`.
 
 Exemplos de schemas reais:
 
-Arquivo	Exemplos de schemas
-prova.schema.ts	createProvaBodySchema, updateProvaBodySchema, publicarProvaBodySchema, provaSchema, provaDetailSchema.
-questao.schema.ts	createQuestaoBodySchema, updateQuestaoBodySchema, questaoTipoSchema, questaoResponseSchema.
-resposta-aluno.schema.ts	salvarRespostaBodySchema, enviarProvaBodySchema, respostaSalvaSchema.
-correcao.schema.ts	salvarCorrecaoBodySchema, correcaoQuestaoSchema, correcaoRespostaSchema.
-resultado.schema.ts	resultadoAlunoSchema, resultadoQuestaoSchema, exportarResultadoBodySchema.
-email.schema.ts	liberarEmailBodySchema, emailEnvioSchema, emailLiberadoSchema.
+| Arquivo | Exemplos de schemas |
+|---|---|
+| `prova.schema.ts` | `createProvaBodySchema`, `updateProvaBodySchema`, `publicarProvaBodySchema`, `provaSchema`, `provaDetailSchema`. |
+| `questao.schema.ts` | `createQuestaoBodySchema`, `updateQuestaoBodySchema`, `questaoTipoSchema`, `questaoResponseSchema`. |
+| `resposta-aluno.schema.ts` | `salvarRespostaBodySchema`, `enviarProvaBodySchema`, `respostaSalvaSchema`. |
+| `correcao.schema.ts` | `salvarCorrecaoBodySchema`, `correcaoQuestaoSchema`, `correcaoRespostaSchema`. |
+| `resultado.schema.ts` | `resultadoAlunoSchema`, `resultadoQuestaoSchema`, `exportarResultadoBodySchema`. |
+| `email.schema.ts` | `liberarEmailBodySchema`, `emailEnvioSchema`, `emailLiberadoSchema`. |
 
-Esse padrão evita que entradas inválidas avancem para a camada de serviço. Quando há erro de validação, o handler global retorna status 422 com erro padronizado.
+Esse padrão evita que entradas inválidas avancem para a camada de serviço. Quando há erro de validação, o handler global retorna status `422` com erro padronizado.
 
-## 5. Middleware Pattern
+### 5. Middleware Pattern
 
-O padrão Middleware aparece principalmente na autenticação/autorização. As rotas protegidas recebem preHandler: requireRole(...). O middleware executa antes do controller, valida o usuário e decide se a requisição pode continuar.
+O padrão Middleware aparece principalmente na autenticação/autorização. As rotas protegidas recebem `preHandler: requireRole(...)`. O middleware executa antes do controller, valida o usuário e decide se a requisição pode continuar.
 
 Exemplos:
 
+```text
 requireRole("professor")
 requireRole("coordenador")
 requireRole("professor", "coordenador")
+```
 
-O middleware requireAuth também possui dois modos reais:
+O middleware `requireAuth` também possui dois modos reais:
 
-Modo	Funcionamento
-Teste	Aceita headers x-user-role, x-user-id, x-user-email, x-user-name ou tokens test-professor/test-coordenador.
-Normal	Valida Bearer Token JWT com jose, usando SUPABASE_JWT_SECRET e, opcionalmente, SUPABASE_JWT_ISSUER. Depois busca o usuário em professor ou coordenador.
+| Modo | Funcionamento |
+|---|---|
+| Teste | Aceita headers `x-user-role`, `x-user-id`, `x-user-email`, `x-user-name` ou tokens `test-professor`/`test-coordenador`. |
+| Normal | Valida Bearer Token JWT com `jose`, usando `SUPABASE_JWT_SECRET` e, opcionalmente, `SUPABASE_JWT_ISSUER`. Depois busca o usuário em `professor` ou `coordenador`. |
 
 Esse padrão centraliza autenticação e autorização, evitando repetição de validação de token dentro de cada controller.
 
-## 6. Adapter Pattern
+### 6. Adapter Pattern
 
-O projeto possui uma interface EmailAdapter em src/services/email-adapter.ts, com implementação concreta FakeEmailAdapter.
+O projeto possui uma interface `EmailAdapter` em `src/services/email-adapter.ts`, com implementação concreta `FakeEmailAdapter`.
 
+```text
 EmailAdapter
   -> FakeEmailAdapter
+```
 
 A interface define o contrato:
 
+```text
 send(para, assunto, corpo): Promise<{ success: boolean; error?: string }>
+```
 
-A implementação atual é simulada: se EMAIL_FAIL_MODE=always, retorna falha; caso contrário, retorna sucesso. Isso permite que EmailResultadoService dependa de um contrato de envio, sem ficar acoplado a um provedor real de e-mail. No futuro, uma implementação real poderia substituir o adapter fake sem alterar a regra de negócio principal.
+A implementação atual é simulada: se `EMAIL_FAIL_MODE=always`, retorna falha; caso contrário, retorna sucesso. Isso permite que `EmailResultadoService` dependa de um contrato de envio, sem ficar acoplado a um provedor real de e-mail. No futuro, uma implementação real poderia substituir o adapter fake sem alterar a regra de negócio principal.
 
-## 7. Singleton/Shared Resource para pool de conexão
+### 7. Singleton/Shared Resource para pool de conexão
 
-O arquivo src/database/pool.ts exporta uma única instância de Pool do pacote pg. Todos os repositories reutilizam essa instância, evitando criar uma nova conexão para cada operação manualmente.
+O arquivo `src/database/pool.ts` exporta uma única instância de `Pool` do pacote `pg`. Todos os repositories reutilizam essa instância, evitando criar uma nova conexão para cada operação manualmente.
 
 Esse padrão de recurso compartilhado aparece na prática como:
 
+```text
 pool.ts
   -> export const pool = new Pool(...)
 repositories
   -> importam pool
 transaction.ts
   -> usa pool.connect()
+```
 
-A configuração também adapta SSL conforme o host: banco local (localhost ou 127.0.0.1) usa SSL falso; banco remoto usa SSL com rejectUnauthorized: false.
+A configuração também adapta SSL conforme o host: banco local (`localhost` ou `127.0.0.1`) usa SSL falso; banco remoto usa SSL com `rejectUnauthorized: false`.
 
-## 8. Unit of Work / Transaction Helper
+### 8. Unit of Work / Transaction Helper
 
-O helper withTransaction em src/database/transaction.ts implementa uma unidade de trabalho transacional. Ele abre uma conexão, executa BEGIN, roda o callback, aplica COMMIT em caso de sucesso e ROLLBACK em caso de erro, liberando o client no final.
+O helper `withTransaction` em `src/database/transaction.ts` implementa uma unidade de trabalho transacional. Ele abre uma conexão, executa `BEGIN`, roda o callback, aplica `COMMIT` em caso de sucesso e `ROLLBACK` em caso de erro, liberando o client no final.
 
 Esse padrão é importante em operações que precisam manter consistência entre múltiplos comandos SQL. Ele evita gravações parciais quando uma etapa falha.
 
 Fluxo implementado:
 
+```text
 pool.connect()
 BEGIN
 callback(client)
 COMMIT
 client.release()
+```
 
 Em caso de erro:
 
+```text
 ROLLBACK
 client.release()
 throw error
+```
 
-## 9. State Pattern aplicado ao ciclo de vida
+### 9. State Pattern aplicado ao ciclo de vida
 
-O sistema aplica uma lógica de estados para provas e tentativas de aluno. Embora não exista uma classe formal chamada State, o padrão aparece como modelagem explícita de estados, transições permitidas e ações associadas.
+O sistema aplica uma lógica de estados para provas e tentativas de aluno. Embora não exista uma classe formal chamada `State`, o padrão aparece como modelagem explícita de estados, transições permitidas e ações associadas.
 
 Estados da prova:
 
+```text
 rascunho -> publicada -> encerrada -> antiga
+```
 
 Estados da tentativa do aluno:
 
+```text
 nao_iniciada -> em_andamento -> enviada -> corrigida
+```
 
 A lógica aparece em:
 
-Local	Evidência
-prova_status	Enum no banco.
-prova_aluno_status	Enum no banco.
-ProvaService.publicar	Permite publicar apenas prova em rascunho.
-ProvaService.encerrar	Permite encerrar apenas prova publicada.
-ProvaService.arquivar	Permite arquivar apenas prova encerrada.
-ProvaQuestaoService	Permite alterar questões apenas em prova rascunho.
-RespostaAlunoService	Permite salvar/enviar apenas tentativa em andamento.
-Triggers SQL	Reforçam transições e regras de publicação no banco.
+| Local | Evidência |
+|---|---|
+| `prova_status` | Enum no banco. |
+| `prova_aluno_status` | Enum no banco. |
+| `ProvaService.publicar` | Permite publicar apenas prova em `rascunho`. |
+| `ProvaService.encerrar` | Permite encerrar apenas prova `publicada`. |
+| `ProvaService.arquivar` | Permite arquivar apenas prova `encerrada`. |
+| `ProvaQuestaoService` | Permite alterar questões apenas em prova `rascunho`. |
+| `RespostaAlunoService` | Permite salvar/enviar apenas tentativa em andamento. |
+| Triggers SQL | Reforçam transições e regras de publicação no banco. |
 
-## 10. Strategy Pattern aplicado à correção
+### 10. Strategy Pattern aplicado à correção
 
 O domínio de correção possui duas estratégias reais:
 
-Estratégia	Implementação
-Correção automática	POST /api/v1/provas/:provaId/correcao/objetivas, usando CorrecaoService.executarCorrecaoAutomatica e CorrecaoRepository.corrigirObjetivas.
-Correção manual	PUT /api/v1/respostas/:respostaId/correcao, usando nota, observação e feedback do professor.
+| Estratégia | Implementação |
+|---|---|
+| Correção automática | `POST /api/v1/provas/:provaId/correcao/objetivas`, usando `CorrecaoService.executarCorrecaoAutomatica` e `CorrecaoRepository.corrigirObjetivas`. |
+| Correção manual | `PUT /api/v1/respostas/:respostaId/correcao`, usando nota, observação e feedback do professor. |
 
-A correção automática atende questões objetivas, como múltipla escolha e verdadeiro/falso. A correção manual atende respostas que dependem da avaliação do professor, especialmente discursivas. As duas estratégias gravam dados na tabela correcao, diferenciadas pelo enum correcao_tipo.
+A correção automática atende questões objetivas, como múltipla escolha e verdadeiro/falso. A correção manual atende respostas que dependem da avaliação do professor, especialmente discursivas. As duas estratégias gravam dados na tabela `correcao`, diferenciadas pelo enum `correcao_tipo`.
 
-## 11. Template/Factory de resposta HTTP
+### 11. Template/Factory de resposta HTTP
 
-Os helpers HTTP padronizam a estrutura das respostas. Controllers não montam manualmente o envelope completo em todos os casos; eles usam funções auxiliares como sendSuccess e sendCreated.
+Os helpers HTTP padronizam a estrutura das respostas. Controllers não montam manualmente o envelope completo em todos os casos; eles usam funções auxiliares como `sendSuccess` e `sendCreated`.
 
 Isso padroniza o formato de retorno e torna a WebAPI mais previsível. Também reduz repetição nos controllers.
 
-## 12. Centralized Error Handling
+### 12. Centralized Error Handling
 
-O tratamento de erros é centralizado em src/app.ts pelo setErrorHandler. O projeto não espalha try/catch de formatação HTTP por todas as rotas. Erros de domínio são lançados como ApiError, erros de validação Zod são convertidos para VALIDATION_ERROR, rotas inexistentes recebem NOT_FOUND e erros inesperados retornam INTERNAL_ERROR.
+O tratamento de erros é centralizado em `src/app.ts` pelo `setErrorHandler`. O projeto não espalha `try/catch` de formatação HTTP por todas as rotas. Erros de domínio são lançados como `ApiError`, erros de validação Zod são convertidos para `VALIDATION_ERROR`, rotas inexistentes recebem `NOT_FOUND` e erros inesperados retornam `INTERNAL_ERROR`.
 
 Esse padrão melhora a consistência da API e facilita a documentação dos retornos.
 
