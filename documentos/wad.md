@@ -4549,103 +4549,728 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
 </div>
 
 ## 3.6. Modelagem do banco de dados (sprints 2 e 4)
-
-### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2)
-
-O ER conceitual abaixo segue a migration atual e usa apenas entidades reais do backend: coordenador, professor, aluno, materia, tema, questao, enunciado, alternativa, prova, prova_questao, prova_aluno, resposta_aluno, resposta_anexo, correcao, feedback, resultado_aluno, exportacao_resultado, email_envio e avaliacao_log.
-
+ 
+### 3.6.1. Modelo Entidade-Relacionamento (ER) (sprint 2, atualizado na sprint 4)
+ 
+Antes da implementação física do banco de dados, foi realizada a modelagem das informações do sistema por meio do Modelo Entidade-Relacionamento (MER) e do Diagrama Entidade-Relacionamento (DER). Esses diagramas têm como objetivo representar, em diferentes níveis de detalhamento, as principais entidades do projeto, seus atributos e os relacionamentos existentes entre elas.
+ 
+Na sprint 4, o modelo ER foi revisado para ficar alinhado à migration principal localizada em `src/backend/src/database/migrations/migration.sql`. A atualização substituiu a visão anterior baseada em tabelas associativas que não existem mais, como `prova_materia` e `prova_enunciado`, pela estrutura atual do banco, que utiliza `prova.materia_id`, `questao`, `enunciado`, `prova_questao`, `aluno`, `prova_aluno`, `resposta_aluno`, anexos, correções, resultados, exportações, e-mails e logs de avaliação.
+ 
+As entidades principais identificadas são:
+ 
+| Grupo | Entidades | Finalidade no domínio |
+| --- | --- | --- |
+| Usuários internos | `coordenador`, `professor` | Representam os perfis autenticados pelo Supabase Auth e responsáveis pela gestão e aplicação das provas. |
+| Organização pedagógica | `materia`, `tema`, `materia_professor` | Organizam as disciplinas, temas e vínculos entre professores e matérias. |
+| Banco de questões | `questao`, `enunciado`, `alternativa` | Armazenam questões reutilizáveis, enunciados em LaTeX/imagem e alternativas objetivas. |
+| Provas | `prova`, `prova_questao`, `prova_status_historico` | Controlam provas, questões selecionadas, ordem, pontuação e histórico de mudança de status. |
+| Participação do aluno | `aluno`, `prova_aluno`, `resposta_aluno`, `resposta_anexo` | Registram alunos, tentativas de prova, respostas, rascunhos e anexos enviados. |
+| Correção e retorno | `correcao`, `feedback`, `resultado_aluno`, `email_envio` | Guardam notas, feedbacks, resultados liberados e envio de e-mails. |
+| Gestão e auditoria | `relatorio`, `exportacao_resultado`, `avaliacao_log` | Apoiam relatórios, exportação de resultados e rastreabilidade de ações. |
+ 
+Os relacionamentos centrais identificados são:
+ 
+| Relacionamento | Cardinalidade | Descrição |
+| --- | --- | --- |
+| Coordenador - Professor | 1:N | Um coordenador pode gerenciar vários professores; cada professor pertence a um coordenador. |
+| Professor - Matéria | N:N | O vínculo é materializado por `materia_professor`. |
+| Matéria - Tema | 1:N | Uma matéria possui vários temas. |
+| Matéria - Questão | 1:N | Cada questão pertence a uma matéria. |
+| Tema - Questão | 0..1:N | Uma questão pode estar associada a um tema; um tema pode classificar várias questões. |
+| Questão - Enunciado | 1:1 | Cada questão possui um enunciado obrigatório. |
+| Questão - Alternativa | 1:N | Questões objetivas possuem alternativas. |
+| Professor - Prova | 1:N | Um professor elabora várias provas. |
+| Matéria - Prova | 1:N | Cada prova está vinculada a uma matéria principal. |
+| Prova - Questão | N:N | O vínculo é materializado por `prova_questao`, com ordem e pontuação. |
+| Prova - Aluno | N:N | O vínculo é materializado por `prova_aluno`, representando a tentativa do aluno. |
+| Prova do aluno - Resposta | 1:N | Cada tentativa contém respostas por questão. |
+| Resposta - Anexo | 1:N | Uma resposta pode possuir arquivos anexados. |
+| Resposta - Correção | 1:0..1 | Uma resposta pode receber uma correção. |
+| Correção - Feedback | 1:N | Uma correção pode possuir vários feedbacks. |
+| Prova do aluno - Resultado | 1:0..1 | A tentativa pode gerar um resultado consolidado. |
+| Prova/Coordenador - Relatório e Exportação | N:1 | Relatórios e exportações são gerados para uma prova por um coordenador. |
+| Prova/Prova do aluno - Log | 0..1:N | Logs registram ações associadas à prova ou à tentativa do aluno. |
+ 
 ~~~plantuml
-@startuml ERAtual
+@startuml
+title Modelo Entidade-Relacionamento Conceitual - MER
+ 
 hide circle
 skinparam linetype ortho
-
-entity coordenador
-entity professor
-entity aluno
-entity materia
-entity materia_professor
-entity tema
-entity questao
-entity enunciado
-entity alternativa
-entity prova
-entity prova_status_historico
-entity prova_questao
-entity prova_aluno
-entity resposta_aluno
-entity resposta_anexo
-entity correcao
-entity feedback
-entity resultado_aluno
-entity exportacao_resultado
-entity email_envio
-entity avaliacao_log
-
-coordenador ||--o{ professor
-professor ||--o{ materia_professor
-materia ||--o{ materia_professor
-materia ||--o{ tema
-materia ||--o{ questao
-materia ||--o{ prova
-questao ||--|| enunciado
-questao ||--o{ alternativa
-prova ||--o{ prova_status_historico
-prova ||--o{ prova_questao
-questao ||--o{ prova_questao
-prova ||--o{ prova_aluno
-aluno ||--o{ prova_aluno
-prova_aluno ||--o{ resposta_aluno
-questao ||--o{ resposta_aluno
-alternativa |o--o{ resposta_aluno
-resposta_aluno ||--o{ resposta_anexo
-resposta_aluno ||--o| correcao
-correcao ||--o{ feedback
-prova_aluno ||--o| resultado_aluno
-prova ||--o{ exportacao_resultado
-prova_aluno ||--o{ email_envio
-prova ||--o{ avaliacao_log
+skinparam classAttributeIconSize 0
+ 
+' =========================
+' Usuários internos
+' =========================
+ 
+entity "Professor" as professor {
+ * id
+ --
+ nome
+ email
+ auth_user_id
+}
+ 
+entity "Coordenador" as coordenador {
+ * id
+ --
+ nome
+ email
+ auth_user_id
+}
+ 
+' =========================
+' Organização pedagógica
+' =========================
+ 
+entity "Matéria" as materia {
+ * id
+ --
+ nome
+ codigo
+ descrição
+}
+ 
+entity "Tema" as tema {
+ * id
+ --
+ nome
+ descrição
+}
+ 
+' =========================
+' Prova
+' =========================
+ 
+entity "Aluno" as aluno {
+ * id
+ --
+ nome
+ email
+ cpf
+ aceitou_termos_em
+}
+ 
+entity "Questão" as questao {
+ * id
+ --
+ tipo
+ pontuação_padrão
+ limite_caracteres
+ limite_palavras
+ permite_anexo
+ ativa
+}
+ 
+entity "Enunciado" as enunciado {
+ * id
+ --
+ conteúdo_latex
+ url_imagem
+}
+ 
+entity "Alternativa" as alternativa {
+ * id
+ --
+ conteúdo_latex
+ url_imagem
+ correta
+ ordem_original
+}
+ 
+entity "Prova" as prova {
+ * id
+ --
+ título
+ modalidade
+ turma
+ semestre
+ instruções
+ tempo_limite
+ período
+ status
+ url_acesso
+ qr_code
+}
+ 
+entity "Questão da Prova" as questao_prova {
+ * prova_id
+ * questao_id
+ --
+ ordem_original
+ pontuação_max
+}
+ 
+entity "Aplicação da Prova ao Aluno" as prova_aluno {
+ * id
+ --
+ status
+ início
+ envio
+ ordem_questões
+ ordem_alternativas
+}
+ 
+entity "Resposta do Aluno" as resposta {
+ * id
+ --
+ texto_resposta
+ url_imagem
+ rascunho
+ enviada_final
+}
+ 
+entity "Arquivo da Resposta" as arquivo_resposta {
+ * id
+ --
+ arquivo_url
+ nome_original
+ tipo_arquivo
+ tamanho
+}
+ 
+entity "Correção" as correcao {
+ * id
+ --
+ nota
+ observação
+ tipo
+ corrigida_em
+}
+ 
+entity "Feedback" as feedback {
+ * id
+ --
+ mensagem
+}
+ 
+' =========================
+' Relatório
+' =========================
+ 
+entity "Relatório" as relatorio {
+ * id
+ --
+ tipo
+ título
+ conteúdo
+ arquivo
+ gerado_em
+}
+ 
+entity "Resultado do Aluno" as resultado {
+ * id
+ --
+ nota_total
+ percentual
+ liberado
+}
+ 
+entity "Exportação de Resultado" as exportacao {
+ * id
+ --
+ formato
+ arquivo
+ gerado_em
+}
+ 
+entity "Envio de E-mail" as email_envio {
+ * id
+ --
+ destinatário
+ assunto
+ status
+}
+ 
+entity "Log de Avaliação" as avaliacao_log {
+ * id
+ --
+ ator_tipo
+ ator_id
+ ação
+ detalhes
+}
+ 
+entity "Histórico de Status da Prova" as prova_status_historico {
+ * id
+ --
+ status_anterior
+ status_novo
+ alterado_por
+}
+ 
+' =========================
+' Relacionamentos conceituais
+' =========================
+ 
+coordenador ||--o{ professor : "1 Coordenador gerencia 0..N Professores"
+ 
+professor }o--o{ materia : "0..N Professores lecionam 0..N Matérias"
+ 
+professor ||--o{ prova : "1 Professor elabora 0..N Provas"
+materia ||--o{ prova : "1 Matéria possui 0..N Provas"
+ 
+materia ||--o{ tema : "1 Matéria possui 0..N Temas"
+ 
+materia ||--o{ questao : "1 Matéria possui 0..N Questões"
+ 
+tema |o--o{ questao : "0..1 Tema classifica 0..N Questões"
+ 
+questao ||--|| enunciado : "1 Questão possui 1 Enunciado"
+ 
+questao ||--o{ alternativa : "1 Questão possui 0..N Alternativas"
+ 
+prova ||--o{ questao_prova : "1 Prova contém 0..N Questões"
+ 
+questao ||--o{ questao_prova : "1 Questão pode ser usada em 0..N Provas"
+ 
+prova ||--o{ prova_status_historico : "1 Prova possui 0..N eventos de status"
+ 
+prova ||--o{ prova_aluno : "1 Prova recebe 0..N Alunos"
+aluno ||--o{ prova_aluno : "1 Aluno participa de 0..N Provas"
+ 
+prova_aluno ||--o{ resposta : "1 Aplicação contém 0..N Respostas"
+ 
+questao ||--o{ resposta : "1 Questão recebe 0..N Respostas"
+ 
+alternativa |o--o{ resposta : "0..1 Alternativa pode aparecer em 0..N Respostas"
+ 
+resposta ||--o{ arquivo_resposta : "1 Resposta possui 0..N Arquivos"
+ 
+resposta ||--o| correcao : "1 Resposta recebe 0..1 Correção"
+ 
+professor ||--o{ correcao : "1 Professor realiza 0..N Correções"
+ 
+correcao ||--o{ feedback : "1 Correção possui 0..N Feedbacks"
+ 
+professor ||--o{ feedback : "1 Professor escreve 0..N Feedbacks"
+ 
+coordenador ||--o{ relatorio : "1 Coordenador gera 0..N Relatórios"
+ 
+prova ||--o{ relatorio : "1 Prova baseia 0..N Relatórios"
+ 
+prova_aluno ||--o| resultado : "1 Aplicação gera 0..1 Resultado"
+ 
+prova_aluno ||--o{ email_envio : "1 Aplicação pode gerar 0..N E-mails"
+ 
+prova ||--o{ exportacao : "1 Prova gera 0..N Exportações"
+coordenador ||--o{ exportacao : "1 Coordenador solicita 0..N Exportações"
+ 
+prova |o--o{ avaliacao_log : "0..1 Prova possui 0..N Logs"
+prova_aluno |o--o{ avaliacao_log : "0..1 Aplicação possui 0..N Logs"
+ 
+note right of professor
+Professor é uma entidade independente.
+Não herda de Pessoa.
+end note
+ 
+note right of coordenador
+Coordenador é uma entidade independente.
+Não herda de Pessoa.
+end note
+ 
+note right of questao_prova
+Representa a associação entre
+Prova e Questão.
+ 
+Permite controlar ordem e pontuação
+da questão dentro de uma prova específica.
+end note
+ 
+note right of aluno
+Aluno voltou a ser entidade cadastral
+na migration atual.
+ 
+O acesso à prova continua ocorrendo
+pelo vínculo prova_aluno.
+end note
+ 
 @enduml
 ~~~
-
-### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2)
-
-O DER fisico preserva os nomes de tabela e campos implementados. As relacoes principais sao:
-
-| Relacao | Implementacao fisica |
-|---------|----------------------|
-| Coordenador -> Professor | professor.coordenador_id referencia coordenador.id |
-| Professor <-> Materia | materia_professor(professor_id, materia_id) |
-| Materia -> Tema/Questao/Prova | tema.materia_id, questao.materia_id e prova.materia_id |
-| Questao -> Enunciado/Alternativa | enunciado.questao_id e alternativa.questao_id |
-| Prova <-> Questao | prova_questao(prova_id, questao_id) com ordem e pontuacao_max |
-| Prova -> ProvaAluno | prova_aluno.prova_id |
-| Aluno -> ProvaAluno | prova_aluno.aluno_id |
-| ProvaAluno -> RespostaAluno | resposta_aluno.prova_aluno_id |
-| RespostaAluno -> RespostaAnexo | resposta_anexo.resposta_id |
-| RespostaAluno -> Correcao | correcao.resposta_id unico por resposta |
-| Correcao -> Feedback | feedback.correcao_id |
-| ProvaAluno -> ResultadoAluno | resultado_aluno.prova_aluno_id |
-| Prova -> ExportacaoResultado/AvaliacaoLog | exportacao_resultado.prova_id e avaliacao_log.prova_id |
-| ProvaAluno -> EmailEnvio | email_envio.prova_aluno_id |
-
-Regras fisicas relevantes:
-
-- prova_questao impede duplicidade de questao na mesma prova e controla ordem.
-- resposta_aluno vincula a resposta a prova_aluno e questao; alternativa_id e opcional para discursivas.
-- correcao usa ON CONFLICT por resposta_id para permitir atualizacao de nota.
-- prova_status_historico registra transicoes de status.
-- avaliacao_log guarda eventos de auditoria/analytics.
-
+ 
+### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2, atualizado na sprint 4)
+ 
+O Diagrama Entidade-Relacionamento (DER) abaixo representa a visão física do banco implementado na migration principal `src/backend/src/database/migrations/migration.sql`. Diferentemente do MER conceitual, esta visão usa os nomes reais das tabelas, colunas, chaves primárias, chaves estrangeiras, restrições `UNIQUE`, restrições `CHECK` mais relevantes e tipos PostgreSQL/Supabase usados pelo sistema.
+ 
+A modelagem física atual possui 22 tabelas de domínio: `coordenador`, `professor`, `materia`, `materia_professor`, `aluno`, `tema`, `questao`, `enunciado`, `alternativa`, `prova`, `prova_status_historico`, `prova_questao`, `prova_aluno`, `resposta_aluno`, `resposta_anexo`, `correcao`, `feedback`, `relatorio`, `resultado_aluno`, `exportacao_resultado`, `email_envio` e `avaliacao_log`. As tabelas associativas reais são `materia_professor`, `prova_questao` e `prova_aluno`; não existem tabelas físicas chamadas `prova_materia` ou `prova_enunciado`.
+ 
+~~~plantuml
+@startuml
+title Diagrama Entidade-Relacionamento Físico - DER
+ 
+hide circle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+ 
+entity "coordenador" as coordenador {
+ * id : UUID <<PK>>
+ --
+ auth_user_id : UUID <<UNIQUE, FK auth.users, NULL>>
+ nome : TEXT <<CHECK>>
+ email : CITEXT <<UNIQUE>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "professor" as professor {
+ * id : UUID <<PK>>
+ --
+ auth_user_id : UUID <<UNIQUE, FK auth.users, NULL>>
+ coordenador_id : UUID <<FK>>
+ nome : TEXT <<CHECK>>
+ email : CITEXT <<UNIQUE>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "materia" as materia {
+ * id : UUID <<PK>>
+ --
+ nome : TEXT <<UNIQUE, CHECK>>
+ codigo : TEXT <<UNIQUE, NULL, CHECK>>
+ descricao : TEXT <<NULL>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "materia_professor" as materia_professor {
+ * materia_id : UUID <<PK, FK>>
+ * professor_id : UUID <<PK, FK>>
+ --
+ criado_em : TIMESTAMPTZ
+}
+ 
+entity "aluno" as aluno {
+ * id : UUID <<PK>>
+ --
+ auth_user_id : UUID <<UNIQUE, FK auth.users, NULL>>
+ nome : TEXT <<CHECK>>
+ email : CITEXT <<UNIQUE>>
+ cpf : TEXT <<UNIQUE, NULL, CHECK>>
+ aceitou_termos_em : TIMESTAMPTZ <<NULL>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "tema" as tema {
+ * id : UUID <<PK>>
+ --
+ materia_id : UUID <<FK>>
+ nome : TEXT <<CHECK>>
+ descricao : TEXT <<NULL>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+ UNIQUE(materia_id, nome)
+}
+ 
+entity "questao" as questao {
+ * id : UUID <<PK>>
+ --
+ materia_id : UUID <<FK>>
+ tema_id : UUID <<FK, NULL>>
+ tipo : questao_tipo
+ limite_caracteres : INTEGER <<NULL, CHECK>>
+ limite_palavras : INTEGER <<NULL, CHECK>>
+ permite_anexo : BOOLEAN
+ pontuacao_padrao : NUMERIC(5,2) <<CHECK>>
+ ativa : BOOLEAN
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "enunciado" as enunciado {
+ * id : UUID <<PK>>
+ --
+ questao_id : UUID <<UNIQUE, FK>>
+ conteudo_latex : TEXT <<CHECK>>
+ url_imagem : TEXT <<NULL>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "alternativa" as alternativa {
+ * id : UUID <<PK>>
+ --
+ questao_id : UUID <<FK>>
+ ordem_original : INTEGER <<CHECK>>
+ conteudo_latex : TEXT <<CHECK>>
+ url_imagem : TEXT <<NULL>>
+ correta : BOOLEAN
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+ UNIQUE(questao_id, ordem_original)
+}
+ 
+entity "prova" as prova {
+ * id : UUID <<PK>>
+ --
+ professor_id : UUID <<FK>>
+ materia_id : UUID <<FK>>
+ titulo : TEXT <<CHECK>>
+ modalidade : TEXT <<CHECK>>
+ turma : TEXT <<CHECK>>
+ semestre : TEXT <<CHECK>>
+ instrucoes : TEXT <<NULL>>
+ tempo_limite_min : INTEGER <<NULL, CHECK>>
+ data_inicio : TIMESTAMPTZ <<NULL>>
+ data_fim : TIMESTAMPTZ <<NULL>>
+ embaralhar_questoes : BOOLEAN
+ embaralhar_alternativas : BOOLEAN
+ status : prova_status
+ url_acesso : TEXT <<UNIQUE, NULL>>
+ qr_code : TEXT <<NULL>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "prova_status_historico" as prova_status_historico {
+ * id : UUID <<PK>>
+ --
+ prova_id : UUID <<FK>>
+ status_anterior : prova_status <<NULL>>
+ status_novo : prova_status
+ alterado_por_auth_user_id : UUID <<FK auth.users, NULL>>
+ criado_em : TIMESTAMPTZ
+}
+ 
+entity "prova_questao" as prova_questao {
+ * prova_id : UUID <<PK, FK>>
+ * questao_id : UUID <<PK, FK>>
+ --
+ ordem_original : INTEGER <<CHECK>>
+ pontuacao_max : NUMERIC(5,2) <<CHECK>>
+ criado_em : TIMESTAMPTZ
+ UNIQUE(prova_id, ordem_original)
+}
+ 
+entity "prova_aluno" as prova_aluno {
+ * id : UUID <<PK>>
+ --
+ prova_id : UUID <<FK>>
+ aluno_id : UUID <<FK>>
+ status : prova_aluno_status
+ inicio_em : TIMESTAMPTZ <<NULL>>
+ enviada_em : TIMESTAMPTZ <<NULL>>
+ ordem_questoes : JSONB
+ ordem_alternativas : JSONB
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+ UNIQUE(prova_id, aluno_id)
+}
+ 
+entity "resposta_aluno" as resposta_aluno {
+ * id : UUID <<PK>>
+ --
+ prova_aluno_id : UUID <<FK>>
+ questao_id : UUID <<FK>>
+ alternativa_id : UUID <<FK, NULL>>
+ resposta_texto : TEXT <<NULL>>
+ url_imagem : TEXT <<NULL>>
+ rascunho : BOOLEAN
+ sincronizada_em : TIMESTAMPTZ <<NULL>>
+ enviada_final : BOOLEAN
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+ UNIQUE(prova_aluno_id, questao_id)
+}
+ 
+entity "resposta_anexo" as resposta_anexo {
+ * id : UUID <<PK>>
+ --
+ resposta_id : UUID <<FK>>
+ url_arquivo : TEXT <<CHECK>>
+ nome_arquivo : TEXT <<NULL>>
+ mime_type : TEXT <<CHECK>>
+ tamanho_bytes : INTEGER <<CHECK>>
+ criado_em : TIMESTAMPTZ
+}
+ 
+entity "correcao" as correcao {
+ * id : UUID <<PK>>
+ --
+ resposta_id : UUID <<UNIQUE, FK>>
+ professor_id : UUID <<FK>>
+ nota : NUMERIC(5,2) <<CHECK>>
+ observacao : TEXT <<NULL>>
+ tipo : correcao_tipo
+ corrigida_em : TIMESTAMPTZ <<NULL>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "feedback" as feedback {
+ * id : UUID <<PK>>
+ --
+ correcao_id : UUID <<FK>>
+ professor_id : UUID <<FK>>
+ mensagem : TEXT <<CHECK>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "relatorio" as relatorio {
+ * id : UUID <<PK>>
+ --
+ prova_id : UUID <<FK>>
+ coordenador_id : UUID <<FK>>
+ tipo : relatorio_tipo
+ titulo : TEXT <<NULL, CHECK>>
+ conteudo : TEXT <<NULL>>
+ url_arquivo : TEXT <<NULL>>
+ gerado_em : TIMESTAMPTZ
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "resultado_aluno" as resultado_aluno {
+ * id : UUID <<PK>>
+ --
+ prova_aluno_id : UUID <<UNIQUE, FK>>
+ nota_total : NUMERIC(6,2) <<CHECK>>
+ percentual : NUMERIC(5,2) <<NULL, CHECK>>
+ liberado : BOOLEAN
+ liberado_em : TIMESTAMPTZ <<NULL>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "exportacao_resultado" as exportacao_resultado {
+ * id : UUID <<PK>>
+ --
+ prova_id : UUID <<FK>>
+ coordenador_id : UUID <<FK>>
+ formato : TEXT <<CHECK>>
+ url_arquivo : TEXT <<NULL>>
+ gerado_em : TIMESTAMPTZ
+ criado_em : TIMESTAMPTZ
+}
+ 
+entity "email_envio" as email_envio {
+ * id : UUID <<PK>>
+ --
+ prova_aluno_id : UUID <<FK>>
+ destinatario : CITEXT
+ assunto : TEXT <<CHECK>>
+ corpo : TEXT <<NULL>>
+ status : email_status
+ erro : TEXT <<NULL>>
+ enviado_em : TIMESTAMPTZ <<NULL>>
+ criado_em : TIMESTAMPTZ
+ atualizado_em : TIMESTAMPTZ
+}
+ 
+entity "avaliacao_log" as avaliacao_log {
+ * id : UUID <<PK>>
+ --
+ prova_id : UUID <<FK, NULL>>
+ prova_aluno_id : UUID <<FK, NULL>>
+ ator_tipo : TEXT <<CHECK>>
+ ator_id : UUID <<NULL>>
+ acao : TEXT <<CHECK>>
+ detalhes : JSONB
+ criado_em : TIMESTAMPTZ
+}
+ 
+coordenador ||--o{ professor : "professor.coordenador_id"
+ 
+materia ||--o{ materia_professor : "materia_id"
+professor ||--o{ materia_professor : "professor_id"
+ 
+materia ||--o{ tema : "tema.materia_id"
+materia ||--o{ questao : "questao.materia_id"
+tema |o--o{ questao : "questao.tema_id"
+ 
+questao ||--|| enunciado : "enunciado.questao_id"
+questao ||--o{ alternativa : "alternativa.questao_id"
+ 
+professor ||--o{ prova : "prova.professor_id"
+materia ||--o{ prova : "prova.materia_id"
+prova ||--o{ prova_status_historico : "prova_status_historico.prova_id"
+ 
+prova ||--o{ prova_questao : "prova_id"
+questao ||--o{ prova_questao : "questao_id"
+ 
+prova ||--o{ prova_aluno : "prova_aluno.prova_id"
+aluno ||--o{ prova_aluno : "prova_aluno.aluno_id"
+ 
+prova_aluno ||--o{ resposta_aluno : "resposta_aluno.prova_aluno_id"
+questao ||--o{ resposta_aluno : "resposta_aluno.questao_id"
+alternativa |o--o{ resposta_aluno : "resposta_aluno.alternativa_id"
+ 
+resposta_aluno ||--o{ resposta_anexo : "resposta_anexo.resposta_id"
+resposta_aluno ||--o| correcao : "correcao.resposta_id"
+professor ||--o{ correcao : "correcao.professor_id"
+ 
+correcao ||--o{ feedback : "feedback.correcao_id"
+professor ||--o{ feedback : "feedback.professor_id"
+ 
+prova ||--o{ relatorio : "relatorio.prova_id"
+coordenador ||--o{ relatorio : "relatorio.coordenador_id"
+ 
+prova_aluno ||--o| resultado_aluno : "resultado_aluno.prova_aluno_id"
+prova_aluno ||--o{ email_envio : "email_envio.prova_aluno_id"
+ 
+prova ||--o{ exportacao_resultado : "exportacao_resultado.prova_id"
+coordenador ||--o{ exportacao_resultado : "exportacao_resultado.coordenador_id"
+ 
+prova |o--o{ avaliacao_log : "avaliacao_log.prova_id"
+prova_aluno |o--o{ avaliacao_log : "avaliacao_log.prova_aluno_id"
+ 
+note right of prova
+Enums usados pela migration:
+prova_status, prova_aluno_status,
+questao_tipo, correcao_tipo,
+relatorio_tipo e email_status.
+ 
+Constraints relevantes:
+url_acesso UNIQUE, datas coerentes
+e campos obrigatórios para publicação.
+end note
+ 
+note right of alternativa
+UNIQUE(questao_id, ordem_original).
+Índice único parcial garante no máximo
+uma alternativa correta por questão.
+end note
+ 
+note right of resposta_anexo
+mime_type aceita image/jpeg, image/png
+ou application/pdf.
+tamanho_bytes deve ser maior que 0
+e até 5 MB.
+end note
+ 
+note right of avaliacao_log
+prova_id e prova_aluno_id são opcionais.
+As FKs usam ON DELETE SET NULL.
+ator_tipo aceita aluno, professor,
+coordenador ou sistema.
+end note
+ 
+@enduml
+~~~
+ 
+Os índices físicos criados para apoiar consultas e filtros aparecem principalmente nas chaves estrangeiras e nos campos mais consultados: `professor.coordenador_id`, `materia_professor.professor_id`, `tema.materia_id`, `questao.materia_id`, `questao.tema_id`, `questao.tipo`, `alternativa.questao_id`, `prova.professor_id`, `prova.materia_id`, `prova.status`, o índice composto `prova(status, turma, semestre, materia_id, professor_id)`, `prova_status_historico.prova_id`, `prova_questao.questao_id`, `prova_aluno.prova_id`, `prova_aluno.aluno_id`, `prova_aluno.status`, `resposta_aluno.prova_aluno_id`, `resposta_aluno.questao_id`, `resposta_anexo.resposta_id`, `correcao.professor_id`, `feedback.correcao_id`, `feedback.professor_id`, `relatorio.prova_id`, `relatorio.coordenador_id`, `relatorio.tipo`, `email_envio.prova_aluno_id`, `email_envio.status`, `avaliacao_log.prova_id`, `avaliacao_log.prova_aluno_id` e `avaliacao_log.acao`.
+ 
 ### 3.6.3. Modelo Relacional e Modelo Físico
-
-Esta seção apresenta o modelo físico efetivamente implementado no banco de dados do projeto. A fonte de verdade considerada é a migration `src/backend/src/database/migrations/migration.sql`, que define extensões, enums, tabelas, tipos de dados, chaves primárias, chaves estrangeiras, restrições, índices, triggers, funções auxiliares e políticas de Row Level Security do PostgreSQL/Supabase.
-
+ 
+Esta seção apresenta a modelagem física do banco de dados do projeto. O modelo foi estruturado para utilização com PostgreSQL/Supabase, contemplando as tabelas principais do sistema, seus atributos, tipos de dados, chaves primárias, chaves estrangeiras, restrições e índices.
+ 
 #### Decisões físicas adotadas
-
+ 
 O banco utiliza PostgreSQL/Supabase com as extensões `pgcrypto`, para geração de identificadores por `gen_random_uuid()`, e `citext`, para campos de e-mail com comparação insensível a maiúsculas e minúsculas. As entidades centrais usam `UUID` como chave primária, datas e horários usam `TIMESTAMPTZ`, conteúdos variáveis usam `TEXT` ou `JSONB`, e notas usam `NUMERIC` com precisão definida. A integridade é reforçada por `FOREIGN KEY`, `UNIQUE`, `CHECK`, índices, triggers e RLS.
-
-#### Enums implementados 
-
+ 
+As principais decisões adotadas foram:
+ 
+- Utilização de `UUID` como chave primária nas tabelas principais;
+- Uso de `gen_random_uuid()` para geração automática dos identificadores;
+- Definição de campos obrigatórios com `NOT NULL`;
+- Uso de `FOREIGN KEY` para garantir integridade entre tabelas relacionadas;
+- Uso de `UNIQUE` para impedir duplicidade em campos como e-mail;
+- Uso de `TIMESTAMPTZ` para armazenar datas e horários com fuso;
+- Uso de tabelas associativas para representar relacionamentos muitos-para-muitos.
+#### Enums implementados
+ 
 | Enum | Valores |
 |------|---------|
 | `prova_status` | `rascunho`, `publicada`, `encerrada`, `antiga` |
@@ -4654,30 +5279,29 @@ O banco utiliza PostgreSQL/Supabase com as extensões `pgcrypto`, para geração
 | `correcao_tipo` | `manual`, `automatica` |
 | `relatorio_tipo` | `desempenho_geral`, `por_aluno`, `por_questao`, `por_materia` |
 | `email_status` | `pendente`, `enviado`, `erro` |
-
+ 
 Não há enum `perfil` nem enum próprio para formato de exportação. O formato de exportação é implementado como `TEXT`, com `CHECK` restrito a `xlsx` e `csv`.
-
+ 
 #### Principais Tabelas
-
+ 
 ##### Tabela `coordenador`
-
+ 
 A tabela `coordenador` armazena os coordenadores do sistema, responsáveis por gerenciar professores e configurar o ambiente.
-
+ 
 Principais atributos:
-
+ 
 - `id`: identificador único do coordenador (UUID, PK);
 - `auth_user_id`: referência ao Supabase Auth (`auth.users`);
 - `nome`: nome completo;
 - `email`: e-mail único;
 - `criado_em`: data de criação do registro;
 - `atualizado_em`: data da última atualização.
-
 ##### Tabela `professor`
-
+ 
 A tabela `professor` representa os professores cadastrados no sistema, vinculados a um coordenador.
-
+ 
 Principais atributos:
-
+ 
 - `id`: identificador único do professor (UUID, PK);
 - `auth_user_id`: referência ao Supabase Auth;
 - `coordenador_id`: referência à tabela `coordenador` (FK);
@@ -4685,31 +5309,43 @@ Principais atributos:
 - `email`: e-mail único;
 - `criado_em`: data de criação do registro;
 - `atualizado_em`: data da última atualização.
-
-##### Tabela `materia`
-
-A tabela `materia` armazena as disciplinas disponíveis no sistema.
-
+##### Tabela `aluno`
+ 
+A tabela `aluno` representa os estudantes cadastrados no sistema, com dados próprios e independentes.
+ 
 Principais atributos:
-
+ 
+- `id`: identificador único do aluno (UUID, PK);
+- `auth_user_id`: referência ao Supabase Auth;
+- `nome`: nome completo;
+- `email`: e-mail único;
+- `cpf`: CPF do aluno (único, opcional);
+- `aceitou_termos_em`: data de aceite dos termos;
+- `criado_em`: data de criação do registro;
+- `atualizado_em`: data da última atualização.
+##### Tabela `materia`
+ 
+A tabela `materia` armazena as disciplinas disponíveis no sistema.
+ 
+Principais atributos:
+ 
 - `id`: identificador único da matéria;
 - `nome`: nome da matéria;
 - demais campos relacionados à disciplina.
-
 ##### Tabela `materia_professor`
-
+ 
 A tabela `materia_professor` representa o relacionamento muitos-para-muitos entre matérias e professores.
-
+ 
 Principais atributos:
-
+ 
 - `materia_id`: referência à matéria;
 - `professor_id`: referência ao professor.
-
 A chave primária composta é formada por `materia_id` e `professor_id`, evitando que o mesmo professor seja associado à mesma matéria mais de uma vez.
+ 
 ##### Demais tabelas do modelo físico atualizado
-
+ 
 Além das tabelas-base descritas acima, a migration atual também contempla:
-
+ 
 - `tema`: classifica questões por assunto dentro de uma matéria;
 - `questao`: armazena o tipo, limites, pontuação padrão e status ativo da questão;
 - `enunciado`: mantém o conteúdo em LaTeX e imagem opcional de cada questão;
@@ -4727,13 +5363,12 @@ Além das tabelas-base descritas acima, a migration atual também contempla:
 - `exportacao_resultado`: registra exportações em `xlsx` ou `csv`;
 - `email_envio`: controla o envio de e-mails de resultado;
 - `avaliacao_log`: registra ações de auditoria relacionadas à prova ou à aplicação da prova ao aluno.
-
-#### Complementos da implementação física atual  
-
+#### Complementos da implementação física atual
+ 
 A fonte de verdade da implementação é `src/backend/src/database/migrations/migration.sql`, que define tipos, tabelas, chaves primárias, chaves estrangeiras, índices, triggers, funções auxiliares e políticas de Row Level Security.
-
+ 
 Também foram preservadas as seguintes decisões físicas já documentadas:
-
+ 
 - UUID como chave primária nas entidades centrais.
 - TIMESTAMPTZ para datas de criação, atualização, publicação, envio e correção.
 - ENUMs para status de prova, tipo de questão, perfil, status de prova_aluno, formato de exportação e status de e-mail.
@@ -4742,9 +5377,8 @@ Também foram preservadas as seguintes decisões físicas já documentadas:
 - UNIQUE e índices parciais para e-mails, professor-matéria, questão em prova e alternativa correta por questão quando aplicável.
 - Triggers de validação para publicação, alternativas, vínculo professor/matéria, resposta, correção e transição de status.
 - RLS habilitado nas tabelas do domínio.
-
 Os agrupamentos físicos do banco também contemplam:
-
+ 
 | Grupo | Tabelas | Finalidade |
 |-------|---------|------------|
 | Identidade e acesso | coordenador, professor, aluno | Usuários internos e identificação do aluno. |
@@ -4755,10 +5389,9 @@ Os agrupamentos físicos do banco também contemplam:
 | Correção e feedback | correcao, feedback | Nota, observação e feedback do professor. |
 | Resultados e comunicação | resultado_aluno, exportacao_resultado, email_envio | Notas, exportações e e-mails. |
 | Auditoria e analytics | avaliacao_log, relatorio | Eventos de uso, logs e relatórios. |
-
-
+ 
 #### Relacionamentos principais preservados
-
+ 
 - coordenador 1:N professor.
 - professor N:N materia por materia_professor.
 - materia 1:N tema, questao e prova.
@@ -4770,13 +5403,12 @@ Os agrupamentos físicos do banco também contemplam:
 - resposta_aluno 1:N resposta_anexo e 1:1 correcao.
 - correcao 1:N feedback.
 - prova 1:N resultado_aluno, exportacao_resultado, email_envio e avaliacao_log.
-
 #### Migration DDL
-
+ 
 ```text
 src\backend\src\database\migrations\migration.sql
 ```
-
+ 
 ### 3.6.4. Consultas SQL e logica proposicional (sprint 2)
 
 
