@@ -5111,17 +5111,44 @@ Descreva os principais segmentos de mercado a serem atendidos pela aplicação. 
 
 ## 6.6 Estratégia de Marketing 
 
-*a) Produto/Serviço (até 200 palavras)*
-*Descreva as funcionalidades, benefícios e diferenciais da aplicação*
+### 6.6.1 Produto/Serviço
 
-*b) Preço (até 200 palavras)*
-*Explique o modelo de precificação adotado e justifique com base nas análises anteriores.*
+O **Corrije Aí** é uma plataforma web voltada para instituições de ensino que desejam otimizar e padronizar o processo de correção de avaliações discursivas. A solução permite o cadastro de provas, questões e critérios de correção, além do gerenciamento de alunos, professores e coordenadores em um único ambiente.
 
-*c) Praça (Distribuição) (até 200 palavras)*
-*Apresente os canais digitais utilizados para distribuir e entregar a aplicação ao público.*
+Entre suas principais funcionalidades estão a correção isonômica das respostas, acompanhamento do progresso das correções, geração de relatórios de desempenho e centralização das informações acadêmicas. A plataforma também oferece diferentes níveis de acesso conforme o perfil do usuário, garantindo organização e segurança dos dados.
 
-*d) Promoção (até 200 palavras)*
-*Descreva as estratégias digitais planejadas, como SEO, redes sociais, marketing de conteúdo e campanhas pagas.*
+Como diferencial, o Corrije Aí busca reduzir o tempo gasto em processos manuais, aumentar a consistência das avaliações e fornecer maior transparência para gestores e docentes. A interface foi projetada para ser intuitiva e acessível, facilitando a adoção da ferramenta por instituições de diferentes portes.
+
+---
+
+### 6.6.2 Preço
+
+O Corrije Aí adota o modelo **Software as a Service (SaaS)**, com cobrança recorrente baseada na quantidade de usuários ou no porte da instituição contratante. Esse formato reduz a necessidade de investimentos iniciais elevados e permite que escolas e organizações educacionais tenham acesso contínuo às atualizações e melhorias da plataforma.
+
+A estratégia de precificação foi escolhida por oferecer previsibilidade financeira aos clientes e escalabilidade ao negócio. Instituições menores podem contratar planos mais acessíveis, enquanto organizações maiores contam com recursos avançados e maior capacidade operacional.
+
+Além disso, a disponibilização de uma versão de demonstração ou período de teste gratuito permite que potenciais clientes conheçam os benefícios da solução antes da contratação, reduzindo barreiras de entrada e aumentando a taxa de conversão.
+
+---
+
+### 6.6.3 Praça (Distribuição)
+
+Por ser uma solução totalmente digital, o Corrije Aí será distribuído por meio de uma aplicação web acessível através de navegadores modernos em computadores, tablets e dispositivos móveis. Dessa forma, usuários podem utilizar a plataforma sem a necessidade de instalação de softwares adicionais.
+
+A aquisição do serviço ocorrerá por meio do site oficial da solução, onde instituições poderão solicitar demonstrações, obter informações sobre planos e realizar o processo de contratação. O suporte ao cliente também será oferecido digitalmente, utilizando canais como e-mail, chat e videoconferências.
+
+Essa estratégia amplia o alcance da plataforma, permitindo atender instituições de ensino em diferentes regiões sem depender de presença física, reduzindo custos operacionais e facilitando a escalabilidade do negócio.
+
+---
+
+### 6.6.4 Promoção
+
+A divulgação do Corrije Aí será realizada principalmente por meio de estratégias de marketing digital. O site institucional será otimizado com técnicas de SEO para melhorar o posicionamento em mecanismos de busca relacionados à gestão educacional, correção de provas e avaliação de desempenho acadêmico.
+
+Nas redes sociais, serão publicados conteúdos educativos sobre inovação na educação, produtividade docente e boas práticas de avaliação, fortalecendo a autoridade da marca e atraindo potenciais clientes. Também serão produzidos artigos, estudos de caso e demonstrações da plataforma para apoiar estratégias de marketing de conteúdo.
+
+Campanhas pagas em plataformas como Google Ads e LinkedIn Ads serão utilizadas para alcançar coordenadores pedagógicos, gestores educacionais e instituições de ensino interessadas em modernizar seus processos. Complementarmente, ações de e-mail marketing serão empregadas para nutrir leads e divulgar novidades, funcionalidades e resultados obtidos por clientes da solução.
+
 
 # <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
