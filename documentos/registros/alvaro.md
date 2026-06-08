@@ -739,3 +739,67 @@ Nenhuma
 #### Link do docs:
 
 Nenhuma
+## ------------------outro dia------------------------
+
+### Data: 05/06/2026
+
+
+
+### Objetivo do Dia
+
+
+Artefato 12 - Preencher os itens abaixo:
+
+1- Resumo Executivo ---> (até 300 palavras – sem necessidade de fonte):
+Apresente de forma clara e objetiva os principais destaques do projeto, incluindo: oportunidade identificada no mercado; problema atendido pela aplicação; diferenciais competitivos da aplicação web e os objetivos estratégicos pretendidos.
+
+Análise de Mercado:
+
+2- Visão Geral do Setor ---> (até 250 palavras)
+Contextualize o setor em que a aplicação está inserida, considerando aspectos econômicos, tecnológicos e regulatórios. Utilize fontes confiáveis.
+
+3- Tamanho e Crescimento do Mercado ---> (até 250 palavras)
+Apresente dados quantitativos que demonstrem o tamanho atual e as perspectivas de crescimento do mercado. Utilize fontes confiáveis.
+
+Artefato 12:
+
+- Tendências de Mercado (até 300 palavras)
+Identificar e analisar tendências relevantes (tecnológicas, comportamentais e mercadológicas) que influenciam o setor. Utilizar fontes confiáveis.
+  
+- Proposta de Valor Única (até 250 palavras)
+Definir, de maneira clara, o que torna a aplicação única e valiosa para o mercado.
+
+- Posicionamento e Diferenciação (Estratégia de Diferenciação, até 250 palavras)
+Explicar como a aplicação se destacará da concorrência, evidenciando a lógica por trás do posicionamento.
+
+
+### Alterações Realizadas
+
+
+#### Álvaro:
+
+
+Criei o resumo executivo com 247 palavras, de forma clara e objetiva os principais destaques do projeto, incluindo: oportunidade identificada no mercado; problema atendido pela aplicação; diferenciais competitivos da aplicação web e os objetivos estratégicos pretendidos.
+
+Criei a Visão Geral do Setor com 245 palavras
+Contextualizei o setor em que a aplicação está inserida, considerando aspectos econômicos, tecnológicos e regulatórios. Utilizei fontes confiáveis.
+
+Criei o Tamanho e Crescimento do Mercado com 207 palavras
+Apresentei dados quantitativos que demonstram o tamanho atual e as perspectivas de crescimento do mercado. Utilizei fontes confiáveis.
+
+- Tendências de Mercado (com 244 palavras)
+Identifiquei e analisei tendências relevantes (tecnológicas, comportamentais e mercadológicas) que influenciam o setor. Utilizei fontes confiáveis.
+  
+- Proposta de Valor (com 218 palavras)
+Defini, de maneira clara, o que torna a nossa aplicação única e valiosa para o mercado.
+
+- Posicionamento e Diferenciação (com 214 palavras)
+Expliquei como nossa aplicação se destacará da concorrência, evidenciando a lógica por trás do posicionamento.
+
+##### Observação:
+
+Foi necessario rescrever tudo o que foi feito no dia 01/6 e no dia 02/6 por um erro no wad devido a conflitos de commit 
+
+## Link do docs:
+
+Nenhuma
