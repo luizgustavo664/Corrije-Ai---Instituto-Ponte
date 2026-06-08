@@ -5676,11 +5676,32 @@ Fontes: Estão na seção (referências).
 
 ## 6.4 Público-Alvo
 
-*a) Segmentação de Mercado (até 250 palavras)*
-Descreva os principais segmentos de mercado a serem atendidos pela aplicação. Utilize bases de dados e fontes confiáveis.*
+### a) Segmentação de Mercado
 
-*b) Perfil do Público-Alvo (até 250 palavras)*
-*Caracterize o público-alvo com dados demográficos, psicográficos e comportamentais, incluindo necessidades específicas. Utilize fontes obrigatórias.*
+A aplicação está inserida no mercado de tecnologia educacional (EdTech), com foco em instituições que realizam avaliações remotas e necessitam de processos acessíveis, organizados e eficientes. Os principais segmentos atendidos são organizações educacionais sem fins lucrativos, instituições de ensino básico e superior, cursos preparatórios e programas de apoio educacional que aplicam avaliações online.
+
+Essas organizações frequentemente atendem estudantes com diferentes níveis de acesso à tecnologia, demandando plataformas compatíveis com dispositivos móveis, de baixo consumo de recursos e capazes de funcionar em diferentes condições de conectividade. Além disso, enfrentam desafios relacionados à centralização das avaliações, ao gerenciamento de arquivos enviados pelos alunos e à padronização dos processos de correção.
+
+Outro segmento relevante é composto por professores, coordenadores pedagógicos e gestores educacionais, que necessitam de ferramentas para criação, aplicação e correção de provas, bem como acompanhamento do desempenho dos estudantes. Para esses usuários, são especialmente importantes funcionalidades que reduzam a carga operacional, organizem as respostas dos alunos e garantam maior transparência e equidade no processo avaliativo.
+
+Nesse contexto, a plataforma atende instituições que buscam modernizar seus processos de avaliação, ampliar a acessibilidade digital e melhorar a gestão das informações acadêmicas, mantendo uma experiência simples tanto para alunos quanto para equipes pedagógicas.
+
+
+---
+
+
+### b) Perfil do Público-Alvo
+
+O público-alvo da aplicação é composto pelos estudantes atendidos pelo Instituto Ponte, além dos professores e coordenadores responsáveis pela aplicação, acompanhamento e correção das avaliações.
+
+Os estudantes são, majoritariamente, adolescentes e jovens adultos entre 14 e 24 anos, em situação de vulnerabilidade social e distribuídos em diferentes estados do Brasil. Muitos utilizam celulares como principal meio de acesso à internet e podem possuir limitações relacionadas à conexão ou desempenho dos aparelhos, o que exige uma plataforma leve, acessível e intuitiva. Além disso, valorizam praticidade e igualdade de condições durante o processo avaliativo, necessitando de uma experiência simples para envio de respostas e arquivos.
+
+Os professores são responsáveis pela elaboração, aplicação e correção das avaliações. Esse público busca ferramentas que ofereçam maior organização, praticidade e padronização no processo avaliativo, reduzindo a carga operacional e facilitando a correção das respostas dos alunos.
+
+Já os coordenadores e gestores educacionais atuam no acompanhamento pedagógico e supervisão das avaliações. Esses profissionais valorizam eficiência, transparência e confiabilidade no gerenciamento das informações, priorizando ferramentas que centralizem os dados e permitam maior controle dos processos acadêmicos.
+
+De forma geral, todos os públicos possuem contato frequente com ferramentas digitais, porém enfrentam dificuldades quando os sistemas exigem alto consumo de internet ou processos descentralizados. Por isso, a aplicação prioriza usabilidade, acessibilidade e centralização das informações.
+
 
 ## 6.5 Posicionamento
 
