@@ -5590,24 +5590,6 @@ Os principais diferenciais competitivos da solução são a interface simples e 
 Como objetivos estratégicos, o projeto busca aumentar a confiabilidade das avaliações remotas, reduzir falhas operacionais, melhorar a eficiência da correção, apoiar decisões pedagógicas com dados e contribuir para a missão do Instituto Ponte de promover ascensão social por meio da educação de qualidade.
 
 
-## 6.2 Análise de Mercado
-
-## 6.1 Resumo Executivo
-
-
-O projeto propõe uma aplicação web para centralizar a criação, aplicação, entrega, correção e análise de avaliações remotas do Instituto Ponte. A oportunidade identificada está no crescimento da atuação nacional da instituição, que atende centenas de estudantes em diferentes estados brasileiros, exigindo processos digitais mais escaláveis, seguros e padronizados.
-
-
-Atualmente, parte do fluxo avaliativo ocorre por canais dispersos, como WhatsApp e e-mail, o que gera risco de perda de arquivos, dificuldade de organização das respostas, retrabalho para professores e menor isonomia na correção. A aplicação atende esse problema ao reunir, em uma única plataforma, o acesso às provas, o envio de respostas e anexos, o acompanhamento do progresso, a correção por questão e a visualização de resultados.
-
-
-Os principais diferenciais competitivos da solução são a interface simples e responsiva para alunos, o acesso facilitado por link, o suporte a respostas com anexos e fórmulas, o salvamento estruturado das submissões, o banco de questões, a correção padronizada por item e os painéis de desempenho para professores e coordenadores. Esses recursos fortalecem a equidade do processo avaliativo e reduzem a carga operacional da equipe pedagógica.
-
-
-Como objetivos estratégicos, o projeto busca aumentar a confiabilidade das avaliações remotas, reduzir falhas operacionais, melhorar a eficiência da correção, apoiar decisões pedagógicas com dados e contribuir para a missão do Instituto Ponte de promover ascensão social por meio da educação de qualidade.
-
-
-
 
 ## 6.2 Análise de Mercado
 
@@ -5768,6 +5750,37 @@ A divulgação do Corrije Aí será realizada principalmente por meio de estrat�
 Nas redes sociais, serão publicados conteúdos educativos sobre inovação na educação, produtividade docente e boas práticas de avaliação, fortalecendo a autoridade da marca e atraindo potenciais clientes. Também serão produzidos artigos, estudos de caso e demonstrações da plataforma para apoiar estratégias de marketing de conteúdo.
 
 Campanhas pagas em plataformas como Google Ads e LinkedIn Ads serão utilizadas para alcançar coordenadores pedagógicos, gestores educacionais e instituições de ensino interessadas em modernizar seus processos. Complementarmente, ações de e-mail marketing serão empregadas para nutrir leads e divulgar novidades, funcionalidades e resultados obtidos por clientes da solução.
+
+
+### 6.7 Business Model Canvas
+
+1. Segmentos de clientes
+A solução atende principalmente organizações educacionais que realizam avaliações remotas e precisam de processos mais acessíveis, organizados e eficientes. No contexto inicial, o cliente central é o Instituto Ponte, considerando seus estudantes, professores e coordenadores pedagógicos. Também podem ser atendidas, futuramente, outras ONGs educacionais, escolas, cursos preparatórios e programas de apoio estudantil que lidam com alunos em diferentes condições de acesso digital.
+
+2. Proposta de valor
+A plataforma oferece uma solução centralizada para criação, aplicação, envio, correção e análise de avaliações remotas. Seu valor está em reduzir a dependência de canais dispersos, como WhatsApp e e-mail, evitar perda de arquivos, padronizar a correção por questão e gerar dados confiáveis para acompanhamento pedagógico. Para os alunos, entrega uma experiência simples e acessível; para professores, reduz retrabalho; e para coordenadores, oferece relatórios e maior controle institucional.
+
+3. Canais
+O principal canal de entrega é a própria aplicação web, acessível por navegadores em computadores, tablets e celulares. Para alunos, o acesso ocorre por link único, reduzindo barreiras de cadastro e login. Para professores e coordenadores, o uso acontece por ambiente autenticado. A comunicação e o suporte podem ocorrer por meios digitais, como e-mail, chat, reuniões online e materiais de orientação.
+
+4. Relacionamento com clientes
+O relacionamento com o Instituto Ponte deve ser próximo e colaborativo, com validações frequentes junto ao parceiro durante o desenvolvimento e uso da solução. O suporte precisa priorizar clareza, rapidez e orientação simples, considerando que a instituição não possui uma equipe técnica interna robusta. No caso de expansão para outras organizações, o relacionamento pode combinar demonstrações, onboarding assistido, documentação, suporte digital e acompanhamento de resultados.
+
+5. Fontes de receita
+Para um cenário comercial futuro, a solução pode adotar um modelo SaaS, com cobrança recorrente conforme o porte da instituição, número de usuários ou volume de avaliações aplicadas. Também pode haver planos diferenciados por funcionalidades, como relatórios avançados, maior armazenamento de anexos ou suporte prioritário. No momento do projeto com o parceiro, a entrega pode ser tratada como solução acadêmica/prototipal, sem cobrança direta ao Instituto Ponte.
+
+6. Recursos principais
+Os principais recursos são a aplicação web, a infraestrutura de hospedagem, o banco de dados, os mecanismos de autenticação, os módulos de provas, submissões, correção e relatórios, além da documentação técnica e de uso. Também são recursos essenciais o conhecimento do time sobre o contexto do Instituto Ponte, as regras pedagógicas da instituição, os requisitos levantados com o parceiro e a capacidade de desenvolver uma interface acessível e responsiva.
+
+7. Atividades principais
+As atividades centrais incluem desenvolvimento e manutenção da plataforma, validação de requisitos com o parceiro, criação dos fluxos de prova e correção, garantia de segurança e persistência dos dados, testes de usabilidade, documentação e suporte à adoção. Também são atividades importantes o monitoramento de desempenho da aplicação, melhoria contínua da experiência dos usuários e evolução dos relatórios pedagógicos.
+
+8. Parcerias principais
+A principal parceria é com o Instituto Ponte, que fornece o contexto real do problema, valida os fluxos e orienta as necessidades pedagógicas. Outras parcerias relevantes podem envolver provedores de infraestrutura em nuvem, serviços de banco de dados, ferramentas de autenticação, instituições educacionais interessadas na solução e possíveis parceiros técnicos para manutenção futura. Em um cenário de expansão, parcerias com redes de ensino, ONGs e programas sociais podem ampliar o alcance da plataforma.
+
+9. Estrutura de custos
+Neste momento da análise, a estrutura de custos pode ser considerada de forma inicial. Os principais custos envolvem desenvolvimento da aplicação, hospedagem, banco de dados, armazenamento de anexos, manutenção técnica, suporte aos usuários, testes, documentação e eventuais ferramentas de monitoramento e segurança. Em uma operação comercial futura, também devem ser considerados custos de marketing, vendas, atendimento ao cliente, evolução do produto e conformidade com a LGPD.
+
 
 # <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
