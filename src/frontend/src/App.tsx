@@ -1,122 +1,92 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
+import { AlunoModule } from './modules/AlunoModule'
+import { CoordenadorProfessorModule } from './modules/CoordenadorProfessorModule'
 
-function App() {
-  const [count, setCount] = useState(0)
+type Portal = 'hub' | 'aluno' | 'coordenador-professor'
 
+const portalCards = [
+  {
+    id: 'aluno' as const,
+    eyebrow: 'Fluxo do aluno',
+    title: 'Aplicacao de prova',
+    description:
+      'Acesso, instrucoes, prova, revisao e confirmacao em uma experiencia mobile-first.',
+  },
+  {
+    id: 'coordenador-professor' as const,
+    eyebrow: 'Fluxo interno',
+    title: 'Coordenacao e professor',
+    description:
+      'Login, cadastro, painel, provas, banco de questoes, correcao e liberacao de notas.',
+  },
+]
+
+function PortalShell({
+  title,
+  onBack,
+  children,
+}: {
+  title: string
+  onBack: () => void
+  children: React.ReactNode
+}) {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <div className="portal-shell">
+      <button type="button" className="portal-back" onClick={onBack}>
+        Voltar ao seletor
+      </button>
+      <span className="portal-label">{title}</span>
+      {children}
+    </div>
   )
 }
 
-export default App
+export default function App() {
+  const [portal, setPortal] = useState<Portal>('hub')
+
+  if (portal === 'aluno') {
+    return (
+      <PortalShell title="Area do aluno" onBack={() => setPortal('hub')}>
+        <AlunoModule />
+      </PortalShell>
+    )
+  }
+
+  if (portal === 'coordenador-professor') {
+    return (
+      <PortalShell
+        title="Area de coordenacao e professor"
+        onBack={() => setPortal('hub')}
+      >
+        <CoordenadorProfessorModule />
+      </PortalShell>
+    )
+  }
+
+  return (
+    <main className="hub-page">
+      <section className="hub-hero">
+        <p className="hub-kicker">Corrije Ai</p>
+        <h1>Escolha qual experiencia abrir no frontend</h1>
+        <p className="hub-copy">
+          As duas pastas novas agora entram pelo app principal, sem manter o
+          template padrao do Vite.
+        </p>
+      </section>
+
+      <section className="hub-grid" aria-label="Portais disponiveis">
+        {portalCards.map((card) => (
+          <article key={card.id} className="hub-card">
+            <p className="hub-card-eyebrow">{card.eyebrow}</p>
+            <h2>{card.title}</h2>
+            <p>{card.description}</p>
+            <button type="button" onClick={() => setPortal(card.id)}>
+              Abrir portal
+            </button>
+          </article>
+        ))}
+      </section>
+    </main>
+  )
+}
