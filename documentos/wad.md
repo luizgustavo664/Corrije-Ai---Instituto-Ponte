@@ -5650,11 +5650,21 @@ Fontes: Estão na seção (referências).
 
 ## 6.3 Análise da Concorrência
 
-*a) Principais Concorrentes (até 250 palavras)*
-*Liste os concorrentes diretos e indiretos, destacando suas principais características e posicionamento no mercado.*
+### a) Principais Concorrentes
 
-*b) Vantagens Competitivas da Aplicação Web (até 250 palavras)*
-*Descreva os diferenciais da sua aplicação em relação aos concorrentes, sem necessidade de citação de fontes.*
+O Google Forms é um concorrente direto pela facilidade de criar avaliações simples e coletar respostas rapidamente. Seu posicionamento é de ferramenta gratuita, ampla e acessível, mas pouco especializada em correção pedagógica, anexos por questão e acompanhamento institucional. O Microsoft Forms ocupa posição semelhante, com vantagem em instituições que já utilizam o ecossistema Microsoft, porém também é mais adequado a formulários e questionários objetivos do que a fluxos completos de prova discursiva.
+
+O Moodle é um concorrente mais robusto, posicionado como ambiente virtual de aprendizagem completo, com recursos de turmas, atividades, notas e avaliações. Apesar disso, exige maior configuração, administração técnica e adaptação ao contexto de uso. O Google Classroom também atua como plataforma educacional ampla, com foco em gestão de turmas e distribuição de atividades, mas não resolve de forma específica a correção isonômica por questão nem a organização de resoluções manuscritas.
+
+Entre as soluções especializadas, Prova Fácil se posiciona como plataforma de avaliações digitais para instituições que buscam profissionalizar provas e simulados. Socrative, Quizizz e Kahoot! são mais voltados a quizzes, testes rápidos e engajamento, com forte apelo para atividades objetivas e gamificadas. Como concorrentes indiretos, WhatsApp, e-mail, Google Drive e planilhas são usados por sua acessibilidade, mas fragmentam arquivos, respostas e critérios de correção.
+
+### b) Vantagens Competitivas da Aplicação Web
+
+A vantagem competitiva da aplicação está em unir a simplicidade de ferramentas como Google Forms e Microsoft Forms com um fluxo avaliativo mais completo e adequado ao Instituto Ponte. Ao contrário desses formulários, a solução organiza prova, questões, anexos, progresso, correção, resultados e relatórios em uma mesma plataforma, reduzindo a dependência de WhatsApp, e-mail, Google Drive e planilhas.
+
+Em relação ao Moodle e ao Google Classroom, o diferencial é a especialização. A aplicação não tenta ser um ambiente virtual de aprendizagem amplo, mas sim resolver com baixo atrito o problema central do parceiro: aplicar e corrigir avaliações remotas com organização, acessibilidade e isonomia. Por isso, prioriza acesso por link para alunos, interface responsiva, envio estruturado de resoluções manuscritas e experiência simples para usuários com diferentes níveis de letramento digital.
+
+Frente a plataformas como Prova Fácil, Socrative, Quizizz e Kahoot!, a solução se destaca por não focar apenas em testes objetivos, automação ou gamificação. Seu valor está na correção por questão, que permite ao professor avaliar todos os alunos com o mesmo critério, no suporte a fórmulas matemáticas, no banco de questões e nos relatórios para coordenadores. Assim, combina acessibilidade, justiça avaliativa e inteligência institucional em uma ferramenta alinhada à missão social do Instituto Ponte.
 
 ## 6.4 Público-Alvo
 

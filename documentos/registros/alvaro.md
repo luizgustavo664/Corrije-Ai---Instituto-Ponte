@@ -803,3 +803,40 @@ Foi necessario rescrever tudo o que foi feito no dia 01/6 e no dia 02/6 por um e
 ## Link do docs:
 
 Nenhuma
+
+## ------------------outro dia------------------------
+
+### Data: 11/06/2026
+
+
+
+### Objetivo do Dia
+
+Preencha os nove blocos do Business Model Canvas de forma coerente com as análises realizadas nas seções anteriores: Segmentos de clientes; Proposta de valor; Canais; Relacionamento com clientes; Fontes de receita;
+Recursos principais; Atividades principais; Parcerias principais; e estrutura de custos (somente se couber nesse momento da análise com o parceiro).
+
+Liste os concorrentes diretos e indiretos, destacando suas principais características e posicionamento no mercado.
+
+Descreva os diferenciais da sua aplicação em relação aos concorrentes, sem necessidade de citação de fontes.
+
+### Alterações Realizadas
+
+
+#### Álvaro:
+
+Preenchi a seção 6.3 - Análise da Concorrência do WAD, desenvolvendo a análise dos principais concorrentes diretos e indiretos da aplicação. Identifiquei ferramentas como Google Forms, Microsoft Forms, Moodle, Google Classroom, Prova Fácil, Socrative, Quizizz e Kahoot!, explicando o posicionamento de cada uma no mercado e suas limitações em relação ao contexto do Instituto Ponte. Também destaquei concorrentes indiretos, como WhatsApp, e-mail, Google Drive e planilhas, relacionando-os ao processo atual de envio, organização e correção de avaliações.
+
+Também elaborei a parte de vantagens competitivas da aplicação web, comparando a solução do Instituto Ponte com os concorrentes citados. Expliquei que o diferencial da plataforma está em unir simplicidade de uso, acesso por link, interface responsiva, envio estruturado de anexos, correção por questão, suporte a fórmulas matemáticas, banco de questões e relatórios para coordenadores. A análise foi ajustada para reforçar o contraste entre a aplicação e ferramentas genéricas ou voltadas apenas a quizzes e avaliações objetivas.
+
+Além disso, preenchi a seção 6.7 - Business Model Canvas, estruturando os nove blocos do modelo de negócio: segmentos de clientes, proposta de valor, canais, relacionamento com clientes, fontes de receita, recursos principais, atividades principais, parcerias principais e estrutura de custos. Relacionei cada bloco ao contexto do Instituto Ponte, considerando os alunos, professores e coordenadores como usuários principais, além da possibilidade de expansão futura para outras ONGs educacionais, escolas, cursos preparatórios e programas de apoio estudantil.
+
+No Business Model Canvas, também defini a proposta de valor da solução como uma plataforma centralizada para criação, aplicação, envio, correção e análise de avaliações remotas. Descrevi os canais digitais de distribuição, o relacionamento próximo com o parceiro, o possível modelo SaaS em um cenário comercial futuro, os recursos técnicos necessários, as atividades de desenvolvimento e manutenção, as parcerias estratégicas e os principais custos associados à operação e evolução da aplicação.
+
+##### Observação:
+
+A seção 6.3 havia permanecido em branco por uma falha de acompanhamento do grupo durante a revisão do WAD. Já a seção 6.7 foi deixada para ser desenvolvida após a aula de negócios, pois o grupo aguardava orientações mais específicas sobre a estrutura adequada do Business Model Canvas.
+
+
+## Link do docs:
+
+Nenhuma
