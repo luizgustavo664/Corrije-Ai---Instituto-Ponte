@@ -5580,12 +5580,9 @@ O mapeamento abaixo conecta os casos de teste às RNs, RFs e endpoints da Matriz
 
 O projeto propõe uma aplicação web para centralizar a criação, aplicação, entrega, correção e análise de avaliações remotas do Instituto Ponte. A oportunidade identificada está no crescimento da atuação nacional da instituição, que atende centenas de estudantes em diferentes estados brasileiros, exigindo processos digitais mais escaláveis, seguros e padronizados.
 
-
 Atualmente, parte do fluxo avaliativo ocorre por canais dispersos, como WhatsApp e e-mail, o que gera risco de perda de arquivos, dificuldade de organização das respostas, retrabalho para professores e menor isonomia na correção. A aplicação atende esse problema ao reunir, em uma única plataforma, o acesso às provas, o envio de respostas e anexos, o acompanhamento do progresso, a correção por questão e a visualização de resultados.
 
-
 Os principais diferenciais competitivos da solução são a interface simples e responsiva para alunos, o acesso facilitado por link, o suporte a respostas com anexos e fórmulas, o salvamento estruturado das submissões, o banco de questões, a correção padronizada por item e os painéis de desempenho para professores e coordenadores. Esses recursos fortalecem a equidade do processo avaliativo e reduzem a carga operacional da equipe pedagógica.
-
 
 Como objetivos estratégicos, o projeto busca aumentar a confiabilidade das avaliações remotas, reduzir falhas operacionais, melhorar a eficiência da correção, apoiar decisões pedagógicas com dados e contribuir para a missão do Instituto Ponte de promover ascensão social por meio da educação de qualidade.
 
@@ -5595,14 +5592,24 @@ Como objetivos estratégicos, o projeto busca aumentar a confiabilidade das aval
 
 
 ### 6.2.1 Visão Geral do Setor
-A aplicação está inserida no setor de tecnologia educacional aplicada ao terceiro setor, com foco em avaliação remota, inclusão digital e gestão pedagógica. Economicamente, organizações sociais de educação, como o Instituto Ponte, atuam em um contexto de alta demanda por oportunidades educacionais e dependência de doações, parcerias e comprovação de impacto. Por isso, soluções digitais que aumentam eficiência, transparência e geração de indicadores tornam-se estratégicas para fortalecer a confiança de financiadores e apoiar a expansão institucional.
+A aplicação está inserida no setor de tecnologia educacional aplicada ao terceiro setor, com foco em avaliação remota, inclusão digital e gestão pedagógica. Economicamente, segundo a Grand View Research (2024), o mercado global de softwares educacionais apresenta perspectiva de crescimento até 2030, impulsionado pela demanda por digitalização de processos educacionais, redução de custos operacionais, acompanhamento por dados e ampliação do acesso à aprendizagem. No recorte de organizações sociais de educação, esse movimento se conecta à necessidade de demonstrar impacto, atrair parcerias e prestar contas com maior transparência. Segundo o Anuário Brasileiro da Educação Básica 2024, o país ainda registra desigualdades significativas de acesso e permanência escolar, reforçando a demanda por soluções digitais voltadas a populações vulneráveis. Por isso, plataformas que aumentam eficiência, organização e geração de indicadores tornam-se estratégicas tanto para o setor educacional quanto para instituições como o Instituto Ponte.
 No aspecto tecnológico, o setor educacional brasileiro vem ampliando o uso de recursos digitais, mas ainda enfrenta desigualdades de acesso, infraestrutura e letramento tecnológico. A pesquisa TIC Educação 2023 indica avanço da conectividade nas escolas, mas também evidencia que a adoção de tecnologias exige ferramentas simples, acessíveis e adequadas a diferentes realidades de uso. Nesse cenário, uma plataforma responsiva para provas remotas, envio de anexos, correção por questão e relatórios automatizados atende diretamente à necessidade de organizar processos avaliativos em ambientes híbridos.
 Do ponto de vista regulatório, a aplicação deve observar a Lei Geral de Proteção de Dados (LGPD), especialmente por tratar dados educacionais de adolescentes, exigindo segurança, finalidade clara e tratamento no melhor interesse do estudante. Além disso, por dialogar com uma OSCIP, o projeto se conecta a um setor regulado por normas de transparência, prestação de contas e finalidade pública.
 
+Fontes: 
 
-Fontes: Estão na seção (referências)
+GRAND VIEW RESEARCH. [Global EdTech Software Market Size & Outlook, 2023-2030](https://www.grandviewresearch.com/horizon/outlook/edtech-software-market-size/global). San Francisco: Grand View Research, 2024. Acesso em: 12 jun. 2026.
+
+COMITÊ GESTOR DA INTERNET NO BRASIL. [Pesquisa sobre o uso das tecnologias de informação e comunicação nas escolas brasileiras: TIC Educação 2023](https://cgi.br/publicacao/pesquisa-sobre-o-uso-das-tecnologias-de-informacao-e-comunicacao-nas-escolas-brasileiras-tic-educacao-2023/). São Paulo: CGI.br, 2024. Acesso em: 1 jun. 2026.
 
 
+TODOS PELA EDUCAÇÃO. [Anuário Brasileiro da Educação Básica 2024](https://anuario.todospelaeducacao.org.br/2024/index.html). São Paulo: Todos Pela Educação, 2024. Acesso em: 1 jun. 2026.
+
+
+BRASIL. [Lei nº 13.709, de 14 de agosto de 2018: Lei Geral de Proteção de Dados Pessoais (LGPD)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Brasília, DF: Presidência da República, 2018. Acesso em: 1 jun. 2026.
+
+
+BRASIL. [Lei nº 9.790, de 23 de março de 1999](https://www.planalto.gov.br/ccivil_03/leis/L9790.htm). Dispõe sobre a qualificação de pessoas jurídicas de direito privado, sem fins lucrativos, como Organizações da Sociedade Civil de Interesse Público. Brasília, DF: Presidência da República, 1999. Acesso em: 1 jun. 2026.
 
 
 
@@ -5610,40 +5617,44 @@ Fontes: Estão na seção (referências)
 ### 6.2.2 Tamanho e Crescimento do Mercado
 O mercado no qual a aplicação do Instituto Ponte se insere combina EdTech, avaliação digital e gestão educacional para organizações de impacto social. Em escala global, o segmento de softwares educacionais foi estimado em US$ 30,1 bilhões em 2023 e deve alcançar US$ 75,9 bilhões até 2030, com crescimento médio anual de 14,1% entre 2024 e 2030. Dentro desse setor, o mercado de avaliações educacionais K-12 também apresenta expansão relevante: foi avaliado em US$ 13,85 bilhões em 2024 e tem projeção de chegar a US$ 32,04 bilhões em 2033, com CAGR de 9,9%.
 
-
 Na América Latina, o setor de EdTechs demonstra maturação e escala regional. Segundo o Report EdTech 2025, do Distrito, existem 1.326 startups educacionais ativas na região; entre 2014 e o início de 2025, o setor captou US$ 912,4 milhões em 553 rodadas, sendo o Brasil responsável por US$ 656,4 milhões em 320 rodadas. Esses dados indicam que o país é um dos pólos mais relevantes para soluções educacionais digitais.
 
+No caso do Instituto Ponte, o Relatório Anual 2025 informa que a organização atende 440 estudantes em 18 estados brasileiros. Esse alcance territorial evidencia uma demanda operacional concreta por soluções digitais escaláveis para acompanhamento pedagógico e avaliações remotas. Nesse contexto, uma plataforma própria permite reduzir perdas operacionais, padronizar correções e gerar indicadores para apoiar a expansão do impacto educacional da instituição.
 
-Para o Instituto Ponte, esse crescimento reforça a oportunidade de adotar uma plataforma própria de avaliações remotas, capaz de reduzir perdas operacionais, padronizar correções, gerar indicadores e escalar o acompanhamento pedagógico de estudantes em diferentes estados.
+Fontes: 
+
+GRAND VIEW RESEARCH. [Global EdTech Software Market Size & Outlook, 2023-2030](https://www.grandviewresearch.com/horizon/outlook/edtech-software-market-size/global). San Francisco: Grand View Research, 2024. Acesso em: 1 jun. 2026.
 
 
-Fontes: Estão na seção (referências)
+RESEARCH AND MARKETS. [K-12 Testing and Assessment Market Forecast to 2033](https://www.researchandmarkets.com/reports/6189457/k-12-testing-assessment-market-forecast). Dublin: Research and Markets, 2025. Acesso em: 1 jun. 2026.
+
+
+ASSOCIAÇÃO BRASILEIRA DE INTERNET. [Distrito destaca que edtechs se reinventam em meio à queda de fundações e investimentos, com foco em inovação](https://abranet.org.br/noticias/distrito-destaca-que-edtechs-se-reinventam-em-meio-a-queda-de-fundacoes-e-investimentos-com-foco-em-inovacao/). Abranet, 2025. Acesso em: 1 jun. 2026.
+
+
+INSTITUTO PONTE. [Relatório Anual 2025](https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf). Vitória: Instituto Ponte, 2026. Acesso em: 1 jun. 2026.
 
 
 ### 6.2.3 Tendências de Mercado
 
+O setor de tecnologia educacional apresenta tendências tecnológicas, comportamentais e mercadológicas relevantes para a aplicação do Instituto Ponte. A primeira é a consolidação de modelos híbridos e mobile-first. Como muitos estudantes acessam atividades educacionais por dispositivos próprios e com diferentes condições de conectividade, plataformas simples, responsivas e de baixo atrito ganham importância. Para o projeto, isso reforça decisões como acesso por link, envio de anexos pelo celular, interface objetiva e salvamento estruturado das respostas.
 
-O setor de tecnologia educacional apresenta três tendências relevantes para a aplicação do Instituto Ponte. A primeira é a consolidação de modelos híbridos e mobile-first. Como muitos estudantes acessam atividades educacionais por dispositivos próprios e com diferentes condições de conectividade, plataformas simples, responsivas e de baixo atrito tendem a ganhar importância. Para o projeto, isso reforça decisões como acesso por link, envio de anexos pelo celular, interface objetiva e salvamento estruturado das respostas.
+A segunda tendência é comportamental: estudantes, professores e instituições passaram a aceitar com mais naturalidade processos digitais de ensino, avaliação e acompanhamento. A OECD (2024) destaca a importância de sistemas educacionais acompanharem resultados e desenvolverem respostas baseadas em evidências. Nesse contexto, cresce a expectativa por avaliações remotas mais organizadas, feedbacks mais rápidos e acesso seguro ao histórico de desempenho.
 
+A terceira tendência é o uso crescente de dados para gestão pedagógica e prestação de contas. Instituições educacionais e organizações sociais precisam demonstrar impacto, acompanhar desempenho e identificar dificuldades de aprendizagem com mais rapidez. Assim, relatórios automáticos, dashboards e histórico de avaliações tornam-se diferenciais estratégicos para professores, coordenadores e financiadores.
 
-
-
-A segunda tendência é o uso crescente de dados para gestão pedagógica e prestação de contas. Instituições educacionais e organizações sociais precisam demonstrar impacto, acompanhar desempenho e identificar dificuldades de aprendizagem com mais rapidez. Assim, relatórios automáticos, dashboards e histórico de avaliações tornam-se diferenciais estratégicos, pois apoiam professores, coordenadores e financiadores na tomada de decisão.
-
-
+Por fim, a automação e a inteligência artificial avançam na educação. A UNESCO aponta que o uso de IA generativa exige governança, proteção de dados, transparência e supervisão humana. Como a plataforma lida com dados de estudantes e avaliações, a aderência à LGPD e a boas práticas de segurança também se torna fator de confiança institucional.
 
 
-A terceira tendência é a incorporação cuidadosa de automação e inteligência artificial em processos educacionais. A UNESCO aponta que o uso de IA generativa na educação exige governança, proteção de dados, transparência e supervisão humana. Nesse sentido, a aplicação pode evoluir para recursos de apoio à correção e análise de desempenho, desde que preserve a isonomia avaliativa e a responsabilidade pedagógica dos professores.
+Fontes:
 
+COMITÊ GESTOR DA INTERNET NO BRASIL. [Pesquisa sobre o uso das tecnologias de informação e comunicação nas escolas brasileiras: TIC Educação 2023](https://cgi.br/publicacao/pesquisa-sobre-o-uso-das-tecnologias-de-informacao-e-comunicacao-nas-escolas-brasileiras-tic-educacao-2023/). São Paulo: CGI.br, 2024. Acesso em: 12 jun. 2026.
 
+OECD. [Education at a Glance 2024: OECD Indicators](https://www.oecd.org/en/publications/education-at-a-glance-2024_c00cad36-en). Paris: OECD Publishing, 2024. Acesso em: 12 jun. 2026.
 
+UNESCO. [Guidance for Generative AI in Education and Research](https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research?hub=67098). Paris: UNESCO, 2023. Acesso em: 12 jun. 2026.
 
-Por fim, observa-se maior exigência por segurança, privacidade e conformidade regulatória. Como a plataforma lida com dados de estudantes e avaliações, a aderência à LGPD e a boas práticas de proteção de dados deixa de ser apenas requisito técnico e passa a ser um fator de confiança institucional.
-
-
-
-
-Fontes: Estão na seção (referências).
+BRASIL. [Lei nº 13.709, de 14 de agosto de 2018: Lei Geral de Proteção de Dados Pessoais (LGPD)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Brasília, DF: Presidência da República, 2018. Acesso em: 12 jun. 2026.
 
 
 
@@ -5702,9 +5713,7 @@ De forma geral, todos os públicos possuem contato frequente com ferramentas dig
 
 A aplicação entrega ao Instituto Ponte uma plataforma única para transformar avaliações remotas, hoje dependentes de canais dispersos, em um processo digital centralizado, seguro e orientado por dados. Sua proposta de valor está em unir inclusão, eficiência operacional e justiça avaliativa em uma solução feita para a realidade de uma organização social educacional.
 
-
 Para os alunos, o valor está no acesso simples por link, na interface responsiva para celular, no envio estruturado de respostas e anexos e na maior segurança de que a prova foi registrada corretamente. Para os professores, a plataforma reduz retrabalho ao permitir criação de provas, organização por status, banco de questões, suporte a fórmulas, correção por questão e acompanhamento das submissões em um único ambiente. Para coordenadores, o sistema gera visão consolidada de desempenho, histórico avaliativo e indicadores úteis para decisões pedagógicas e prestação de contas.
-
 
 O diferencial da aplicação não está apenas em digitalizar provas, mas em adaptar o processo avaliativo às necessidades do Instituto Ponte: estudantes em diferentes contextos de acesso, professores com alto volume de correções e uma instituição que precisa demonstrar impacto educacional com dados confiáveis. Assim, a solução se posiciona como uma ferramenta de equidade e gestão, capaz de reduzir falhas operacionais, padronizar critérios de correção e fortalecer a missão institucional de promover ascensão social por meio da educação.
 
@@ -5714,9 +5723,7 @@ O diferencial da aplicação não está apenas em digitalizar provas, mas em ada
 
 A estratégia de diferenciação da aplicação está em oferecer uma solução especializada para avaliações remotas em organizações educacionais de impacto social, em vez de competir diretamente com plataformas genéricas de ensino ou formulários digitais. Enquanto ferramentas amplas resolvem partes isoladas do processo, como aplicação de questionários, armazenamento de arquivos ou visualização de notas, a plataforma proposta integra todo o fluxo avaliativo do Instituto Ponte em um único ambiente.
 
-
 O primeiro eixo de diferenciação é a adequação ao contexto dos alunos. A aplicação prioriza acesso por link, experiência responsiva, envio de anexos pelo celular e interface simples, reduzindo barreiras tecnológicas para estudantes em diferentes realidades de conectividade e dispositivo. O segundo eixo é a eficiência docente: banco de questões, suporte a LaTeX, organização de provas por status e correção por questão permitem que professores trabalhem com mais padronização e menos retrabalho.
-
 
 O terceiro eixo é a gestão institucional. A solução gera dados estruturados, histórico de respostas e relatórios que apoiam decisões pedagógicas e prestação de contas, algo essencial para uma OSCIP dependente de transparência, impacto comprovado e confiança de parceiros. Assim, a aplicação se diferencia por combinar acessibilidade, isonomia avaliativa e inteligência de gestão, posicionando-se como uma ferramenta feita para a operação real do Instituto Ponte, e não como uma adaptação de sistemas educacionais genéricos.
 
@@ -5764,6 +5771,16 @@ Campanhas pagas em plataformas como Google Ads e LinkedIn Ads serão utilizadas 
 
 ### 6.7 Business Model Canvas
 
+Template:
+
+<div align="center">
+  <img src="../assets/modelCanvas.png" width="850">
+</div>
+
+<div align="center">
+  <strong>Figura — Business Model Canvas.</strong><br><em>Fonte: elaboração própria, porém editada com o ChatGPT.</em>
+</div>
+
 1. Segmentos de clientes
 A solução atende principalmente organizações educacionais que realizam avaliações remotas e precisam de processos mais acessíveis, organizados e eficientes. No contexto inicial, o cliente central é o Instituto Ponte, considerando seus estudantes, professores e coordenadores pedagógicos. Também podem ser atendidas, futuramente, outras ONGs educacionais, escolas, cursos preparatórios e programas de apoio estudantil que lidam com alunos em diferentes condições de acesso digital.
 
@@ -5777,7 +5794,7 @@ O principal canal de entrega é a própria aplicação web, acessível por naveg
 O relacionamento com o Instituto Ponte deve ser próximo e colaborativo, com validações frequentes junto ao parceiro durante o desenvolvimento e uso da solução. O suporte precisa priorizar clareza, rapidez e orientação simples, considerando que a instituição não possui uma equipe técnica interna robusta. No caso de expansão para outras organizações, o relacionamento pode combinar demonstrações, onboarding assistido, documentação, suporte digital e acompanhamento de resultados.
 
 5. Fontes de receita
-Para um cenário comercial futuro, a solução pode adotar um modelo SaaS, com cobrança recorrente conforme o porte da instituição, número de usuários ou volume de avaliações aplicadas. Também pode haver planos diferenciados por funcionalidades, como relatórios avançados, maior armazenamento de anexos ou suporte prioritário. No momento do projeto com o parceiro, a entrega pode ser tratada como solução acadêmica/prototipal, sem cobrança direta ao Instituto Ponte.
+Para um cenário comercial futuro, a solução pode adotar um modelo SaaS alinhado ao crescimento do mercado de edtechs e avaliações digitais apresentado na análise de mercado. A cobrança recorrente pode variar conforme critérios diretamente ligados ao uso e ao valor entregue: número de alunos ativos, quantidade de professores e coordenadores, volume de provas aplicadas, armazenamento de anexos e nível de relatórios pedagógicos contratados. Dessa forma, instituições menores, como ONGs educacionais e programas sociais, poderiam acessar planos mais básicos, enquanto escolas, cursos preparatórios ou redes maiores contratariam planos com maior capacidade operacional, suporte prioritário e analytics avançado. No caso do Instituto Ponte, que atende 440 estudantes em 18 estados, o modelo evidencia a lógica de precificação por escala e necessidade de gestão distribuída; entretanto, no projeto atual, a entrega permanece acadêmica/prototipal, sem cobrança direta ao parceiro.
 
 6. Recursos principais
 Os principais recursos são a aplicação web, a infraestrutura de hospedagem, o banco de dados, os mecanismos de autenticação, os módulos de provas, submissões, correção e relatórios, além da documentação técnica e de uso. Também são recursos essenciais o conhecimento do time sobre o contexto do Instituto Ponte, as regras pedagógicas da instituição, os requisitos levantados com o parceiro e a capacidade de desenvolver uma interface acessível e responsiva.
@@ -5832,6 +5849,8 @@ MINISTÉRIO DA EDUCAÇÃO. **Programa Universidade para Todos (ProUni)**. Brasí
 
 OECD. **Education at a Glance 2023: OECD Indicators**. Paris: OECD Publishing, 2023. Disponível em: https://doi.org/10.1787/e13bef63-en. Acesso em: 1 mai. 2025.
 
+OECD. [Education at a Glance 2024: OECD Indicators](https://www.oecd.org/en/publications/education-at-a-glance-2024_c00cad36-en). Paris: OECD Publishing, 2024. Acesso em: 12 jun. 2026.
+
 OECD. **Philanthropy and Education: Harnessing the Potential for Learning**. Paris: OECD Publishing, 2019. Disponível em: https://doi.org/10.1787/000e0c1e-en. Acesso em: 1 mai. 2025.
 
 TODOS PELA EDUCAÇÃO. **Anuário Brasileiro da Educação Básica 2023**. São Paulo: Todos Pela Educação, 2023. Disponível em: https://todospelaeducacao.org.br/anuario. Acesso em: 1 mai. 2025.
@@ -5839,6 +5858,8 @@ TODOS PELA EDUCAÇÃO. **Anuário Brasileiro da Educação Básica 2023**. São 
 TRANSPARÊNCIA BRASIL. **Organizações da Sociedade Civil: dados e transparência**. São Paulo: Transparência Brasil, 2022. Disponível em: https://www.transparencia.org.br. Acesso em: 1 mai. 2025.
 
 UNICEF – United Nations Children's Fund. **Relatório Situação da Infância e Adolescência Brasileira 2022**. Brasília: UNICEF, 2022. Disponível em: https://www.unicef.org/brazil/relatorios. Acesso em: 1 mai. 2025.
+
+UNESCO. [Guidance for Generative AI in Education and Research](https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research?hub=67098). Paris: UNESCO, 2023. Acesso em: 12 jun. 2026.
 
 W3C – World Wide Web Consortium. **Web Content Accessibility Guidelines (WCAG) 2.1**. W3C Recommendation, 5 June 2018. Disponível em: https://www.w3.org/TR/WCAG21. Acesso em: 1 mai. 2025.
 
