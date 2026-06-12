@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { ChevronLeftIcon, BookmarkIcon, ClockIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
-import type { Exam } from "./examTypes";
+import type { MateriaDto } from "../../../../../src/features/materias/materias.types";
+import type { CreateProvaPayload } from "../../../../../src/features/provas/provas.types";
+
+export type NovaProvaInput = CreateProvaPayload;
 
 interface Props {
   onBack: () => void;
-  onSave: (exam: Exam) => void;
+  onSave: (input: NovaProvaInput) => Promise<void> | void;
+  materias: MateriaDto[];
+  isSaving?: boolean;
+  errorMessage?: string;
 }
 
 const modalidades = ["Prova", "Trabalho", "Atividade", "Simulado"];
@@ -39,7 +45,6 @@ const labelStyle: React.CSSProperties = {
   fontSize: 14,
   color: "#111",
   marginBottom: 6,
-  display: "block",
 };
 
 const chevron = (
@@ -48,36 +53,46 @@ const chevron = (
   </svg>
 );
 
-export function NovaProvaPage({ onBack, onSave }: Props) {
+export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, errorMessage }: Props) {
   const [nome, setNome] = useState("");
   const [modalidade, setModalidade] = useState("");
-  const [disciplina, setDisciplina] = useState("");
+  const [materiaId, setMateriaId] = useState("");
   const [turma, setTurma] = useState("");
   const [semestre, setSemestre] = useState("");
   const [orientacoes, setOrientacoes] = useState("");
   const [tempoProva, setTempoProva] = useState<string>("");
+  const [dataInicio, setDataInicio] = useState("");
   const [dataLimite, setDataLimite] = useState("");
 
-  const canSave = nome.trim() !== "";
+  const canSave =
+    nome.trim() !== "" &&
+    materiaId !== "" &&
+    turma.trim() !== "" &&
+    semestre !== "" &&
+    !isSaving;
 
-  function handleSave() {
+  async function handleSave() {
     if (!canSave) return;
-    const exam: Exam = {
-      id: Date.now(),
-      title: nome.trim(),
-      modalidade: modalidade || "Prova",
-      discipline: disciplina,
-      subject: disciplina,
-      turma,
-      semester: semestre || "1º Semestre 2026",
-      badge: "Rascunho",
-      submissions: "10",
-      tempoProva: tempoProva !== "" ? Number(tempoProva) : undefined,
-      dataLimite: dataLimite || undefined,
-      orientacoes: orientacoes.trim() || undefined,
-    };
-    onSave(exam);
-    onBack();
+    const dataFim = dataLimite ? new Date(dataLimite).toISOString() : null;
+    const dataInicioVal = dataInicio ? new Date(dataInicio).toISOString() : null;
+    try {
+      await onSave({
+        materiaId,
+        titulo: nome.trim(),
+        modalidade: modalidade || "Prova",
+        turma: turma.trim(),
+        semestre,
+        instrucoes: orientacoes.trim() || null,
+        tempoLimiteMin: tempoProva !== "" && Number(tempoProva) > 0 ? Number(tempoProva) : null,
+        dataInicio: dataInicioVal,
+        dataFim,
+        embaralharQuestoes: false,
+        embaralharAlternativas: false,
+      });
+      onBack();
+    } catch {
+      // A mutation do TanStack Query já expõe a mensagem para renderização.
+    }
   }
 
   // Minimum datetime for the picker: now
@@ -116,6 +131,16 @@ export function NovaProvaPage({ onBack, onSave }: Props) {
             Dados da Prova
           </h2>
 
+          {errorMessage && (
+            <div
+              role="alert"
+              className="rounded-lg px-4 py-3"
+              style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: 14 }}
+            >
+              {errorMessage}
+            </div>
+          )}
+
           {/* Nome da Prova */}
           <div className="flex flex-col gap-1.5 w-full">
             <label style={labelStyle}>Nome da Prova *</label>
@@ -150,15 +175,26 @@ export function NovaProvaPage({ onBack, onSave }: Props) {
             </div>
             <div className="flex flex-col gap-1.5 w-full">
               <label style={labelStyle}>Disciplina *</label>
-              <input
-                type="text"
-                value={disciplina}
-                onChange={(e) => setDisciplina(e.target.value)}
-                placeholder="Ex: Matemática"
-                style={inputStyle}
-                onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
-                onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
-              />
+              <div className="relative w-full">
+                <select
+                  value={materiaId}
+                  onChange={(e) => setMateriaId(e.target.value)}
+                  style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
+                >
+                  <option value="">Selecionar</option>
+                  {materias.map((materia) => (
+                    <option key={materia.id} value={materia.id}>{materia.nome}</option>
+                  ))}
+                </select>
+                {chevron}
+              </div>
+              {materias.length === 0 && (
+                <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9B9B9B" }}>
+                  Nenhuma matéria disponível para seleção.
+                </span>
+              )}
             </div>
           </div>
 
@@ -194,7 +230,7 @@ export function NovaProvaPage({ onBack, onSave }: Props) {
             </div>
           </div>
 
-          {/* Tempo de Prova + Data Limite */}
+          {/* Tempo de Prova + Datas */}
           <div className="flex gap-5">
             {/* Tempo de Prova */}
             <div className="flex flex-col gap-1.5 w-full">
@@ -219,6 +255,28 @@ export function NovaProvaPage({ onBack, onSave }: Props) {
               </div>
               <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9B9B9B" }}>
                 Tempo disponível para o aluno após iniciar a prova
+              </span>
+            </div>
+
+            {/* Data de Início */}
+            <div className="flex flex-col gap-1.5 w-full">
+              <label style={labelStyle} className="flex items-center gap-1.5">
+                <CalendarDaysIcon style={{ width: 15, height: 15, color: "#05245F" }} />
+                Data e Hora de Início
+              </label>
+              <div className="relative w-full">
+                <input
+                  type="datetime-local"
+                  value={dataInicio}
+                  min={minDatetime}
+                  onChange={(e) => setDataInicio(e.target.value)}
+                  style={{ ...inputStyle, paddingRight: 13, cursor: "pointer" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
+                />
+              </div>
+              <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9B9B9B" }}>
+                Data e hora em que a prova ficará disponível
               </span>
             </div>
 
@@ -301,7 +359,7 @@ export function NovaProvaPage({ onBack, onSave }: Props) {
             }}
           >
             <BookmarkIcon className="w-[15px] h-[15px]" style={{ color: "#fff" }} />
-            Salvar como Rascunho
+            {isSaving ? "Salvando..." : "Salvar como Rascunho"}
           </button>
         </div>
       </div>

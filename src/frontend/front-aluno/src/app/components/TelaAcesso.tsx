@@ -10,10 +10,12 @@ const ACCESS_TIPS = [
 ];
 
 interface Props {
-  onNext: (info: StudentInfo) => void;
+  onNext: (info: StudentInfo) => void | Promise<void>;
+  isLoading?: boolean;
+  errorMessage?: string;
 }
 
-export function TelaAcesso({ onNext }: Props) {
+export function TelaAcesso({ onNext, isLoading = false, errorMessage }: Props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [cpf, setCpf] = useState("");
@@ -37,11 +39,15 @@ export function TelaAcesso({ onNext }: Props) {
     return errs;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
-    onNext({ name: name.trim(), email: email.trim(), cpf });
+    try {
+      await onNext({ name: name.trim(), email: email.trim(), cpf });
+    } catch {
+      // O erro é exibido por errorMessage.
+    }
   };
 
   return (
@@ -127,11 +133,15 @@ export function TelaAcesso({ onNext }: Props) {
 
           <button
             type="submit"
+            disabled={isLoading}
             className="w-full bg-[#6B6FA3] text-white rounded-lg py-4 font-bold text-sm tracking-widest uppercase mt-2 active:opacity-90 transition-opacity flex items-center justify-center gap-2"
           >
-            Continuar
+            {isLoading ? "Iniciando..." : "Continuar"}
             <ChevronRight size={18} />
           </button>
+          {errorMessage && (
+            <p className="text-sm text-[#D32F2F] text-center font-medium">{errorMessage}</p>
+          )}
         </form>
       </div>
     </div>

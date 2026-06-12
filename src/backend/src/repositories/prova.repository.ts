@@ -31,6 +31,7 @@ type ProvaRow = {
   atualizado_em: Date | string;
   materia_nome?: string;
   professor_nome?: string;
+  submissoes?: string;
   total?: string;
 };
 
@@ -58,6 +59,7 @@ const mapProva = (row: ProvaRow): Prova => ({
   qrCode: row.qr_code,
   criadoEm: toIsoString(row.criado_em) ?? "",
   atualizadoEm: toIsoString(row.atualizado_em) ?? "",
+  submissoes: row.submissoes ? Number(row.submissoes) : 0,
   materia: row.materia_nome ? { id: row.materia_id, nome: row.materia_nome } : undefined,
   professor: row.professor_nome ? { id: row.professor_id, nome: row.professor_nome } : undefined,
 });
@@ -196,10 +198,17 @@ export class ProvaRepository {
     const result = await pool.query<ProvaRow>(
       `
         SELECT p.*, m."nome" AS "materia_nome", pr."nome" AS "professor_nome",
-          COUNT(*) OVER() AS "total"
+          COUNT(*) OVER() AS "total",
+          COALESCE(pa_count.submissoes, 0) AS "submissoes"
         FROM "prova" p
         JOIN "materia" m ON m."id" = p."materia_id"
         JOIN "professor" pr ON pr."id" = p."professor_id"
+        LEFT JOIN (
+          SELECT "prova_id", COUNT(*)::int AS "submissoes"
+          FROM "prova_aluno"
+          WHERE "status" IN ('enviada', 'corrigida')
+          GROUP BY "prova_id"
+        ) pa_count ON pa_count."prova_id" = p."id"
         ${whereSql}
         ORDER BY p."criado_em" DESC
         LIMIT ${limitParam}
@@ -223,10 +232,17 @@ export class ProvaRepository {
   async findById(provaId: string) {
     const result = await pool.query<ProvaRow>(
       `
-        SELECT p.*, m."nome" AS "materia_nome", pr."nome" AS "professor_nome"
+        SELECT p.*, m."nome" AS "materia_nome", pr."nome" AS "professor_nome",
+          COALESCE(pa_count.submissoes, 0) AS "submissoes"
         FROM "prova" p
         JOIN "materia" m ON m."id" = p."materia_id"
         JOIN "professor" pr ON pr."id" = p."professor_id"
+        LEFT JOIN (
+          SELECT "prova_id", COUNT(*)::int AS "submissoes"
+          FROM "prova_aluno"
+          WHERE "status" IN ('enviada', 'corrigida')
+          GROUP BY "prova_id"
+        ) pa_count ON pa_count."prova_id" = p."id"
         WHERE p."id" = $1
       `,
       [provaId],
@@ -417,6 +433,7 @@ export class ProvaRepository {
       `
         UPDATE "prova"
         SET "url_acesso" = $1,
+            "qr_code" = $1,
             "status" = 'publicada'
         WHERE "id" = $2
         RETURNING *

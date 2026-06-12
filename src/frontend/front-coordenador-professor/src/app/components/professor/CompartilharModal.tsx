@@ -1,16 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import QRCode from "qrcode";
 import { XMarkIcon, ClipboardDocumentIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 interface Props {
   onClose: () => void;
+  urlAcesso: string;
+  qrCode?: string;
 }
 
-export function CompartilharModal({ onClose }: Props) {
+export function CompartilharModal({ onClose, urlAcesso, qrCode }: Props) {
   const [copied, setCopied] = useState(false);
-  const url = "https://urlexemplo.com/prova/abc123";
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+  const [qrError, setQrError] = useState<string | null>(null);
+  const qrPayload = qrCode || urlAcesso;
+
+  useEffect(() => {
+    setQrCodeDataUrl(null);
+    setQrError(null);
+
+    QRCode.toDataURL(qrPayload, {
+      errorCorrectionLevel: "M",
+      margin: 2,
+      width: 240,
+      color: {
+        dark: "#111111",
+        light: "#FFFFFF",
+      },
+    })
+      .then(setQrCodeDataUrl)
+      .catch(() => setQrError("Não foi possível gerar o QR Code."));
+  }, [qrPayload]);
 
   function handleCopy() {
-    navigator.clipboard.writeText(url).catch(() => {});
+    navigator.clipboard.writeText(urlAcesso).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
@@ -26,7 +48,7 @@ export function CompartilharModal({ onClose }: Props) {
       <div
         className="bg-white rounded-2xl flex flex-col gap-5 relative"
         style={{
-          width: 500,
+          width: 625,
           padding: "32px 32px 36px",
           boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
         }}
@@ -65,7 +87,7 @@ export function CompartilharModal({ onClose }: Props) {
                 textOverflow: "ellipsis",
               }}
             >
-              {url}
+              {urlAcesso}
             </span>
           </div>
           <button
@@ -95,60 +117,17 @@ export function CompartilharModal({ onClose }: Props) {
             padding: "32px 0 28px",
           }}
         >
-          {/* QR code placeholder drawn with SVG */}
           <div
             className="rounded-2xl flex items-center justify-center bg-white"
-            style={{ width: 160, height: 160, border: "1px solid #E0E0E0" }}
+            style={{ width: 240, height: 240, border: "1px solid #E0E0E0" }}
           >
-            <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-              {/* Top-left finder */}
-              <rect x="5" y="5" width="30" height="30" rx="4" fill="#1a1a1a" />
-              <rect x="11" y="11" width="18" height="18" rx="2" fill="white" />
-              <rect x="16" y="16" width="8" height="8" rx="1" fill="#1a1a1a" />
-              {/* Top-right finder */}
-              <rect x="75" y="5" width="30" height="30" rx="4" fill="#1a1a1a" />
-              <rect x="81" y="11" width="18" height="18" rx="2" fill="white" />
-              <rect x="86" y="16" width="8" height="8" rx="1" fill="#1a1a1a" />
-              {/* Bottom-left finder */}
-              <rect x="5" y="75" width="30" height="30" rx="4" fill="#1a1a1a" />
-              <rect x="11" y="81" width="18" height="18" rx="2" fill="white" />
-              <rect x="16" y="86" width="8" height="8" rx="1" fill="#1a1a1a" />
-              {/* Data modules (simplified) */}
-              <rect x="42" y="5"  width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="50" y="5"  width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="58" y="5"  width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="42" y="13" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="58" y="13" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="42" y="21" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="50" y="21" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="42" y="42" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="50" y="42" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="58" y="42" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="66" y="42" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="42" y="50" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="58" y="50" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="42" y="58" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="50" y="58" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="66" y="58" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="75" y="42" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="83" y="50" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="75" y="58" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="99" y="42" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="5"  y="42" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="13" y="50" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="5"  y="58" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="21" y="42" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="29" y="50" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="42" y="75" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="50" y="75" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="42" y="83" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="58" y="83" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="66" y="75" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="42" y="99" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="58" y="91" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="66" y="99" width="6" height="6" rx="1" fill="#1a1a1a" />
-              <rect x="50" y="99" width="6" height="6" rx="1" fill="#1a1a1a" />
-            </svg>
+            {qrCodeDataUrl ? (
+              <img src={qrCodeDataUrl} alt="QR Code da prova" width={240} height={240} />
+            ) : (
+              <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181", padding: 16, textAlign: "center" }}>
+                {qrError ?? "Gerando QR Code..."}
+              </span>
+            )}
           </div>
 
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#6A7181" }}>

@@ -1,45 +1,76 @@
 import { useState } from "react";
-import { UserGroupIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { NovoProfessorModal, type ProfessorData } from "./NovoProfessorModal";
-
-export interface Professor {
-  id: number;
-  nome: string;
-  cpf: string;
-  provasCriadas: number;
-}
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { UserGroupIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { toast } from "sonner";
+import { ConfirmDialog } from "../../../../../src/components/feedback/ConfirmDialog";
+import { getStoredAuthSession } from "../../../../../src/features/auth/auth.storage";
+import { listProfessores, createProfessor, deleteProfessor } from "../../../../../src/features/professores/professores.api";
+import { listProvas } from "../../../../../src/features/provas/provas.api";
+import { useAnalyticsSummary } from "../../../../../src/features/analytics/useAnalyticsSummary";
+import { NovoProfessorModal } from "./NovoProfessorModal";
 
 interface Props {
-  onNavigateToProfile?: (professorId: number) => void;
-  professores: Professor[];
-  setProfessores: React.Dispatch<React.SetStateAction<Professor[]>>;
+  onNavigateToProfile?: (professorId: string) => void;
 }
 
-export function GestaoProfessoresPage({ onNavigateToProfile, professores, setProfessores }: Props): JSX.Element {
+export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Element {
+  const queryClient = useQueryClient();
   const [showNovoProfessorModal, setShowNovoProfessorModal] = useState(false);
+  const [professorToDelete, setProfessorToDelete] = useState<string | null>(null);
 
-  const mockAlertas = [
-    "Prof. Carlos Silva com 5 provas pendentes de correção há mais de 15 dias",
-    "Profª Maria Santos não enviou relatório mensal de desempenho - prazo expirado",
-    "Dr. João Oliveira com 3 turmas sem notas lançadas do bimestre anterior",
-    "Profª Ana Costa com pendência de documentação para renovação de contrato",
-    "Dr. Ricardo Lima solicitou licença emergencial - 4 turmas precisam realocação",
-    "Profª Fernanda Alves com 8 recursos de notas pendentes de análise",
-    "Dr. Rafael Rocha não compareceu à reunião pedagógica obrigatória",
-  ];
+  const { data: professores, isLoading, isError } = useQuery({
+    queryKey: ["professores"],
+    queryFn: listProfessores,
+    select: (result) => result.data,
+  });
 
-  const handleNovoProfessor = (data: ProfessorData) => {
-    const novoProfessor = {
-      id: professores.length > 0 ? Math.max(...professores.map(p => p.id)) + 1 : 1,
+  const { data: provas = [], isLoading: isLoadingProvas } = useQuery({
+    queryKey: ["provas"],
+    queryFn: listProvas,
+    select: (result) => result.data,
+  });
+
+  const analytics = useAnalyticsSummary(provas);
+  const provasPublicadas = provas.filter((prova) => prova.status === "publicada").length;
+
+  const createMutation = useMutation({
+    mutationFn: createProfessor,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["professores"] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteProfessor,
+    onSuccess: () => {
+      setProfessorToDelete(null);
+      toast.success("Professor removido com sucesso.");
+      void queryClient.invalidateQueries({ queryKey: ["professores"] });
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : "Erro ao remover professor.";
+      toast.error(message);
+    },
+  });
+
+  const handleNovoProfessor = (data: { nome: string; email: string }) => {
+    const session = getStoredAuthSession();
+    if (!session) return;
+
+    createMutation.mutate({
       nome: data.nome,
-      cpf: data.cpf,
-      provasCriadas: 0,
-    };
-    setProfessores(prev => [novoProfessor, ...prev]);
+      email: data.email,
+      coordenadorId: session.usuario.id,
+    });
     setShowNovoProfessorModal(false);
   };
 
-  const handleProfessorClick = (professorId: number) => {
+  const handleDeleteProfessor = (e: React.MouseEvent, professorId: string) => {
+    e.stopPropagation();
+    setProfessorToDelete(professorId);
+  };
+
+  const handleProfessorClick = (professorId: string) => {
     if (onNavigateToProfile) {
       onNavigateToProfile(professorId);
     }
@@ -47,7 +78,29 @@ export function GestaoProfessoresPage({ onNavigateToProfile, professores, setPro
 
   return (
     <>
-      <NovoProfessorModal isOpen={showNovoProfessorModal} onClose={() => setShowNovoProfessorModal(false)} onSave={handleNovoProfessor} />
+      <NovoProfessorModal
+        isOpen={showNovoProfessorModal}
+        onClose={() => setShowNovoProfessorModal(false)}
+        onSave={handleNovoProfessor}
+        isSaving={createMutation.isPending}
+      />
+      <ConfirmDialog
+        open={!!professorToDelete}
+        title="Remover professor?"
+        description="Esta ação remove o professor da gestão. Confirme apenas se ele não deve mais acessar o sistema."
+        confirmLabel="Remover"
+        isLoading={deleteMutation.isPending}
+        onOpenChange={(open) => {
+          if (!open && !deleteMutation.isPending) {
+            setProfessorToDelete(null);
+          }
+        }}
+        onConfirm={() => {
+          if (professorToDelete) {
+            deleteMutation.mutate(professorToDelete);
+          }
+        }}
+      />
     <div className="p-8" style={{ backgroundColor: "#F2F2F2", minHeight: "100vh" }}>
       {/* Header */}
       <div className="mb-8">
@@ -85,7 +138,7 @@ export function GestaoProfessoresPage({ onNavigateToProfile, professores, setPro
             </div>
           </div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "32px", color: "#6B6FA3" }}>
-            {professores.length}
+            {isLoading ? "..." : professores?.length ?? 0}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
             Professores Ativos
@@ -102,13 +155,13 @@ export function GestaoProfessoresPage({ onNavigateToProfile, professores, setPro
             </div>
           </div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "32px", color: "#6B6FA3" }}>
-            42
+            {isLoadingProvas ? "..." : provasPublicadas}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
             Provas Publicadas
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#9CA3AF", marginTop: "2px" }}>
-            Nos últimos 30 dias
+            Disponíveis para alunos
           </p>
         </div>
 
@@ -122,13 +175,13 @@ export function GestaoProfessoresPage({ onNavigateToProfile, professores, setPro
             </div>
           </div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "32px", color: "#6B6FA3" }}>
-            {mockAlertas.length}
+            {analytics.isLoading ? "..." : analytics.summary.pendenciasCorrecao}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
-            Alertas Institucionais
+            Correções Pendentes
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#9CA3AF", marginTop: "2px" }}>
-            Pendências dos professores
+            Somadas nas provas
           </p>
         </div>
 
@@ -142,63 +195,59 @@ export function GestaoProfessoresPage({ onNavigateToProfile, professores, setPro
             </div>
           </div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "32px", color: "#6B6FA3" }}>
-            8.2
+            {analytics.isLoading ? "..." : analytics.summary.envios}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
-            Média institucional
+            Provas Enviadas
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#9CA3AF", marginTop: "2px" }}>
-            Atual semestre
+            Submissões finalizadas
           </p>
         </div>
       </div>
 
+      {analytics.isError && (
+        <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#FF6B6B", marginBottom: "16px" }}>
+          Não foi possível carregar métricas de provas.
+        </p>
+      )}
+
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Alertas */}
-        <div>
-          <h2
-            className="mb-4"
-            style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "18px", color: "#6B6FA3" }}
-          >
-            Alertas institucionais
-          </h2>
-          <div className="space-y-3">
-            {mockAlertas.map((alerta, index) => (
-              <div key={index} className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4">
-                <div
-                  className="flex items-center justify-center rounded-lg shrink-0"
-                  style={{ width: 40, height: 40, backgroundColor: "#FEF3C7" }}
-                >
-                  <span style={{ fontSize: "20px" }}>⚠️</span>
-                </div>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#374151", fontWeight: 500 }}>
-                  {alerta}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Professores */}
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "18px", color: "#6B6FA3" }}>
               Professores
             </h2>
-            <button
-              className="text-sm hover:opacity-80 transition-opacity"
-              style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, color: "#05245F" }}
-            >
-              Ver todos os Professores →
-            </button>
           </div>
+
+          {isLoading && (
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181" }}>
+              Carregando professores...
+            </p>
+          )}
+
+          {isError && (
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#FF6B6B" }}>
+              Erro ao carregar professores.
+            </p>
+          )}
+
           <div className="space-y-3">
-            {professores.map((professor) => (
-              <button
+            {(professores ?? []).map((professor) => (
+              <div
                 key={professor.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => handleProfessorClick(professor.id)}
-                className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4 w-full text-left hover:bg-gray-50 transition-colors"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleProfessorClick(professor.id);
+                  }
+                }}
+                className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4 w-full text-left hover:bg-gray-50 transition-colors group"
               >
                 <div
                   className="flex items-center justify-center rounded-full shrink-0"
@@ -211,10 +260,19 @@ export function GestaoProfessoresPage({ onNavigateToProfile, professores, setPro
                     {professor.nome}
                   </p>
                   <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
-                    CPF: {professor.cpf} • {professor.provasCriadas} Provas criadas
+                    {professor.email}
                   </p>
                 </div>
-              </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleDeleteProfessor(e, professor.id)}
+                  className="p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
+                  style={{ color: "#FF6B6B" }}
+                  title="Remover professor"
+                >
+                  <TrashIcon className="w-5 h-5" />
+                </button>
+              </div>
             ))}
           </div>
         </div>

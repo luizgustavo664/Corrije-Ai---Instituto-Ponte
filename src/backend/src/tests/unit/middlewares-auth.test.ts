@@ -7,7 +7,11 @@ jest.unstable_mockModule("../../database/pool.js", () => ({
 }));
 
 const mockJwtVerify = jest.fn<any>();
+const mockDecodeProtectedHeader = jest.fn<any>();
+const mockCreateRemoteJWKSet = jest.fn<any>();
 jest.unstable_mockModule("jose", () => ({
+  createRemoteJWKSet: mockCreateRemoteJWKSet,
+  decodeProtectedHeader: mockDecodeProtectedHeader,
   jwtVerify: mockJwtVerify,
 }));
 
@@ -18,7 +22,12 @@ beforeEach(async () => {
   jest.resetModules();
   mockQuery.mockReset();
   mockJwtVerify.mockReset();
+  mockDecodeProtectedHeader.mockReset();
+  mockCreateRemoteJWKSet.mockReset();
+  mockDecodeProtectedHeader.mockReturnValue({ alg: "HS256" });
+  mockCreateRemoteJWKSet.mockReturnValue(jest.fn());
   process.env.SUPABASE_JWT_SECRET = "test-secret";
+  process.env.SUPABASE_URL = "https://test.supabase.co";
   auth = await import("../../middlewares/auth.js");
 });
 
@@ -126,6 +135,17 @@ describe("requireAuth em modo produção com JWT real", () => {
     );
   });
 
+  it("deve lançar erro claro quando SUPABASE_JWT_SECRET não está configurado", async () => {
+    delete process.env.SUPABASE_JWT_SECRET;
+
+    const req = makeRequest({
+      headers: { authorization: "Bearer jwt-valido-no-front" },
+    });
+    await expect(auth.requireAuth(req, makeReply())).rejects.toThrow(
+      "SUPABASE_JWT_SECRET não configurado no backend.",
+    );
+  });
+
   it("deve lançar 401 quando token é vazio", async () => {
     const req = makeRequest({
       headers: { authorization: "Bearer " },
@@ -196,6 +216,34 @@ describe("requireAuth em modo produção com JWT real", () => {
     expect(mockQuery).toHaveBeenCalledWith(
       expect.stringContaining("auth_user_id"),
       ["auth-user-1"],
+    );
+  });
+
+  it("deve validar JWT assimétrico do Supabase usando JWKS", async () => {
+    delete process.env.SUPABASE_JWT_SECRET;
+    mockDecodeProtectedHeader.mockReturnValue({ alg: "RS256" });
+    mockJwtVerify.mockResolvedValue({
+      payload: { sub: "auth-user-rs", email: "rs@test.com" },
+    });
+    mockQuery.mockResolvedValue({
+      rows: [
+        {
+          id: "coord-rs",
+          nome: "Coordenador RS",
+          email: "rs@test.com",
+          perfil: "coordenador",
+        },
+      ],
+    });
+
+    const req = makeRequest({
+      headers: { authorization: "Bearer jwt-assimetrico" },
+    });
+    await auth.requireAuth(req, makeReply());
+
+    expect(req.user!.id).toBe("coord-rs");
+    expect(mockCreateRemoteJWKSet).toHaveBeenCalledWith(
+      new URL("https://test.supabase.co/auth/v1/.well-known/jwks.json"),
     );
   });
 

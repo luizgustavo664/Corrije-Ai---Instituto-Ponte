@@ -151,6 +151,23 @@ export class ProfessorService {
   }
 
   /**
+   * Lista matérias vinculadas a um professor.
+   *
+   * @param professorId - ID do professor.
+   * @param _user - Usuário autenticado (ignorado, autorização externa).
+   * @returns Matérias vinculadas ao professor.
+   * @throws notFound - Se o professor não for encontrado.
+   */
+  async listarMaterias(professorId: string, _user: AuthUser) {
+    const professor = await this.repository.findById(professorId);
+    if (!professor) {
+      throw notFound("Professor não encontrado.");
+    }
+
+    return this.repository.findMateriasByProfessor(professorId);
+  }
+
+  /**
    * Remove o vínculo de um professor com uma matéria.
    *
    * @param professorId - ID do professor.

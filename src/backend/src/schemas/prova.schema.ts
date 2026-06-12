@@ -26,6 +26,7 @@ export const provaSchema = z.object({
   status: provaStatusSchema,
   urlAcesso: z.string().nullable().describe("URL única de acesso para o aluno."),
   qrCode: z.string().nullable().describe("Payload do QR Code para acesso rápido."),
+  submissoes: z.number().int().nonnegative().describe("Quantidade de alunos que enviaram a prova."),
   criadoEm: z.string().datetime().describe("Data e hora de criação do registro."),
   atualizadoEm: z.string().datetime().describe("Data e hora da última atualização."),
   materia: z

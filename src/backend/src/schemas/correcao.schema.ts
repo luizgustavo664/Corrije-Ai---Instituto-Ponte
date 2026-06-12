@@ -31,6 +31,7 @@ export const correcaoQuestaoSchema = z.object({
   questaoId: z.string().uuid().describe("Identificador único da questão."),
   ordemOriginal: z.number().int().positive().describe("Ordem da questão na prova."),
   pontuacaoMax: z.number().positive().describe("Pontuação máxima da questão."),
+  tipo: z.string().describe("Tipo da questão (multipla_escolha, verdadeiro_falso, discursiva)."),
   respostas: z.object({
     total: z.number().int().nonnegative().describe("Total de respostas enviadas para esta questão."),
     corrigidas: z.number().int().nonnegative().describe("Quantidade de respostas já corrigidas."),

@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { useQueries } from "@tanstack/react-query";
 import { DocumentTextIcon, UserIcon, ListBulletIcon } from "@heroicons/react/24/outline";
-import type { Exam } from "./examTypes";
+import type { Exam } from "../../../../../src/features/dashboard/dashboard.types";
+import { isPersistedExam } from "../../../../../src/features/dashboard/dashboard.ui-adapter";
+import { listarQuestoesCorrecao } from "../../../../../src/features/correcao/correcao.api";
+import type { CorrecaoQuestaoDto } from "../../../../../src/features/correcao/correcao.types";
 
 interface Props {
   onNavigate?: (tab: string, exam?: Exam) => void;
@@ -9,33 +13,59 @@ interface Props {
 
 type Modo = "questao" | "aluno";
 
-interface ExamWithCorrection extends Exam {
+type ExamWithCorrection = Exam & {
   corrected: number;
   pending: number;
   progress: number;
+};
+
+function sumStats(stats: CorrecaoQuestaoDto[]) {
+  return stats.reduce(
+    (acc, q) => ({
+      total: acc.total + q.respostas.total,
+      corrigidas: acc.corrigidas + q.respostas.corrigidas,
+    }),
+    { total: 0, corrigidas: 0 },
+  );
 }
 
 export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
   const [modo, setModo] = useState<Modo>("questao");
-  // Gerar dados de correção para cada prova (usando seed baseada no ID para consistência)
+
+  const realExams = exams.filter(isPersistedExam);
+
+  const correctionQueries = useQueries({
+    queries: realExams.map((exam) => ({
+      queryKey: ["correcao", "questoes", exam.id],
+      queryFn: () => listarQuestoesCorrecao(String(exam.id)),
+    })),
+  });
+
+  const statsByExamId = new Map<string, { total: number; corrigidas: number }>();
+  correctionQueries.forEach((query, index) => {
+    const examId = String(realExams[index]?.id);
+    if (query.data && examId) {
+      statsByExamId.set(examId, sumStats(query.data));
+    }
+  });
+
   const examCards: ExamWithCorrection[] = exams.map((exam) => {
-    const total = parseInt(exam.submissions);
-    // Usar ID da prova como seed para gerar porcentagem consistente
-    const seed = (exam.id * 37) % 100; // Gera número entre 0-99
-    const correctionRate = seed / 100;
-    const corrected = Math.floor(total * correctionRate);
-    const pending = total - corrected;
-    const progress = total > 0 ? Math.round((corrected / total) * 100) : 0;
+    const isReal = isPersistedExam(exam);
+    const stats = isReal ? statsByExamId.get(String(exam.id)) : undefined;
+    const total = stats?.total ?? 0;
+    const corrigidas = stats?.corrigidas ?? 0;
+    const pending = total - corrigidas;
+    const progress = total > 0 ? Math.round((corrigidas / total) * 100) : 0;
 
     return {
       ...exam,
-      corrected,
+      corrected: corrigidas,
       pending,
       progress,
     };
   });
 
-  const totalSubmissions = examCards.reduce((acc, e) => acc + parseInt(e.submissions), 0);
+  const totalSubmissions = examCards.reduce((acc, e) => acc + e.corrected + e.pending, 0);
   const totalCorrected = examCards.reduce((acc, e) => acc + e.corrected, 0);
   const totalPending = examCards.reduce((acc, e) => acc + e.pending, 0);
 
@@ -48,7 +78,6 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
 
   return (
     <div className="p-8 flex flex-col gap-6">
-      {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#000" }}>
@@ -58,8 +87,6 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
             {modo === "questao" ? "Corrija questão por questão em todas as submissões" : "Corrija a prova completa de cada aluno"}
           </p>
         </div>
-
-        {/* Toggle modo */}
         <div className="flex gap-1 p-1 rounded-xl shrink-0" style={{ backgroundColor: "#fff", border: "1px solid #D7D7D9" }}>
           <button
             onClick={() => setModo("questao")}
@@ -92,7 +119,6 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
         </div>
       </div>
 
-      {/* Stat cards */}
       <div className="grid grid-cols-4 gap-4">
         {statCards.map((card, i) => (
           <div key={i} className="bg-white rounded-xl p-4 flex flex-col gap-1" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
@@ -104,21 +130,10 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
         ))}
       </div>
 
-      {/* Section label */}
-      <p
-        style={{
-          fontFamily: "Inter, sans-serif",
-          fontSize: "12px",
-          letterSpacing: "0.1em",
-          color: "#6B6FA3",
-          textTransform: "uppercase",
-          fontWeight: 600,
-        }}
-      >
+      <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", letterSpacing: "0.1em", color: "#6B6FA3", textTransform: "uppercase", fontWeight: 600 }}>
         {modo === "questao" ? "Escolha a prova a ser corrigida" : "Escolha a prova para corrigir por aluno"}
       </p>
 
-      {/* Exam correction cards */}
       <div className="flex flex-col gap-4">
         {examCards.map((exam) => (
           <div
@@ -127,34 +142,26 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
             className="bg-white rounded-xl p-4 flex flex-col gap-3 cursor-pointer hover:shadow-md transition-shadow"
             style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
           >
-            {/* Top row */}
             <div className="flex items-center gap-3">
-              <div
-                className="flex items-center justify-center rounded-lg shrink-0"
-                style={{ width: 36, height: 36, backgroundColor: "#EEF1F8" }}
-              >
+              <div className="flex items-center justify-center rounded-lg shrink-0" style={{ width: 36, height: 36, backgroundColor: "#EEF1F8" }}>
                 <DocumentTextIcon className="w-[18px] h-[18px]" style={{ color: "#6B6FA3" }} />
               </div>
               <div className="flex-1">
                 <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "14px", color: "#000" }}>
                   {exam.title}
                 </p>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>{exam.submissions} submissões</p>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
+                  {(exam.corrected + exam.pending)} submissões
+                </p>
               </div>
             </div>
-
-            {/* Stats row */}
             <div className="grid grid-cols-3 gap-3">
               {[
                 { val: exam.corrected.toString(), label: "Provas corrigidas" },
                 { val: exam.pending.toString(), label: "Provas pendentes" },
                 { val: `${exam.progress}%`, label: "Progresso" },
               ].map((stat, j) => (
-                <div
-                  key={j}
-                  className="rounded-lg p-2 text-center"
-                  style={{ backgroundColor: "#F2F2F2" }}
-                >
+                <div key={j} className="rounded-lg p-2 text-center" style={{ backgroundColor: "#F2F2F2" }}>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "16px", color: "#6B6FA3" }}>
                     {stat.val}
                   </p>
@@ -162,13 +169,8 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
                 </div>
               ))}
             </div>
-
-            {/* Progress bar */}
             <div className="w-full rounded-full h-1.5" style={{ backgroundColor: "#E5E7EB" }}>
-              <div
-                className="h-1.5 rounded-full transition-all"
-                style={{ width: `${exam.progress}%`, backgroundColor: "#6B6FA3" }}
-              />
+              <div className="h-1.5 rounded-full transition-all" style={{ width: `${exam.progress}%`, backgroundColor: "#6B6FA3" }} />
             </div>
           </div>
         ))}

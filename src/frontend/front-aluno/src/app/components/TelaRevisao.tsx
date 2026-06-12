@@ -49,10 +49,10 @@ export function TelaRevisao({
                   className="bg-white rounded-xl px-4 py-3.5 shadow-sm flex items-center gap-3 text-left active:opacity-80 transition-opacity"
                 >
                   <div className="size-8 rounded-full bg-[#F2F2F2] flex items-center justify-center shrink-0">
-                    <span className="text-xs font-bold text-[#05245F]">{q.id}</span>
+                    <span className="text-xs font-bold text-[#05245F]">{q.displayOrder}</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#05245F]">Questão {q.id}</p>
+                    <p className="text-sm font-semibold text-[#05245F]">Questão {q.displayOrder}</p>
                     <p className="text-xs text-[#666666] mt-0.5 truncate">{q.statement}</p>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
@@ -89,7 +89,7 @@ export function TelaRevisao({
                     : "bg-[#F2F2F2] text-[#05245F]"
                   }`}
               >
-                {q.id}
+                {q.displayOrder}
               </button>
             ))}
           </div>

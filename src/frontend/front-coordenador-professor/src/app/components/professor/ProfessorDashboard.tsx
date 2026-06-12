@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Squares2X2Icon,
   DocumentTextIcon,
@@ -15,23 +15,21 @@ import { CorrecaoPage } from "./CorrecaoPage";
 import { LiberacaoNotasPage } from "./LiberacaoNotasPage";
 import { NovaProvaPage } from "./NovaProvaPage";
 import { ProvaDetailPage } from "./ProvaDetailPage";
-import type { Question } from "./ProvaDetailPage";
 import { NovaQuestaoPage } from "./NovaQuestaoPage";
 import { QuestaoCorrecaoPage } from "./QuestaoCorrecaoPage";
 import { ProvaQuestoesCorrecaoPage } from "./ProvaQuestoesCorrecaoPage";
 import { CorrecaoAlunoPage } from "./CorrecaoAlunoPage";
-import { defaultExams } from "./examTypes";
-import type { Exam } from "./examTypes";
-import { bancoQuestoes as defaultBancoQuestoes } from "./bancoQuestoesData";
-import type { BancoQuestion } from "./bancoQuestoesData";
+import { useDashboard } from "../../../../../src/features/dashboard/useDashboard";
 
-type Tab = "painel" | "provas" | "banco" | "correcao" | "liberacao" | "nova-prova" | "prova-detail" | "nova-questao" | "nova-questao-banco" | "questao-correcao" | "prova-questoes-correcao" | "correcao-aluno";
+export type ProfessorTab = "painel" | "provas" | "banco" | "correcao" | "liberacao" | "nova-prova" | "prova-detail" | "nova-questao" | "nova-questao-banco" | "questao-correcao" | "prova-questoes-correcao" | "correcao-aluno";
 
 interface Props {
   onLogout: () => void;
+  initialTab?: ProfessorTab;
+  onNavigateTab?: (tab: ProfessorTab) => void;
 }
 
-const navItems: { id: Tab; label: string; Icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
+const navItems: { id: ProfessorTab; label: string; Icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
   { id: "painel", label: "Painel", Icon: Squares2X2Icon },
   { id: "provas", label: "Provas", Icon: DocumentTextIcon },
   { id: "banco", label: "Banco de Questões", Icon: CircleStackIcon },
@@ -39,101 +37,89 @@ const navItems: { id: Tab; label: string; Icon: React.FC<React.SVGProps<SVGSVGEl
   { id: "liberacao", label: "Liberação das Notas", Icon: PaperAirplaneIcon },
 ];
 
-export function ProfessorDashboard({ onLogout }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>("painel");
-  const [exams, setExams] = useState<Exam[]>(defaultExams);
-  const [examQuestions, setExamQuestions] = useState<Question[]>([]);
-  const [currentQuestionType, setCurrentQuestionType] = useState<"Alternativa" | "V/F" | "Discursiva">("Discursiva");
-  const [bancoQuestoes, setBancoQuestoes] = useState<BancoQuestion[]>(defaultBancoQuestoes);
-  const [selectedExam, setSelectedExam] = useState<Exam | null>(null);
-  const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigateTab }: Props) {
+  const [activeTab, setActiveTabState] = useState<ProfessorTab>(initialTab);
+  const [, setCurrentQuestionType] = useState<"Alternativa" | "V/F" | "Discursiva">("Discursiva");
+  const [, setCurrentQuestionIndex] = useState(0);
 
-  function addExam(exam: Exam) {
-    setExams((prev) => [exam, ...prev]);
-  }
+  const {
+    materiasQuery,
+    questoesQuery,
+    bancoQuestoes,
+    selectedExamId,
+    provaDetailQuery,
+    provaQuestoesQuery,
+    exams,
+    examQuestions,
+    currentQuestaoId,
+    setCurrentQuestaoId,
+    selectedExam,
+    setSelectedExam,
+    showPublishModal,
+    setShowPublishModal,
+    showCompletionModal,
+    setShowCompletionModal,
+    createProvaMutation,
+    updateProvaMutation,
+    publicarProvaMutation,
+    createQuestaoMutation,
+    updateQuestaoMutation,
+    deleteQuestaoMutation,
+    addQuestaoProvaMutation,
+    removeQuestaoProvaMutation,
+    addExam,
+    updateExam,
+    deleteExam,
+    arquivarExam,
+    publishSelectedExam,
+    addQuestions,
+    deleteQuestion,
+    updateQuestion,
+    addBancoQuestion,
+    createQuestionForSelectedExam,
+    updateBancoQuestion,
+    deleteBancoQuestion,
+    addQuestionToExam,
+  } = useDashboard();
 
-  function updateExam(exam: Exam) {
-    setExams((prev) => prev.map((e) => (e.id === exam.id ? exam : e)));
-    setSelectedExam(exam);
-  }
+  useEffect(() => {
+    setActiveTabState(initialTab);
+  }, [initialTab]);
 
-  function deleteExam(id: number) {
-    setExams((prev) => prev.filter((e) => e.id !== id));
-  }
-
-  function addQuestion(q: Question) {
-    setExamQuestions((prev) => [...prev, { ...q, id: prev.length + 1 }]);
-  }
-
-  function addQuestions(questions: Question[]) {
-    setExamQuestions((prev) => {
-      const maxId = prev.length > 0 ? Math.max(...prev.map(q => q.id)) : 0;
-      return [...prev, ...questions.map((q, i) => ({ ...q, id: maxId + i + 1 }))];
-    });
-  }
-
-  function deleteQuestion(id: number) {
-    setExamQuestions((prev) => prev.filter((q) => q.id !== id));
-  }
-
-  function updateQuestion(question: Question) {
-    setExamQuestions((prev) =>
-      prev.map((q) => (q.id === question.id ? question : q))
-    );
-  }
-
-  function addBancoQuestion(q: Question, materia?: string, semestre?: string) {
-    const newBancoQuestion: BancoQuestion = {
-      id: bancoQuestoes.length > 0 ? Math.max(...bancoQuestoes.map(bq => bq.id)) + 1 : 1,
-      type: q.type,
-      materia: materia || "Matéria Geral",
-      semestre: semestre || "1º Semestre",
-      dificuldade: "Média",
-      text: q.text,
-      options: q.options,
-      answer: q.answer,
-      timesUsed: 0,
-      successRate: 0,
-    };
-    setBancoQuestoes((prev) => [newBancoQuestion, ...prev]);
-  }
-
-  function updateBancoQuestion(questao: BancoQuestion) {
-    setBancoQuestoes((prev) =>
-      prev.map((q) => (q.id === questao.id ? questao : q))
-    );
-  }
-
-  function deleteBancoQuestion(id: number) {
-    setBancoQuestoes((prev) => prev.filter((q) => q.id !== id));
-  }
-
-  function addQuestionToExam(provaId: number, bancoQ: BancoQuestion) {
-    const newQuestion: Question = {
-      id: examQuestions.length > 0 ? Math.max(...examQuestions.map(q => q.id)) + 1 : 1,
-      type: bancoQ.type,
-      text: bancoQ.text,
-      options: bancoQ.options,
-      answer: bancoQ.answer,
-    };
-    addQuestions([newQuestion]);
-  }
+  const setActiveTab = (tab: ProfessorTab) => {
+    setActiveTabState(tab);
+    onNavigateTab?.(tab);
+  };
 
   const renderPage = () => {
     switch (activeTab) {
       case "painel":
-        return <PainelPage onNavigate={(tab) => setActiveTab(tab as Tab)} />;
+        return (
+          <PainelPage
+            onNavigate={(tab, exam) => {
+              if (exam) setSelectedExam(exam);
+              setActiveTab(tab as ProfessorTab);
+            }}
+            exams={exams}
+          />
+        );
       case "provas":
-        return <ProvasPage onNavigate={(tab, exam) => {
-          if (exam) setSelectedExam(exam);
-          setActiveTab(tab as Tab);
-        }} exams={exams} onDeleteExam={deleteExam} />;
+        return (
+          <ProvasPage
+            onNavigate={(tab, exam) => {
+              if (exam) setSelectedExam(exam);
+              setActiveTab(tab as ProfessorTab);
+            }}
+            exams={exams}
+            onDeleteExam={deleteExam}
+            onArchiveExam={arquivarExam}
+          />
+        );
       case "prova-detail":
         return (
           <ProvaDetailPage
             onBack={() => setActiveTab("provas")}
-            onNavigate={(tab) => setActiveTab(tab as Tab)}
+            onNavigate={(tab) => setActiveTab(tab as ProfessorTab)}
             questions={examQuestions}
             onDeleteQuestion={deleteQuestion}
             onUpdateQuestion={updateQuestion}
@@ -145,38 +131,124 @@ export function ProfessorDashboard({ onLogout }: Props) {
             examTurma={selectedExam?.turma}
             examModalidade={selectedExam?.modalidade}
             examTempoProva={selectedExam?.tempoProva}
+            examDataInicio={selectedExam?.dataInicio}
             examDataLimite={selectedExam?.dataLimite}
             examOrientacoes={selectedExam?.orientacoes}
             selectedExam={selectedExam ?? undefined}
             onUpdateExam={updateExam}
+            onPublish={publishSelectedExam}
+            showPublishModal={showPublishModal}
+            onClosePublishModal={() => setShowPublishModal(false)}
+            isLoading={provaDetailQuery.isLoading || provaQuestoesQuery.isLoading}
+            errorMessage={
+              provaDetailQuery.isError
+                ? provaDetailQuery.error.message
+                : provaQuestoesQuery.isError
+                  ? provaQuestoesQuery.error.message
+                  : addQuestaoProvaMutation.isError
+                    ? addQuestaoProvaMutation.error.message
+                    : removeQuestaoProvaMutation.isError
+                      ? removeQuestaoProvaMutation.error.message
+                      : publicarProvaMutation.isError
+                        ? publicarProvaMutation.error.message
+                  : undefined
+            }
+            isPublishing={publicarProvaMutation.isPending}
+            isUpdatingExam={updateProvaMutation.isPending}
+            updateExamErrorMessage={
+              updateProvaMutation.isError ? updateProvaMutation.error.message : undefined
+            }
           />
         );
       case "banco":
-        return <BancoQuestoesPage onNavigate={(tab) => setActiveTab(tab as Tab)} bancoQuestoes={bancoQuestoes} onUpdateQuestion={updateBancoQuestion} onDeleteQuestion={deleteBancoQuestion} provas={exams} onAddToProva={addQuestionToExam} />;
+        return (
+          <BancoQuestoesPage
+            onNavigate={(tab) => setActiveTab(tab as ProfessorTab)}
+            bancoQuestoes={bancoQuestoes}
+            onUpdateQuestion={updateBancoQuestion}
+            onDeleteQuestion={deleteBancoQuestion}
+            provas={exams}
+            onAddToProva={addQuestionToExam}
+            isLoading={questoesQuery.isLoading}
+            errorMessage={
+              questoesQuery.isError
+                ? questoesQuery.error.message
+                : updateQuestaoMutation.isError
+                  ? updateQuestaoMutation.error.message
+                  : deleteQuestaoMutation.isError
+                    ? deleteQuestaoMutation.error.message
+                    : addQuestaoProvaMutation.isError
+                      ? addQuestaoProvaMutation.error.message
+                      : undefined
+            }
+          />
+        );
       case "correcao":
         return <CorrecaoPage onNavigate={(tab, exam) => {
           if (exam) setSelectedExam(exam);
-          setActiveTab(tab as Tab);
+          setActiveTab(tab as ProfessorTab);
         }} exams={exams} />;
       case "liberacao":
         return <LiberacaoNotasPage exams={exams} />;
       case "nova-prova":
-        return <NovaProvaPage onBack={() => setActiveTab("provas")} onSave={addExam} />;
+        return (
+          <NovaProvaPage
+            onBack={() => setActiveTab("provas")}
+            onSave={addExam}
+            materias={materiasQuery.data ?? []}
+            isSaving={createProvaMutation.isPending}
+            errorMessage={
+              createProvaMutation.isError
+                ? createProvaMutation.error.message
+                : materiasQuery.isError
+                  ? materiasQuery.error.message
+                  : undefined
+            }
+          />
+        );
       case "nova-questao":
-        return <NovaQuestaoPage onBack={() => setActiveTab("prova-detail")} onSave={(q) => {
-          addQuestion(q);
-          addBancoQuestion(q, selectedExam?.subject, selectedExam?.semester);
-        }} />;
+        return (
+          <NovaQuestaoPage
+            onBack={() => setActiveTab("prova-detail")}
+            onSave={createQuestionForSelectedExam}
+            materias={materiasQuery.data ?? []}
+            defaultMateriaId={selectedExam?.materiaId}
+            isSaving={createQuestaoMutation.isPending || addQuestaoProvaMutation.isPending}
+            errorMessage={
+              createQuestaoMutation.isError
+                ? createQuestaoMutation.error.message
+                : addQuestaoProvaMutation.isError
+                  ? addQuestaoProvaMutation.error.message
+                  : materiasQuery.isError
+                    ? materiasQuery.error.message
+                    : undefined
+            }
+          />
+        );
       case "correcao-aluno":
         return selectedExam ? (
           <CorrecaoAlunoPage
             onBack={() => setActiveTab("correcao")}
-            exam={selectedExam}
-            questions={examQuestions}
+            provaId={selectedExamId}
+            examTitle={selectedExam.title}
           />
         ) : null;
       case "nova-questao-banco":
-        return <NovaQuestaoPage onBack={() => setActiveTab("banco")} onSave={(q) => { addBancoQuestion(q); setActiveTab("banco"); }} />;
+        return (
+          <NovaQuestaoPage
+            onBack={() => setActiveTab("banco")}
+            onSave={addBancoQuestion}
+            materias={materiasQuery.data ?? []}
+            isSaving={createQuestaoMutation.isPending}
+            errorMessage={
+              createQuestaoMutation.isError
+                ? createQuestaoMutation.error.message
+                : materiasQuery.isError
+                  ? materiasQuery.error.message
+                  : undefined
+            }
+          />
+        );
       case "prova-questoes-correcao":
         return <ProvaQuestoesCorrecaoPage
           onBack={() => setActiveTab("correcao")}
@@ -184,11 +256,11 @@ export function ProfessorDashboard({ onLogout }: Props) {
             const questionIdx = examQuestions.findIndex(q => q.id === id);
             setCurrentQuestionIndex(questionIdx);
             setCurrentQuestionType(type);
+            setCurrentQuestaoId(id);
             setActiveTab("questao-correcao");
           }}
-          questions={examQuestions}
+          provaId={selectedExamId}
           examTitle={selectedExam?.title || "Título da Prova — Semestre"}
-          totalSubmissions={selectedExam?.submissions ? parseInt(selectedExam.submissions) : 48}
           showCompletionModal={showCompletionModal}
           onResetCompletionModal={() => setShowCompletionModal(false)}
         />;
@@ -201,15 +273,14 @@ export function ProfessorDashboard({ onLogout }: Props) {
             setShowCompletionModal(true);
             setActiveTab("prova-questoes-correcao");
           }}
-          questionType={currentQuestionType}
-          correctAnswer={currentQuestionType === "Alternativa" ? "B" : "Verdadeiro"}
+          provaId={selectedExamId}
+          questaoId={currentQuestaoId}
         />;
     }
   };
 
   return (
     <div className="h-screen overflow-hidden flex" style={{ backgroundColor: "#F2F2F2" }}>
-      {/* Sidebar */}
       <aside
         className="flex flex-col shrink-0"
         style={{
@@ -218,7 +289,6 @@ export function ProfessorDashboard({ onLogout }: Props) {
           borderRight: "1px solid #D7D7D9",
         }}
       >
-        {/* Logo section */}
         <div className="flex items-center justify-center px-4 py-6">
           <div
             className="flex items-center justify-center rounded-xl"
@@ -228,10 +298,8 @@ export function ProfessorDashboard({ onLogout }: Props) {
           </div>
         </div>
 
-        {/* Top divider */}
         <div style={{ borderTop: "1px solid #D7D7D9" }} />
 
-        {/* Nav items */}
         <nav className="flex flex-col gap-1 px-3 py-3 flex-1">
           {navItems.map(({ id, label, Icon }) => {
             const isActive = activeTab === id;
@@ -254,10 +322,8 @@ export function ProfessorDashboard({ onLogout }: Props) {
           })}
         </nav>
 
-        {/* Bottom divider */}
         <div style={{ borderTop: "1px solid #D7D7D9" }} />
 
-        {/* Logout */}
         <div className="px-3 py-3">
           <button
             onClick={onLogout}
@@ -272,7 +338,6 @@ export function ProfessorDashboard({ onLogout }: Props) {
         </div>
       </aside>
 
-      {/* Main content */}
       <main className="flex-1 overflow-y-auto">
         {renderPage()}
       </main>

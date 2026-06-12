@@ -11,6 +11,15 @@ type ProfessorRow = {
   atualizado_em: Date;
 };
 
+type MateriaProfessorRow = {
+  id: string;
+  nome: string;
+  codigo: string | null;
+  descricao: string | null;
+  criado_em: Date;
+  atualizado_em: Date;
+};
+
 /** Converte uma ProfessorRow (snake_case) para o modelo Professor (camelCase).
  *  Datas são convertidas com toISOString(). */
 const mapProfessor = (row: ProfessorRow): Professor => ({
@@ -18,6 +27,15 @@ const mapProfessor = (row: ProfessorRow): Professor => ({
   coordenadorId: row.coordenador_id,
   nome: row.nome,
   email: row.email,
+  criadoEm: row.criado_em.toISOString(),
+  atualizadoEm: row.atualizado_em.toISOString(),
+});
+
+const mapMateriaProfessor = (row: MateriaProfessorRow) => ({
+  id: row.id,
+  nome: row.nome,
+  codigo: row.codigo,
+  descricao: row.descricao,
   criadoEm: row.criado_em.toISOString(),
   atualizadoEm: row.atualizado_em.toISOString(),
 });
@@ -198,6 +216,27 @@ export class ProfessorRepository {
       [materiaId],
     );
     return result.rows[0].exists as boolean;
+  }
+
+  /**
+   * Lista matérias vinculadas a um professor.
+   *
+   * @param professorId - ID do professor.
+   * @returns Matérias vinculadas ao professor.
+   */
+  async findMateriasByProfessor(professorId: string) {
+    const result = await pool.query<MateriaProfessorRow>(
+      `
+        SELECT m.*
+        FROM "materia" m
+        JOIN "materia_professor" mp ON mp."materia_id" = m."id"
+        WHERE mp."professor_id" = $1
+        ORDER BY m."nome" ASC
+      `,
+      [professorId],
+    );
+
+    return result.rows.map(mapMateriaProfessor);
   }
 
   /**

@@ -219,11 +219,14 @@ describe("CorrecaoService - unitário", () => {
       expect(result).toEqual({ corrigidas: 5 });
     });
 
-    it("deve lançar forbidden quando perfil não é professor", async () => {
+    it("deve executar correção automática quando coordenador tem acesso", async () => {
+      mockHasAccessToProva.mockResolvedValue(true);
+      mockCorrigirObjetivas.mockResolvedValue({ corrigidas: 5 });
+
       const service = new CorrecaoService();
-      await expect(
-        service.executarCorrecaoAutomatica("prova-1", coordenador),
-      ).rejects.toThrow("Somente professores podem executar correção automática.");
+      const result = await service.executarCorrecaoAutomatica("prova-1", coordenador);
+
+      expect(result).toEqual({ corrigidas: 5 });
     });
 
     it("deve lançar forbidden quando sem acesso à prova", async () => {

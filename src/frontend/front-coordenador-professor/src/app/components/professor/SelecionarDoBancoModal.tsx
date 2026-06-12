@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { MagnifyingGlassIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import type { Question, QuestionType } from "./ProvaDetailPage";
-import { convertBancoToQuestion } from "./bancoQuestoesData";
-import type { BancoQuestion } from "./bancoQuestoesData";
+import { convertBancoToQuestion } from "../../../../../src/features/dashboard/dashboard.mappers";
+import type { BancoQuestion } from "../../../../../src/features/dashboard/dashboard.types";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onAddQuestions: (questions: Question[]) => void;
+  onAddQuestions: (questions: Question[]) => void | Promise<void>;
   bancoQuestoes: BancoQuestion[];
 }
 
@@ -18,7 +18,7 @@ const typeColors: Record<QuestionType, { bg: string; color: string }> = {
 };
 
 export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQuestoes }: Props): JSX.Element | null {
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<Array<BancoQuestion["id"]>>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterMateria, setFilterMateria] = useState<string>("");
   const [filterTipo, setFilterTipo] = useState<string>("");
@@ -43,17 +43,17 @@ export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQ
     return matchSearch && matchMateria && matchTipo && matchDificuldade && matchSemestre;
   });
 
-  const toggleSelection = (id: number) => {
+  const toggleSelection = (id: BancoQuestion["id"]) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((qid) => qid !== id) : [...prev, id]
     );
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     const selected = bancoQuestoes
       .filter((q) => selectedIds.includes(q.id))
       .map(convertBancoToQuestion);
-    onAddQuestions(selected);
+    await onAddQuestions(selected);
     setSelectedIds([]);
     setSearchTerm("");
     setFilterMateria("");

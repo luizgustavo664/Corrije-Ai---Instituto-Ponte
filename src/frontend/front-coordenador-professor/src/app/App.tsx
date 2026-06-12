@@ -1,26 +1,61 @@
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { Navigate, Route, Routes, useNavigate, useParams } from "react-router";
 import { LoginScreen } from "./components/LoginScreen";
 import { CadastroScreen } from "./components/CadastroScreen";
-import { ProfessorDashboard } from "./components/professor/ProfessorDashboard";
-import { CoordenadorDashboard } from "./components/coordenador/CoordenadorDashboard";
+import { ProfessorDashboard, type ProfessorTab } from "./components/professor/ProfessorDashboard";
+import { CoordenadorDashboard, type CoordenadorTab } from "./components/coordenador/CoordenadorDashboard";
 import imgLogo from "../imports/logo-new.png";
+import { logout as requestLogout, startGoogleLogin } from "../../../src/features/auth/auth.api";
+import {
+  clearAuthSession,
+  clearPendingAuthRole,
+  getStoredAuthSession,
+  storePendingAuthRole,
+} from "../../../src/features/auth/auth.storage";
+import type { AuthRole, AuthSession } from "../../../src/features/auth/auth.types";
 
-type Screen = "login" | "cadastro";
-type Role = "professor" | "coordenador";
-type AppView = "auth" | "professor" | "coordenador";
+const professorTabs: ProfessorTab[] = [
+  "painel",
+  "provas",
+  "banco",
+  "correcao",
+  "liberacao",
+  "nova-prova",
+  "prova-detail",
+  "nova-questao",
+  "nova-questao-banco",
+  "questao-correcao",
+  "prova-questoes-correcao",
+  "correcao-aluno",
+];
 
-export default function App() {
-  const [screen, setScreen] = useState<Screen>("login");
-  const [role, setRole] = useState<Role>("professor");
-  const [appView, setAppView] = useState<AppView>("auth");
+const coordenadorTabs: CoordenadorTab[] = [
+  "painel",
+  "provas",
+  "banco",
+  "correcao",
+  "liberacao",
+  "gestao-professores",
+  "gestao-alunos",
+  "perfil-aluno",
+  "perfil-professor",
+  "nova-prova",
+  "prova-detail",
+  "nova-questao",
+  "nova-questao-banco",
+  "questao-correcao",
+  "prova-questoes-correcao",
+];
 
-  if (appView === "professor") {
-    return <ProfessorDashboard onLogout={() => setAppView("auth")} />;
-  }
-
-  if (appView === "coordenador") {
-    return <CoordenadorDashboard onLogout={() => setAppView("auth")} />;
-  }
+function AuthLayout({ mode }: { mode: "login" | "cadastro" }) {
+  const [selectedRole, setSelectedRole] = useState<AuthRole>("professor");
+  const googleLoginMutation = useMutation({
+    mutationFn: startGoogleLogin,
+    onSuccess: ({ redirectUrl }) => {
+      window.location.assign(redirectUrl);
+    },
+  });
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F2F2F2" }}>
@@ -66,21 +101,103 @@ export default function App() {
 
       {/* Main */}
       <main className="flex flex-1 justify-center items-start py-12 px-4">
-        {screen === "login" ? (
+        {mode === "login" ? (
           <LoginScreen
-            role={role}
-            onRoleChange={setRole}
-            onNavigateToCadastro={() => setScreen("cadastro")}
-            onLogin={() => setAppView(role)}
+            errorMessage={
+              googleLoginMutation.isError
+                ? googleLoginMutation.error.message
+                : undefined
+            }
+            isLoading={googleLoginMutation.isPending}
+            role={selectedRole}
+            onRoleChange={setSelectedRole}
+            onGoogleLogin={() => {
+              storePendingAuthRole(selectedRole);
+              googleLoginMutation.mutate();
+            }}
           />
         ) : (
           <CadastroScreen
-            role={role}
-            onRoleChange={setRole}
-            onNavigateToLogin={() => setScreen("login")}
+            onNavigateToLogin={() => window.location.assign("/login")}
           />
         )}
       </main>
     </div>
+  );
+}
+
+function requireSession(role: AuthRole): AuthSession | null {
+  const session = getStoredAuthSession();
+  if (!session || session.usuario.perfil !== role) {
+    return null;
+  }
+
+  return session;
+}
+
+function ProfessorRoute({ onLogout }: { onLogout: () => void }) {
+  const navigate = useNavigate();
+  const { tab } = useParams();
+  const session = requireSession("professor");
+  const initialTab = professorTabs.includes(tab as ProfessorTab)
+    ? (tab as ProfessorTab)
+    : "painel";
+
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return (
+    <ProfessorDashboard
+      onLogout={onLogout}
+      initialTab={initialTab}
+      onNavigateTab={(nextTab) => navigate(`/professor/${nextTab}`)}
+    />
+  );
+}
+
+function CoordenadorRoute({ onLogout }: { onLogout: () => void }) {
+  const navigate = useNavigate();
+  const { tab } = useParams();
+  const session = requireSession("coordenador");
+  const initialTab = coordenadorTabs.includes(tab as CoordenadorTab)
+    ? (tab as CoordenadorTab)
+    : "painel";
+
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return (
+    <CoordenadorDashboard
+      onLogout={onLogout}
+      initialTab={initialTab}
+      onNavigateTab={(nextTab) => navigate(`/coordenador/${nextTab}`)}
+    />
+  );
+}
+
+export default function App() {
+  const navigate = useNavigate();
+  const logout = async () => {
+    const token = getStoredAuthSession()?.accessToken;
+    clearAuthSession();
+    clearPendingAuthRole();
+    navigate("/login", { replace: true });
+
+    await requestLogout(token).catch(() => undefined);
+  };
+
+  return (
+    <Routes>
+      <Route index element={<Navigate to="/login" replace />} />
+      <Route path="login" element={<AuthLayout mode="login" />} />
+      <Route path="cadastro" element={<AuthLayout mode="cadastro" />} />
+      <Route path="professor" element={<Navigate to="/professor/painel" replace />} />
+      <Route path="professor/:tab" element={<ProfessorRoute onLogout={logout} />} />
+      <Route path="coordenador" element={<Navigate to="/coordenador/painel" replace />} />
+      <Route path="coordenador/:tab" element={<CoordenadorRoute onLogout={logout} />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
 }

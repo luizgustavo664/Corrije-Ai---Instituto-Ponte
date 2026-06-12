@@ -51,7 +51,12 @@ export function buildApp() {
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
-  app.register(fastifyCors, { origin: "*" });
+  app.register(fastifyCors, {
+    origin: true,
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-user-role"],
+    credentials: true,
+  });
   app.register(fastifySwagger, {
     openapi: {
       info: {

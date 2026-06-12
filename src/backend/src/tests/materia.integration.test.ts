@@ -36,11 +36,11 @@ describe("MateriaController - integração", () => {
     const response = await request(app.server)
       .post("/api/v1/materias")
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Matemática", codigo: `${TEST_PREFIX}-mat` });
+      .send({ nome: `${TEST_PREFIX}-Matemática`, codigo: `${TEST_PREFIX}-mat` });
 
     expect(response.statusCode).toBe(201);
     expect(response.body.success).toBe(true);
-    expect(response.body.data.nome).toBe("Matemática");
+    expect(response.body.data.nome).toBe(`${TEST_PREFIX}-Matemática`);
     expect(response.body.data.codigo).toBe(`${TEST_PREFIX}-mat`);
     expect(response.body.data.id).toBeDefined();
   });
@@ -59,12 +59,12 @@ describe("MateriaController - integração", () => {
     await request(app.server)
       .post("/api/v1/materias")
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Matemática", codigo: `${TEST_PREFIX}-dup` });
+      .send({ nome: `${TEST_PREFIX}-Duplicada`, codigo: `${TEST_PREFIX}-dup` });
 
     const response = await request(app.server)
       .post("/api/v1/materias")
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Matemática" });
+      .send({ nome: `${TEST_PREFIX}-Duplicada` });
 
     expect(response.statusCode).toBe(409);
     expect(response.body.error.code).toBe("CONFLICT");
@@ -74,11 +74,11 @@ describe("MateriaController - integração", () => {
     await request(app.server)
       .post("/api/v1/materias")
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Matemática", codigo: `${TEST_PREFIX}-lista` });
+      .send({ nome: `${TEST_PREFIX}-Matemática lista`, codigo: `${TEST_PREFIX}-lista` });
     await request(app.server)
       .post("/api/v1/materias")
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Português", codigo: `${TEST_PREFIX}-lista-2` });
+      .send({ nome: `${TEST_PREFIX}-Português lista`, codigo: `${TEST_PREFIX}-lista-2` });
 
     const response = await request(app.server)
       .get("/api/v1/materias")
@@ -96,10 +96,11 @@ describe("MateriaController - integração", () => {
   });
 
   it("deve buscar matéria por id quando o id existe", async () => {
+    const nome = `${TEST_PREFIX}-Física busca`;
     const created = await request(app.server)
       .post("/api/v1/materias")
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Física", codigo: `${TEST_PREFIX}-busca` });
+      .send({ nome, codigo: `${TEST_PREFIX}-busca` });
 
     const id = created.body.data.id;
     const response = await request(app.server)
@@ -107,7 +108,7 @@ describe("MateriaController - integração", () => {
       .set("Authorization", professorToken);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.data.nome).toBe("Física");
+    expect(response.body.data.nome).toBe(nome);
     expect(response.body.data.id).toBe(id);
   });
 
@@ -120,19 +121,20 @@ describe("MateriaController - integração", () => {
   });
 
   it("deve atualizar nome e código da matéria quando dados são válidos", async () => {
+    const nomeAtualizado = `${TEST_PREFIX}-Química Geral`;
     const created = await request(app.server)
       .post("/api/v1/materias")
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Química", codigo: `${TEST_PREFIX}-upd` });
+      .send({ nome: `${TEST_PREFIX}-Química`, codigo: `${TEST_PREFIX}-upd` });
 
     const id = created.body.data.id;
     const response = await request(app.server)
       .put(`/api/v1/materias/${id}`)
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Química Geral", codigo: `${TEST_PREFIX}-upd-novo` });
+      .send({ nome: nomeAtualizado, codigo: `${TEST_PREFIX}-upd-novo` });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.data.nome).toBe("Química Geral");
+    expect(response.body.data.nome).toBe(nomeAtualizado);
     expect(response.body.data.codigo).toBe(`${TEST_PREFIX}-upd-novo`);
   });
 
@@ -140,7 +142,7 @@ describe("MateriaController - integração", () => {
     const created = await request(app.server)
       .post("/api/v1/materias")
       .set("Authorization", coordenadorToken)
-      .send({ nome: "Biologia", codigo: `${TEST_PREFIX}-del` });
+      .send({ nome: `${TEST_PREFIX}-Biologia`, codigo: `${TEST_PREFIX}-del` });
 
     const id = created.body.data.id;
     const response = await request(app.server)

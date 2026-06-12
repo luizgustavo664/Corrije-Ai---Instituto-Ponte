@@ -76,7 +76,8 @@ describe("ResultadoService - unitário", () => {
       path: "provas/prova-1/resultados-123.csv",
       contentType: "text/csv; charset=utf-8",
     }));
-    expect(String(storage.upload.mock.calls[0][0].content)).toContain("\"Aluno A\"");
+    const uploadInput = storage.upload.mock.calls[0][0] as { content: string | Buffer };
+    expect(String(uploadInput.content)).toContain("\"Aluno A\"");
     expect(repo.createExportacao).toHaveBeenCalledWith("prova-1", "coord-1", "csv", "/exports/a.csv", 1);
   });
 

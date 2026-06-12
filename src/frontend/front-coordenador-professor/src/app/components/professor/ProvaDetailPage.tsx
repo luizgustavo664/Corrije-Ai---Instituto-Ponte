@@ -1,23 +1,28 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   ChevronLeftIcon, ShareIcon, PlusIcon, Bars2Icon, PencilIcon, TrashIcon,
   CheckCircleIcon, ClockIcon, CalendarDaysIcon, AcademicCapIcon, BookOpenIcon,
   UsersIcon, XMarkIcon, BookmarkIcon, DocumentTextIcon, AcademicCapIcon as SemesterIcon,
+  ChartBarIcon,
 } from "@heroicons/react/24/outline";
 import { CompartilharModal } from "./CompartilharModal";
 import { SelecionarOrigemQuestaoModal } from "./SelecionarOrigemQuestaoModal";
 import { SelecionarDoBancoModal } from "./SelecionarDoBancoModal";
 import { EditarQuestaoProvaModal } from "./EditarQuestaoProvaModal";
-import type { BancoQuestion } from "./bancoQuestoesData";
-import type { Exam } from "./examTypes";
+import { getProvaAnalytics } from "../../../../../src/features/analytics/analytics.api";
+import { listarQuestoesCorrecao } from "../../../../../src/features/correcao/correcao.api";
+import { isPersistedId } from "../../../../../src/features/dashboard/dashboard.ui-adapter";
+import type { BancoQuestion, Exam } from "../../../../../src/features/dashboard/dashboard.types";
+import type { Question, QuestionType } from "../../../../../src/features/questoes/questao.types";
 
 interface Props {
   onBack: () => void;
   onNavigate?: (tab: string) => void;
   questions: Question[];
-  onDeleteQuestion?: (id: number) => void;
+  onDeleteQuestion?: (id: Question["id"]) => void;
   onUpdateQuestion?: (question: Question) => void;
-  onAddQuestions?: (questions: Question[]) => void;
+  onAddQuestions?: (questions: Question[]) => void | Promise<void>;
   bancoQuestoes?: BancoQuestion[];
   examTitle?: string;
   examSubject?: string;
@@ -25,10 +30,19 @@ interface Props {
   examTurma?: string;
   examModalidade?: string;
   examTempoProva?: number;
+  examDataInicio?: string;
   examDataLimite?: string;
   examOrientacoes?: string;
   selectedExam?: Exam;
-  onUpdateExam?: (exam: Exam) => void;
+  onUpdateExam?: (exam: Exam) => void | Promise<void>;
+  onPublish?: () => void;
+  showPublishModal?: boolean;
+  onClosePublishModal?: () => void;
+  isLoading?: boolean;
+  errorMessage?: string;
+  isUpdatingExam?: boolean;
+  updateExamErrorMessage?: string;
+  isPublishing?: boolean;
 }
 
 type TabId = "questoes" | "submissoes" | "respostas" | "configuracoes";
@@ -40,41 +54,7 @@ const tabs: { id: TabId; label: string }[] = [
   { id: "configuracoes", label: "Configurações" },
 ];
 
-export type QuestionType = "Alternativa" | "V/F" | "Discursiva";
-
-export interface Question {
-  id: number;
-  type: QuestionType;
-  text: string;
-  options?: { letter: string; text: string; correct: boolean }[];
-  answer?: string;
-}
-
-export const defaultQuestions: Question[] = [
-  {
-    id: 1,
-    type: "Alternativa",
-    text: "Enunciado da questão de número N",
-    options: [
-      { letter: "A", text: "Valor da alternativa A", correct: true },
-      { letter: "B", text: "Valor da alternativa B", correct: false },
-      { letter: "C", text: "Valor da alternativa C", correct: false },
-      { letter: "D", text: "Valor da alternativa D", correct: false },
-    ],
-  },
-  {
-    id: 2,
-    type: "V/F",
-    text: "Enunciado da questão de verdadeiro ou falso",
-    answer: "Verdadeiro",
-  },
-  {
-    id: 3,
-    type: "Discursiva",
-    text: "Enunciado da questão discursiva",
-    answer: "Gabarito: texto esperado como resposta",
-  },
-];
+export type { Question, QuestionType } from "../../../../../src/features/questoes/questao.types";
 
 const typeColors: Record<QuestionType, { bg: string; color: string }> = {
   Alternativa: { bg: "#EEF1F8", color: "#6B6FA3" },
@@ -111,6 +91,14 @@ function formatDataLimite(iso?: string): string {
   return d.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
+function toDatetimeLocalValue(value?: string): string {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  const timezoneOffset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() - timezoneOffset).toISOString().slice(0, 16);
+}
+
 const inputStyle: React.CSSProperties = {
   width: "100%",
   height: 40,
@@ -129,7 +117,6 @@ const labelStyle: React.CSSProperties = {
   fontSize: 13,
   color: "#111",
   marginBottom: 4,
-  display: "block",
 };
 
 const chevron = (
@@ -155,12 +142,12 @@ function PointsBadge() {
   );
 }
 
-function QuestionCard({ question, onDelete, onEdit }: { question: Question; onDelete?: () => void; onEdit?: () => void }) {
+function QuestionCard({ question, index, onDelete, onEdit }: { question: Question; index?: number; onDelete?: () => void; onEdit?: () => void }) {
   return (
     <div className="bg-white rounded-xl p-4 flex gap-3 items-start" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.06)", border: "1px solid #EBEBEB" }}>
       <Bars2Icon className="w-[18px] h-[18px] shrink-0 mt-0.5 cursor-grab" style={{ color: "#B1B4BD" }} />
       <div className="flex items-center justify-center rounded-full shrink-0" style={{ width: 26, height: 26, backgroundColor: "#EEF1F8" }}>
-        <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: 13, color: "#6B6FA3" }}>{question.id}</span>
+        <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: 13, color: "#6B6FA3" }}>{index ?? question.id}</span>
       </div>
       <div className="flex-1 flex flex-col gap-3 min-w-0">
         <div className="flex gap-2 flex-wrap">
@@ -201,36 +188,48 @@ function QuestionCard({ question, onDelete, onEdit }: { question: Question; onDe
 interface EditModalProps {
   exam: Exam;
   onClose: () => void;
-  onSave: (exam: Exam) => void;
+  onSave: (exam: Exam) => void | Promise<void>;
+  isSaving?: boolean;
+  errorMessage?: string;
 }
 
-function EditarDadosProvaModal({ exam, onClose, onSave }: EditModalProps) {
+function EditarDadosProvaModal({ exam, onClose, onSave, isSaving = false, errorMessage }: EditModalProps) {
   const [nome, setNome] = useState(exam.title);
   const [modalidade, setModalidade] = useState(exam.modalidade || "");
   const [disciplina, setDisciplina] = useState(exam.discipline || "");
   const [turma, setTurma] = useState(exam.turma || "");
   const [semestre, setSemestre] = useState(exam.semester || "");
   const [tempoProva, setTempoProva] = useState(exam.tempoProva != null ? String(exam.tempoProva) : "");
-  const [dataLimite, setDataLimite] = useState(exam.dataLimite || "");
+  const [dataInicio, setDataInicio] = useState(toDatetimeLocalValue(exam.dataInicio));
+  const [dataLimite, setDataLimite] = useState(toDatetimeLocalValue(exam.dataLimite));
   const [orientacoes, setOrientacoes] = useState(exam.orientacoes || "");
+  const [embaralharQuestoes, setEmbaralharQuestoes] = useState(exam.embaralharQuestoes ?? false);
+  const [embaralharAlternativas, setEmbaralharAlternativas] = useState(exam.embaralharAlternativas ?? false);
 
-  const canSave = nome.trim() !== "";
+  const canSave = nome.trim() !== "" && !isSaving;
   const minDatetime = new Date().toISOString().slice(0, 16);
 
-  function handleSave() {
+  async function handleSave() {
     if (!canSave) return;
-    onSave({
-      ...exam,
-      title: nome.trim(),
-      modalidade: modalidade || exam.modalidade,
-      discipline: disciplina,
-      subject: disciplina,
-      turma,
-      semester: semestre || exam.semester,
-      tempoProva: tempoProva !== "" ? Number(tempoProva) : undefined,
-      dataLimite: dataLimite || undefined,
-      orientacoes: orientacoes.trim() || undefined,
-    });
+    try {
+      await onSave({
+        ...exam,
+        title: nome.trim(),
+        modalidade: modalidade || exam.modalidade,
+        discipline: disciplina,
+        subject: disciplina,
+        turma,
+        semester: semestre || exam.semester,
+        tempoProva: tempoProva !== "" ? Number(tempoProva) : undefined,
+        dataInicio: dataInicio || undefined,
+        dataLimite: dataLimite || undefined,
+        orientacoes: orientacoes.trim() || undefined,
+        embaralharQuestoes,
+        embaralharAlternativas,
+      });
+    } catch {
+      // O erro já é exibido pelo estado da mutation no modal.
+    }
   }
 
   return (
@@ -318,11 +317,34 @@ function EditarDadosProvaModal({ exam, onClose, onSave }: EditModalProps) {
             <div className="flex flex-col gap-1 w-full">
               <label style={labelStyle} className="flex items-center gap-1.5">
                 <CalendarDaysIcon style={{ width: 14, height: 14, color: "#05245F" }} />
+                Data e Hora de Início
+              </label>
+              <input type="datetime-local" value={dataInicio} min={minDatetime} onChange={(e) => setDataInicio(e.target.value)} style={inputStyle}
+                onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }} />
+            </div>
+          </div>
+
+          {/* Data limite + Embaralhamento */}
+          <div className="flex gap-4">
+            <div className="flex flex-col gap-1 w-full">
+              <label style={labelStyle} className="flex items-center gap-1.5">
+                <CalendarDaysIcon style={{ width: 14, height: 14, color: "#05245F" }} />
                 Data e Hora Limite
               </label>
               <input type="datetime-local" value={dataLimite} min={minDatetime} onChange={(e) => setDataLimite(e.target.value)} style={inputStyle}
                 onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
                 onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }} />
+            </div>
+            <div className="flex flex-col gap-3 w-full justify-end">
+              <label className="flex items-center gap-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>
+                <input type="checkbox" checked={embaralharQuestoes} onChange={(e) => setEmbaralharQuestoes(e.target.checked)} />
+                Embaralhar questões
+              </label>
+              <label className="flex items-center gap-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>
+                <input type="checkbox" checked={embaralharAlternativas} onChange={(e) => setEmbaralharAlternativas(e.target.checked)} />
+                Embaralhar alternativas
+              </label>
             </div>
           </div>
 
@@ -334,6 +356,12 @@ function EditarDadosProvaModal({ exam, onClose, onSave }: EditModalProps) {
               onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
               onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }} />
           </div>
+
+          {errorMessage && (
+            <div className="rounded-lg px-4 py-3" style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: 13 }}>
+              {errorMessage}
+            </div>
+          )}
         </div>
 
         {/* Footer */}
@@ -345,7 +373,7 @@ function EditarDadosProvaModal({ exam, onClose, onSave }: EditModalProps) {
           <button onClick={handleSave} disabled={!canSave} className="flex items-center gap-2 px-5 py-2.5 rounded-lg transition-opacity"
             style={{ backgroundColor: canSave ? "#6B6FA3" : "#B1B4BD", fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: 14, color: "#fff", cursor: canSave ? "pointer" : "not-allowed" }}>
             <BookmarkIcon className="w-[15px] h-[15px]" style={{ color: "#fff" }} />
-            Salvar alterações
+            {isSaving ? "Salvando..." : "Salvar alterações"}
           </button>
         </div>
       </div>
@@ -356,19 +384,26 @@ function EditarDadosProvaModal({ exam, onClose, onSave }: EditModalProps) {
 export function ProvaDetailPage({
   onBack, onNavigate, questions, onDeleteQuestion, onUpdateQuestion, onAddQuestions,
   bancoQuestoes = [], examTitle = "Título da Prova", examSubject = "", examSemester = "",
-  examTurma, examModalidade, examTempoProva, examDataLimite, examOrientacoes,
-  selectedExam, onUpdateExam,
+  examTurma, examModalidade, examTempoProva, examDataInicio, examDataLimite, examOrientacoes,
+  selectedExam, onUpdateExam, onPublish, showPublishModal = false, onClosePublishModal,
+  isLoading = false, errorMessage, isUpdatingExam = false, updateExamErrorMessage, isPublishing = false,
 }: Props) {
   const [activeTab, setActiveTab] = useState<TabId>("questoes");
-  const [showPublish, setShowPublish] = useState(false);
   const [showOrigemModal, setShowOrigemModal] = useState(false);
   const [showBancoModal, setShowBancoModal] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [showEditExam, setShowEditExam] = useState(false);
+  const [editTempo, setEditTempo] = useState("");
+  const [editDataInicio, setEditDataInicio] = useState("");
+  const [editDataLimite, setEditDataLimite] = useState("");
+  const [editEmbaralharQuestoes, setEditEmbaralharQuestoes] = useState(false);
+  const [editEmbaralharAlternativas, setEditEmbaralharAlternativas] = useState(false);
+  const [savingConfig, setSavingConfig] = useState(false);
+  const [configError, setConfigError] = useState<string | null>(null);
 
   // Estado local do exam — fonte da verdade para exibição nesta página
   const buildExamFromProps = (): Exam => selectedExam ?? {
-    id: 0,
+    id: "",
     title: examTitle,
     modalidade: examModalidade || "",
     discipline: examSubject,
@@ -378,21 +413,73 @@ export function ProvaDetailPage({
     badge: "Rascunho",
     submissions: "0",
     tempoProva: examTempoProva,
+    dataInicio: examDataInicio,
     dataLimite: examDataLimite,
     orientacoes: examOrientacoes,
   };
 
   const [localExam, setLocalExam] = useState<Exam>(buildExamFromProps);
+  const provaId = isPersistedId(localExam.id) ? localExam.id : null;
+
+  const analyticsQuery = useQuery({
+    queryKey: ["analytics", provaId],
+    queryFn: () => getProvaAnalytics(provaId ?? ""),
+    enabled: Boolean(provaId),
+  });
+
+  const correcaoQuestoesQuery = useQuery({
+    queryKey: ["correcao", "questoes", provaId],
+    queryFn: () => listarQuestoesCorrecao(provaId ?? ""),
+    enabled: Boolean(provaId),
+  });
+
+  const analytics = analyticsQuery.data;
+  const questoesCorrecao = correcaoQuestoesQuery.data ?? [];
+  const totalCorrigidas = questoesCorrecao.reduce((acc, questao) => acc + questao.respostas.corrigidas, 0);
+  const totalRespostasCorrecao = questoesCorrecao.reduce((acc, questao) => acc + questao.respostas.total, 0);
+  const percentualEnvios = analytics?.totalAlunos
+    ? Math.round((analytics.envios / analytics.totalAlunos) * 100)
+    : 0;
 
   // Sincroniza quando selectedExam muda (ex: ao entrar na página de uma prova diferente)
   useEffect(() => {
     setLocalExam(buildExamFromProps());
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedExam?.id]);
+  }, [selectedExam]);
+
+  // Sincroniza o estado do formulário de configurações com o localExam
+  useEffect(() => {
+    setEditTempo(localExam.tempoProva != null ? String(localExam.tempoProva) : "");
+    setEditDataInicio(toDatetimeLocalValue(localExam.dataInicio));
+    setEditDataLimite(toDatetimeLocalValue(localExam.dataLimite));
+    setEditEmbaralharQuestoes(localExam.embaralharQuestoes ?? false);
+    setEditEmbaralharAlternativas(localExam.embaralharAlternativas ?? false);
+  }, [localExam]);
 
   const handleUpdateQuestion = (updatedQuestion: Question) => {
     onUpdateQuestion?.(updatedQuestion);
     setEditingQuestion(null);
+  };
+
+  const handleSaveConfig = async () => {
+    setConfigError(null);
+    setSavingConfig(true);
+    try {
+      const updated: Exam = {
+        ...localExam,
+        tempoProva: editTempo !== "" ? Number(editTempo) : undefined,
+        dataInicio: editDataInicio || undefined,
+        dataLimite: editDataLimite || undefined,
+        embaralharQuestoes: editEmbaralharQuestoes,
+        embaralharAlternativas: editEmbaralharAlternativas,
+      };
+      await onUpdateExam?.(updated);
+      setLocalExam(updated);
+    } catch (err) {
+      setConfigError(err instanceof Error ? err.message : "Erro ao salvar configurações.");
+    } finally {
+      setSavingConfig(false);
+    }
   };
 
   const infoCards = [
@@ -406,7 +493,13 @@ export function ProvaDetailPage({
 
   return (
     <>
-      {showPublish && <CompartilharModal onClose={() => setShowPublish(false)} />}
+      {showPublishModal && localExam.urlAcesso && (
+        <CompartilharModal
+          onClose={onClosePublishModal ?? (() => undefined)}
+          urlAcesso={localExam.urlAcesso}
+          qrCode={localExam.qrCode}
+        />
+      )}
       <SelecionarOrigemQuestaoModal
         isOpen={showOrigemModal}
         onClose={() => setShowOrigemModal(false)}
@@ -429,9 +522,11 @@ export function ProvaDetailPage({
         <EditarDadosProvaModal
           exam={localExam}
           onClose={() => setShowEditExam(false)}
-          onSave={(updated) => {
-            setLocalExam(updated);   // atualiza imediatamente a exibição
-            onUpdateExam?.(updated); // propaga ao pai para persistir na lista
+          isSaving={isUpdatingExam}
+          errorMessage={updateExamErrorMessage}
+          onSave={async (updated) => {
+            await onUpdateExam?.(updated);
+            setLocalExam(updated);
             setShowEditExam(false);
           }}
         />
@@ -464,10 +559,14 @@ export function ProvaDetailPage({
               <PencilIcon className="w-[15px] h-[15px]" />
               Editar dados
             </button>
-            <button onClick={() => setShowPublish(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
-              style={{ border: "1.5px solid #6B6FA3", color: "#6B6FA3", backgroundColor: "#fff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 14 }}>
+            <button
+              onClick={onPublish}
+              disabled={isPublishing}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
+              style={{ border: "1.5px solid #6B6FA3", color: "#6B6FA3", backgroundColor: "#fff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 14, opacity: isPublishing ? 0.65 : 1, cursor: isPublishing ? "not-allowed" : "pointer" }}
+            >
               <ShareIcon className="w-[15px] h-[15px]" />
-              Publicar
+              {isPublishing ? "Publicando..." : localExam.urlAcesso ? "Compartilhar" : "Publicar"}
             </button>
             <button onClick={() => setShowOrigemModal(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
               style={{ backgroundColor: "#F9B233", color: "#6B6FA3", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 14 }}>
@@ -476,6 +575,23 @@ export function ProvaDetailPage({
             </button>
           </div>
         </div>
+
+        {isLoading && (
+          <div className="bg-white rounded-xl p-4" style={{ border: "1px solid #E6E6E6" }}>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#6A7181" }}>
+              Carregando dados da prova...
+            </p>
+          </div>
+        )}
+
+        {errorMessage && (
+          <div
+            className="rounded-xl p-4"
+            style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: 14 }}
+          >
+            {errorMessage}
+          </div>
+        )}
 
         {/* Info cards */}
         <div className="flex flex-wrap gap-3">
@@ -525,15 +641,236 @@ export function ProvaDetailPage({
         {/* Questions list */}
         {activeTab === "questoes" && (
           <div className="flex flex-col gap-4">
-            {questions.map((q) => (
-              <QuestionCard key={q.id} question={q} onEdit={() => setEditingQuestion(q)} onDelete={() => onDeleteQuestion?.(q.id)} />
+            {questions.map((q, i) => (
+              <QuestionCard key={q.id} question={q} index={i + 1} onEdit={() => setEditingQuestion(q)} onDelete={() => onDeleteQuestion?.(q.id)} />
             ))}
           </div>
         )}
 
-        {activeTab !== "questoes" && (
-          <div className="bg-white rounded-xl p-8 flex items-center justify-center" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.06)", minHeight: 200 }}>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#B1B4BD" }}>Conteúdo em construção</p>
+        {activeTab === "submissoes" && (
+          <div className="bg-white rounded-xl p-5 flex flex-col gap-4" style={{ border: "1px solid #E6E6E6" }}>
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 16, color: "#6B6FA3" }}>
+                  Submissões da prova
+                </h3>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#6A7181", marginTop: 4 }}>
+                  Acompanhe acessos, inícios e envios registrados pelo backend.
+                </p>
+              </div>
+              <ChartBarIcon className="w-6 h-6" style={{ color: "#05245F" }} />
+            </div>
+
+            {!provaId ? (
+              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#B1B4BD" }}>
+                Salve a prova para acompanhar submissões reais.
+              </p>
+            ) : analyticsQuery.isLoading ? (
+              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#6A7181" }}>Carregando métricas...</p>
+            ) : analyticsQuery.isError ? (
+              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#9A3412" }}>
+                Não foi possível carregar as submissões.
+              </p>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    { label: "Alunos", value: analytics?.totalAlunos ?? 0 },
+                    { label: "Acessos", value: analytics?.acessos ?? 0 },
+                    { label: "Inícios", value: analytics?.inicios ?? 0 },
+                    { label: "Envios", value: analytics?.envios ?? 0 },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-xl p-4" style={{ border: "1px solid #E5E7EB" }}>
+                      <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181" }}>{item.label}</p>
+                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: 22, color: "#05245F" }}>{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="rounded-xl p-4" style={{ backgroundColor: "#F8FAFC" }}>
+                  <div className="flex justify-between mb-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#6A7181" }}>
+                    <span>Progresso de envio</span>
+                    <span>{percentualEnvios}%</span>
+                  </div>
+                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "#E5E7EB" }}>
+                    <div className="h-full rounded-full" style={{ width: `${percentualEnvios}%`, backgroundColor: "#05245F" }} />
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {activeTab === "respostas" && (
+          <div className="bg-white rounded-xl p-5 flex flex-col gap-4" style={{ border: "1px solid #E6E6E6" }}>
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 16, color: "#6B6FA3" }}>
+                  Respostas por questão
+                </h3>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#6A7181", marginTop: 4 }}>
+                  Status real de correção por questão, incluindo objetivas corrigidas automaticamente.
+                </p>
+              </div>
+              {provaId && (
+                <button
+                  type="button"
+                  onClick={() => onNavigate?.("correcao")}
+                  className="px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
+                  style={{ backgroundColor: "#05245F", color: "#fff", fontFamily: "Inter, sans-serif", fontSize: 13, fontWeight: 600 }}
+                >
+                  Abrir correção
+                </button>
+              )}
+            </div>
+
+            {!provaId ? (
+              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#B1B4BD" }}>
+                Salve a prova para consultar respostas reais.
+              </p>
+            ) : correcaoQuestoesQuery.isLoading ? (
+              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#6A7181" }}>Carregando respostas...</p>
+            ) : correcaoQuestoesQuery.isError ? (
+              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#9A3412" }}>
+                Não foi possível carregar as respostas por questão.
+              </p>
+            ) : questoesCorrecao.length === 0 ? (
+              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#B1B4BD" }}>
+                Ainda não há respostas enviadas para esta prova.
+              </p>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {[
+                    { label: "Respostas", value: totalRespostasCorrecao },
+                    { label: "Corrigidas", value: totalCorrigidas },
+                    { label: "Pendentes", value: Math.max(0, totalRespostasCorrecao - totalCorrigidas) },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-xl p-4" style={{ border: "1px solid #E5E7EB" }}>
+                      <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181" }}>{item.label}</p>
+                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: 22, color: "#05245F" }}>{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-col gap-3">
+                  {questoesCorrecao.map((questao) => {
+                    const question = questions.find((item) => item.id === questao.questaoId);
+                    const pendentes = Math.max(0, questao.respostas.total - questao.respostas.corrigidas);
+                    const progresso = questao.respostas.total
+                      ? Math.round((questao.respostas.corrigidas / questao.respostas.total) * 100)
+                      : 0;
+
+                    return (
+                      <div key={questao.questaoId} className="rounded-xl p-4 flex flex-col gap-3" style={{ border: "1px solid #E5E7EB" }}>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="line-clamp-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 600, color: "#111" }}>
+                              {questao.ordemOriginal}. {question?.text ?? "Questão cadastrada"}
+                            </p>
+                            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181", marginTop: 4 }}>
+                              {questao.tipo.replace("_", " ")} · {questao.pontuacaoMax} ponto(s)
+                            </p>
+                          </div>
+                          <span className="shrink-0 px-3 py-1 rounded-full" style={{ backgroundColor: pendentes > 0 ? "#FFF8E0" : "#E6FAF8", color: pendentes > 0 ? "#B07D00" : "#05245F", fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 600 }}>
+                            {pendentes > 0 ? `${pendentes} pendente(s)` : "Corrigida"}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="flex justify-between mb-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181" }}>
+                            <span>{questao.respostas.corrigidas}/{questao.respostas.total} corrigidas</span>
+                            <span>{progresso}%</span>
+                          </div>
+                          <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "#E5E7EB" }}>
+                            <div className="h-full rounded-full" style={{ width: `${progresso}%`, backgroundColor: pendentes > 0 ? "#F9B233" : "#05245F" }} />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Configurações */}
+        {activeTab === "configuracoes" && (
+          <div className="bg-white rounded-xl p-6 flex flex-col gap-6" style={{ border: "1px solid #E6E6E6" }}>
+            <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 16, color: "#111" }}>
+              Configurações da Prova
+            </h3>
+
+            <div className="flex gap-5">
+              {/* Tempo de Prova */}
+              <div className="flex flex-col gap-1.5 w-full">
+                <label style={labelStyle} className="flex items-center gap-1.5">
+                  <ClockIcon style={{ width: 15, height: 15, color: "#05245F" }} />
+                  Tempo de Prova
+                </label>
+                <div className="relative w-full">
+                  <select value={editTempo} onChange={(e) => setEditTempo(e.target.value)}
+                    style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}>
+                    <option value="">Selecionar duração</option>
+                    {duracoes.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
+                  </select>
+                  {chevron}
+                </div>
+              </div>
+
+              {/* Data de Início */}
+              <div className="flex flex-col gap-1.5 w-full">
+                <label style={labelStyle} className="flex items-center gap-1.5">
+                  <CalendarDaysIcon style={{ width: 15, height: 15, color: "#05245F" }} />
+                  Data e Hora de Início
+                </label>
+                <input type="datetime-local" value={editDataInicio}
+                  onChange={(e) => setEditDataInicio(e.target.value)}
+                  style={{ ...inputStyle, paddingRight: 13, cursor: "pointer" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }} />
+              </div>
+
+              {/* Data Limite */}
+              <div className="flex flex-col gap-1.5 w-full">
+                <label style={labelStyle} className="flex items-center gap-1.5">
+                  <CalendarDaysIcon style={{ width: 15, height: 15, color: "#05245F" }} />
+                  Data e Hora Limite
+                </label>
+                <input type="datetime-local" value={editDataLimite}
+                  onChange={(e) => setEditDataLimite(e.target.value)}
+                  style={{ ...inputStyle, paddingRight: 13, cursor: "pointer" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }} />
+              </div>
+            </div>
+
+            {/* Shuffle options */}
+            <div className="flex gap-6">
+              <label className="flex items-center gap-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#111" }}>
+                <input type="checkbox" checked={editEmbaralharQuestoes} onChange={(e) => setEditEmbaralharQuestoes(e.target.checked)} />
+                Embaralhar questões
+              </label>
+              <label className="flex items-center gap-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#111" }}>
+                <input type="checkbox" checked={editEmbaralharAlternativas} onChange={(e) => setEditEmbaralharAlternativas(e.target.checked)} />
+                Embaralhar alternativas
+              </label>
+            </div>
+
+            {(updateExamErrorMessage || configError) && (
+              <div className="rounded-lg px-4 py-3" style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: 13 }}>
+                {configError || updateExamErrorMessage}
+              </div>
+            )}
+
+            <div className="flex justify-end">
+              <button onClick={handleSaveConfig} disabled={savingConfig}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg transition-opacity"
+                style={{ backgroundColor: savingConfig ? "#B1B4BD" : "#6B6FA3", fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: 14, color: "#fff", cursor: savingConfig ? "not-allowed" : "pointer" }}>
+                <BookmarkIcon className="w-[15px] h-[15px]" style={{ color: "#fff" }} />
+                {savingConfig ? "Salvando..." : "Salvar configurações"}
+              </button>
+            </div>
           </div>
         )}
       </div>
