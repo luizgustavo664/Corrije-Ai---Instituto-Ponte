@@ -1,92 +1,158 @@
-import { useState } from 'react'
+import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query'
+import { Component, lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router'
+import { toast } from 'sonner'
 import './App.css'
-import { AlunoModule } from './modules/AlunoModule'
-import { CoordenadorProfessorModule } from './modules/CoordenadorProfessorModule'
+import { Toaster } from './components/ui/sonner'
+import { finishGoogleLogin } from './features/auth/auth.api'
+import { listenSessionExpired } from './features/auth/auth.events'
+import {
+  clearAuthSession,
+  clearPendingAuthRole,
+  getPendingAuthRole,
+  storeAuthSession,
+} from './features/auth/auth.storage'
 
-type Portal = 'hub' | 'aluno' | 'coordenador-professor'
-
-const portalCards = [
-  {
-    id: 'aluno' as const,
-    eyebrow: 'Fluxo do aluno',
-    title: 'Aplicacao de prova',
-    description:
-      'Acesso, instrucoes, prova, revisao e confirmacao em uma experiencia mobile-first.',
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: false,
+    },
   },
-  {
-    id: 'coordenador-professor' as const,
-    eyebrow: 'Fluxo interno',
-    title: 'Coordenacao e professor',
-    description:
-      'Login, cadastro, painel, provas, banco de questoes, correcao e liberacao de notas.',
-  },
-]
+})
 
-function PortalShell({
-  title,
-  onBack,
-  children,
-}: {
-  title: string
-  onBack: () => void
-  children: React.ReactNode
-}) {
+const AlunoModule = lazy(() =>
+  import('./modules/AlunoModule').then((module) => ({
+    default: module.AlunoModule,
+  })),
+)
+
+const CoordenadorProfessorModule = lazy(() =>
+  import('./modules/CoordenadorProfessorModule').then((module) => ({
+    default: module.CoordenadorProfessorModule,
+  })),
+)
+
+function LoadingScreen({ label = 'Carregando' }: { label?: string }) {
   return (
-    <div className="portal-shell">
-      <button type="button" className="portal-back" onClick={onBack}>
-        Voltar ao seletor
-      </button>
-      <span className="portal-label">{title}</span>
-      {children}
-    </div>
+    <main className="app-loading">
+      <span aria-hidden="true" />
+      {label}
+    </main>
   )
 }
 
+class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
+  state: { error: Error | null } = { error: null }
+
+  static getDerivedStateFromError(error: Error) {
+    return { error }
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <main className="app-auth-state">
+          <h1>Algo deu errado</h1>
+          <p>{this.state.error.message}</p>
+          <a href="/login">Voltar ao login</a>
+        </main>
+      )
+    }
+
+    return this.props.children
+  }
+}
+
+function AuthCallbackPage() {
+  const navigate = useNavigate()
+  const role = getPendingAuthRole()
+  const callbackMutation = useMutation({
+    mutationFn: () => finishGoogleLogin(role ?? undefined),
+    onSuccess: (session) => {
+      storeAuthSession({
+        accessToken: session.accessToken,
+        usuario: session.usuario,
+      })
+      clearPendingAuthRole()
+      navigate(`${session.redirectTo}/painel`, { replace: true })
+    },
+  })
+
+  const params = new URLSearchParams(window.location.search)
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''))
+  const callbackError =
+    params.get('error_description') ??
+    params.get('error') ??
+    hashParams.get('error_description') ??
+    hashParams.get('error') ??
+    undefined
+
+  useEffect(() => {
+    if (!callbackError && callbackMutation.status === 'idle') {
+      callbackMutation.mutate()
+    }
+  }, [callbackError, callbackMutation])
+
+  if (callbackError) {
+    return (
+      <main className="app-auth-state">
+        <h1>Login não concluído</h1>
+        <p>{callbackError}</p>
+        <a href="/login">Voltar ao login</a>
+      </main>
+    )
+  }
+
+  if (callbackMutation.isError) {
+    return (
+      <main className="app-auth-state">
+        <h1>Não foi possível autenticar</h1>
+        <p>{callbackMutation.error.message}</p>
+        <a href="/login">Tentar novamente</a>
+      </main>
+    )
+  }
+
+  return <LoadingScreen label="Finalizando login" />
+}
+
+function SessionExpiredHandler() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    return listenSessionExpired(() => {
+      clearAuthSession()
+      clearPendingAuthRole()
+      toast.error('Sua sessão expirou. Faça login novamente.')
+      navigate('/login', { replace: true })
+    })
+  }, [navigate])
+
+  return null
+}
+
 export default function App() {
-  const [portal, setPortal] = useState<Portal>('hub')
-
-  if (portal === 'aluno') {
-    return (
-      <PortalShell title="Area do aluno" onBack={() => setPortal('hub')}>
-        <AlunoModule />
-      </PortalShell>
-    )
-  }
-
-  if (portal === 'coordenador-professor') {
-    return (
-      <PortalShell
-        title="Area de coordenacao e professor"
-        onBack={() => setPortal('hub')}
-      >
-        <CoordenadorProfessorModule />
-      </PortalShell>
-    )
-  }
-
   return (
-    <main className="hub-page">
-      <section className="hub-hero">
-        <p className="hub-kicker">Corrije Ai</p>
-        <h1>Escolha qual experiencia abrir no frontend</h1>
-        <p className="hub-copy">
-          As duas pastas novas agora entram pelo app principal, sem manter o
-          template padrao do Vite.
-        </p>
-      </section>
-
-      <section className="hub-grid" aria-label="Portais disponiveis">
-        {portalCards.map((card) => (
-          <article key={card.id} className="hub-card">
-            <p className="hub-card-eyebrow">{card.eyebrow}</p>
-            <h2>{card.title}</h2>
-            <p>{card.description}</p>
-            <button type="button" onClick={() => setPortal(card.id)}>
-              Abrir portal
-            </button>
-          </article>
-        ))}
-      </section>
-    </main>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <SessionExpiredHandler />
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingScreen />}>
+            <Routes>
+              <Route path="/auth/callback" element={<AuthCallbackPage />} />
+              <Route path="/aluno/*" element={<AlunoModule />} />
+              <Route path="/*" element={<CoordenadorProfessorModule />} />
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
+        <Toaster richColors position="top-right" />
+      </BrowserRouter>
+    </QueryClientProvider>
   )
 }

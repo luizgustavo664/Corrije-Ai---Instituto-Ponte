@@ -1,46 +1,54 @@
 import { useState } from "react";
-import { UserIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { NovoAlunoModal, type AlunoData } from "./NovoAlunoModal";
-
-export interface Aluno {
-  id: number;
-  nome: string;
-  cpf: string;
-  provasFeitas: number;
-  media: number;
-}
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { UserIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { toast } from "sonner";
+import { ConfirmDialog } from "../../../../../src/components/feedback/ConfirmDialog";
+import { listAlunos, deleteAluno } from "../../../../../src/features/alunos/alunos.api";
+import { listProvas } from "../../../../../src/features/provas/provas.api";
+import { useAnalyticsSummary } from "../../../../../src/features/analytics/useAnalyticsSummary";
 
 interface Props {
-  onNavigateToProfile?: (alunoId: number) => void;
-  alunos: Aluno[];
-  setAlunos: React.Dispatch<React.SetStateAction<Aluno[]>>;
+  onNavigateToProfile?: (alunoId: string) => void;
 }
 
-export function GestaoAlunosPage({ onNavigateToProfile, alunos, setAlunos }: Props): JSX.Element {
-  const [showNovoAlunoModal, setShowNovoAlunoModal] = useState(false);
+export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
+  const queryClient = useQueryClient();
+  const [alunoToDelete, setAlunoToDelete] = useState<string | null>(null);
 
-  const mockAlertas = [
-    "Lucas Martins com 3 provas sem correção há mais de 30 dias - requer ação urgente",
-    "Isabela Souza não atualizou dados cadastrais após mudança de endereço obrigatória",
-    "Gabriel Costa com 5 faltas consecutivas em disciplinas obrigatórias",
-    "Beatriz Santos com pendência de documentação para matrícula do próximo semestre",
-    "Pedro Lima solicitou trancamento emergencial - 4 disciplinas afetadas",
-    "Mariana Alves com 2 recursos de notas pendentes de análise",
-  ];
+  const { data: alunos, isLoading, isError } = useQuery({
+    queryKey: ["alunos"],
+    queryFn: listAlunos,
+    select: (result) => result.data,
+  });
 
-  const handleNovoAluno = (data: AlunoData) => {
-    const novoAluno = {
-      id: alunos.length > 0 ? Math.max(...alunos.map(a => a.id)) + 1 : 1,
-      nome: data.nome,
-      cpf: data.cpf,
-      provasFeitas: 0,
-      media: 0,
-    };
-    setAlunos(prev => [novoAluno, ...prev]);
-    setShowNovoAlunoModal(false);
+  const { data: provas = [] } = useQuery({
+    queryKey: ["provas"],
+    queryFn: listProvas,
+    select: (result) => result.data,
+  });
+
+  const analytics = useAnalyticsSummary(provas);
+  const alunosComCadastroPendente = (alunos ?? []).filter((aluno) => !aluno.cpf).length;
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteAluno,
+    onSuccess: () => {
+      setAlunoToDelete(null);
+      toast.success("Aluno removido com sucesso.");
+      void queryClient.invalidateQueries({ queryKey: ["alunos"] });
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : "Erro ao remover aluno.";
+      toast.error(message);
+    },
+  });
+
+  const handleDeleteAluno = (e: React.MouseEvent, alunoId: string) => {
+    e.stopPropagation();
+    setAlunoToDelete(alunoId);
   };
 
-  const handleAlunoClick = (alunoId: number) => {
+  const handleAlunoClick = (alunoId: string) => {
     if (onNavigateToProfile) {
       onNavigateToProfile(alunoId);
     }
@@ -48,7 +56,23 @@ export function GestaoAlunosPage({ onNavigateToProfile, alunos, setAlunos }: Pro
 
   return (
     <>
-      <NovoAlunoModal isOpen={showNovoAlunoModal} onClose={() => setShowNovoAlunoModal(false)} onSave={handleNovoAluno} />
+      <ConfirmDialog
+        open={!!alunoToDelete}
+        title="Remover aluno?"
+        description="Alunos são gerados automaticamente quando iniciam uma prova. Remova apenas registros indevidos ou duplicados."
+        confirmLabel="Remover"
+        isLoading={deleteMutation.isPending}
+        onOpenChange={(open) => {
+          if (!open && !deleteMutation.isPending) {
+            setAlunoToDelete(null);
+          }
+        }}
+        onConfirm={() => {
+          if (alunoToDelete) {
+            deleteMutation.mutate(alunoToDelete);
+          }
+        }}
+      />
     <div className="p-8" style={{ backgroundColor: "#F2F2F2", minHeight: "100vh" }}>
       {/* Header */}
       <div className="mb-8">
@@ -58,19 +82,9 @@ export function GestaoAlunosPage({ onNavigateToProfile, alunos, setAlunos }: Pro
               Gestão de Alunos
             </h1>
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
-              Informações cadastrais, desempenho e histórico acadêmico
+              Alunos são cadastrados automaticamente quando iniciam uma prova pelo portal público
             </p>
           </div>
-          <button
-            onClick={() => setShowNovoAlunoModal(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all hover:opacity-90"
-            style={{ backgroundColor: "#05245F", color: "#FFFFFF" }}
-          >
-            <PlusIcon className="w-5 h-5" />
-            <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "14px" }}>
-              Novo Aluno
-            </span>
-          </button>
         </div>
       </div>
 
@@ -86,7 +100,7 @@ export function GestaoAlunosPage({ onNavigateToProfile, alunos, setAlunos }: Pro
             </div>
           </div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "32px", color: "#6B6FA3" }}>
-            {alunos.length}
+            {isLoading ? "..." : alunos?.length ?? 0}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
             Alunos cadastrados
@@ -103,13 +117,13 @@ export function GestaoAlunosPage({ onNavigateToProfile, alunos, setAlunos }: Pro
             </div>
           </div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "32px", color: "#6B6FA3" }}>
-            {alunos.length}
+            {analytics.isLoading ? "..." : analytics.summary.inicios}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
-            Avaliados
+            Inícios de prova
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#9CA3AF", marginTop: "2px" }}>
-            Nos últimos 30 dias
+            Registrados pelo portal do aluno
           </p>
         </div>
 
@@ -123,7 +137,7 @@ export function GestaoAlunosPage({ onNavigateToProfile, alunos, setAlunos }: Pro
             </div>
           </div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "32px", color: "#6B6FA3" }}>
-            {mockAlertas.length}
+            {isLoading ? "..." : alunosComCadastroPendente}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
             Pendências de cadastro
@@ -143,63 +157,59 @@ export function GestaoAlunosPage({ onNavigateToProfile, alunos, setAlunos }: Pro
             </div>
           </div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "32px", color: "#6B6FA3" }}>
-            8.2
+            {analytics.isLoading ? "..." : analytics.summary.envios}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
-            Média institucional
+            Provas enviadas
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#9CA3AF", marginTop: "2px" }}>
-            Atual semestre
+            Submissões finalizadas
           </p>
         </div>
       </div>
 
+      {analytics.isError && (
+        <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#FF6B6B", marginBottom: "16px" }}>
+          Não foi possível carregar métricas de provas.
+        </p>
+      )}
+
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Alertas */}
-        <div>
-          <h2
-            className="mb-4"
-            style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "18px", color: "#6B6FA3" }}
-          >
-            Alertas institucionais
-          </h2>
-          <div className="space-y-3">
-            {mockAlertas.map((alerta, index) => (
-              <div key={index} className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4">
-                <div
-                  className="flex items-center justify-center rounded-lg shrink-0"
-                  style={{ width: 40, height: 40, backgroundColor: "#FEF3C7" }}
-                >
-                  <span style={{ fontSize: "20px" }}>⚠️</span>
-                </div>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#374151", fontWeight: 500 }}>
-                  {alerta}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Alunos */}
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "18px", color: "#6B6FA3" }}>
               Alunos
             </h2>
-            <button
-              className="text-sm hover:opacity-80 transition-opacity"
-              style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, color: "#05245F" }}
-            >
-              Ver todos os alunos →
-            </button>
           </div>
+
+          {isLoading && (
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181" }}>
+              Carregando alunos...
+            </p>
+          )}
+
+          {isError && (
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#FF6B6B" }}>
+              Erro ao carregar alunos.
+            </p>
+          )}
+
           <div className="space-y-3">
-            {alunos.map((aluno) => (
-              <button
+            {(alunos ?? []).map((aluno) => (
+              <div
                 key={aluno.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => handleAlunoClick(aluno.id)}
-                className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4 w-full text-left hover:bg-gray-50 transition-colors"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleAlunoClick(aluno.id);
+                  }
+                }}
+                className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4 w-full text-left hover:bg-gray-50 transition-colors group"
               >
                 <div
                   className="flex items-center justify-center rounded-full shrink-0"
@@ -212,10 +222,19 @@ export function GestaoAlunosPage({ onNavigateToProfile, alunos, setAlunos }: Pro
                     {aluno.nome}
                   </p>
                   <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
-                    CPF: {aluno.cpf} • {aluno.provasFeitas} provas feitas • Média: {aluno.media}
+                    {aluno.email}{aluno.cpf ? ` • CPF: ${aluno.cpf}` : ""}
                   </p>
                 </div>
-              </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleDeleteAluno(e, aluno.id)}
+                  className="p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
+                  style={{ color: "#FF6B6B" }}
+                  title="Remover aluno"
+                >
+                  <TrashIcon className="w-5 h-5" />
+                </button>
+              </div>
             ))}
           </div>
         </div>

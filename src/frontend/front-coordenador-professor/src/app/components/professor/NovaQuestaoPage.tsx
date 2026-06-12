@@ -1,20 +1,27 @@
 import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronLeftIcon, BookmarkIcon, PlusIcon, EyeIcon, EyeSlashIcon, PhotoIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
-import type { Question, QuestionType as QType } from "./ProvaDetailPage";
+import type { MateriaDto } from "../../../../../src/features/materias/materias.types";
+import type { CreateQuestaoPayload } from "../../../../../src/features/questoes/questoes.types";
+import { createTema, listTemas } from "../../../../../src/features/temas/temas.api";
 
 interface Props {
   onBack: () => void;
-  onSave?: (question: Question) => void;
+  onSave?: (payload: CreateQuestaoPayload) => void | Promise<void>;
+  materias?: MateriaDto[];
+  defaultMateriaId?: string;
+  isSaving?: boolean;
+  errorMessage?: string;
 }
 
 type FormQuestionType = "Múltipla Escolha" | "Verdadeiro/Falso" | "Discursiva";
 
 const questionTypes: FormQuestionType[] = ["Múltipla Escolha", "Verdadeiro/Falso", "Discursiva"];
 
-function toProvaType(t: FormQuestionType): QType {
-  if (t === "Múltipla Escolha") return "Alternativa";
-  if (t === "Verdadeiro/Falso") return "V/F";
-  return "Discursiva";
+function toApiType(t: FormQuestionType): CreateQuestaoPayload["tipo"] {
+  if (t === "Múltipla Escolha") return "multipla_escolha";
+  if (t === "Verdadeiro/Falso") return "verdadeiro_falso";
+  return "discursiva";
 }
 
 const letters = ["A", "B", "C", "D", "E"];
@@ -49,20 +56,36 @@ const labelStyle: React.CSSProperties = {
   marginBottom: 12,
 };
 
-export function NovaQuestaoPage({ onBack, onSave }: Props) {
+export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaId, isSaving = false, errorMessage }: Props) {
+  const queryClient = useQueryClient();
   const [showPreview, setShowPreview] = useState(true);
   const [type, setType] = useState<FormQuestionType>("Múltipla Escolha");
   const [points, setPoints] = useState("1");
-  const [discipline, setDiscipline] = useState("");
+  const [materiaId, setMateriaId] = useState(defaultMateriaId ?? "");
   const [theme, setTheme] = useState("");
   const [enunciado, setEnunciado] = useState("");
   const [allowPhotos, setAllowPhotos] = useState(false);
+  const [vfAnswer, setVfAnswer] = useState<"Verdadeiro" | "Falso">("Verdadeiro");
   const [alternatives, setAlternatives] = useState<Alternative[]>([
     { id: "A", text: "Alternativa A", correct: false },
     { id: "B", text: "Alternativa B", correct: false },
     { id: "C", text: "Alternativa C", correct: false },
     { id: "D", text: "Alternativa D", correct: false },
   ]);
+
+  const temasQuery = useQuery({
+    queryKey: ["temas", materiaId],
+    queryFn: () => listTemas({ materiaId }),
+    select: (result) => result.data,
+    enabled: !!materiaId,
+  });
+
+  const createTemaMutation = useMutation({
+    mutationFn: createTema,
+    onSuccess: (_tema, variables) => {
+      void queryClient.invalidateQueries({ queryKey: ["temas", variables.materiaId] });
+    },
+  });
 
   function markCorrect(id: string) {
     setAlternatives((prev) =>
@@ -76,24 +99,51 @@ export function NovaQuestaoPage({ onBack, onSave }: Props) {
     );
   }
 
-  function handleSave() {
-    if (!enunciado.trim()) return;
-    const newQuestion: Question = {
-      id: Date.now(),
-      type: toProvaType(type),
-      text: enunciado.trim(),
-      ...(type === "Múltipla Escolha"
-        ? {
-            options: alternatives.map((a) => ({
-              letter: a.id,
-              text: a.text,
-              correct: a.correct,
+  const hasCorrectAlternative = alternatives.some((alternative) => alternative.correct);
+  const canSave = !!enunciado.trim() && !!materiaId && !isSaving && (type !== "Múltipla Escolha" || hasCorrectAlternative);
+
+  async function handleSave() {
+    if (!canSave) return;
+
+    const tipo = toApiType(type);
+    const temaNome = theme.trim();
+    const existingTema = (temasQuery.data ?? []).find(
+      (tema) => tema.nome.trim().toLowerCase() === temaNome.toLowerCase(),
+    );
+    const temaId = temaNome
+      ? existingTema?.id ?? (await createTemaMutation.mutateAsync({ materiaId, nome: temaNome })).id
+      : null;
+    const payload: CreateQuestaoPayload = {
+      materiaId,
+      temaId,
+      tipo,
+      permiteAnexo: tipo === "discursiva" ? allowPhotos : undefined,
+      pontuacaoPadrao: Number(points) > 0 ? Number(points) : 1,
+      enunciado: {
+        conteudoLatex: enunciado.trim(),
+        urlImagem: null,
+      },
+      alternativas:
+        tipo === "discursiva"
+          ? []
+          : tipo === "verdadeiro_falso"
+            ? [
+              { ordemOriginal: 1, conteudoLatex: "Verdadeiro", correta: vfAnswer === "Verdadeiro" },
+              { ordemOriginal: 2, conteudoLatex: "Falso", correta: vfAnswer === "Falso" },
+            ]
+            : alternatives.map((alternative, index) => ({
+              ordemOriginal: index + 1,
+              conteudoLatex: alternative.text,
+              correta: alternative.correct,
             })),
-          }
-        : { answer: type === "Verdadeiro/Falso" ? "Verdadeiro" : "A ser corrigido" }),
     };
-    onSave?.(newQuestion);
-    onBack();
+
+    try {
+      await onSave?.(payload);
+      onBack();
+    } catch {
+      // O erro vem do estado da mutation exibido nesta tela.
+    }
   }
 
   function addAlternative() {
@@ -144,19 +194,19 @@ export function NovaQuestaoPage({ onBack, onSave }: Props) {
           </button>
           <button
             onClick={handleSave}
-            disabled={!enunciado.trim()}
+            disabled={!canSave}
             className="flex items-center gap-2 px-5 py-2 rounded-lg transition-opacity"
             style={{
-              backgroundColor: enunciado.trim() ? "#6B6FA3" : "#B1B4BD",
+              backgroundColor: canSave ? "#6B6FA3" : "#B1B4BD",
               fontFamily: "Inter, sans-serif",
               fontWeight: 500,
               fontSize: 14,
               color: "#fff",
-              cursor: enunciado.trim() ? "pointer" : "not-allowed",
+              cursor: canSave ? "pointer" : "not-allowed",
             }}
           >
             <BookmarkIcon className="w-[15px] h-[15px]" style={{ color: "#fff" }} />
-            Salvar Questão
+            {isSaving ? "Salvando..." : "Salvar Questão"}
           </button>
         </div>
       </div>
@@ -214,15 +264,18 @@ export function NovaQuestaoPage({ onBack, onSave }: Props) {
               {/* Disciplina */}
               <div className="flex flex-col gap-1.5 flex-1">
                 <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#111" }}>Disciplina</span>
-                <input
-                  type="text"
-                  placeholder="Ex: Matemática"
-                  value={discipline}
-                  onChange={(e) => setDiscipline(e.target.value)}
-                  style={inputStyle}
+                <select
+                  value={materiaId}
+                  onChange={(e) => setMateriaId(e.target.value)}
+                  style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
                   onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
                   onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
-                />
+                >
+                  <option value="">Selecionar matéria</option>
+                  {materias.map((materia) => (
+                    <option key={materia.id} value={materia.id}>{materia.nome}</option>
+                  ))}
+                </select>
               </div>
 
               {/* Tema */}
@@ -231,12 +284,18 @@ export function NovaQuestaoPage({ onBack, onSave }: Props) {
                 <input
                   type="text"
                   placeholder="Ex: Derivadas"
+                  list="temas-disponiveis"
                   value={theme}
                   onChange={(e) => setTheme(e.target.value)}
                   style={inputStyle}
                   onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
                   onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
                 />
+                <datalist id="temas-disponiveis">
+                  {(temasQuery.data ?? []).map((tema) => (
+                    <option key={tema.id} value={tema.nome} />
+                  ))}
+                </datalist>
               </div>
             </div>
           </div>
@@ -271,6 +330,36 @@ export function NovaQuestaoPage({ onBack, onSave }: Props) {
               Suporta LaTeX entre <code>$$</code> — ex: <code>$$f'(x) = 2x$$</code>
             </p>
           </div>
+
+          {type === "Verdadeiro/Falso" && (
+            <div className="bg-white rounded-2xl p-6 flex flex-col gap-3" style={{ border: "1px solid #E6E6E6" }}>
+              <label style={labelStyle}>Resposta correta</label>
+              <div className="flex gap-3">
+                {(["Verdadeiro", "Falso"] as const).map((answer) => (
+                  <button
+                    key={answer}
+                    onClick={() => setVfAnswer(answer)}
+                    className="flex-1 py-3 rounded-lg transition-all"
+                    style={{
+                      backgroundColor: vfAnswer === answer ? "#6B6FA3" : "#F2F3F5",
+                      color: vfAnswer === answer ? "#fff" : "#6A7181",
+                      fontFamily: "Poppins, sans-serif",
+                      fontWeight: 600,
+                      fontSize: "14px",
+                    }}
+                  >
+                    {answer}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="rounded-xl p-4" style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: "14px" }}>
+              {errorMessage}
+            </div>
+          )}
 
           {/* ALTERNATIVAS (only for Múltipla Escolha) */}
           {type === "Múltipla Escolha" && (

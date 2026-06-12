@@ -12,6 +12,7 @@ export type CorrecaoQuestao = {
   questaoId: string;
   ordemOriginal: number;
   pontuacaoMax: number;
+  tipo: string;
   respostas: {
     total: number;
     /** Quantidade já corrigida (manual ou automática). */

@@ -1,68 +1,56 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeftIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
-import type { Question } from "./ProvaDetailPage";
+import { listarQuestoesCorrecao } from "../../../../../src/features/correcao/correcao.api";
+import type { CorrecaoQuestaoDto } from "../../../../../src/features/correcao/correcao.types";
+import { useCorrecaoAutomaticaObjetivas } from "../../../../../src/features/correcao/useCorrecaoAutomaticaObjetivas";
 import { CorrecaoCompletaModal } from "./CorrecaoCompletaModal";
 import { SuccessNotification } from "./SuccessNotification";
 
 interface Props {
   onBack: () => void;
-  onNavigateToQuestion: (questionId: number, questionType: "Alternativa" | "V/F" | "Discursiva") => void;
-  questions?: Question[];
+  onNavigateToQuestion: (questaoId: string, tipo: "Alternativa" | "V/F" | "Discursiva") => void;
+  provaId: string | null;
   examTitle?: string;
-  totalSubmissions?: number;
   showCompletionModal?: boolean;
   onResetCompletionModal?: () => void;
 }
 
-interface QuestionCorrection {
-  id: number;
-  numero: number;
-  titulo: string;
-  tipo: "Alternativa" | "V/F" | "Discursiva";
-  totalSubmissoes: number;
-  corrigidas: number;
-  pendentes: number;
-  progresso: number;
-}
+const tipoToUiType: Record<string, "Alternativa" | "V/F" | "Discursiva"> = {
+  multipla_escolha: "Alternativa",
+  verdadeiro_falso: "V/F",
+  discursiva: "Discursiva",
+};
 
-const typeColors = {
+const typeColors: Record<string, { bg: string; color: string }> = {
   Alternativa: { bg: "#EEF1F8", color: "#6B6FA3" },
   "V/F": { bg: "#E6FAF8", color: "#05245F" },
   Discursiva: { bg: "#FFF8E0", color: "#B07D00" },
 };
 
-function convertToQuestionCorrection(questions: Question[], totalSubmissions: number): QuestionCorrection[] {
-  return questions.map((q, index) => {
-    const totalSub = totalSubmissions;
-    const corrigidas = Math.floor(Math.random() * totalSub);
-    const pendentes = totalSub - corrigidas;
-    const progresso = totalSub > 0 ? Math.round((corrigidas / totalSub) * 100) : 0;
-
-    return {
-      id: q.id,
-      numero: index + 1,
-      titulo: q.text.length > 60 ? q.text.substring(0, 60) + "..." : q.text,
-      tipo: q.type,
-      totalSubmissoes: totalSub,
-      corrigidas,
-      pendentes,
-      progresso,
-    };
-  });
-}
-
 export function ProvaQuestoesCorrecaoPage({
   onBack,
   onNavigateToQuestion,
-  questions = [],
-  examTitle = "Avaliação Final - Cálculo Diferencial III",
-  totalSubmissions = 45,
+  provaId,
+  examTitle = "Carregando...",
   showCompletionModal = false,
-  onResetCompletionModal
+  onResetCompletionModal,
 }: Props) {
-  const questoes = convertToQuestionCorrection(questions, totalSubmissions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const correcaoAutomaticaQuery = useCorrecaoAutomaticaObjetivas(provaId);
+  const shouldWaitAutoCorrection = correcaoAutomaticaQuery.isLoading;
+
+  const questoesQuery = useQuery({
+    queryKey: ["correcao", "questoes", provaId],
+    queryFn: () => listarQuestoesCorrecao(provaId!),
+    enabled: !!provaId && !shouldWaitAutoCorrection,
+  });
+
+  const questoes: CorrecaoQuestaoDto[] = questoesQuery.data ?? [];
+
+  const totalCorrigidas = questoes.reduce((acc, q) => acc + q.respostas.corrigidas, 0);
+  const totalPendentes = questoes.reduce((acc, q) => acc + q.respostas.total - q.respostas.corrigidas, 0);
 
   useEffect(() => {
     if (showCompletionModal) {
@@ -73,28 +61,21 @@ export function ProvaQuestoesCorrecaoPage({
   const handleSaveCorrection = () => {
     setIsModalOpen(false);
     setShowNotification(true);
-    if (onResetCompletionModal) {
-      onResetCompletionModal();
-    }
+    onResetCompletionModal?.();
   };
 
   const handleContinueCorrection = () => {
     setIsModalOpen(false);
-    if (onResetCompletionModal) {
-      onResetCompletionModal();
-    }
+    onResetCompletionModal?.();
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    if (onResetCompletionModal) {
-      onResetCompletionModal();
-    }
+    onResetCompletionModal?.();
   };
 
   return (
     <div className="p-8 flex flex-col gap-6">
-      {/* Botão voltar */}
       <button
         onClick={onBack}
         className="flex items-center gap-2 hover:opacity-70 transition-opacity self-start"
@@ -106,17 +87,22 @@ export function ProvaQuestoesCorrecaoPage({
         </span>
       </button>
 
-      {/* Header */}
       <div>
         <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "24px", color: "#6B6FA3" }}>
           {examTitle}
         </h1>
-        <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "4px" }}>
-          1º Semestre 2026 • {totalSubmissions} submissões
-        </p>
+        {correcaoAutomaticaQuery.isLoading && (
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181", marginTop: 4 }}>
+            Corrigindo questões objetivas automaticamente...
+          </p>
+        )}
+        {correcaoAutomaticaQuery.data && correcaoAutomaticaQuery.data.respostasCorrigidas > 0 && (
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#05245F", marginTop: 4 }}>
+            {correcaoAutomaticaQuery.data.respostasCorrigidas} resposta(s) objetiva(s) corrigida(s) automaticamente.
+          </p>
+        )}
       </div>
 
-      {/* Stats resumo */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-white rounded-xl p-4" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "28px", color: "#6B6FA3" }}>
@@ -128,7 +114,7 @@ export function ProvaQuestoesCorrecaoPage({
         </div>
         <div className="bg-white rounded-xl p-4" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "28px", color: "#05245F" }}>
-            {questoes.reduce((acc, q) => acc + q.corrigidas, 0)}
+            {totalCorrigidas}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
             Total de correções feitas
@@ -136,7 +122,7 @@ export function ProvaQuestoesCorrecaoPage({
         </div>
         <div className="bg-white rounded-xl p-4" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "28px", color: "#FF6B6B" }}>
-            {questoes.reduce((acc, q) => acc + q.pendentes, 0)}
+            {totalPendentes}
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
             Correções pendentes
@@ -144,117 +130,93 @@ export function ProvaQuestoesCorrecaoPage({
         </div>
       </div>
 
-      {/* Título da seção */}
-      <p
-        style={{
-          fontFamily: "Inter, sans-serif",
-          fontSize: "12px",
-          letterSpacing: "0.1em",
-          color: "#6B6FA3",
-          textTransform: "uppercase",
-          fontWeight: 600,
-          marginTop: "8px",
-        }}
-      >
+      <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", letterSpacing: "0.1em", color: "#6B6FA3", textTransform: "uppercase", fontWeight: 600, marginTop: "8px" }}>
         Selecione a questão para corrigir
       </p>
 
-      {/* Lista de questões */}
       <div className="flex flex-col gap-3">
         {questoes.length === 0 ? (
           <div className="bg-white rounded-xl p-8 flex items-center justify-center" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#B1B4BD" }}>
-              Nenhuma questão encontrada nesta prova
+              {shouldWaitAutoCorrection || questoesQuery.isLoading
+                ? "Carregando questões..."
+                : "Nenhuma questão encontrada nesta prova"}
             </p>
           </div>
         ) : (
           questoes.map((questao) => {
-            const { bg, color } = typeColors[questao.tipo];
+            const pendentes = questao.respostas.total - questao.respostas.corrigidas;
+            const progresso = questao.respostas.total > 0
+              ? Math.round((questao.respostas.corrigidas / questao.respostas.total) * 100)
+              : 0;
+            const uiType = tipoToUiType[questao.tipo] ?? "Discursiva";
+            const { bg, color } = typeColors[uiType];
 
             return (
               <button
-                key={questao.id}
-                onClick={() => onNavigateToQuestion(questao.id, questao.tipo)}
+                key={questao.questaoId}
+                onClick={() => onNavigateToQuestion(questao.questaoId, uiType)}
                 className="bg-white rounded-xl p-5 flex flex-col gap-4 cursor-pointer hover:shadow-md transition-shadow text-left"
                 style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
               >
-              {/* Top row */}
-              <div className="flex items-start gap-4">
-                <div
-                  className="flex items-center justify-center rounded-lg shrink-0"
-                  style={{ width: 48, height: 48, backgroundColor: "#EEF1F8" }}
-                >
-                  <DocumentTextIcon className="w-6 h-6" style={{ color: "#6B6FA3" }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span
-                      className="inline-block px-2 py-0.5 rounded-md"
-                      style={{
-                        backgroundColor: bg,
-                        color,
-                        fontFamily: "Inter, sans-serif",
-                        fontSize: "11px",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {questao.tipo}
-                    </span>
-                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#B1B4BD" }}>
-                      Questão {questao.numero}
-                    </span>
+                <div className="flex items-start gap-4">
+                  <div className="flex items-center justify-center rounded-lg shrink-0" style={{ width: 48, height: 48, backgroundColor: "#EEF1F8" }}>
+                    <DocumentTextIcon className="w-6 h-6" style={{ color: "#6B6FA3" }} />
                   </div>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "16px", color: "#6B6FA3" }}>
-                    {questao.titulo}
-                  </p>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181", marginTop: "4px" }}>
-                    {questao.totalSubmissoes} submissões
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="inline-block px-2 py-0.5 rounded-md" style={{ backgroundColor: bg, color, fontFamily: "Inter, sans-serif", fontSize: "11px", fontWeight: 600 }}>
+                        {uiType}
+                      </span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#B1B4BD" }}>
+                        Questão {questao.ordemOriginal}
+                      </span>
+                    </div>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "16px", color: "#6B6FA3" }}>
+                      Pontuação máxima: {questao.pontuacaoMax}
+                    </p>
+                    <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181", marginTop: "4px" }}>
+                      {questao.respostas.total} submissões
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              {/* Stats row */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="rounded-lg p-3 text-center" style={{ backgroundColor: "#F2F2F2" }}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#05245F" }}>
-                    {questao.corrigidas}
-                  </p>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "#6A7181" }}>
-                    Corrigidas
-                  </p>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="rounded-lg p-3 text-center" style={{ backgroundColor: "#F2F2F2" }}>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#05245F" }}>
+                      {questao.respostas.corrigidas}
+                    </p>
+                    <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "#6A7181" }}>
+                      Corrigidas
+                    </p>
+                  </div>
+                  <div className="rounded-lg p-3 text-center" style={{ backgroundColor: "#F2F2F2" }}>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#FF6B6B" }}>
+                      {pendentes}
+                    </p>
+                    <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "#6A7181" }}>
+                      Pendentes
+                    </p>
+                  </div>
+                  <div className="rounded-lg p-3 text-center" style={{ backgroundColor: "#F2F2F2" }}>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#6B6FA3" }}>
+                      {progresso}%
+                    </p>
+                    <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "#6A7181" }}>
+                      Progresso
+                    </p>
+                  </div>
                 </div>
-                <div className="rounded-lg p-3 text-center" style={{ backgroundColor: "#F2F2F2" }}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#FF6B6B" }}>
-                    {questao.pendentes}
-                  </p>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "#6A7181" }}>
-                    Pendentes
-                  </p>
-                </div>
-                <div className="rounded-lg p-3 text-center" style={{ backgroundColor: "#F2F2F2" }}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#6B6FA3" }}>
-                    {questao.progresso}%
-                  </p>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "#6A7181" }}>
-                    Progresso
-                  </p>
-                </div>
-              </div>
 
-              {/* Progress bar */}
-              <div className="w-full rounded-full h-1.5" style={{ backgroundColor: "#E5E7EB" }}>
-                <div
-                  className="h-1.5 rounded-full transition-all"
-                  style={{ width: `${questao.progresso}%`, backgroundColor: "#6B6FA3" }}
-                />
-              </div>
-            </button>
-          );
-        })
+                <div className="w-full rounded-full h-1.5" style={{ backgroundColor: "#E5E7EB" }}>
+                  <div className="h-1.5 rounded-full transition-all" style={{ width: `${progresso}%`, backgroundColor: "#6B6FA3" }} />
+                </div>
+              </button>
+            );
+          })
         )}
       </div>
 
-      {/* Modal de correção completa */}
       <CorrecaoCompletaModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -262,7 +224,6 @@ export function ProvaQuestoesCorrecaoPage({
         onContinue={handleContinueCorrection}
       />
 
-      {/* Notificação de sucesso */}
       <SuccessNotification
         isVisible={showNotification}
         onClose={() => setShowNotification(false)}

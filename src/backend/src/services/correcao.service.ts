@@ -97,17 +97,17 @@ export class CorrecaoService {
    * Executa a correção automática para todas as questões objetivas da prova.
    *
    * @param provaId - ID da prova.
-   * @param user - Usuário autenticado (deve ser professor).
+   * @param user - Usuário autenticado (deve ser professor ou coordenador).
    * @returns Resumo com total de respostas corrigidas e quantidade de questões discursivas pendentes.
    * @throws forbidden - Se o usuário não for professor ou não tiver acesso à prova.
    */
   async executarCorrecaoAutomatica(provaId: string, user: AuthUser) {
-    if (user.perfil !== "professor") {
-      throw forbidden("Somente professores podem executar correção automática.");
+    if (user.perfil !== "professor" && user.perfil !== "coordenador") {
+      throw forbidden("Somente professores e coordenadores podem executar correção automática.");
     }
 
     await this.ensureProvaAccess(provaId, user);
-    return this.correcaoRepository.corrigirObjetivas(provaId, user.id);
+    return this.correcaoRepository.corrigirObjetivas(provaId);
   }
 
   /**

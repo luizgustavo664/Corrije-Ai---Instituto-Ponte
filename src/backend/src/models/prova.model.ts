@@ -75,6 +75,8 @@ export type Prova = {
   atualizadoEm: string;
   materia?: { id: string; nome: string };
   professor?: { id: string; nome: string };
+  /** Número de alunos que já enviaram a prova (status enviada ou corrigida). */
+  submissoes: number;
 };
 
 /**

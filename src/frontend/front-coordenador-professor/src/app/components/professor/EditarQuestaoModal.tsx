@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { XMarkIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
-import type { BancoQuestion } from "./bancoQuestoesData";
+import type { BancoQuestion } from "../../../../../src/features/dashboard/dashboard.types";
 
 interface Props {
   isOpen: boolean;

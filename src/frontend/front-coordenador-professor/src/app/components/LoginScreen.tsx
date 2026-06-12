@@ -1,13 +1,12 @@
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import imgLock from "../../imports/TelaDeAcessoLogin/7e7a81d80b09b6a41757199595b111faa4ac1641.png";
-
-type Role = "professor" | "coordenador";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import type { AuthRole } from "../../../../src/features/auth/auth.types";
 
 interface Props {
-  role: Role;
-  onRoleChange: (role: Role) => void;
-  onNavigateToCadastro: () => void;
-  onLogin?: () => void;
+  errorMessage?: string;
+  isLoading?: boolean;
+  role: AuthRole;
+  onRoleChange: (role: AuthRole) => void;
+  onGoogleLogin: () => void;
 }
 
 function GoogleIcon() {
@@ -21,153 +20,90 @@ function GoogleIcon() {
   );
 }
 
-export function LoginScreen({ role, onRoleChange, onNavigateToCadastro, onLogin }: Props) {
+export function LoginScreen({
+  errorMessage,
+  isLoading = false,
+  role,
+  onRoleChange,
+  onGoogleLogin,
+}: Props) {
   return (
     <div
-      className="bg-white rounded-2xl w-full max-w-[480px] px-10 py-10 flex flex-col gap-5"
+      className="bg-white rounded-2xl w-full max-w-[480px] px-10 py-10 flex flex-col gap-6"
       style={{ boxShadow: "0px 4px 24px rgba(0,0,0,0.10)" }}
     >
-      {/* Role selector */}
-      <div
-        className="flex self-center rounded-full p-1"
-        style={{ backgroundColor: "#EEF1F8" }}
-      >
-        {(["professor", "coordenador"] as Role[]).map((r) => (
-          <button
-            key={r}
-            onClick={() => onRoleChange(r)}
-            className="px-6 py-2 rounded-full transition-all capitalize"
-            style={{
-              fontFamily: "Poppins, sans-serif",
-              fontWeight: 500,
-              fontSize: "14px",
-              backgroundColor: role === r ? "#6B6FA3" : "transparent",
-              color: role === r ? "#FFFFFF" : "#6B6FA3",
-            }}
-          >
-            {r === "professor" ? "Professor" : "Coordenador"}
-          </button>
-        ))}
+      <div className="flex flex-col gap-2">
+        <p
+          style={{
+            fontFamily: "Poppins, sans-serif",
+            fontWeight: 600,
+            fontSize: "24px",
+            color: "#6B6FA3",
+          }}
+        >
+          Acesso interno
+        </p>
+        <p style={{ fontFamily: "Inter, sans-serif", fontSize: "15px", color: "#6A7181", lineHeight: 1.55 }}>
+          Professores e coordenadores entram com a conta Google autorizada pela instituição.
+        </p>
       </div>
 
-      {/* Section title */}
-      <p
+      <div className="grid grid-cols-2 gap-3" role="group" aria-label="Perfil de acesso">
+        {(["professor", "coordenador"] as const).map((option) => {
+          const isSelected = role === option;
+          return (
+            <button
+              key={option}
+              type="button"
+              onClick={() => onRoleChange(option)}
+              className="px-4 py-3 rounded-full border transition-colors"
+              style={{
+                borderColor: isSelected ? "#05245F" : "#D1D5DB",
+                backgroundColor: isSelected ? "#05245F" : "#FFFFFF",
+                color: isSelected ? "#FFFFFF" : "#05245F",
+                fontFamily: "Poppins, sans-serif",
+                fontSize: "14px",
+                fontWeight: 600,
+              }}
+            >
+              {option === "professor" ? "Professor" : "Coordenador"}
+            </button>
+          );
+        })}
+      </div>
+
+      {errorMessage && (
+        <div
+          role="alert"
+          className="rounded-xl px-4 py-3"
+          style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: "14px" }}
+        >
+          {errorMessage}
+        </div>
+      )}
+
+      <button
+        onClick={onGoogleLogin}
+        disabled={isLoading}
+        className="flex items-center justify-center gap-3 px-5 py-4 rounded-full transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-60"
         style={{
+          backgroundColor: "#F9B233",
+          color: "#05245F",
           fontFamily: "Poppins, sans-serif",
-          fontWeight: 500,
-          fontSize: "24px",
-          color: "#6B6FA3",
+          fontWeight: 600,
+          fontSize: "16px",
         }}
       >
-        Login
-      </p>
+        <GoogleIcon />
+        {isLoading ? "Abrindo Google..." : "Entrar com Google"}
+        <ArrowRightIcon className="w-5 h-5" aria-hidden="true" />
+      </button>
 
-      {/* Email input */}
-      <div className="relative">
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#9F9F9F" }}>
-          <EnvelopeIcon className="w-[22px] h-[22px]" />
-        </div>
-        <input
-          type="email"
-          placeholder="email@email.com.br"
-          className="w-full pl-11 pr-4 py-4 rounded-sm outline-none transition-colors"
-          style={{
-            border: "2.5px solid #D9D9D9",
-            fontFamily: "Inter, sans-serif",
-            fontSize: "16px",
-            color: "#9F9F9F",
-            backgroundColor: "transparent",
-          }}
-          onFocus={(e) => (e.target.style.borderColor = "#05245F")}
-          onBlur={(e) => (e.target.style.borderColor = "#D9D9D9")}
-        />
-      </div>
-
-      {/* CPF input */}
-      <div className="relative">
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          <img
-            src={imgLock}
-            alt="lock"
-            className="w-[28px] h-[28px] object-contain opacity-60"
-          />
-        </div>
-        <input
-          type="text"
-          placeholder="CPF"
-          className="w-full pl-12 pr-4 py-4 rounded-sm outline-none transition-colors"
-          style={{
-            border: "2.5px solid #D9D9D9",
-            fontFamily: "Inter, sans-serif",
-            fontSize: "16px",
-            color: "#6B6FA3",
-            backgroundColor: "transparent",
-          }}
-          onFocus={(e) => (e.target.style.borderColor = "#05245F")}
-          onBlur={(e) => (e.target.style.borderColor = "#D9D9D9")}
-        />
-      </div>
-
-      {/* Action buttons row */}
-      <div className="flex gap-3 flex-wrap">
-        <button
-          onClick={onLogin}
-          className="flex-1 py-3 rounded-full transition-opacity hover:opacity-85"
-          style={{
-            backgroundColor: "#F9B233",
-            color: "#6B6FA3",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 500,
-            fontSize: "16px",
-            minWidth: "120px",
-          }}
-        >
-          ENTRAR
-        </button>
-        <button
-          className="flex items-center justify-center gap-2 px-5 py-3 rounded-full transition-opacity hover:opacity-85"
-          style={{
-            backgroundColor: "#D9D9D9",
-            color: "#6B6FA3",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 400,
-            fontSize: "16px",
-          }}
-        >
-          <GoogleIcon />
-          Entrar com o Google
-        </button>
-      </div>
-
-      {/* Divider line */}
       <div style={{ borderTop: "1px solid #E5E7EB" }} />
 
-      {/* Cadastro area */}
-      <div className="flex flex-col items-center gap-3">
-        <p style={{ fontFamily: "Inter, sans-serif", fontSize: "16px", color: "#000000" }}>
-          Não tem uma conta?{" "}
-          <button
-            onClick={onNavigateToCadastro}
-            className="hover:underline"
-            style={{ color: "#05245F", fontFamily: "Inter, sans-serif", fontSize: "16px" }}
-          >
-            Cadastre-se agora
-          </button>
-        </p>
-        <button
-          onClick={onNavigateToCadastro}
-          className="px-10 py-3 rounded-full transition-opacity hover:opacity-85"
-          style={{
-            backgroundColor: "#D9D9D9",
-            color: "#6B6FA3",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 400,
-            fontSize: "16px",
-          }}
-        >
-          Cadastrar
-        </button>
-      </div>
+      <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181", lineHeight: 1.5 }}>
+        O Google valida sua identidade; o backend libera apenas se esse e-mail estiver cadastrado no perfil escolhido.
+      </p>
     </div>
   );
 }

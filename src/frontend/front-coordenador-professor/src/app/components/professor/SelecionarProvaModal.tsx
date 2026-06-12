@@ -1,19 +1,18 @@
 import { XMarkIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
-import type { Exam } from "./examTypes";
-import type { BancoQuestion } from "./bancoQuestoesData";
+import type { BancoQuestion, Exam } from "../../../../../src/features/dashboard/dashboard.types";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   questao: BancoQuestion | null;
   provas: Exam[];
-  onAddToProva: (provaId: number, questao: BancoQuestion) => void;
+  onAddToProva: (provaId: Exam["id"], questao: BancoQuestion) => void;
 }
 
 export function SelecionarProvaModal({ isOpen, onClose, questao, provas, onAddToProva }: Props) {
   if (!isOpen || !questao) return null;
 
-  const handleSelectProva = (provaId: number) => {
+  const handleSelectProva = (provaId: Exam["id"]) => {
     onAddToProva(provaId, questao);
     onClose();
   };

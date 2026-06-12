@@ -57,7 +57,10 @@ interface Props {
   onDismissTimeWarning: () => void;
   onTimeWarningFinalize: () => void;
   onTriggerWarningDemo: () => void;
+  onFileUpload: (questaoId: string) => void;
   studentInfo: StudentInfo;
+  syncMessage?: string;
+  uploadMessage?: string;
 }
 
 export function TelaProva({
@@ -75,13 +78,16 @@ export function TelaProva({
   onDismissTimeWarning,
   onTimeWarningFinalize,
   onTriggerWarningDemo,
+  onFileUpload,
+  syncMessage,
+  uploadMessage,
 }: Props) {
   const question = questions[currentQIndex];
   const markedCount = questions.filter((q) => q.marked).length;
   const isFirst = currentQIndex === 0;
   const isLast = currentQIndex === questions.length - 1;
 
-  const minutesLeft = parseInt(timeLeft);
+  const minutesLeft = Number.parseInt(timeLeft.replace(/\D/g, ""), 10) || 0;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F2F2F2]">
@@ -108,7 +114,7 @@ export function TelaProva({
                     : "bg-[#F2F2F2] text-[#666666]"
                   }`}
               >
-                {q.id}
+                {q.displayOrder}
               </button>
             );
           })}
@@ -123,7 +129,7 @@ export function TelaProva({
       <div className="flex-1 px-4 py-5 flex flex-col gap-4 overflow-y-auto pb-32">
         {/* Question header */}
         <div className="bg-[#05245F] rounded-xl px-4 py-3">
-          <span className="text-white font-bold text-base">Questão {question.id}</span>
+          <span className="text-white font-bold text-base">Questão {question.displayOrder}</span>
         </div>
 
         {/* Statement */}
@@ -135,17 +141,62 @@ export function TelaProva({
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <label className="text-sm font-semibold text-[#05245F]">Resposta</label>
-            <button className="flex items-center gap-1.5 text-xs text-[#6B6FA3] bg-[#F2F2F2] px-2.5 py-1.5 rounded-lg">
-              <Paperclip size={13} />
-              Anexar arquivo
-            </button>
+            {question.type === "discursiva" && (
+              <button
+                onClick={() => onFileUpload(question.id)}
+                className="flex items-center gap-1.5 text-xs text-[#6B6FA3] bg-[#F2F2F2] px-2.5 py-1.5 rounded-lg hover:opacity-80 transition-opacity"
+              >
+                <Paperclip size={13} />
+                Anexar arquivo
+              </button>
+            )}
           </div>
-          <textarea
-            value={question.answer}
-            onChange={(e) => onAnswerChange(currentQIndex, e.target.value)}
-            placeholder="Digite aqui sua resposta..."
-            className="w-full bg-white border border-[#D9D9D9] rounded-xl p-4 text-sm text-[#000000] placeholder:text-[#666666] outline-none focus:border-[#6B6FA3] transition-colors resize-none min-h-[160px]"
-          />
+          {question.type === "discursiva" ? (
+            <textarea
+              value={question.answer}
+              onChange={(e) => onAnswerChange(currentQIndex, e.target.value)}
+              placeholder="Digite aqui sua resposta..."
+              className="w-full bg-white border border-[#D9D9D9] rounded-xl p-4 text-sm text-[#000000] placeholder:text-[#666666] outline-none focus:border-[#6B6FA3] transition-colors resize-none min-h-[160px]"
+            />
+          ) : (
+            <div className="flex flex-col gap-2">
+              {question.alternatives.map((alternative) => {
+                const selected = question.answer === alternative.id;
+                return (
+                  <button
+                    key={alternative.id}
+                    onClick={() => onAnswerChange(currentQIndex, alternative.id)}
+                    className={`w-full text-left rounded-xl px-4 py-3 border-2 transition-all ${
+                      selected
+                        ? "border-[#6B6FA3] bg-[#6B6FA3]/10"
+                        : "border-[#D9D9D9] bg-white"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                        selected ? "border-[#6B6FA3] bg-[#6B6FA3]" : "border-[#D9D9D9]"
+                      }`}>
+                        {selected && <span className="size-2 rounded-full bg-white" />}
+                      </span>
+                      <span className="text-sm text-[#000000] leading-relaxed">
+                        {alternative.conteudoLatex}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          {syncMessage && (
+            <p className={`text-xs ${syncMessage.includes("Falha") || syncMessage.includes("não") ? "text-[#D32F2F]" : "text-[#6A7181]"}`}>
+              {syncMessage}
+            </p>
+          )}
+          {uploadMessage && (
+            <p className={`text-xs ${uploadMessage.includes("Falha") || uploadMessage.includes("não") ? "text-[#D32F2F]" : "text-[#6A7181]"}`}>
+              {uploadMessage}
+            </p>
+          )}
         </div>
 
         {/* Mark for review */}
@@ -180,14 +231,15 @@ export function TelaProva({
           </button>
         )}
 
-        {/* Demo trigger */}
-        <button
-          onClick={onTriggerWarningDemo}
-          className="flex items-center gap-1.5 self-center mx-auto text-[10px] text-[#F9B233] border border-dashed border-[#F9B233] px-3 py-1.5 rounded-lg bg-[#05245F]"
-        >
-          <AlertTriangle size={11} />
-          Simular aviso de tempo
-        </button>
+        {import.meta.env.DEV && (
+          <button
+            onClick={onTriggerWarningDemo}
+            className="flex items-center gap-1.5 self-center mx-auto text-[10px] text-[#F9B233] border border-dashed border-[#F9B233] px-3 py-1.5 rounded-lg bg-[#05245F]"
+          >
+            <AlertTriangle size={11} />
+            Simular aviso de tempo
+          </button>
+        )}
       </div>
 
       {/* Fixed bottom nav */}

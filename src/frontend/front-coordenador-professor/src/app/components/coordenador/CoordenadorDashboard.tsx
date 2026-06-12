@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Squares2X2Icon,
   DocumentTextIcon,
@@ -17,20 +17,16 @@ import { CorrecaoPage } from "../professor/CorrecaoPage";
 import { LiberacaoNotasPage } from "../professor/LiberacaoNotasPage";
 import { NovaProvaPage } from "../professor/NovaProvaPage";
 import { ProvaDetailPage } from "../professor/ProvaDetailPage";
-import type { Question } from "../professor/ProvaDetailPage";
 import { NovaQuestaoPage } from "../professor/NovaQuestaoPage";
 import { QuestaoCorrecaoPage } from "../professor/QuestaoCorrecaoPage";
 import { ProvaQuestoesCorrecaoPage } from "../professor/ProvaQuestoesCorrecaoPage";
-import { GestaoProfessoresPage, type Professor } from "./GestaoProfessoresPage";
-import { GestaoAlunosPage, type Aluno } from "./GestaoAlunosPage";
+import { GestaoProfessoresPage } from "./GestaoProfessoresPage";
+import { GestaoAlunosPage } from "./GestaoAlunosPage";
 import { PerfilAlunoPage } from "./PerfilAlunoPage";
 import { PerfilProfessorPage } from "./PerfilProfessorPage";
-import { defaultExams } from "../professor/examTypes";
-import type { Exam } from "../professor/examTypes";
-import { bancoQuestoes as defaultBancoQuestoes } from "../professor/bancoQuestoesData";
-import type { BancoQuestion } from "../professor/bancoQuestoesData";
+import { useDashboard } from "../../../../../src/features/dashboard/useDashboard";
 
-type Tab =
+export type CoordenadorTab =
   | "painel"
   | "provas"
   | "banco"
@@ -49,9 +45,11 @@ type Tab =
 
 interface Props {
   onLogout: () => void;
+  initialTab?: CoordenadorTab;
+  onNavigateTab?: (tab: CoordenadorTab) => void;
 }
 
-const navItems: { id: Tab; label: string; Icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
+const navItems: { id: CoordenadorTab; label: string; Icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
   { id: "painel", label: "Painel", Icon: Squares2X2Icon },
   { id: "provas", label: "Provas", Icon: DocumentTextIcon },
   { id: "banco", label: "Banco de Questões", Icon: CircleStackIcon },
@@ -61,126 +59,64 @@ const navItems: { id: Tab; label: string; Icon: React.FC<React.SVGProps<SVGSVGEl
   { id: "gestao-alunos", label: "Gestão de Alunos", Icon: UserIcon },
 ];
 
-// Lista inicial de alunos (10 alunos)
-const initialAlunos: Aluno[] = [
-  { id: 1, nome: "Lucas Henrique Martins", cpf: "123.987.456-78", provasFeitas: 12, media: 8.7 },
-  { id: 2, nome: "Isabela Cristina Souza", cpf: "987.321.654-90", provasFeitas: 8, media: 9.2 },
-  { id: 3, nome: "Gabriel Fernando Costa", cpf: "456.123.789-01", provasFeitas: 15, media: 7.4 },
-  { id: 4, nome: "Beatriz Oliveira Santos", cpf: "321.456.987-12", provasFeitas: 10, media: 9.1 },
-  { id: 5, nome: "Pedro Augusto Lima", cpf: "789.654.321-23", provasFeitas: 14, media: 8.5 },
-  { id: 6, nome: "Mariana Silva Alves", cpf: "654.789.123-34", provasFeitas: 11, media: 9.3 },
-  { id: 7, nome: "Rafael dos Santos Rocha", cpf: "147.369.258-45", provasFeitas: 9, media: 7.8 },
-  { id: 8, nome: "Amanda Carolina Dias", cpf: "258.147.369-56", provasFeitas: 13, media: 8.9 },
-  { id: 9, nome: "Thiago Roberto Freitas", cpf: "369.258.147-67", provasFeitas: 7, media: 6.9 },
-  { id: 10, nome: "Julia Fernanda Rodrigues", cpf: "741.963.852-78", provasFeitas: 16, media: 9.4 },
-];
+export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNavigateTab }: Props) {
+  const [activeTab, setActiveTabState] = useState<CoordenadorTab>(initialTab);
+  const [selectedProfessorId, setSelectedProfessorId] = useState<string | null>(null);
+  const [selectedAlunoId, setSelectedAlunoId] = useState<string | null>(null);
 
-const initialProfessores: Professor[] = [
-  { id: 1, nome: "Dr. Carlos Alberto Silva", cpf: "123.456.789-10", provasCriadas: 18 },
-  { id: 2, nome: "Profª Maria Helena Santos", cpf: "987.654.321-00", provasCriadas: 24 },
-  { id: 3, nome: "Dr. João Pedro Oliveira", cpf: "456.789.123-45", provasCriadas: 15 },
-  { id: 4, nome: "Profª Ana Beatriz Costa", cpf: "321.654.987-22", provasCriadas: 21 },
-  { id: 5, nome: "Dr. Ricardo Mendes Lima", cpf: "789.123.456-33", provasCriadas: 19 },
-  { id: 6, nome: "Profª Fernanda Souza Alves", cpf: "654.987.321-88", provasCriadas: 16 },
-  { id: 7, nome: "Dr. Rafael Campos Rocha", cpf: "147.258.369-99", provasCriadas: 22 },
-  { id: 8, nome: "Profª Juliana Martins Dias", cpf: "258.369.147-77", provasCriadas: 20 },
-  { id: 9, nome: "Dr. Paulo Roberto Freitas", cpf: "369.147.258-66", provasCriadas: 13 },
-  { id: 10, nome: "Profª Camila Rodrigues", cpf: "741.852.963-55", provasCriadas: 17 },
-];
+  const {
+    materiasQuery,
+    bancoQuestoes,
+    exams,
+    selectedExam,
+    setSelectedExam,
+    showCompletionModal,
+    setShowCompletionModal,
+    addExam,
+    deleteExam,
+    arquivarExam,
+    addQuestions,
+    deleteQuestion,
+    updateQuestion,
+    addBancoQuestion,
+    createQuestionForSelectedExam,
+    updateBancoQuestion,
+    deleteBancoQuestion,
+    addQuestionToExam,
+  } = useDashboard();
 
-export function CoordenadorDashboard({ onLogout }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>("painel");
-  const [exams, setExams] = useState<Exam[]>(defaultExams);
-  const [examQuestions, setExamQuestions] = useState<Question[]>([]);
-  const [currentQuestionType, setCurrentQuestionType] = useState<"Alternativa" | "V/F" | "Discursiva">("Discursiva");
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [bancoQuestoes, setBancoQuestoes] = useState<BancoQuestion[]>(defaultBancoQuestoes);
-  const [selectedExam, setSelectedExam] = useState<Exam | null>(null);
-  const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [alunos, setAlunos] = useState(initialAlunos);
-  const [professores, setProfessores] = useState(initialProfessores);
+  useEffect(() => {
+    setActiveTabState(initialTab);
+  }, [initialTab]);
 
-  function addExam(exam: Exam) {
-    setExams((prev) => [exam, ...prev]);
-  }
-
-  function deleteExam(id: number) {
-    setExams((prev) => prev.filter((e) => e.id !== id));
-  }
-
-  function addQuestion(q: Question) {
-    setExamQuestions((prev) => [...prev, { ...q, id: prev.length + 1 }]);
-  }
-
-  function addQuestions(questions: Question[]) {
-    setExamQuestions((prev) => {
-      const maxId = prev.length > 0 ? Math.max(...prev.map(q => q.id)) : 0;
-      return [...prev, ...questions.map((q, i) => ({ ...q, id: maxId + i + 1 }))];
-    });
-  }
-
-  function deleteQuestion(id: number) {
-    setExamQuestions((prev) => prev.filter((q) => q.id !== id));
-  }
-
-  function updateQuestion(question: Question) {
-    setExamQuestions((prev) =>
-      prev.map((q) => (q.id === question.id ? question : q))
-    );
-  }
-
-  function addBancoQuestion(q: Question) {
-    const newBancoQuestion: BancoQuestion = {
-      id: bancoQuestoes.length > 0 ? Math.max(...bancoQuestoes.map(bq => bq.id)) + 1 : 1,
-      type: q.type,
-      materia: "Matéria Geral",
-      semestre: "1º Semestre",
-      dificuldade: "Média",
-      text: q.text,
-      options: q.options,
-      answer: q.answer,
-      timesUsed: 0,
-      successRate: 0,
-    };
-    setBancoQuestoes((prev) => [newBancoQuestion, ...prev]);
-  }
-
-  function updateBancoQuestion(questao: BancoQuestion) {
-    setBancoQuestoes((prev) =>
-      prev.map((q) => (q.id === questao.id ? questao : q))
-    );
-  }
-
-  function deleteBancoQuestion(id: number) {
-    setBancoQuestoes((prev) => prev.filter((q) => q.id !== id));
-  }
-
-  function addQuestionToExam(provaId: number, bancoQ: BancoQuestion) {
-    const newQuestion: Question = {
-      id: examQuestions.length > 0 ? Math.max(...examQuestions.map(q => q.id)) + 1 : 1,
-      type: bancoQ.type,
-      text: bancoQ.text,
-      options: bancoQ.options,
-      answer: bancoQ.answer,
-    };
-    addQuestions([newQuestion]);
-  }
+  const setActiveTab = (tab: CoordenadorTab) => {
+    setActiveTabState(tab);
+    onNavigateTab?.(tab);
+  };
 
   const renderPage = () => {
     switch (activeTab) {
       case "painel":
-        return <PainelPage onNavigate={(tab) => setActiveTab(tab as Tab)} />;
+        return (
+          <PainelPage
+            onNavigate={(tab, exam) => {
+              if (exam) setSelectedExam(exam);
+              setActiveTab(tab as CoordenadorTab);
+            }}
+            exams={exams}
+          />
+        );
       case "provas":
         return <ProvasPage onNavigate={(tab, exam) => {
           if (exam) setSelectedExam(exam);
-          setActiveTab(tab as Tab);
-        }} exams={exams} onDeleteExam={deleteExam} />;
+          setActiveTab(tab as CoordenadorTab);
+        }} exams={exams} onDeleteExam={deleteExam} onArchiveExam={arquivarExam} />;
       case "prova-detail":
         return (
           <ProvaDetailPage
             onBack={() => setActiveTab("provas")}
-            onNavigate={(tab) => setActiveTab(tab as Tab)}
-            questions={examQuestions}
+            onNavigate={(tab) => setActiveTab(tab as CoordenadorTab)}
+            questions={[]}
             onDeleteQuestion={deleteQuestion}
             onUpdateQuestion={updateQuestion}
             onAddQuestions={addQuestions}
@@ -191,52 +127,71 @@ export function CoordenadorDashboard({ onLogout }: Props) {
           />
         );
       case "banco":
-        return <BancoQuestoesPage onNavigate={(tab) => setActiveTab(tab as Tab)} bancoQuestoes={bancoQuestoes} onUpdateQuestion={updateBancoQuestion} onDeleteQuestion={deleteBancoQuestion} provas={exams} onAddToProva={addQuestionToExam} />;
+        return <BancoQuestoesPage onNavigate={(tab) => setActiveTab(tab as CoordenadorTab)} bancoQuestoes={bancoQuestoes} onUpdateQuestion={updateBancoQuestion} onDeleteQuestion={deleteBancoQuestion} provas={exams} onAddToProva={addQuestionToExam} />;
       case "correcao":
         return <CorrecaoPage onNavigate={(tab, exam) => {
           if (exam) setSelectedExam(exam);
-          setActiveTab(tab as Tab);
+          setActiveTab(tab as CoordenadorTab);
         }} exams={exams} />;
       case "liberacao":
         return <LiberacaoNotasPage exams={exams} />;
       case "gestao-professores":
         return <GestaoProfessoresPage
-          onNavigateToProfile={() => setActiveTab("perfil-professor")}
-          professores={professores}
-          setProfessores={setProfessores}
+          onNavigateToProfile={(professorId) => {
+            setSelectedProfessorId(professorId);
+            setActiveTab("perfil-professor");
+          }}
         />;
       case "gestao-alunos":
         return <GestaoAlunosPage
-          onNavigateToProfile={() => setActiveTab("perfil-aluno")}
-          alunos={alunos}
-          setAlunos={setAlunos}
+          onNavigateToProfile={(alunoId) => {
+            setSelectedAlunoId(alunoId);
+            setActiveTab("perfil-aluno");
+          }}
         />;
       case "perfil-aluno":
-        return <PerfilAlunoPage onBack={() => setActiveTab("gestao-alunos")} />;
+        return <PerfilAlunoPage
+          onBack={() => setActiveTab("gestao-alunos")}
+          alunoId={selectedAlunoId ?? ""}
+        />;
       case "perfil-professor":
-        return <PerfilProfessorPage onBack={() => setActiveTab("gestao-professores")} />;
+        return <PerfilProfessorPage
+          onBack={() => setActiveTab("gestao-professores")}
+          professorId={selectedProfessorId ?? ""}
+        />;
       case "nova-prova":
-        return <NovaProvaPage onBack={() => setActiveTab("provas")} onSave={addExam} />;
+        return <NovaProvaPage onBack={() => setActiveTab("provas")} onSave={addExam} materias={materiasQuery.data ?? []} />;
       case "nova-questao":
-        return <NovaQuestaoPage onBack={() => setActiveTab("prova-detail")} onSave={addQuestion} />;
+        return (
+          <NovaQuestaoPage
+            onBack={() => setActiveTab("prova-detail")}
+            onSave={createQuestionForSelectedExam}
+            materias={materiasQuery.data ?? []}
+            defaultMateriaId={selectedExam?.materiaId}
+          />
+        );
       case "nova-questao-banco":
-        return <NovaQuestaoPage onBack={() => setActiveTab("banco")} onSave={(q) => { addBancoQuestion(q); setActiveTab("banco"); }} />;
+        return (
+          <NovaQuestaoPage
+            onBack={() => setActiveTab("banco")}
+            onSave={addBancoQuestion}
+            materias={materiasQuery.data ?? []}
+          />
+        );
       case "prova-questoes-correcao":
+        if (!selectedExam) return null;
         return <ProvaQuestoesCorrecaoPage
           onBack={() => setActiveTab("correcao")}
-          onNavigateToQuestion={(id, type) => {
-            const questionIdx = examQuestions.findIndex(q => q.id === id);
-            setCurrentQuestionIndex(questionIdx);
-            setCurrentQuestionType(type);
+          onNavigateToQuestion={() => {
             setActiveTab("questao-correcao");
           }}
-          questions={examQuestions}
-          examTitle={selectedExam?.title || "Título da Prova — Semestre"}
-          totalSubmissions={selectedExam?.submissions ? parseInt(selectedExam.submissions) : 48}
+          provaId={selectedExam.id}
+          examTitle={selectedExam.title || "Título da Prova — Semestre"}
           showCompletionModal={showCompletionModal}
           onResetCompletionModal={() => setShowCompletionModal(false)}
         />;
       case "questao-correcao":
+        if (!selectedExam) return null;
         return <QuestaoCorrecaoPage
           onBack={() => {
             setActiveTab("prova-questoes-correcao");
@@ -245,17 +200,24 @@ export function CoordenadorDashboard({ onLogout }: Props) {
             setShowCompletionModal(true);
             setActiveTab("prova-questoes-correcao");
           }}
-          questionType={currentQuestionType}
-          correctAnswer={currentQuestionType === "Alternativa" ? "B" : "Verdadeiro"}
+          provaId={selectedExam.id}
+          questaoId={null}
         />;
       default:
-        return <PainelPage onNavigate={(tab) => setActiveTab(tab as Tab)} />;
+        return (
+          <PainelPage
+            onNavigate={(tab, exam) => {
+              if (exam) setSelectedExam(exam);
+              setActiveTab(tab as CoordenadorTab);
+            }}
+            exams={exams}
+          />
+        );
     }
   };
 
   return (
     <div className="h-screen overflow-hidden flex" style={{ backgroundColor: "#F2F2F2" }}>
-      {/* Sidebar */}
       <aside
         className="flex flex-col shrink-0"
         style={{
@@ -264,7 +226,6 @@ export function CoordenadorDashboard({ onLogout }: Props) {
           borderRight: "1px solid #D7D7D9",
         }}
       >
-        {/* Logo section */}
         <div className="flex items-center justify-center px-4 py-6">
           <div
             className="flex items-center justify-center rounded-xl"
@@ -274,10 +235,8 @@ export function CoordenadorDashboard({ onLogout }: Props) {
           </div>
         </div>
 
-        {/* Top divider */}
         <div style={{ borderTop: "1px solid #D7D7D9" }} />
 
-        {/* Nav items */}
         <nav className="flex flex-col gap-1 px-3 py-3 flex-1 overflow-y-auto">
           {navItems.map(({ id, label, Icon }) => {
             const isActive = activeTab === id;
@@ -300,10 +259,8 @@ export function CoordenadorDashboard({ onLogout }: Props) {
           })}
         </nav>
 
-        {/* Bottom divider */}
-        <div style={{ borderTop: "1px solid #D7D7D9" }} />
+        <div style={{ borderTop: "1px solid #D9D9D9" }} />
 
-        {/* Logout */}
         <div className="px-3 py-3">
           <button
             onClick={onLogout}
@@ -318,7 +275,6 @@ export function CoordenadorDashboard({ onLogout }: Props) {
         </div>
       </aside>
 
-      {/* Main content */}
       <main className="flex-1 overflow-y-auto">
         {renderPage()}
       </main>

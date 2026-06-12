@@ -10,6 +10,7 @@ type CorrecaoQuestaoRow = {
   questao_id: string;
   ordem_original: number;
   pontuacao_max: string | number;
+  tipo: string;
   total_respostas: string;
   corrigidas: string;
 };
@@ -52,6 +53,7 @@ const mapQuestao = (row: CorrecaoQuestaoRow): CorrecaoQuestao => ({
   questaoId: row.questao_id,
   ordemOriginal: row.ordem_original,
   pontuacaoMax: Number(row.pontuacao_max),
+  tipo: row.tipo,
   respostas: {
     total: Number(row.total_respostas),
     corrigidas: Number(row.corrigidas),
@@ -153,9 +155,11 @@ export class CorrecaoRepository {
           pq."questao_id",
           pq."ordem_original",
           pq."pontuacao_max",
+          q."tipo",
           COUNT(ra."id") AS "total_respostas",
           COUNT(c."id") AS "corrigidas"
         FROM "prova_questao" pq
+        JOIN "questao" q ON q."id" = pq."questao_id"
         LEFT JOIN "prova_aluno" pa
           ON pa."prova_id" = pq."prova_id"
           AND pa."status" IN ('enviada', 'corrigida')
@@ -164,7 +168,7 @@ export class CorrecaoRepository {
           AND ra."questao_id" = pq."questao_id"
         LEFT JOIN "correcao" c ON c."resposta_id" = ra."id"
         WHERE pq."prova_id" = $1
-        GROUP BY pq."questao_id", pq."ordem_original", pq."pontuacao_max"
+        GROUP BY pq."questao_id", pq."ordem_original", pq."pontuacao_max", q."tipo"
         ORDER BY pq."ordem_original" ASC
       `,
       [provaId],
@@ -318,22 +322,22 @@ export class CorrecaoRepository {
    * Retorna total de pendências discursivas que exigem correção manual.
    *
    * @param provaId - ID da prova.
-   * @param professorId - ID do professor responsável.
    * @returns Resumo com respostas corrigidas e pendências discursivas.
    */
-  async corrigirObjetivas(provaId: string, professorId: string): Promise<CorrecaoAutomatica> {
+  async corrigirObjetivas(provaId: string): Promise<CorrecaoAutomatica> {
     return withTransaction(async (client) => {
       await client.query(
         `
           INSERT INTO "correcao" ("resposta_id", "professor_id", "nota", "tipo", "corrigida_em")
           SELECT
             ra."id",
-            $2,
+            p."professor_id",
             CASE WHEN a."correta" = TRUE THEN pq."pontuacao_max" ELSE 0 END,
             'automatica',
             CURRENT_TIMESTAMP
           FROM "resposta_aluno" ra
           JOIN "prova_aluno" pa ON pa."id" = ra."prova_aluno_id"
+          JOIN "prova" p ON p."id" = pa."prova_id"
           JOIN "prova_questao" pq ON pq."prova_id" = pa."prova_id" AND pq."questao_id" = ra."questao_id"
           JOIN "questao" q ON q."id" = ra."questao_id"
           JOIN "alternativa" a ON a."id" = ra."alternativa_id"
@@ -346,7 +350,7 @@ export class CorrecaoRepository {
               "tipo" = 'automatica',
               "corrigida_em" = CURRENT_TIMESTAMP
         `,
-        [provaId, professorId],
+        [provaId],
       );
 
       const discursivas = await client.query<{ total: string }>(

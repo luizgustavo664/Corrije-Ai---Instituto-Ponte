@@ -42,12 +42,12 @@ export async function correcaoRoutes(app: FastifyInstance) {
   app.withTypeProvider().post(
     "/provas/:provaId/correcao/objetivas",
     {
-      preHandler: requireRole("professor"),
+      preHandler: requireRole("professor", "coordenador"),
       schema: {
         tags: ["Correção"],
         summary: "Executar correção automática de objetivas",
         description:
-          "Executa a correção automática das questões objetivas (múltipla escolha e verdadeiro/falso) de uma prova. Discursivas permanecem pendentes para correção manual. Permite recálculo antes da liberação dos resultados. Atende RF013/RN14.",
+          "Executa a correção automática das questões objetivas (múltipla escolha e verdadeiro/falso) de uma prova. Discursivas permanecem pendentes para correção manual. Permite recálculo antes da liberação dos resultados. Professores vinculados e coordenadores podem executar. Atende RF013/RN14.",
         params: correcaoProvaParamsSchema,
         response: {
           200: successResponseSchema(correcaoAutomaticaSchema),

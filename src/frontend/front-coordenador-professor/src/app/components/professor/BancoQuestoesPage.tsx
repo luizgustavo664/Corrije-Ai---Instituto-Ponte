@@ -1,29 +1,45 @@
 import { useState } from "react";
 import { MagnifyingGlassIcon, ChevronDownIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { bancoQuestoes as defaultBancoQuestoes } from "./bancoQuestoesData";
-import type { BancoQuestion } from "./bancoQuestoesData";
+import type { BancoQuestion, Exam } from "../../../../../src/features/dashboard/dashboard.types";
 import { EditarQuestaoModal } from "./EditarQuestaoModal";
 import { SelecionarProvaModal } from "./SelecionarProvaModal";
-import type { Exam } from "./examTypes";
 
 interface Props {
   onNavigate?: (tab: string) => void;
   bancoQuestoes?: BancoQuestion[];
   onUpdateQuestion?: (questao: BancoQuestion) => void;
-  onDeleteQuestion?: (id: number) => void;
+  onDeleteQuestion?: (id: BancoQuestion["id"]) => void;
   provas?: Exam[];
-  onAddToProva?: (provaId: number, questao: BancoQuestion) => void;
+  onAddToProva?: (provaId: Exam["id"], questao: BancoQuestion) => void;
+  isLoading?: boolean;
+  errorMessage?: string;
 }
 
-export function BancoQuestoesPage({ onNavigate, bancoQuestoes = defaultBancoQuestoes, onUpdateQuestion, onDeleteQuestion, provas = [], onAddToProva }: Props) {
+export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQuestion, onDeleteQuestion, provas = [], onAddToProva, isLoading = false, errorMessage }: Props) {
   const [editingQuestao, setEditingQuestao] = useState<BancoQuestion | null>(null);
   const [questaoParaAdicionar, setQuestaoParaAdicionar] = useState<BancoQuestion | null>(null);
+  const [search, setSearch] = useState("");
+  const [materiaFilter, setMateriaFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
+  const [dificuldadeFilter, setDificuldadeFilter] = useState("");
+  const materias = [...new Set(bancoQuestoes.map((q) => q.materia).filter(Boolean))].sort();
+  const tipos = [...new Set(bancoQuestoes.map((q) => q.type).filter(Boolean))].sort();
+  const dificuldades = [...new Set(bancoQuestoes.map((q) => q.dificuldade).filter(Boolean))].sort();
+
+  const filtered = bancoQuestoes.filter((q) => {
+    const matchSearch = q.text.toLowerCase().includes(search.toLowerCase()) ||
+      q.materia.toLowerCase().includes(search.toLowerCase());
+    const matchMateria = !materiaFilter || q.materia === materiaFilter;
+    const matchType = !typeFilter || q.type === typeFilter;
+    const matchDificuldade = !dificuldadeFilter || q.dificuldade === dificuldadeFilter;
+    return matchSearch && matchMateria && matchType && matchDificuldade;
+  });
   const handleSaveEdit = (questao: BancoQuestion) => {
     onUpdateQuestion?.(questao);
     setEditingQuestao(null);
   };
 
-  const handleAddToProva = (provaId: number, questao: BancoQuestion) => {
+  const handleAddToProva = (provaId: Exam["id"], questao: BancoQuestion) => {
     onAddToProva?.(provaId, questao);
   };
 
@@ -77,6 +93,20 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = defaultBancoQues
         </div>
       </div>
 
+      {isLoading && (
+        <div className="bg-white rounded-xl p-4" style={{ border: "1px solid #E6E6E6" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181" }}>
+            Carregando banco de questões...
+          </p>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="rounded-xl p-4" style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: "14px" }}>
+          {errorMessage}
+        </div>
+      )}
+
       {/* Filter row */}
       <div className="flex gap-3 items-center">
         <div className="relative flex-1 max-w-sm">
@@ -84,6 +114,8 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = defaultBancoQues
           <input
             type="text"
             placeholder="Buscar questões"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 rounded-xl outline-none"
             style={{
               backgroundColor: "#fff",
@@ -95,28 +127,65 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = defaultBancoQues
           />
         </div>
 
-        {["Matéria", "Semestre"].map((label) => (
-          <div key={label} className="relative">
-            <select
-              className="appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
-              style={{
-                backgroundColor: "#fff",
-                border: "1px solid #D9D9D9",
-                fontFamily: "Inter, sans-serif",
-                fontSize: "13px",
-                color: "#6A7181",
-              }}
-            >
-              <option>{label}</option>
-            </select>
-            <ChevronDownIcon className="w-[14px] h-[14px] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#9F9F9F" }} />
-          </div>
-        ))}
+        <div className="relative">
+          <select
+            value={materiaFilter}
+            onChange={(e) => setMateriaFilter(e.target.value)}
+            className="appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
+            style={{
+              backgroundColor: "#fff",
+              border: "1px solid #D9D9D9",
+              fontFamily: "Inter, sans-serif",
+              fontSize: "13px",
+              color: "#6A7181",
+            }}
+          >
+            <option value="">Matéria</option>
+            {materias.map((m) => <option key={m} value={m}>{m}</option>)}
+          </select>
+          <ChevronDownIcon className="w-[14px] h-[14px] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#9F9F9F" }} />
+        </div>
+        <div className="relative">
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
+            style={{
+              backgroundColor: "#fff",
+              border: "1px solid #D9D9D9",
+              fontFamily: "Inter, sans-serif",
+              fontSize: "13px",
+              color: "#6A7181",
+            }}
+          >
+            <option value="">Tipo</option>
+            {tipos.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+          <ChevronDownIcon className="w-[14px] h-[14px] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#9F9F9F" }} />
+        </div>
+        <div className="relative">
+          <select
+            value={dificuldadeFilter}
+            onChange={(e) => setDificuldadeFilter(e.target.value)}
+            className="appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
+            style={{
+              backgroundColor: "#fff",
+              border: "1px solid #D9D9D9",
+              fontFamily: "Inter, sans-serif",
+              fontSize: "13px",
+              color: "#6A7181",
+            }}
+          >
+            <option value="">Dificuldade</option>
+            {dificuldades.map((d) => <option key={d} value={d}>{d}</option>)}
+          </select>
+          <ChevronDownIcon className="w-[14px] h-[14px] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#9F9F9F" }} />
+        </div>
       </div>
 
       {/* Question list */}
       <div className="flex flex-col gap-3">
-        {bancoQuestoes.map((q) => (
+        {filtered.map((q) => (
           <div
             key={q.id}
             onClick={() => setEditingQuestao(q)}
@@ -137,18 +206,6 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = defaultBancoQues
                   }}
                 >
                   {q.materia}
-                </span>
-                <span
-                  className="px-2 py-0.5 rounded-full"
-                  style={{
-                    border: "1px solid #D7D7D9",
-                    backgroundColor: "#F2F2F2",
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "11px",
-                    color: "#6A7181",
-                  }}
-                >
-                  {q.semestre}
                 </span>
                 <span
                   className="px-2 py-0.5 rounded-full"

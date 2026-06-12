@@ -22,12 +22,28 @@ describe("AuthService - unitário", () => {
   };
 
   describe("getGoogleRedirectUrl", () => {
-    it("deve gerar URL com client id padrão quando não configurado", () => {
+    it("deve gerar URL com client id local em modo de teste quando não configurado", () => {
       delete process.env.GOOGLE_CLIENT_ID;
       const service = new AuthService(makeMockRepo());
       const url = service.getGoogleRedirectUrl();
       expect(url).toContain("client_id=local-client-id");
       expect(url).toContain("https://accounts.google.com/o/oauth2/v2/auth");
+    });
+
+    it("deve exigir GOOGLE_CLIENT_ID fora do modo de teste", () => {
+      const origNodeEnv = process.env.NODE_ENV;
+      const origAuthMode = process.env.AUTH_MODE;
+      const origClientId = process.env.GOOGLE_CLIENT_ID;
+      process.env.NODE_ENV = "production";
+      delete process.env.AUTH_MODE;
+      delete process.env.GOOGLE_CLIENT_ID;
+
+      const service = new AuthService(makeMockRepo());
+      expect(() => service.getGoogleRedirectUrl()).toThrow("GOOGLE_CLIENT_ID não configurado.");
+
+      process.env.NODE_ENV = origNodeEnv;
+      process.env.AUTH_MODE = origAuthMode;
+      process.env.GOOGLE_CLIENT_ID = origClientId;
     });
 
     it("deve usar GOOGLE_CLIENT_ID quando configurado", () => {
@@ -39,15 +55,22 @@ describe("AuthService - unitário", () => {
 
     it("deve usar redirectUri padrão quando não configurado", () => {
       delete process.env.GOOGLE_CLIENT_ID;
+      delete process.env.GOOGLE_REDIRECT_URI;
       const service = new AuthService(makeMockRepo());
       const url = service.getGoogleRedirectUrl();
-      expect(url).toContain("redirect_uri=http%3A%2F%2Flocalhost%3A3333%2Fapi%2Fv1%2Fauth%2Fgoogle%2Fcallback");
+      expect(url).toContain("redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Fauth%2Fcallback");
     });
 
     it("deve incluir escopos openid email profile", () => {
       const service = new AuthService(makeMockRepo());
       const url = service.getGoogleRedirectUrl();
       expect(url).toContain("scope=openid+email+profile");
+    });
+
+    it("deve incluir perfil escolhido no state quando informado", () => {
+      const service = new AuthService(makeMockRepo());
+      const url = service.getGoogleRedirectUrl("coordenador");
+      expect(url).toContain("state=coordenador");
     });
   });
 
@@ -67,18 +90,16 @@ describe("AuthService - unitário", () => {
 
       const service = new AuthService(makeMockRepo());
       await expect(service.handleGoogleCallback("some-code")).rejects.toThrow(
-        "Fluxo OAuth local não disponível em produção",
+        "O login Google deve ser feito no frontend com Supabase JS.",
       );
 
       process.env.NODE_ENV = origNodeEnv;
       process.env.AUTH_MODE = origAuthMode;
     });
 
-    it("deve lançar forbidden quando code não tem @ e MOCK_GOOGLE_EMAIL ausente", async () => {
+    it("deve lançar forbidden quando code de teste não é email", async () => {
       const origNodeEnv = process.env.NODE_ENV;
       process.env.NODE_ENV = "test";
-      const origMockEmail = process.env.MOCK_GOOGLE_EMAIL;
-      delete process.env.MOCK_GOOGLE_EMAIL;
 
       const service = new AuthService(makeMockRepo());
       await expect(service.handleGoogleCallback("code-sem-arroba")).rejects.toThrow(
@@ -86,26 +107,22 @@ describe("AuthService - unitário", () => {
       );
 
       process.env.NODE_ENV = origNodeEnv;
-      process.env.MOCK_GOOGLE_EMAIL = origMockEmail;
     });
 
-    it("deve usar MOCK_GOOGLE_EMAIL quando code não tem @", async () => {
+    it("deve usar email direto em modo de teste", async () => {
       const origNodeEnv = process.env.NODE_ENV;
       process.env.NODE_ENV = "test";
-      const origMockEmail = process.env.MOCK_GOOGLE_EMAIL;
-      process.env.MOCK_GOOGLE_EMAIL = "mock@test.com";
 
       const mockRepo = makeMockRepo();
       mockRepo.findUserByEmail.mockResolvedValue(usuarioProfessor);
 
       const service = new AuthService(mockRepo);
-      const result = await service.handleGoogleCallback("code-sem-arroba");
+      const result = await service.handleGoogleCallback("mock@test.com");
 
-      expect(mockRepo.findUserByEmail).toHaveBeenCalledWith("mock@test.com");
+      expect(mockRepo.findUserByEmail).toHaveBeenCalledWith("mock@test.com", undefined);
       expect(result.accessToken).toContain("test-professor");
 
       process.env.NODE_ENV = origNodeEnv;
-      process.env.MOCK_GOOGLE_EMAIL = origMockEmail;
     });
 
     it("deve lançar forbidden quando email não encontrado no banco", async () => {
@@ -151,6 +168,21 @@ describe("AuthService - unitário", () => {
       const result = await service.handleGoogleCallback("coord@test.com");
 
       expect(result.redirectTo).toBe("/coordenador");
+
+      process.env.NODE_ENV = origNodeEnv;
+    });
+
+    it("deve usar state como perfil preferido na busca do usuário", async () => {
+      const origNodeEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = "test";
+
+      const mockRepo = makeMockRepo();
+      mockRepo.findUserByEmail.mockResolvedValue(usuarioCoordenador);
+
+      const service = new AuthService(mockRepo);
+      await service.handleGoogleCallback("coord@test.com", "coordenador");
+
+      expect(mockRepo.findUserByEmail).toHaveBeenCalledWith("coord@test.com", "coordenador");
 
       process.env.NODE_ENV = origNodeEnv;
     });

@@ -59,6 +59,44 @@ describe("AuthRepository - unitário", () => {
     expect(result!.perfil).toBe("professor");
   });
 
+  it("deve buscar somente coordenador quando perfil coordenador for informado", async () => {
+    mockQuery.mockResolvedValue({
+      rows: [
+        { id: "coord-1", nome: "Coordenador", email: "email@test.com", perfil: "coordenador" },
+      ],
+    });
+
+    const repo = new AuthRepository();
+    const result = await repo.findUserByEmail("email@test.com", "coordenador");
+
+    expect(result).toBeDefined();
+    expect(result!.perfil).toBe("coordenador");
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining('FROM "coordenador"'),
+      ["email@test.com"],
+    );
+    expect(mockQuery.mock.calls[0][0]).not.toContain('FROM "professor"');
+  });
+
+  it("deve buscar somente professor quando perfil professor for informado", async () => {
+    mockQuery.mockResolvedValue({
+      rows: [
+        { id: "prof-1", nome: "Professor", email: "email@test.com", perfil: "professor" },
+      ],
+    });
+
+    const repo = new AuthRepository();
+    const result = await repo.findUserByEmail("email@test.com", "professor");
+
+    expect(result).toBeDefined();
+    expect(result!.perfil).toBe("professor");
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining('FROM "professor"'),
+      ["email@test.com"],
+    );
+    expect(mockQuery.mock.calls[0][0]).not.toContain('FROM "coordenador"');
+  });
+
   it("deve retornar coordenador se não houver professor", async () => {
     mockQuery.mockResolvedValue({
       rows: [

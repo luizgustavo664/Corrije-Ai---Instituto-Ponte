@@ -1,4 +1,3 @@
-import { Check } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import logoImg from "../../imports/logoCorrijeAi.png";
 

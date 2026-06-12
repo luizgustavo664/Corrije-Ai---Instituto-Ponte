@@ -1,24 +1,19 @@
 import { useState, useEffect } from "react";
-import { PaperAirplaneIcon, ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
-import type { Exam } from "./examTypes";
-
-type RowStatus = "Enviado" | "Falhou";
-
-const tableRows: { name: string; email: string; grade: number; status: RowStatus; dateTime: string }[] = [
-  { name: "Lucas Henrique Martins", email: "lucas.martins@estudante.edu.br", grade: 9.87, status: "Enviado", dateTime: "28/05/2026 09:15" },
-  { name: "Isabela Cristina Souza", email: "isabela.souza@estudante.edu.br", grade: 8.92, status: "Enviado", dateTime: "28/05/2026 09:15" },
-  { name: "Gabriel Fernando Costa", email: "gabriel.costa@estudante.edu.br", grade: 7.64, status: "Enviado", dateTime: "28/05/2026 09:16" },
-  { name: "Beatriz Oliveira Santos", email: "beatriz.santos@estudante.edu.br", grade: 9.23, status: "Falhou", dateTime: "28/05/2026 09:16" },
-  { name: "Pedro Augusto Lima", email: "pedro.lima@estudante.edu.br", grade: 8.45, status: "Enviado", dateTime: "28/05/2026 09:17" },
-  { name: "Mariana Silva Alves", email: "mariana.alves@estudante.edu.br", grade: 9.56, status: "Enviado", dateTime: "28/05/2026 09:17" },
-  { name: "Rafael dos Santos Rocha", email: "rafael.rocha@estudante.edu.br", grade: 7.89, status: "Falhou", dateTime: "28/05/2026 09:18" },
-  { name: "Amanda Carolina Dias", email: "amanda.dias@estudante.edu.br", grade: 8.78, status: "Enviado", dateTime: "28/05/2026 09:18" },
-  { name: "Thiago Roberto Freitas", email: "thiago.freitas@estudante.edu.br", grade: 6.92, status: "Enviado", dateTime: "28/05/2026 09:19" },
-  { name: "Julia Fernanda Rodrigues", email: "julia.rodrigues@estudante.edu.br", grade: 9.34, status: "Falhou", dateTime: "28/05/2026 09:19" },
-];
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import { PaperAirplaneIcon, ExclamationTriangleIcon, CheckCircleIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+import type { Exam } from "../../../../../src/features/dashboard/dashboard.types";
+import { isPersistedExam } from "../../../../../src/features/dashboard/dashboard.ui-adapter";
+import { getProvaAnalytics } from "../../../../../src/features/analytics/analytics.api";
+import type { ProvaAnalyticsDto } from "../../../../../src/features/analytics/analytics.types";
+import { getStoredAuthSession } from "../../../../../src/features/auth/auth.storage";
+import { exportarAnexosProva } from "../../../../../src/features/anexos/anexos.api";
+import type { AnexoExportarItemDto } from "../../../../../src/features/anexos/anexos.types";
+import { liberarEmailsResultado, listarEmailsProva, reenviarEmailResultado } from "../../../../../src/features/emails/emails.api";
+import type { EmailEnvioDto } from "../../../../../src/features/emails/emails.types";
+import { exportarResultados } from "../../../../../src/features/resultados/resultados.api";
 
 interface ProvaDisponivel {
-  id: number;
+  id: Exam["id"];
   nome: string;
   disciplina: string;
   turma: string;
@@ -31,11 +26,16 @@ interface Props {
   exams?: Exam[];
 }
 
-function convertExamsToProvasDisponiveis(exams: Exam[]): ProvaDisponivel[] {
+function convertExamsToProvasDisponiveis(
+  exams: Exam[],
+  analyticsByProvaId: Map<string, ProvaAnalyticsDto>,
+): ProvaDisponivel[] {
   return exams.map(exam => {
-    const totalSubmissions = parseInt(exam.submissions);
+    const analytics = analyticsByProvaId.get(String(exam.id));
+    const totalSubmissions = analytics?.envios ?? parseInt(exam.submissions);
+    const pendencias = analytics?.pendenciasCorrecao ?? 0;
+    const corrigidas = Math.max(0, totalSubmissions - pendencias);
 
-    // Se não há submissões, não há nada para corrigir
     if (totalSubmissions === 0) {
       return {
         id: exam.id,
@@ -48,10 +48,6 @@ function convertExamsToProvasDisponiveis(exams: Exam[]): ProvaDisponivel[] {
       };
     }
 
-    // Usar a MESMA lógica de seed da CorrecaoPage para consistência
-    const seed = (exam.id * 37) % 100;
-    const correctionRate = seed / 100;
-    const corrigidas = Math.floor(totalSubmissions * correctionRate);
     const isCompleta = corrigidas === totalSubmissions;
 
     return {
@@ -67,21 +63,46 @@ function convertExamsToProvasDisponiveis(exams: Exam[]): ProvaDisponivel[] {
 }
 
 export function LiberacaoNotasPage({ exams = [] }: Props) {
-  const provasDisponiveis = convertExamsToProvasDisponiveis(exams);
-  const [selectedProvas, setSelectedProvas] = useState<number[]>([]);
+  const queryClient = useQueryClient();
+  const isCoordenador = getStoredAuthSession()?.usuario.perfil === "coordenador";
+  const realExams = exams.filter(isPersistedExam);
+  const analyticsQueries = useQueries({
+    queries: realExams.map((exam) => ({
+      queryKey: ["analytics", exam.id],
+      queryFn: () => getProvaAnalytics(String(exam.id)),
+    })),
+  });
+  const emailQueries = useQueries({
+    queries: realExams.map((exam) => ({
+      queryKey: ["emails", "prova", exam.id],
+      queryFn: () => listarEmailsProva(String(exam.id)),
+    })),
+  });
+  const analyticsByProvaId = new Map(
+    analyticsQueries
+      .map((query) => query.data)
+      .filter((item): item is ProvaAnalyticsDto => Boolean(item))
+      .map((item) => [item.provaId, item]),
+  );
+  const emailRows = emailQueries
+    .flatMap((query) => query.data ?? [])
+    .sort((a, b) => new Date(b.criadoEm).getTime() - new Date(a.criadoEm).getTime());
+  const provasDisponiveis = convertExamsToProvasDisponiveis(exams, analyticsByProvaId);
+  const [selectedProvas, setSelectedProvas] = useState<Array<Exam["id"]>>([]);
   const [showModal, setShowModal] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [progresso, setProgresso] = useState(0);
   const [concluido, setConcluido] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const [exportMessage, setExportMessage] = useState<string | null>(null);
+  const [anexosExportados, setAnexosExportados] = useState<AnexoExportarItemDto[]>([]);
 
-  // Calcular estatísticas dinamicamente (apenas provas com correções)
   const provasComCorrecoes = provasDisponiveis.filter(p => p.corrigidas > 0);
   const totalAlunos = provasComCorrecoes.reduce((sum, p) => sum + p.totalAlunos, 0);
   const totalCorrigidas = provasComCorrecoes.reduce((sum, p) => sum + p.corrigidas, 0);
-  // Simular taxa de sucesso de envio (~93%)
-  const emailsEnviados = Math.floor(totalCorrigidas * 0.93);
-  const falhasEnvio = Math.floor(totalCorrigidas * 0.015);
-  const pendentes = totalAlunos - emailsEnviados - falhasEnvio;
+  const emailsEnviados = emailRows.filter((row) => row.status === "enviado").length;
+  const falhasEnvio = emailRows.filter((row) => row.status === "erro").length;
+  const pendentes = Math.max(0, totalAlunos - totalCorrigidas);
 
   const statCards = [
     { label: "Total de alunos", value: totalAlunos.toString() },
@@ -92,7 +113,7 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
 
   const progressoEnvio = totalAlunos > 0 ? Math.round((emailsEnviados / totalAlunos) * 100) : 0;
 
-  const toggleProva = (id: number) => {
+  const toggleProva = (id: Exam["id"]) => {
     setSelectedProvas((prev) =>
       prev.includes(id) ? prev.filter((provaId) => provaId !== id) : [...prev, id]
     );
@@ -102,11 +123,73 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
     .filter((p) => selectedProvas.includes(p.id))
     .reduce((sum, p) => sum + p.totalAlunos, 0);
 
+  const liberarMutation = useMutation({
+    mutationFn: async (provaIds: Array<Exam["id"]>) => {
+      const ids = provaIds.filter((id): id is string => typeof id === "string");
+      return Promise.all(ids.map((id) => liberarEmailsResultado(id, true)));
+    },
+    onSuccess: async (_data, provaIds) => {
+      await Promise.all(
+        provaIds
+          .filter((id): id is string => typeof id === "string")
+          .map((id) => queryClient.invalidateQueries({ queryKey: ["emails", "prova", id] })),
+      );
+      setProgresso(100);
+      setEnviando(false);
+      setConcluido(true);
+    },
+    onError: (error) => {
+      setSendError(error instanceof Error ? error.message : "Erro ao enviar notas.");
+      setEnviando(false);
+    },
+  });
+
+  const reenviarMutation = useMutation({
+    mutationFn: reenviarEmailResultado,
+    onSuccess: () => {
+      realExams.forEach((exam) => {
+        void queryClient.invalidateQueries({ queryKey: ["emails", "prova", exam.id] });
+      });
+    },
+  });
+
+  const exportarResultadosMutation = useMutation({
+    mutationFn: (provaId: string) => exportarResultados(provaId, { formato: "xlsx" }),
+    onSuccess: (data) => {
+      setExportMessage(
+        data.pendenciasCorrecao > 0
+          ? `Exportação gerada com ${data.pendenciasCorrecao} pendência(s) de correção.`
+          : "Exportação de resultados gerada.",
+      );
+      window.open(data.urlArquivo, "_blank", "noopener,noreferrer");
+    },
+    onError: (error) => {
+      setExportMessage(error instanceof Error ? error.message : "Erro ao exportar resultados.");
+    },
+  });
+
+  const exportarAnexosMutation = useMutation({
+    mutationFn: exportarAnexosProva,
+    onSuccess: (items) => {
+      setAnexosExportados(items);
+      setExportMessage(
+        items.length === 0
+          ? "Nenhum anexo encontrado para esta prova."
+          : `${items.length} anexo(s) encontrado(s). Use a lista abaixo para abrir cada arquivo.`,
+      );
+    },
+    onError: (error) => {
+      setExportMessage(error instanceof Error ? error.message : "Erro ao exportar anexos.");
+    },
+  });
+
   const handleEnviarNotas = () => {
     setShowModal(true);
     setEnviando(true);
     setProgresso(0);
     setConcluido(false);
+    setSendError(null);
+    liberarMutation.mutate(selectedProvas);
   };
 
   useEffect(() => {
@@ -115,9 +198,6 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
         setProgresso((prev) => Math.min(prev + 10, 100));
       }, 300);
       return () => clearTimeout(timer);
-    } else if (progresso === 100) {
-      setEnviando(false);
-      setConcluido(true);
     }
   }, [enviando, progresso]);
 
@@ -126,6 +206,24 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
     setSelectedProvas([]);
     setProgresso(0);
     setConcluido(false);
+    setSendError(null);
+  };
+
+  const formatDateTime = (iso: string | null) => {
+    if (!iso) return "-";
+    return new Date(iso).toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const statusLabel = (status: EmailEnvioDto["status"]) => {
+    if (status === "enviado") return "Enviado";
+    if (status === "erro") return "Falhou";
+    return "Pendente";
   };
 
   return (
@@ -299,6 +397,106 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
         </div>
       </div>
 
+      {isCoordenador && (
+        <div className="bg-white rounded-xl p-5 flex flex-col gap-4" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
+          <div>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "16px", color: "#6B6FA3" }}>
+              Exportações
+            </p>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181", marginTop: "4px" }}>
+              Gere planilhas de resultados ou acesse anexos enviados pelos alunos.
+            </p>
+          </div>
+          {exportMessage && (
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#05245F" }}>
+              {exportMessage}
+            </p>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {realExams.map((exam) => (
+              <div key={exam.id} className="rounded-xl p-4 flex items-center justify-between gap-3" style={{ border: "1px solid #E5E7EB" }}>
+                <div className="min-w-0">
+                  <p className="truncate" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px", color: "#6B6FA3" }}>
+                    {exam.title}
+                  </p>
+                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
+                    {exam.subject} • {exam.turma}
+                  </p>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => exportarResultadosMutation.mutate(String(exam.id))}
+                    disabled={exportarResultadosMutation.isPending}
+                    className="flex items-center gap-1 px-3 py-2 rounded-lg hover:opacity-85 transition-opacity disabled:opacity-50"
+                    style={{ backgroundColor: "#05245F", color: "#fff", fontFamily: "Inter, sans-serif", fontSize: "12px", fontWeight: 600 }}
+                  >
+                    <ArrowDownTrayIcon className="w-4 h-4" />
+                    Resultados
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => exportarAnexosMutation.mutate(String(exam.id))}
+                    disabled={exportarAnexosMutation.isPending}
+                    className="flex items-center gap-1 px-3 py-2 rounded-lg hover:opacity-85 transition-opacity disabled:opacity-50"
+                    style={{ border: "1px solid #6B6FA3", color: "#6B6FA3", backgroundColor: "#fff", fontFamily: "Inter, sans-serif", fontSize: "12px", fontWeight: 600 }}
+                  >
+                    <ArrowDownTrayIcon className="w-4 h-4" />
+                    Anexos
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          {anexosExportados.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left" style={{ borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid #E5E7EB" }}>
+                    {["Aluno", "Arquivo", "Tipo", "Ação"].map((col) => (
+                      <th
+                        key={col}
+                        className="py-2 pr-4"
+                        style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "12px", color: "#6B6FA3" }}
+                      >
+                        {col}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {anexosExportados.map((item) => (
+                    <tr key={item.id} style={{ borderBottom: "1px solid #F2F2F2" }}>
+                      <td className="py-2 pr-4" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#111" }}>
+                        {item.aluno}
+                      </td>
+                      <td className="py-2 pr-4" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
+                        {item.nomeArquivo ?? item.id}
+                      </td>
+                      <td className="py-2 pr-4" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
+                        {item.mimeType}
+                      </td>
+                      <td className="py-2">
+                        <a
+                          href={item.urlArquivo}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 px-3 py-1 rounded-lg hover:opacity-85 transition-opacity"
+                          style={{ border: "1px solid #6B6FA3", color: "#6B6FA3", fontFamily: "Inter, sans-serif", fontSize: "12px" }}
+                        >
+                          <ArrowDownTrayIcon className="w-4 h-4" />
+                          Abrir
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Stat cards */}
       <div className="grid grid-cols-4 gap-4">
         {statCards.map((card, i) => (
@@ -342,11 +540,20 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
           Histórico de Envios
         </p>
 
-        <div className="overflow-x-auto">
+        {emailQueries.some((query) => query.isLoading) ? (
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
+            Carregando histórico de envios...
+          </p>
+        ) : emailRows.length === 0 ? (
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
+            Nenhum envio de resultado registrado ainda.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
           <table className="w-full text-left" style={{ borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid #E5E7EB" }}>
-                {["Aluno", "Email", "Nota", "Status", "Data/Hora", "Ação"].map((col) => (
+                {["Aluno", "Email", "Status", "Data/Hora", "Ação"].map((col) => (
                   <th
                     key={col}
                     className="pb-2 pr-4"
@@ -358,19 +565,16 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
               </tr>
             </thead>
             <tbody>
-              {tableRows.map((row, i) => (
-                <tr key={i} style={{ borderBottom: "1px solid #F2F2F2" }}>
+              {emailRows.map((row) => (
+                <tr key={row.id} style={{ borderBottom: "1px solid #F2F2F2" }}>
                   <td className="py-3 pr-4" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#000" }}>
-                    {row.name}
+                    {row.aluno?.nome ?? "-"}
                   </td>
                   <td className="py-3 pr-4" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
-                    {row.email}
-                  </td>
-                  <td className="py-3 pr-4" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#000" }}>
-                    {row.grade}
+                    {row.destinatario}
                   </td>
                   <td className="py-3 pr-4">
-                    {row.status === "Enviado" ? (
+                    {row.status === "enviado" ? (
                       <span
                         className="px-2 py-1 rounded-full"
                         style={{
@@ -383,7 +587,7 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
                       >
                         Enviado
                       </span>
-                    ) : (
+                    ) : row.status === "erro" ? (
                       <span
                         className="px-2 py-1 rounded-full"
                         style={{
@@ -396,14 +600,29 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
                       >
                         Falhou
                       </span>
+                    ) : (
+                      <span
+                        className="px-2 py-1 rounded-full"
+                        style={{
+                          backgroundColor: "rgba(156,163,175,0.2)",
+                          color: "#6B7280",
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "11px",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {statusLabel(row.status)}
+                      </span>
                     )}
                   </td>
                   <td className="py-3 pr-4" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
-                    {row.dateTime}
+                    {formatDateTime(row.enviadoEm ?? row.criadoEm)}
                   </td>
                   <td className="py-3">
-                    {row.status === "Falhou" && (
+                    {row.status === "erro" && (
                       <button
+                        onClick={() => reenviarMutation.mutate(row.id)}
+                        disabled={reenviarMutation.isPending}
                         className="px-3 py-1 rounded-lg hover:opacity-85 transition-opacity"
                         style={{
                           border: "1px solid #6A7181",
@@ -422,6 +641,7 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
             </tbody>
           </table>
         </div>
+        )}
       </div>
 
       {/* Modal de Envio */}
@@ -552,6 +772,36 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
                   }}
                 >
                   Concluir
+                </button>
+              </>
+            ) : sendError ? (
+              <>
+                <div
+                  className="flex items-center justify-center rounded-full"
+                  style={{ width: 80, height: 80, backgroundColor: "rgba(239,68,68,0.15)" }}
+                >
+                  <ExclamationTriangleIcon className="w-12 h-12" style={{ color: "#EF4444" }} />
+                </div>
+                <div className="text-center">
+                  <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "22px", color: "#6B6FA3" }}>
+                    Envio não concluído
+                  </h2>
+                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", marginTop: "8px" }}>
+                    {sendError}
+                  </p>
+                </div>
+                <button
+                  onClick={handleFecharModal}
+                  className="w-full py-3 rounded-full transition-opacity hover:opacity-85"
+                  style={{
+                    backgroundColor: "#F9B233",
+                    color: "#6B6FA3",
+                    fontFamily: "Poppins, sans-serif",
+                    fontWeight: 600,
+                    fontSize: "16px",
+                  }}
+                >
+                  Fechar
                 </button>
               </>
             ) : null}

@@ -43,9 +43,10 @@ function SubmitWarningModal({ onBack, onSubmit }: SubmitWarningModalProps) {
 interface Props {
   questions: Question[];
   blankQuestions: Question[];
-  markedQuestions: Question[];
   timeLeft: string;
   showSubmitWarning: boolean;
+  isSubmitting?: boolean;
+  errorMessage?: string;
   onGoToQuestion: (index: number) => void;
   onBack: () => void;
   onConfirm: () => void;
@@ -56,9 +57,10 @@ interface Props {
 export function TelaPreEntrega({
   questions,
   blankQuestions,
-  markedQuestions,
   timeLeft,
   showSubmitWarning,
+  isSubmitting = false,
+  errorMessage,
   onGoToQuestion,
   onBack,
   onConfirm,
@@ -137,11 +139,11 @@ export function TelaPreEntrega({
                       ${isMarked ? "bg-[#F9B233] " : isAnswered ? "bg-[#6B6FA3] " : "bg-[#F2F2F2] "}`}
                     >
                       <span className={`text-xs font-bold ${isAnswered && !isMarked ? "text-white" : "text-[#05245F]"}`}>
-                        {q.id}
+                        {q.displayOrder}
                       </span>
                     </div>
                     <div className="text-left">
-                      <p className="text-sm font-medium text-[#000000]">Questão {q.id}</p>
+                      <p className="text-sm font-medium text-[#000000]">Questão {q.displayOrder}</p>
                       <p className="text-[10px] text-[#666666] mt-0.5 truncate max-w-[180px]">{q.statement.slice(0, 60)}…</p>
                     </div>
                   </div>
@@ -166,11 +168,18 @@ export function TelaPreEntrega({
         </button>
         <button
           onClick={onConfirm}
+          disabled={isSubmitting}
           className="flex-1 bg-[#6B6FA3] text-white rounded-lg py-3 font-semibold text-sm active:opacity-80 transition-opacity"
         >
-          Confirmar envio
+          {isSubmitting ? "Enviando..." : "Confirmar envio"}
         </button>
       </div>
+
+      {errorMessage && (
+        <div className="fixed bottom-20 left-4 right-4 max-w-[448px] mx-auto bg-white border border-[#D32F2F]/30 rounded-xl px-4 py-3 shadow-lg">
+          <p className="text-sm text-[#D32F2F] font-medium">{errorMessage}</p>
+        </div>
+      )}
 
       {showSubmitWarning && (
         <SubmitWarningModal onBack={onDismissWarning} onSubmit={onSubmit} />

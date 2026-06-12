@@ -13,7 +13,11 @@ const usuarioSchema = z.object({
 
 const callbackQuerySchema = z.object({
   code: z.string().describe("Código de autorização retornado pelo Google OAuth."),
-  state: z.string().optional().describe("Estado opcional para proteção CSRF."),
+  state: z.enum(["professor", "coordenador"]).optional().describe("Perfil escolhido antes do redirecionamento OAuth."),
+});
+
+const googleStartQuerySchema = z.object({
+  perfil: z.enum(["professor", "coordenador"]).optional().describe("Perfil escolhido para desambiguar o login."),
 });
 
 export async function authRoutes(app: FastifyInstance) {
@@ -27,6 +31,7 @@ export async function authRoutes(app: FastifyInstance) {
         summary: "Iniciar autenticação OAuth Google",
         description:
           "Endpoint público que inicia o fluxo de autenticação OAuth com o Google. Retorna a URL de redirecionamento para a página de login do Google. Atende RF002/RN19.",
+        querystring: googleStartQuerySchema,
         response: {
           200: successResponseSchema(z.object({ redirectUrl: z.string().url().describe("URL de redirecionamento para o Google OAuth.") })),
         },
