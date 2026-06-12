@@ -1,0 +1,288 @@
+
+> servidor@1.0.0 test
+> node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose --coverage
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+(node:85453) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ suppress logs { quiet: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ suppress logs { quiet: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ enable debugging { debug: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (6) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+--------------------------------|---------|----------|---------|---------|----------------------------------------------
+File                            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                            
+--------------------------------|---------|----------|---------|---------|----------------------------------------------
+All files                       |   94.39 |    79.79 |   96.76 |   94.99 |                                              
+ src                            |    82.6 |    57.14 |    62.5 |   84.44 |                                              
+  app.ts                        |      95 |    66.66 |   83.33 |   97.43 | 32                                           
+  server.ts                     |       0 |        0 |       0 |       0 | 3-13                                         
+ src/controllers                |   99.08 |    82.14 |   98.76 |   99.08 |                                              
+  aluno-portal.controller.ts    |     100 |      100 |     100 |     100 |                                              
+  aluno.controller.ts           |     100 |      100 |     100 |     100 |                                              
+  analytics.controller.ts       |     100 |      100 |     100 |     100 |                                              
+  anexo-exportar.controller.ts  |     100 |      100 |     100 |     100 |                                              
+  auth.controller.ts            |     100 |      100 |     100 |     100 |                                              
+  correcao.controller.ts        |     100 |      100 |     100 |     100 |                                              
+  email-resultado.controller.ts |     100 |      100 |     100 |     100 |                                              
+  health.controller.ts          |     100 |      100 |     100 |     100 |                                              
+  materia.controller.ts         |     100 |       60 |     100 |     100 | 20                                           
+  professor.controller.ts       |   92.85 |       60 |   88.88 |   92.85 | 28-29                                        
+  prova-questao.controller.ts   |     100 |      100 |     100 |     100 |                                              
+  prova.controller.ts           |     100 |      100 |     100 |     100 |                                              
+  questao.controller.ts         |     100 |      100 |     100 |     100 |                                              
+  resposta-aluno.controller.ts  |     100 |      100 |     100 |     100 |                                              
+  resposta-anexo.controller.ts  |     100 |    66.66 |     100 |     100 | 11                                           
+  resultado.controller.ts       |     100 |      100 |     100 |     100 |                                              
+  tema.controller.ts            |     100 |      100 |     100 |     100 |                                              
+ src/database                   |    87.5 |    66.66 |     100 |    87.5 |                                              
+  ping.repository.ts            |     100 |      100 |     100 |     100 |                                              
+  pool.ts                       |     100 |    66.66 |     100 |     100 | 6,11                                         
+  transaction.ts                |      80 |      100 |     100 |      80 | 13-14                                        
+ src/errors                     |     100 |       50 |     100 |     100 |                                              
+  api-error.ts                  |     100 |       50 |     100 |     100 | 22,28                                        
+ src/helpers                    |   96.87 |    92.59 |     100 |   96.77 |                                              
+  date.ts                       |     100 |      100 |     100 |     100 |                                              
+  http.ts                       |    87.5 |       75 |     100 |    87.5 | 8                                            
+  multipart.ts                  |     100 |    94.73 |     100 |     100 | 30                                           
+ src/middlewares                |   88.54 |    78.94 |     100 |   88.54 |                                              
+  auth.ts                       |   88.54 |    78.94 |     100 |   88.54 | 31,66,103,136-143,147-154,172-179,183-190    
+ src/repositories               |   90.35 |    67.42 |   94.52 |   92.02 |                                              
+  aluno-portal.repository.ts    |   71.73 |    73.68 |   70.58 |   72.09 | 80-85,90-92,101,106,112,218                  
+  aluno.repository.ts           |   97.14 |    54.16 |     100 |   97.05 | 124                                          
+  analytics.repository.ts       |     100 |       75 |     100 |     100 | 50                                           
+  anexo-exportar.repository.ts  |     100 |      100 |     100 |     100 |                                              
+  auth.repository.ts            |     100 |       80 |     100 |     100 | 38,52                                        
+  avaliacao-log.repository.ts   |     100 |    91.66 |     100 |     100 | 52                                           
+  correcao.repository.ts        |   96.66 |       50 |     100 |     100 | 73-142,279-388                               
+  email-envio.repository.ts     |      95 |    78.57 |      90 |   94.44 | 172                                          
+  materia.repository.ts         |   91.42 |     62.5 |     100 |   91.17 | 118-119,123                                  
+  professor.repository.ts       |   83.67 |    59.09 |   85.71 |    85.1 | 143-144,147-148,152,228-239                  
+  prova-questao.repository.ts   |      95 |    63.63 |     100 |     100 | 50,54,59-65,129-216                          
+  prova.repository.ts           |   94.52 |    70.27 |     100 |     100 | 60-61,86-119,189-190,192,222,264-283,311-515 
+  questao.repository.ts         |      90 |    71.23 |     100 |   92.45 | 335-336,357-358                              
+  resposta-aluno.repository.ts  |     100 |       75 |     100 |     100 | 47,145,206-256                               
+  resposta-anexo.repository.ts  |     100 |      100 |     100 |     100 |                                              
+  resultado.repository.ts       |   94.11 |       60 |     100 |     100 | 33-44,74-94                                  
+  tema.repository.ts            |   82.05 |    63.63 |     100 |   81.57 | 73-82,125-126,130                            
+ src/routes                     |     100 |      100 |     100 |     100 |                                              
+  aluno-portal.routes.ts        |     100 |      100 |     100 |     100 |                                              
+  aluno.routes.ts               |     100 |      100 |     100 |     100 |                                              
+  analytics.routes.ts           |     100 |      100 |     100 |     100 |                                              
+  anexo-exportar.routes.ts      |     100 |      100 |     100 |     100 |                                              
+  auth.routes.ts                |     100 |      100 |     100 |     100 |                                              
+  coordenador.routes.ts         |     100 |      100 |     100 |     100 |                                              
+  correcao.routes.ts            |     100 |      100 |     100 |     100 |                                              
+  email.routes.ts               |     100 |      100 |     100 |     100 |                                              
+  health.routes.ts              |     100 |      100 |     100 |     100 |                                              
+  materia.routes.ts             |     100 |      100 |     100 |     100 |                                              
+  professor.routes.ts           |     100 |      100 |     100 |     100 |                                              
+  prova.routes.ts               |     100 |      100 |     100 |     100 |                                              
+  questao.routes.ts             |     100 |      100 |     100 |     100 |                                              
+  resposta-aluno.routes.ts      |     100 |      100 |     100 |     100 |                                              
+  resposta-anexo.routes.ts      |     100 |      100 |     100 |     100 |                                              
+  resultado.routes.ts           |     100 |      100 |     100 |     100 |                                              
+  tema.routes.ts                |     100 |      100 |     100 |     100 |                                              
+ src/schemas                    |     100 |      100 |     100 |     100 |                                              
+  aluno-portal.schema.ts        |     100 |      100 |     100 |     100 |                                              
+  aluno.schema.ts               |     100 |      100 |     100 |     100 |                                              
+  analytics.schema.ts           |     100 |      100 |     100 |     100 |                                              
+  anexo-exportar.schema.ts      |     100 |      100 |     100 |     100 |                                              
+  common.schema.ts              |     100 |      100 |     100 |     100 |                                              
+  correcao.schema.ts            |     100 |      100 |     100 |     100 |                                              
+  email.schema.ts               |     100 |      100 |     100 |     100 |                                              
+  materia.schema.ts             |     100 |      100 |     100 |     100 |                                              
+  professor.schema.ts           |     100 |      100 |     100 |     100 |                                              
+  prova-questao.schema.ts       |     100 |      100 |     100 |     100 |                                              
+  prova.schema.ts               |     100 |      100 |     100 |     100 |                                              
+  questao.schema.ts             |     100 |      100 |     100 |     100 |                                              
+  resposta-aluno.schema.ts      |     100 |      100 |     100 |     100 |                                              
+  resposta-anexo.schema.ts      |     100 |      100 |     100 |     100 |                                              
+  resultado.schema.ts           |     100 |      100 |     100 |     100 |                                              
+  tema.schema.ts                |     100 |      100 |     100 |     100 |                                              
+ src/services                   |   95.88 |    92.13 |   99.12 |   95.96 |                                              
+  aluno-portal.service.ts       |     100 |      100 |     100 |     100 |                                              
+  aluno.service.ts              |      88 |     82.6 |     100 |      88 | 65,84,99                                     
+  analytics.service.ts          |     100 |      100 |     100 |     100 |                                              
+  anexo-exportar.service.ts     |     100 |      100 |     100 |     100 |                                              
+  auth.service.ts               |     100 |      100 |     100 |     100 |                                              
+  avaliacao-log.service.ts      |     100 |      100 |     100 |     100 |                                              
+  correcao.service.ts           |   96.55 |    95.65 |     100 |   96.55 | 106                                          
+  email-adapter.ts              |     100 |      100 |     100 |     100 |                                              
+  email-resultado.service.ts    |   95.45 |    81.08 |     100 |   95.38 | 23,180-181                                   
+  health.service.ts             |     100 |      100 |     100 |     100 |                                              
+  materia.service.ts            |     100 |      100 |     100 |     100 |                                              
+  professor.service.ts          |   78.84 |    71.42 |   88.88 |   78.84 | 85,96-98,104,119,162-167,181                 
+  prova-questao.service.ts      |   97.05 |    95.23 |     100 |   97.05 | 67                                           
+  prova.service.ts              |   98.68 |    97.95 |     100 |   98.68 | 250                                          
+  questao.service.ts            |   95.16 |    89.36 |     100 |   96.66 | 165,191                                      
+  resposta-aluno.service.ts     |    97.5 |    97.05 |     100 |    97.5 | 102                                          
+  resposta-anexo.service.ts     |   97.29 |    96.29 |     100 |   97.22 | 140                                          
+  resultado.service.ts          |     100 |    94.44 |     100 |     100 | 13                                           
+  storage.service.ts            |     100 |      100 |     100 |     100 |                                              
+  tema.service.ts               |     100 |      100 |     100 |     100 |                                              
+--------------------------------|---------|----------|---------|---------|----------------------------------------------
+Test Suites: 44 passed, 44 total
+Tests:       390 passed, 390 total
+Snapshots:   0 total
+Time:        90.316 s
+Ran all test suites.

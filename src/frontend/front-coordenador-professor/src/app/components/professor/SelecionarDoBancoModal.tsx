@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MagnifyingGlassIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { MathText } from "../../../../../src/components/math/MathText";
 import type { Question, QuestionType } from "./ProvaDetailPage";
 import { convertBancoToQuestion } from "../../../../../src/features/dashboard/dashboard.mappers";
 import type { BancoQuestion } from "../../../../../src/features/dashboard/dashboard.types";
@@ -321,7 +322,7 @@ export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQ
                     </div>
 
                     {/* Texto da questão */}
-                    <p
+                    <MathText
                       style={{
                         fontFamily: "Inter, sans-serif",
                         fontSize: "13px",
@@ -330,7 +331,7 @@ export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQ
                       }}
                     >
                       {question.text}
-                    </p>
+                    </MathText>
 
                     {/* Informação de uso */}
                     <p className="text-xs" style={{ color: "#6A7181" }}>

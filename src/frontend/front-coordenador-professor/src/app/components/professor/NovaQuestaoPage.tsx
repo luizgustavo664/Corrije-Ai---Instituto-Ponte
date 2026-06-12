@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronLeftIcon, BookmarkIcon, PlusIcon, EyeIcon, EyeSlashIcon, PhotoIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { MathText } from "../../../../../src/components/math/MathText";
 import type { MateriaDto } from "../../../../../src/features/materias/materias.types";
 import type { CreateQuestaoPayload } from "../../../../../src/features/questoes/questoes.types";
 import { createTema, listTemas } from "../../../../../src/features/temas/temas.api";
@@ -467,7 +468,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
                 style={{ backgroundColor: "#F7F8FA", border: "1px solid #E6E6E6" }}
               >
                 {enunciado
-                  ? <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>{enunciado}</p>
+                  ? <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>{enunciado}</MathText>
                   : <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#B1B4BD", fontStyle: "italic" }}>O enunciado aparecerá aqui...</p>
                 }
               </div>
@@ -481,7 +482,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
                       style={{ backgroundColor: "#F2F3F5" }}
                     >
                       <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, color: "#6B6FA3" }}>{alt.id})</span>
-                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#333" }}>{alt.text}</span>
+                      <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#333" }}>{alt.text}</MathText>
                     </div>
                   ))}
                 </div>

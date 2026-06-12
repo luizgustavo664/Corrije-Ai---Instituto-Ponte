@@ -62,7 +62,11 @@ export class AlunoPortalService {
       throw conflict("Já existe submissão final para esta prova e aluno.");
     }
 
-    const questoes = await this.alunoPortalRepository.findQuestoesPublicas(prova.id);
+    const questoes = await this.alunoPortalRepository.findQuestoesPublicas(prova.id, {
+      provaAlunoId: inicio.provaAluno.id,
+      embaralharQuestoes: prova.embaralharQuestoes,
+      embaralharAlternativas: prova.embaralharAlternativas,
+    });
     return {
       provaAlunoId: inicio.provaAluno.id,
       status: inicio.provaAluno.status,

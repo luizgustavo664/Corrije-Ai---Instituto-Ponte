@@ -234,7 +234,13 @@ describe("CorrecaoAutomaticaController - integração", () => {
     });
 
     const correcoes = await pool.query<{ resposta_id: string; nota: string; tipo: string }>(
-      'SELECT "resposta_id", "nota", "tipo" FROM "correcao" ORDER BY "resposta_id"',
+      `
+        SELECT "resposta_id", "nota", "tipo"
+        FROM "correcao"
+        WHERE "resposta_id" = ANY($1::uuid[])
+        ORDER BY "resposta_id"
+      `,
+      [[seed.respostaMultiplaId, seed.respostaVfId, seed.respostaDiscursivaId]],
     );
     expect(correcoes.rows).toHaveLength(2);
     expect(correcoes.rows).toEqual(
