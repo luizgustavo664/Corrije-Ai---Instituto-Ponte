@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { MathText } from "../../../../../src/components/math/MathText";
 import {
   ChevronLeftIcon, ShareIcon, PlusIcon, Bars2Icon, PencilIcon, TrashIcon,
   CheckCircleIcon, ClockIcon, CalendarDaysIcon, AcademicCapIcon, BookOpenIcon,
@@ -154,15 +155,15 @@ function QuestionCard({ question, index, onDelete, onEdit }: { question: Questio
           <TypeBadge type={question.type} />
           <PointsBadge />
         </div>
-        <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>{question.text}</p>
+        <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>{question.text}</MathText>
         {question.options && (
           <div className="flex flex-col gap-1.5">
             {question.options.map((opt) => (
               <div key={opt.letter} className="flex items-center gap-2 px-3 py-2 rounded-xl" style={{ backgroundColor: opt.correct ? "#6B6FA3" : "#F2F3F5" }}>
                 {opt.correct && <CheckCircleIcon className="w-[14px] h-[14px] shrink-0" style={{ color: "#F9B233" }} />}
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: opt.correct ? "#fff" : "#333" }}>
-                  <strong>{opt.letter})</strong>&nbsp;&nbsp;{opt.text}
-                </p>
+                <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: opt.correct ? "#fff" : "#333" }}>
+                  <strong>{opt.letter})</strong>&nbsp;&nbsp;<MathText>{opt.text}</MathText>
+                </span>
               </div>
             ))}
           </div>

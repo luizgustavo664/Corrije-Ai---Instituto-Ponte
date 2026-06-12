@@ -17,6 +17,8 @@ export interface Exam {
   dataLimite?: string;
   orientacoes?: string;
   materiaId?: string;
+  professorId?: string;
+  professorName?: string;
   criadoEm?: string;
   embaralharQuestoes?: boolean;
   embaralharAlternativas?: boolean;

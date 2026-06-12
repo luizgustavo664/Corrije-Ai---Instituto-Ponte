@@ -8,6 +8,7 @@ const config: Config = {
   collectCoverageFrom: [
     "src/**/*.ts",
     "!src/**/*.test.ts",
+    "!src/database/migrate.ts",
   ],
   clearMocks: true,
   moduleNameMapper: {

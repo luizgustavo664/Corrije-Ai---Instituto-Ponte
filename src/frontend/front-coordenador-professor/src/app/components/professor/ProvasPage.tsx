@@ -17,19 +17,23 @@ export function ProvasPage({ onNavigate, exams, onDeleteExam, onArchiveExam }: P
   const [materiaFilter, setMateriaFilter] = useState("");
   const [semestreFilter, setSemestreFilter] = useState("");
   const [turmaFilter, setTurmaFilter] = useState("");
+  const [professorFilter, setProfessorFilter] = useState("");
 
   const materias = [...new Set(exams.map((e) => e.subject).filter(Boolean))].sort();
   const semestres = [...new Set(exams.map((e) => e.semester).filter(Boolean))].sort();
   const turmas = [...new Set(exams.map((e) => e.turma).filter(Boolean))].sort();
+  const professores = [...new Set(exams.map((e) => e.professorName).filter(Boolean))].sort();
 
   const filtered = exams.filter((e) => {
     const matchTab = activeTab === "Todas" || e.badge === activeTab;
     const matchSearch = e.title.toLowerCase().includes(search.toLowerCase()) ||
-      e.discipline.toLowerCase().includes(search.toLowerCase());
+      e.discipline.toLowerCase().includes(search.toLowerCase()) ||
+      (e.professorName ?? "").toLowerCase().includes(search.toLowerCase());
     const matchMateria = !materiaFilter || e.subject === materiaFilter;
     const matchSemestre = !semestreFilter || e.semester === semestreFilter;
     const matchTurma = !turmaFilter || e.turma === turmaFilter;
-    return matchTab && matchSearch && matchMateria && matchSemestre && matchTurma;
+    const matchProfessor = !professorFilter || e.professorName === professorFilter;
+    return matchTab && matchSearch && matchMateria && matchSemestre && matchTurma && matchProfessor;
   });
 
   return (
@@ -95,6 +99,25 @@ export function ProvasPage({ onNavigate, exams, onDeleteExam, onArchiveExam }: P
               color: "#6A7181",
             }}
           />
+        </div>
+
+        <div className="relative">
+          <select
+            value={professorFilter}
+            onChange={(e) => setProfessorFilter(e.target.value)}
+            className="appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
+            style={{
+              backgroundColor: "#fff",
+              border: "1px solid #D9D9D9",
+              fontFamily: "Inter, sans-serif",
+              fontSize: "13px",
+              color: "#6A7181",
+            }}
+          >
+            <option value="">Professor</option>
+            {professores.map((p) => <option key={p} value={p}>{p}</option>)}
+          </select>
+          <ChevronDownIcon className="w-[14px] h-[14px] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#9F9F9F" }} />
         </div>
 
         <div className="relative">
@@ -222,6 +245,11 @@ export function ProvasPage({ onNavigate, exams, onDeleteExam, onArchiveExam }: P
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#504F4F" }}>
                 {exam.modalidade} • {exam.semester}
               </p>
+              {exam.professorName && (
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
+                  Professor: {exam.professorName}
+                </p>
+              )}
 
               {/* Bottom row */}
               <div className="flex items-center gap-4 mt-1">
