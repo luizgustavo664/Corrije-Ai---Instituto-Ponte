@@ -12,6 +12,8 @@ type ProvaPublicaRow = {
   tempo_limite_min: number | null;
   data_inicio: Date | string | null;
   data_fim: Date | string | null;
+  embaralhar_questoes: boolean;
+  embaralhar_alternativas: boolean;
   status: string;
 };
 
@@ -56,6 +58,8 @@ const mapProvaPublica = (row: ProvaPublicaRow) => ({
   tempoLimiteMin: row.tempo_limite_min,
   dataInicio: toIsoString(row.data_inicio),
   dataFim: toIsoString(row.data_fim),
+  embaralharQuestoes: row.embaralhar_questoes,
+  embaralharAlternativas: row.embaralhar_alternativas,
   status: row.status,
 });
 
@@ -71,6 +75,47 @@ const mapQuestaoPublica = (row: QuestaoPublicaRow) => ({
   },
   alternativas: row.alternativas ?? [],
 });
+
+const hashString = (value: string) => {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
+
+const shuffleDeterministic = <T>(items: T[], seed: string, getKey: (item: T) => string) =>
+  [...items].sort((a, b) => {
+    const hashA = hashString(`${seed}:${getKey(a)}`);
+    const hashB = hashString(`${seed}:${getKey(b)}`);
+    return hashA - hashB;
+  });
+
+function applyShuffle(
+  questoes: ReturnType<typeof mapQuestaoPublica>[],
+  seed: string,
+  options: { embaralharQuestoes: boolean; embaralharAlternativas: boolean },
+) {
+  const orderedQuestions = options.embaralharQuestoes
+    ? shuffleDeterministic(questoes, `${seed}:questoes`, (questao) => questao.id)
+    : questoes;
+
+  return orderedQuestions.map((questao, questionIndex) => {
+    const alternativas = options.embaralharAlternativas
+      ? shuffleDeterministic(questao.alternativas, `${seed}:${questao.id}:alternativas`, (alternativa) => alternativa.id)
+      : questao.alternativas;
+
+    return {
+      ...questao,
+      ordem: questionIndex + 1,
+      alternativas: alternativas.map((alternativa, alternativaIndex) => ({
+        ...alternativa,
+        ordem: alternativaIndex + 1,
+      })),
+    };
+  });
+}
 
 /**
  * Repositório de acesso público do aluno ao portal de provas.
@@ -90,7 +135,8 @@ export class AlunoPortalRepository {
     const normalized = normalizeUrlAcesso(urlAcesso);
     const result = await pool.query<ProvaPublicaRow>(
       `
-        SELECT "id", "titulo", "instrucoes", "tempo_limite_min", "data_inicio", "data_fim", "status"
+        SELECT "id", "titulo", "instrucoes", "tempo_limite_min", "data_inicio", "data_fim",
+               "embaralhar_questoes", "embaralhar_alternativas", "status"
         FROM "prova"
         WHERE "url_acesso" = $1
           OR "url_acesso" = $2
@@ -109,7 +155,11 @@ export class AlunoPortalRepository {
    * @param client - Conexão opcional (para uso dentro de transação).
    * @returns Lista de questões públicas.
    */
-  async findQuestoesPublicas(provaId: string, client: PoolClient | typeof pool = pool) {
+  async findQuestoesPublicas(
+    provaId: string,
+    options: { provaAlunoId: string; embaralharQuestoes: boolean; embaralharAlternativas: boolean },
+    client: PoolClient | typeof pool = pool,
+  ) {
     const result = await client.query<QuestaoPublicaRow>(
       `
         SELECT
@@ -141,7 +191,7 @@ export class AlunoPortalRepository {
       [provaId],
     );
 
-    return result.rows.map(mapQuestaoPublica);
+    return applyShuffle(result.rows.map(mapQuestaoPublica), options.provaAlunoId, options);
   }
 
   /**

@@ -4,9 +4,11 @@ import {
   ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon,
   CheckCircleIcon, UserIcon, BookmarkIcon, MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { MathText } from "../../../../../src/components/math/MathText";
 import { listarQuestoesCorrecao, listarRespostasPorQuestao, salvarCorrecao } from "../../../../../src/features/correcao/correcao.api";
 import type { CorrecaoQuestaoDto, CorrecaoRespostaDto } from "../../../../../src/features/correcao/correcao.types";
 import { useCorrecaoAutomaticaObjetivas } from "../../../../../src/features/correcao/useCorrecaoAutomaticaObjetivas";
+import { AnexosGallery } from "./AnexosGallery";
 
 interface Props {
   onBack: () => void;
@@ -360,9 +362,9 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
                     <span className="px-2 py-0.5 rounded-md" style={{ backgroundColor: "#EEF1F8", color: "#6B6FA3", fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 600, alignSelf: "flex-start" }}>
                       {questaoInfo?.ordemOriginal ?? ""}ª Questão
                     </span>
-                    <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>
+                    <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>
                       {resposta.respostaTexto ?? "Nenhuma resposta textual."}
-                    </p>
+                    </MathText>
                   </div>
                 </div>
 
@@ -370,14 +372,12 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
                   <div className="flex-1 flex flex-col gap-2">
                     <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 600, color: "#6A7181" }}>Resposta do aluno</p>
                     <div className="rounded-xl p-3" style={{ backgroundColor: "#F7F8FA", border: "1px solid #E6E6E6" }}>
-                      <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111", lineHeight: 1.6 }}>
+                      <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111", lineHeight: 1.6 }}>
                         {resposta.respostaTexto ?? "Em branco"}
-                      </p>
+                      </MathText>
                     </div>
                     {resposta.anexos.length > 0 && (
-                      <p style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#6B6FA3" }}>
-                        {resposta.anexos.length} anexo(s)
-                      </p>
+                      <AnexosGallery anexos={resposta.anexos} />
                     )}
                   </div>
 

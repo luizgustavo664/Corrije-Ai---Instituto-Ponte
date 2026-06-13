@@ -8,6 +8,7 @@ import type { ProvaAnalyticsDto } from "../../../../../src/features/analytics/an
 import { getStoredAuthSession } from "../../../../../src/features/auth/auth.storage";
 import { exportarAnexosProva } from "../../../../../src/features/anexos/anexos.api";
 import type { AnexoExportarItemDto } from "../../../../../src/features/anexos/anexos.types";
+import { buildAnexosZip } from "../../../../../src/features/anexos/anexos.zip";
 import { liberarEmailsResultado, listarEmailsProva, reenviarEmailResultado } from "../../../../../src/features/emails/emails.api";
 import type { EmailEnvioDto } from "../../../../../src/features/emails/emails.types";
 import { exportarResultados } from "../../../../../src/features/resultados/resultados.api";
@@ -168,14 +169,33 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
     },
   });
 
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
   const exportarAnexosMutation = useMutation({
     mutationFn: exportarAnexosProva,
-    onSuccess: (items) => {
+    onSuccess: async (items, provaId) => {
       setAnexosExportados(items);
+      if (items.length === 0) {
+        setExportMessage("Nenhum anexo encontrado para esta prova.");
+        return;
+      }
+
+      const exam = realExams.find((item) => String(item.id) === provaId);
+      const zip = await buildAnexosZip(items, exam?.title ?? `prova-${provaId}`);
+      downloadBlob(zip.blob, zip.filename);
       setExportMessage(
-        items.length === 0
-          ? "Nenhum anexo encontrado para esta prova."
-          : `${items.length} anexo(s) encontrado(s). Use a lista abaixo para abrir cada arquivo.`,
+        zip.failedCount > 0
+          ? `Pacote ZIP gerado. ${zip.failedCount} anexo(s) não puderam ser baixados automaticamente; consulte o manifesto no ZIP.`
+          : `${items.length} anexo(s) exportado(s) em pacote ZIP.`,
       );
     },
     onError: (error) => {
@@ -442,7 +462,7 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
                     style={{ border: "1px solid #6B6FA3", color: "#6B6FA3", backgroundColor: "#fff", fontFamily: "Inter, sans-serif", fontSize: "12px", fontWeight: 600 }}
                   >
                     <ArrowDownTrayIcon className="w-4 h-4" />
-                    Anexos
+                    ZIP anexos
                   </button>
                 </div>
               </div>

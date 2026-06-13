@@ -34,6 +34,8 @@ export function mapProvaToExam(prova: ProvaDto): Exam {
     dataLimite: prova.dataFim ?? undefined,
     orientacoes: prova.instrucoes ?? undefined,
     materiaId: prova.materiaId,
+    professorId: prova.professorId,
+    professorName: prova.professor?.nome,
     criadoEm: prova.criadoEm,
     embaralharQuestoes: prova.embaralharQuestoes,
     embaralharAlternativas: prova.embaralharAlternativas,

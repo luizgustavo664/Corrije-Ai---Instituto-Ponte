@@ -1,4 +1,5 @@
 import { Paperclip, ChevronLeft, ChevronRight, Flag, AlertTriangle } from "lucide-react";
+import { MathText } from "../../../../src/components/math/MathText";
 import { Header } from "./Header";
 import type { Question, StudentInfo } from "../App";
 
@@ -134,7 +135,9 @@ export function TelaProva({
 
         {/* Statement */}
         <div className="bg-white rounded-xl p-4 shadow-sm min-h-[140px]">
-          <p className="text-[#000000] text-sm leading-relaxed">{question.statement}</p>
+          <MathText className="block text-[#000000] text-sm leading-relaxed" emptyText="Enunciado não informado.">
+            {question.statement}
+          </MathText>
         </div>
 
         {/* Answer area */}
@@ -147,7 +150,7 @@ export function TelaProva({
                 className="flex items-center gap-1.5 text-xs text-[#6B6FA3] bg-[#F2F2F2] px-2.5 py-1.5 rounded-lg hover:opacity-80 transition-opacity"
               >
                 <Paperclip size={13} />
-                Anexar arquivo
+                Anexar arquivos
               </button>
             )}
           </div>
@@ -178,9 +181,9 @@ export function TelaProva({
                       }`}>
                         {selected && <span className="size-2 rounded-full bg-white" />}
                       </span>
-                      <span className="text-sm text-[#000000] leading-relaxed">
+                      <MathText className="text-sm text-[#000000] leading-relaxed">
                         {alternative.conteudoLatex}
-                      </span>
+                      </MathText>
                     </div>
                   </button>
                 );
