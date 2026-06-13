@@ -1,19 +1,22 @@
-import type { Config } from 'jest';
-
+import type { Config } from "jest";
 const config: Config = {
-  preset: 'ts-jest/presets/default-esm',
-  testEnvironment: 'node',
-  extensionsToTreatAsEsm: ['.ts'],
-  testMatch: ['**/*.spec.ts'],
+  preset: "ts-jest/presets/default-esm",
+  testEnvironment: "node",
+  extensionsToTreatAsEsm: [".ts"],
+  testMatch: ["**/*.test.ts"],
   maxWorkers: 1,
-  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.spec.ts'],
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/**/*.test.ts",
+    "!src/database/migrate.ts",
+  ],
   clearMocks: true,
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1'
+    "^(\\.{1,2}/.*)\\.js$": "$1",
   },
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', { useESM: true }]
-  }
+    "^.+\\.tsx?$": ["ts-jest", { useESM: true }],
+  },
 };
 
 export default config;

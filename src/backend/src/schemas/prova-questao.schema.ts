@@ -9,6 +9,11 @@ export const provaQuestaoDeleteParamsSchema = provaQuestaoParamsSchema.extend({
   questaoId: z.string().uuid("O questaoId deve ser um UUID válido.").describe("Identificador único da questão."),
 });
 
+/**
+ * Corpo para associar uma questão a uma prova.
+ * pontuacaoMax, quando informado, substitui a pontuacaoPadrao
+ * definida na questão original para esta prova específica.
+ */
 export const addQuestaoProvaBodySchema = z
   .object({
     questaoId: z.string().uuid("O questaoId deve ser um UUID válido.").describe("Identificador único da questão a ser adicionada."),

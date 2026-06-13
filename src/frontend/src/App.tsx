@@ -1,122 +1,158 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query'
+import { Component, lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router'
+import { toast } from 'sonner'
 import './App.css'
+import { Toaster } from './components/ui/sonner'
+import { finishGoogleLogin } from './features/auth/auth.api'
+import { listenSessionExpired } from './features/auth/auth.events'
+import {
+  clearAuthSession,
+  clearPendingAuthRole,
+  getPendingAuthRole,
+  storeAuthSession,
+} from './features/auth/auth.storage'
 
-function App() {
-  const [count, setCount] = useState(0)
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: false,
+    },
+  },
+})
 
+const AlunoModule = lazy(() =>
+  import('./modules/AlunoModule').then((module) => ({
+    default: module.AlunoModule,
+  })),
+)
+
+const CoordenadorProfessorModule = lazy(() =>
+  import('./modules/CoordenadorProfessorModule').then((module) => ({
+    default: module.CoordenadorProfessorModule,
+  })),
+)
+
+function LoadingScreen({ label = 'Carregando' }: { label?: string }) {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <main className="app-loading">
+      <span aria-hidden="true" />
+      {label}
+    </main>
   )
 }
 
-export default App
+class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
+  state: { error: Error | null } = { error: null }
+
+  static getDerivedStateFromError(error: Error) {
+    return { error }
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <main className="app-auth-state">
+          <h1>Algo deu errado</h1>
+          <p>{this.state.error.message}</p>
+          <a href="/login">Voltar ao login</a>
+        </main>
+      )
+    }
+
+    return this.props.children
+  }
+}
+
+function AuthCallbackPage() {
+  const navigate = useNavigate()
+  const role = getPendingAuthRole()
+  const callbackMutation = useMutation({
+    mutationFn: () => finishGoogleLogin(role ?? undefined),
+    onSuccess: (session) => {
+      storeAuthSession({
+        accessToken: session.accessToken,
+        usuario: session.usuario,
+      })
+      clearPendingAuthRole()
+      navigate(`${session.redirectTo}/painel`, { replace: true })
+    },
+  })
+
+  const params = new URLSearchParams(window.location.search)
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''))
+  const callbackError =
+    params.get('error_description') ??
+    params.get('error') ??
+    hashParams.get('error_description') ??
+    hashParams.get('error') ??
+    undefined
+
+  useEffect(() => {
+    if (!callbackError && callbackMutation.status === 'idle') {
+      callbackMutation.mutate()
+    }
+  }, [callbackError, callbackMutation])
+
+  if (callbackError) {
+    return (
+      <main className="app-auth-state">
+        <h1>Login não concluído</h1>
+        <p>{callbackError}</p>
+        <a href="/login">Voltar ao login</a>
+      </main>
+    )
+  }
+
+  if (callbackMutation.isError) {
+    return (
+      <main className="app-auth-state">
+        <h1>Não foi possível autenticar</h1>
+        <p>{callbackMutation.error.message}</p>
+        <a href="/login">Tentar novamente</a>
+      </main>
+    )
+  }
+
+  return <LoadingScreen label="Finalizando login" />
+}
+
+function SessionExpiredHandler() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    return listenSessionExpired(() => {
+      clearAuthSession()
+      clearPendingAuthRole()
+      toast.error('Sua sessão expirou. Faça login novamente.')
+      navigate('/login', { replace: true })
+    })
+  }, [navigate])
+
+  return null
+}
+
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <SessionExpiredHandler />
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingScreen />}>
+            <Routes>
+              <Route path="/auth/callback" element={<AuthCallbackPage />} />
+              <Route path="/aluno/*" element={<AlunoModule />} />
+              <Route path="/*" element={<CoordenadorProfessorModule />} />
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
+        <Toaster richColors position="top-right" />
+      </BrowserRouter>
+    </QueryClientProvider>
+  )
+}

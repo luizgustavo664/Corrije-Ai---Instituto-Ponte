@@ -4,6 +4,7 @@ import { withTransaction } from "../database/transaction.js";
 import { toIsoString } from "../helpers/date.js";
 import type { IniciarProvaInput } from "../schemas/aluno-portal.schema.js";
 
+/** Linha pública da tabela `prova` para exibição ao aluno. */
 type ProvaPublicaRow = {
   id: string;
   titulo: string;
@@ -11,14 +12,18 @@ type ProvaPublicaRow = {
   tempo_limite_min: number | null;
   data_inicio: Date | string | null;
   data_fim: Date | string | null;
+  embaralhar_questoes: boolean;
+  embaralhar_alternativas: boolean;
   status: string;
 };
 
+/** Linha da tabela `prova_aluno` para controle de status. */
 type ProvaAlunoRow = {
   id: string;
   status: "nao_iniciada" | "em_andamento" | "enviada" | "corrigida";
 };
 
+/** Alternativa pública (sem campo correta) exibida ao aluno. */
 type AlternativaPublica = {
   id: string;
   ordem: number;
@@ -26,6 +31,7 @@ type AlternativaPublica = {
   urlImagem: string | null;
 };
 
+/** Linha de questão pública com enunciado e alternativas (sem campo correta). */
 type QuestaoPublicaRow = {
   id: string;
   ordem: number;
@@ -35,12 +41,16 @@ type QuestaoPublicaRow = {
   alternativas: AlternativaPublica[] | null;
 };
 
+/** Normaliza a URL de acesso extraindo URL original e slug (último segmento).
+ *  Permite acesso via URL completa ou código curto. */
 const normalizeUrlAcesso = (urlAcesso: string) => {
   const decoded = decodeURIComponent(urlAcesso.trim());
   const slug = decoded.split("/").filter(Boolean).at(-1) ?? decoded;
   return { original: decoded, slug };
 };
 
+/** Converte uma ProvaPublicaRow para o formato público da prova (camelCase).
+ *  Datas são convertidas com toIsoString(). */
 const mapProvaPublica = (row: ProvaPublicaRow) => ({
   id: row.id,
   titulo: row.titulo,
@@ -48,9 +58,13 @@ const mapProvaPublica = (row: ProvaPublicaRow) => ({
   tempoLimiteMin: row.tempo_limite_min,
   dataInicio: toIsoString(row.data_inicio),
   dataFim: toIsoString(row.data_fim),
+  embaralharQuestoes: row.embaralhar_questoes,
+  embaralharAlternativas: row.embaralhar_alternativas,
   status: row.status,
 });
 
+/** Converte uma QuestaoPublicaRow para o formato público da questão (camelCase).
+ *  Alternativas são exibidas sem o campo correta. */
 const mapQuestaoPublica = (row: QuestaoPublicaRow) => ({
   id: row.id,
   ordem: row.ordem,
@@ -62,12 +76,67 @@ const mapQuestaoPublica = (row: QuestaoPublicaRow) => ({
   alternativas: row.alternativas ?? [],
 });
 
+const hashString = (value: string) => {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
+
+const shuffleDeterministic = <T>(items: T[], seed: string, getKey: (item: T) => string) =>
+  [...items].sort((a, b) => {
+    const hashA = hashString(`${seed}:${getKey(a)}`);
+    const hashB = hashString(`${seed}:${getKey(b)}`);
+    return hashA - hashB;
+  });
+
+function applyShuffle(
+  questoes: ReturnType<typeof mapQuestaoPublica>[],
+  seed: string,
+  options: { embaralharQuestoes: boolean; embaralharAlternativas: boolean },
+) {
+  const orderedQuestions = options.embaralharQuestoes
+    ? shuffleDeterministic(questoes, `${seed}:questoes`, (questao) => questao.id)
+    : questoes;
+
+  return orderedQuestions.map((questao, questionIndex) => {
+    const alternativas = options.embaralharAlternativas
+      ? shuffleDeterministic(questao.alternativas, `${seed}:${questao.id}:alternativas`, (alternativa) => alternativa.id)
+      : questao.alternativas;
+
+    return {
+      ...questao,
+      ordem: questionIndex + 1,
+      alternativas: alternativas.map((alternativa, alternativaIndex) => ({
+        ...alternativa,
+        ordem: alternativaIndex + 1,
+      })),
+    };
+  });
+}
+
+/**
+ * Repositório de acesso público do aluno ao portal de provas.
+ *
+ * Localiza prova por URL (normalizando slug), faz upsert do aluno
+ * por email, retoma sessão anterior ou bloqueia se já enviada.
+ * Registra log de auditoria ao iniciar nova prova.
+ */
 export class AlunoPortalRepository {
+  /**
+   * Busca prova pública por URL de acesso normalizada.
+   *
+   * @param urlAcesso - URL ou slug de acesso à prova.
+   * @returns Dados públicos da prova ou null.
+   */
   async findPublicByUrl(urlAcesso: string) {
     const normalized = normalizeUrlAcesso(urlAcesso);
     const result = await pool.query<ProvaPublicaRow>(
       `
-        SELECT "id", "titulo", "instrucoes", "tempo_limite_min", "data_inicio", "data_fim", "status"
+        SELECT "id", "titulo", "instrucoes", "tempo_limite_min", "data_inicio", "data_fim",
+               "embaralhar_questoes", "embaralhar_alternativas", "status"
         FROM "prova"
         WHERE "url_acesso" = $1
           OR "url_acesso" = $2
@@ -79,7 +148,18 @@ export class AlunoPortalRepository {
     return result.rows[0] ? mapProvaPublica(result.rows[0]) : null;
   }
 
-  async findQuestoesPublicas(provaId: string, client: PoolClient | typeof pool = pool) {
+  /**
+   * Busca questões públicas de uma prova (sem campo correta nas alternativas).
+   *
+   * @param provaId - ID da prova.
+   * @param client - Conexão opcional (para uso dentro de transação).
+   * @returns Lista de questões públicas.
+   */
+  async findQuestoesPublicas(
+    provaId: string,
+    options: { provaAlunoId: string; embaralharQuestoes: boolean; embaralharAlternativas: boolean },
+    client: PoolClient | typeof pool = pool,
+  ) {
     const result = await client.query<QuestaoPublicaRow>(
       `
         SELECT
@@ -111,9 +191,17 @@ export class AlunoPortalRepository {
       [provaId],
     );
 
-    return result.rows.map(mapQuestaoPublica);
+    return applyShuffle(result.rows.map(mapQuestaoPublica), options.provaAlunoId, options);
   }
 
+  /**
+   * Inicia uma prova para o aluno: faz upsert do aluno, cria prova_aluno
+   * e registra log de auditoria. Retoma sessão anterior se existir.
+   *
+   * @param provaId - ID da prova.
+   * @param input - Dados do aluno: nome, email, cpf.
+   * @returns Dados da prova-aluno e flag finalizada.
+   */
   async iniciarProva(provaId: string, input: IniciarProvaInput) {
     return withTransaction(async (client) => {
       const alunoId = await this.upsertAluno(client, input);
@@ -162,9 +250,9 @@ export class AlunoPortalRepository {
       `
         INSERT INTO "aluno" ("nome", "email", "cpf", "aceitou_termos_em")
         VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
-        ON CONFLICT ("cpf") DO UPDATE
+        ON CONFLICT ("email") DO UPDATE
         SET "nome" = EXCLUDED."nome",
-            "email" = EXCLUDED."email",
+            "cpf" = COALESCE(EXCLUDED."cpf", "aluno"."cpf"),
             "aceitou_termos_em" = CURRENT_TIMESTAMP
         RETURNING "id"
       `,
