@@ -83,9 +83,9 @@ A proposta resolve a atual dispersão do processo avaliativo, que é feito por W
 
 Além de tornar o processo mais eficiente para professores e coordenadores, o aplicativo gera relatórios automáticos de desempenho e permite acompanhar resultados com maior segurança. A plataforma valoriza acessibilidade, usabilidade e justiça no processo avaliativo, reduzindo perdas de arquivos, sobrecarga administrativa e dificuldades técnicas dos usuários.
 
-## 📝 Link de demonstração
+## Demonstração e documentação da API
 
-_Coloque aqui o link para o vídeo de demonstração do projeto_
+A demonstração funcional pode ser realizada localmente seguindo as instruções abaixo. Com o backend em execução, a documentação OpenAPI/Swagger fica disponível em `http://localhost:3333/docs`.
 
 ## 📁 Estrutura de pastas
 
@@ -120,7 +120,7 @@ cd g05
 
 ```sh
 cd src/backend
-npm install
+npm ci
 ```
 
 ### 3. Configurar variáveis de ambiente do backend
@@ -132,11 +132,19 @@ Exemplo de conteúdo mínimo:
 ```env
 DATABASE_URL="postgresql://..."
 PORT=3333
+SUPABASE_URL="https://seu-projeto.supabase.co"
+SUPABASE_JWT_SECRET="seu-segredo-jwt"
 ```
 
-> Se desejar usar outro banco, ajuste `DATABASE_URL` com sua string de conexão.
+> Os testes de integração executam operações reais de leitura e escrita. Deve ser utilizado um banco PostgreSQL exclusivo para desenvolvimento/testes, nunca uma base de produção.
 
-### 4. Iniciar o backend em modo de desenvolvimento
+### 4. Aplicar as migrations
+
+```sh
+npm run migrate
+```
+
+### 5. Iniciar o backend em modo de desenvolvimento
 
 ```sh
 npm run dev
@@ -144,14 +152,22 @@ npm run dev
 
 O servidor backend ficará disponível em `http://localhost:3333`.
 
-### 5. Instalar dependências do frontend
+### 6. Instalar dependências do frontend
 
 ```sh
 cd ../frontend
-npm install
+npm ci
 ```
 
-### 6. Iniciar o frontend em modo de desenvolvimento
+### 7. Configurar e iniciar o frontend
+
+Crie `src/frontend/.env` com as URLs utilizadas pela aplicação:
+
+```env
+VITE_API_URL="http://localhost:3333/api/v1"
+VITE_SUPABASE_URL="https://seu-projeto.supabase.co"
+VITE_SUPABASE_ANON_KEY="sua-chave-anonima"
+```
 
 ```sh
 npm run dev
@@ -159,10 +175,22 @@ npm run dev
 
 O frontend será servido pelo Vite e, por padrão, estará disponível em `http://localhost:5173`.
 
-### 7. Como acessar a aplicação
+### 8. Como acessar a aplicação
 
 - Acesse o frontend em `http://localhost:5173`
 - O frontend deve se conectar ao backend em `http://localhost:3333`
+- Consulte a documentação da WebAPI em `http://localhost:3333/docs`
+
+### 9. Executar testes e cobertura
+
+No diretório `src/backend`, com `DATABASE_URL` apontando para o banco de testes preparado pelas migrations:
+
+```sh
+npm test
+npm test -- --coverage
+```
+
+Os testes unitários de Service seguem a nomenclatura `*.service.test.ts`; os testes de integração HTTP seguem `*.integration.test.ts`. As evidências versionadas estão em `documentos/evidencias/`.
 
 ### Observações
 
@@ -179,7 +207,7 @@ O frontend será servido pelo Vite e, por padrão, estará disponível em `http:
     * 
 * 0.2.0 - XX/XX/2024
     *  -->
-* 0.1.0 - 26/06/2026
+* 0.1.0 - 26/06/2026 (planejado)
     Versão final do MVP
 
 ## 📋 Licença/License
