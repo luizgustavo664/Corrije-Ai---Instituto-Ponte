@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MagnifyingGlassIcon, ChevronDownIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { MathText } from "../../../../../src/components/math/MathText";
 import type { BancoQuestion, Exam } from "../../../../../src/features/dashboard/dashboard.types";
 import { EditarQuestaoModal } from "./EditarQuestaoModal";
 import { SelecionarProvaModal } from "./SelecionarProvaModal";
@@ -263,9 +264,9 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
               </div>
             </div>
 
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px", color: "#000" }}>
+            <MathText style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px", color: "#000" }}>
               {q.text}
-            </p>
+            </MathText>
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
               {q.timesUsed === 1
                 ? `Utilizada ${q.timesUsed} vez - Taxa de acerto: ${q.successRate}%`

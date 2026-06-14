@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronLeftIcon, ChevronRightIcon, BookmarkIcon, EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { MathText } from "../../../../../src/components/math/MathText";
 import { listarRespostasPorQuestao, salvarCorrecao } from "../../../../../src/features/correcao/correcao.api";
 import type { CorrecaoRespostaDto } from "../../../../../src/features/correcao/correcao.types";
+import { AnexosGallery } from "./AnexosGallery";
 
 interface Props {
   onBack: () => void;
@@ -292,9 +294,9 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
             <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 14, color: "#111", marginBottom: 8 }}>
               Resposta do Aluno
             </p>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#504F4F", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+            <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#504F4F", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
               {student.respostaTexto ?? "Nenhuma resposta textual."}
-            </p>
+            </MathText>
           </div>
 
           {student.anexos.length > 0 && (
@@ -303,20 +305,7 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
                 Anexos enviados pelo aluno
               </p>
               <div className="flex gap-3">
-                {student.anexos.map((anexo) => (
-                  <a
-                    key={anexo.id}
-                    href={anexo.urlArquivo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-xl flex items-center justify-center shrink-0"
-                    style={{ width: 120, height: 80, backgroundColor: "#E5E7EB" }}
-                  >
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" fill="#B1B4BD"/>
-                    </svg>
-                  </a>
-                ))}
+                <AnexosGallery anexos={student.anexos} />
               </div>
             </div>
           )}

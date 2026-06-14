@@ -129,6 +129,7 @@ export default function App() {
   const [showTimeWarning, setShowTimeWarning] = useState(false);
   const [showSubmitWarning, setShowSubmitWarning] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const saveTimeouts = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
@@ -170,8 +171,29 @@ export default function App() {
   });
 
   const uploadAnexoMutation = useMutation({
-    mutationFn: ({ respostaId, file }: { respostaId: string; file: File }) =>
-      uploadAnexo(respostaId, file),
+    mutationFn: async ({ respostaId, files }: { respostaId: string; files: File[] }) => {
+      const results = await Promise.allSettled(files.map((file) => uploadAnexo(respostaId, file)));
+      const failed = results.filter((result) => result.status === "rejected");
+
+      if (failed.length > 0) {
+        throw new Error(
+          failed.length === files.length
+            ? "Falha ao enviar os anexos selecionados."
+            : `${files.length - failed.length} anexo(s) enviado(s), ${failed.length} falharam.`,
+        );
+      }
+
+      return results.length;
+    },
+    onMutate: ({ files }) => {
+      setUploadStatus(`Processando e enviando ${files.length} anexo(s)...`);
+    },
+    onSuccess: (count) => {
+      setUploadStatus(`${count} anexo(s) enviado(s) com sucesso.`);
+    },
+    onError: (error) => {
+      setUploadStatus(error instanceof Error ? error.message : "Erro ao enviar anexos.");
+    },
   });
 
   const enviarProvaMutation = useMutation({
@@ -320,11 +342,12 @@ export default function App() {
   function openFilePicker(respostaId: string) {
     const input = document.createElement("input");
     input.type = "file";
+    input.multiple = true;
     input.accept = ".jpg,.jpeg,.png,.pdf";
     input.onchange = () => {
-      const file = input.files?.[0];
-      if (file) {
-        uploadAnexoMutation.mutate({ respostaId, file });
+      const files = Array.from(input.files ?? []);
+      if (files.length > 0) {
+        uploadAnexoMutation.mutate({ respostaId, files });
       }
     };
     input.click();
@@ -408,11 +431,7 @@ export default function App() {
                   : undefined
             }
             uploadMessage={
-              uploadAnexoMutation.isPending
-                ? "Enviando arquivo..."
-                : uploadAnexoMutation.isError
-                  ? uploadAnexoMutation.error.message
-                  : undefined
+              uploadAnexoMutation.isPending ? uploadStatus ?? "Processando e enviando anexos..." : uploadStatus ?? undefined
             }
             onAnswerChange={updateAnswer}
             onToggleMark={toggleMark}
