@@ -5912,11 +5912,17 @@ Neste momento da análise, a estrutura de custos pode ser considerada de forma i
 
 # <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
-*Escreva de que formas a solução da aplicação web atingiu os objetivos descritos na seção 2 deste documento. Indique pontos fortes e pontos a melhorar de maneira geral.*
+# <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
-*Relacione os pontos de melhorias evidenciados nos testes com planos de ações para serem implementadas. O grupo não precisa implementá-las, pode deixar registrado aqui o plano para ações futuras*
+Ao longo das cinco sprints, a solução desenvolvida atingiu os principais objetivos definidos para o projeto. A aplicação web centralizou o processo de criação, aplicação e correção de avaliações do Instituto Ponte, reduzindo a dependência de ferramentas externas e proporcionando maior organização no gerenciamento das provas e respostas dos alunos. Além disso, a plataforma contribuiu para a padronização do processo avaliativo, oferecendo um ambiente único para professores, estudantes e gestores educacionais.
 
-*Relacione também quaisquer outras ideias que o grupo tenha para melhorias futuras*
+Entre os principais pontos fortes da solução destacam-se a centralização das informações, a facilidade de gerenciamento das avaliações, a organização das questões e respostas, a autenticação segura dos usuários e a disponibilização de funcionalidades que tornam o processo de aplicação e correção de provas mais eficiente. Outro aspecto relevante foi a construção de uma arquitetura que favorece a manutenção e a evolução do sistema, permitindo futuras expansões de forma estruturada.
+
+Durante os testes realizados, foram identificadas oportunidades de melhoria relacionadas principalmente à experiência dos usuários e ao aperfeiçoamento de funcionalidades existentes. Como plano de ação futuro, recomenda-se a realização de novas rodadas de testes de usabilidade com alunos e professores para identificar possíveis dificuldades de navegação e aprimorar os fluxos mais utilizados da plataforma. Também é recomendada a ampliação da cobertura de testes automatizados, visando aumentar a confiabilidade e a estabilidade da aplicação.
+
+Como trabalhos futuros, o grupo propõe a integração de recursos de inteligência artificial à plataforma. Entre eles, destaca-se a geração automática de feedbacks para auxiliar os professores no processo de correção, mantendo a necessidade de validação humana antes da disponibilização aos alunos. Além disso, propõe-se a implementação de uma funcionalidade capaz de gerar versões alternativas de questões, preservando as competências e habilidades avaliadas. Essas melhorias têm potencial para aumentar a produtividade dos docentes, reduzir o tempo gasto em atividades repetitivas e tornar o processo avaliativo mais flexível e eficiente.
+
+Dessa forma, conclui-se que a solução desenvolvida atende aos objetivos propostos para o projeto, oferecendo uma base sólida para a modernização e otimização do processo avaliativo do Instituto Ponte. As melhorias sugeridas representam oportunidades de evolução que poderão ampliar ainda mais os benefícios da plataforma para toda a comunidade educacional atendida pela instituição.
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
