@@ -1620,7 +1620,7 @@ Esta matriz foi atualizada conforme o estado atual da implementação. O backend
 A arquitetura atual do backend segue uma organização em camadas, implementada em TypeScript com Fastify, validação por Zod, documentação automática via Swagger/OpenAPI e persistência em PostgreSQL/Supabase. O código entregue nesta sprint está concentrado no diretório src, com separação explícita entre rotas, controllers, services, repositories, schemas, middlewares, helpers, database, errors e testes.
 
 A aplicação possui frontend implementado em React/TypeScript e integrado aos principais fluxos da WebAPI. O diagrama abaixo representa a estrutura de integração do backend e seus pontos de consumo: clientes HTTP acessam a WebAPI a partir dos painéis de professor/coordenador e do portal público do aluno; a WebAPI processa autenticação, validação, regras de negócio e persistência; e o banco PostgreSQL/Supabase armazena os dados da aplicação.
-@startuml AplicacaoInfraestrutura
+```plantuml
 title Aplicação Fastify e Infraestrutura Interna
 top to bottom direction
 skinparam shadowing false
@@ -1661,8 +1661,9 @@ AuthMiddleware --> Pool : consulta professor/coordenador
 Transaction --> Pool
 Pool --> DB
 Migrate --> DB
-@enduml
-@startuml RotasControllers
+```
+
+```plantuml
 title Camada de Rotas e Controllers
 top to bottom direction
 skinparam shadowing false
@@ -1731,8 +1732,9 @@ RResultado --> CResultado
 RTema --> CTema
 Controllers --> HttpHelpers
 CRespostaAnexo --> Multipart
-@enduml
-@startuml ControllersServices
+```
+
+```plantuml
 title Relação entre Controllers e Services
 top to bottom direction
 skinparam shadowing false
@@ -1796,8 +1798,9 @@ CRespostaAluno --> SRespostaAluno
 CRespostaAnexo --> SRespostaAnexo
 CResultado --> SResultado
 CTema --> STema
-@enduml
-@startuml ServicesRepositoriesBanco
+```
+
+```plantuml
 title Services, Repositories e Banco de Dados
 top to bottom direction
 skinparam shadowing false
@@ -1877,7 +1880,7 @@ SEmailAdapter --> EmailFake
 Repositories --> Pool
 RepDatabase --> Pool
 Pool --> DB
-@enduml
+```
 A aplicação é inicializada por src/server.ts, que chama buildApp() em src/app.ts e sobe o servidor na porta definida por process.env.PORT, usando 3333 como padrão. Dentro de buildApp(), o Fastify registra CORS, Swagger, Swagger UI, compiladores de validação/serialização baseados em Zod e todas as rotas sob o prefixo /api/v1. A documentação OpenAPI fica disponível em /docs, gerada a partir dos schemas declarados diretamente nas rotas. 
 
 A arquitetura observada no código é composta pelas seguintes camadas reais:
@@ -2581,7 +2584,7 @@ Esse fluxo evita que as rotas executem SQL diretamente. As rotas apenas descreve
 ### 3.2.3. Diagrama de Classes do Dominio (sprint 2)
 
 O diagrama de dominio abaixo foi alinhado ao backend atual e a migration src/backend/src/database/migrations/migration.sql. Coordenador, professor e aluno sao entidades/tabelas independentes. A composicao da prova usa prova_questao, a tentativa do aluno usa prova_aluno, os anexos usam resposta_anexo e a exportacao/resultado/e-mail usam tabelas proprias.
-@startuml DiagramaDeClassesDominioAtual
+```plantuml
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
 package "Identidade e acesso" {
@@ -2737,9 +2740,9 @@ ProvaAluno "1" -- "0..1" ResultadoAluno
 Prova "1" -- "0..*" ExportacaoResultado
 ProvaAluno "1" -- "0..*" EmailEnvio
 Prova "1" -- "0..*" AvaliacaoLog
-@enduml
+```
 #### 3.2.3.1 Diagrama de Classes Arquitetural
-@startuml ClassesArquiteturaisAtualizadas
+```plantuml
 title Classes Arquiteturais Reais - Controllers, Services e Repositories
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
@@ -2850,17 +2853,14 @@ RespostaAnexoService --> StorageService
 ResultadoService --> ResultadoRepository
 ResultadoService --> StorageService
 TemaService --> TemaRepository
-@enduml
+```
 ### 3.2.4. Diagrama de Sequência UML (sprint 3, atualizado na sprint 5)
 
 Os diagramas de sequência a seguir detalham fluxos reais do código atual. A modelagem mantém a separação em camadas usada no projeto: o ator interage com a interface, a requisição é tratada por rota Fastify e middleware, o controller chama o service, o service concentra regras de negócio, o repository isola SQL e o banco armazena as entidades do domínio. No fluxo de autenticação, o login Google de produção é feito no frontend com Supabase JS; o backend valida o JWT nas rotas protegidas e mantém `/auth/google`/`/auth/google/callback` como suporte de redirecionamento e modo local/teste.
 
-# Diagramas de Sequência UML — UC01, UC02, UC03
+#### 3.2.4.1 Autenticar-se e validar sessão (UC01)
 
----
-
-## UC01 — Autenticar-se e validar sessão
-@startuml DiagramaSequenciaUC01
+```plantuml
 title UC01 — Autenticar-se e validar sessão
 autonumber
 skinparam sequenceArrowThickness 2
@@ -2972,13 +2972,15 @@ note right of Google
   test-professor/test-coordenador.
 end note
 
-@enduml
-Figura x diagrama de sequência do caso de uso 1, autoria própria
+```
 
----
+**Figura 1 – Diagrama de sequência do caso de uso UC01**
 
-## UC02 — Listar e filtrar provas por status
-@startuml
+Fonte: Autoria própria.
+
+#### 3.2.4.2 Listar e filtrar provas por status (UC02)
+
+```plantuml
 boundary "ProvaController" as Controller
 control "ProvaService" as Service
 database "ProvaRepository" as ProvaRepository
@@ -3040,13 +3042,15 @@ note right of Tela
   a partir da lista plana retornada pela API.
 end note
 
-@enduml
-  Figura x diagrama de sequência do caso de uso 2, autoria própria
+```
 
----
+**Figura 2 – Diagrama de sequência do caso de uso UC02**
 
-## UC03 — Criar prova a partir da home
-@startuml
+Fonte: Autoria própria.
+
+#### 3.2.4.3 Criar prova a partir da home (UC03)
+
+```plantuml
 boundary "ProvaController" as Controller
 control "ProvaService" as Service
 database "ProvaRepository" as ProvaRepository
@@ -3141,8 +3145,11 @@ else professor não vinculado à matéria (403)
 
 end
 
-@enduml
-Figura x diagrama de sequência do caso de uso 3, autoria própria
+```
+
+**Figura 3 – Diagrama de sequência do caso de uso UC03**
+
+Fonte: Autoria própria.
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
@@ -3156,7 +3163,7 @@ Figura x diagrama de sequência do caso de uso 3, autoria própria
 
 Esta seção lista apenas padrões que aparecem no código entregue. Não foram incluídos padrões sem evidência direta na estrutura do projeto.
 
-### 1. Layered Architecture
+#### 1. Layered Architecture
 
 O projeto aplica arquitetura em camadas, separando rotas, controllers, services, repositories e infraestrutura de banco. Essa separação é visível na organização dos diretórios `src/routes`, `src/controllers`, `src/services`, `src/repositories`, `src/schemas`, `src/middlewares` e `src/database`.
 
@@ -3174,7 +3181,7 @@ Exemplos reais:
 
 Esse padrão reduz acoplamento e impede que regras de negócio fiquem espalhadas diretamente nas rotas HTTP.
 
-### 2. Repository Pattern
+#### 2. Repository Pattern
 
 O padrão Repository é usado para isolar a persistência. Os repositories são responsáveis por montar queries SQL, executar comandos no banco, lidar com `JOINs`, paginação, agregações, `UPSERTs` e consultas especializadas.
 
@@ -3202,7 +3209,7 @@ Repositories reais do código:
 
 Esse padrão é importante porque o banco possui muitas regras relacionais e queries com múltiplas tabelas. Sem repositories, controllers e services ficariam acoplados à implementação SQL.
 
-### 3. Service Layer
+#### 3. Service Layer
 
 O padrão Service Layer aparece em todos os domínios principais. As services não apenas repassam chamadas; elas aplicam regras e coordenam repositories.
 
@@ -3222,7 +3229,7 @@ Exemplos reais:
 
 Esse padrão mantém as regras de negócio fora dos controllers e facilita testes unitários, como demonstrado pelos arquivos em `src/tests/unit`.
 
-### 4. DTO/Schema Validation com Zod
+#### 4. DTO/Schema Validation com Zod
 
 A aplicação usa Zod como mecanismo de validação e documentação. Os schemas estão em `src/schemas` e são conectados ao Fastify por `fastify-type-provider-zod`.
 
@@ -3239,7 +3246,7 @@ Exemplos de schemas reais:
 
 Esse padrão evita que entradas inválidas avancem para a camada de serviço. Quando há erro de validação, o handler global retorna status `422` com erro padronizado.
 
-### 5. Middleware Pattern
+#### 5. Middleware Pattern
 
 O padrão Middleware aparece principalmente na autenticação/autorização. As rotas protegidas recebem `preHandler: requireRole(...)`. O middleware executa antes do controller, valida o usuário e decide se a requisição pode continuar.
 
@@ -3258,7 +3265,7 @@ O middleware `requireAuth` também possui dois modos reais:
 
 Esse padrão centraliza autenticação e autorização, evitando repetição de validação de token dentro de cada controller.
 
-### 6. Adapter Pattern
+#### 6. Adapter Pattern
 
 O projeto possui uma interface `EmailAdapter` em `src/services/email-adapter.ts`, com implementação concreta `FakeEmailAdapter`.
 ```text
@@ -3271,7 +3278,7 @@ send(para, assunto, corpo): Promise<{ success: boolean; error?: string }>
 ```
 A implementação atual é simulada: se `EMAIL_FAIL_MODE=always`, retorna falha; caso contrário, retorna sucesso. Isso permite que `EmailResultadoService` dependa de um contrato de envio, sem ficar acoplado a um provedor real de e-mail. No futuro, uma implementação real poderia substituir o adapter fake sem alterar a regra de negócio principal.
 
-### 7. Singleton/Shared Resource para pool de conexão
+#### 7. Singleton/Shared Resource para pool de conexão
 
 O arquivo `src/database/pool.ts` exporta uma única instância de `Pool` do pacote `pg`. Todos os repositories reutilizam essa instância, evitando criar uma nova conexão para cada operação manualmente.
 
@@ -3286,7 +3293,7 @@ transaction.ts
 ```
 A configuração também adapta SSL conforme o host: banco local (`localhost` ou `127.0.0.1`) usa SSL falso; banco remoto usa SSL com `rejectUnauthorized: false`.
 
-### 8. Unit of Work / Transaction Helper
+#### 8. Unit of Work / Transaction Helper
 
 O helper `withTransaction` em `src/database/transaction.ts` implementa uma unidade de trabalho transacional. Ele abre uma conexão, executa `BEGIN`, roda o callback, aplica `COMMIT` em caso de sucesso e `ROLLBACK` em caso de erro, liberando o client no final.
 
@@ -3306,7 +3313,7 @@ ROLLBACK
 client.release()
 throw error
 ```
-### 9. Máquina de estados de domínio
+#### 9. Máquina de estados de domínio
 
 O sistema aplica uma máquina de estados explícita para provas e tentativas de aluno. Não existe uma classe formal `State`; a implementação está distribuída entre enums do banco, validações dos services, repositories e triggers SQL.
 
@@ -3331,7 +3338,7 @@ A lógica aparece em:
 | `RespostaAlunoService` | Permite salvar/enviar apenas tentativa em andamento. |
 | Triggers SQL | Reforçam transições e regras de publicação no banco. |
 
-### 10. Estratégias de correção por fluxo
+#### 10. Estratégias de correção por fluxo
 
 O domínio de correção possui dois fluxos reais de correção, selecionados pela rota e pelo tipo de questão:
 
@@ -3342,13 +3349,13 @@ O domínio de correção possui dois fluxos reais de correção, selecionados pe
 
 A correção automática atende questões objetivas, como múltipla escolha e verdadeiro/falso. A correção manual atende respostas que dependem da avaliação do professor, especialmente discursivas. As duas estratégias gravam dados na tabela `correcao`, diferenciadas pelo enum `correcao_tipo`.
 
-### 11. Template/Factory de resposta HTTP
+#### 11. Template/Factory de resposta HTTP
 
 Os helpers HTTP padronizam a estrutura das respostas. Controllers não montam manualmente o envelope completo em todos os casos; eles usam funções auxiliares como `sendSuccess` e `sendCreated`.
 
 Isso padroniza o formato de retorno e torna a WebAPI mais previsível. Também reduz repetição nos controllers.
 
-### 12. Centralized Error Handling
+#### 12. Centralized Error Handling
 
 O tratamento de erros é centralizado em `src/app.ts` pelo `setErrorHandler`. O projeto não espalha `try/catch` de formatação HTTP por todas as rotas. Erros de domínio são lançados como `ApiError`, erros de validação Zod são convertidos para `VALIDATION_ERROR`, rotas inexistentes recebem `NOT_FOUND` e erros inesperados retornam `INTERNAL_ERROR`.
 
@@ -4171,8 +4178,7 @@ Os relacionamentos centrais identificados são:
 | Prova/Coordenador - Relatório e Exportação | N:1 | Relatórios e exportações são gerados para uma prova por um coordenador. |
 | Prova/Prova do aluno - Log | 0..1:N | Logs registram ações associadas à prova ou à tentativa do aluno. |
 
-~~~plantuml
-@startuml
+```plantuml
 title Modelo Entidade-Relacionamento Conceitual - MER
 
 hide circle
@@ -4465,8 +4471,7 @@ O acesso à prova continua ocorrendo
 pelo vínculo prova_aluno.
 end note
 
-@enduml
-~~~
+```
 
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2, atualizado na sprint 5)
 
@@ -4474,8 +4479,7 @@ O Diagrama Entidade-Relacionamento (DER) abaixo representa a visão física do b
 
 A modelagem física atual possui 22 tabelas de domínio: `coordenador`, `professor`, `materia`, `materia_professor`, `aluno`, `tema`, `questao`, `enunciado`, `alternativa`, `prova`, `prova_status_historico`, `prova_questao`, `prova_aluno`, `resposta_aluno`, `resposta_anexo`, `correcao`, `feedback`, `relatorio`, `resultado_aluno`, `exportacao_resultado`, `email_envio` e `avaliacao_log`. As tabelas associativas reais são `materia_professor`, `prova_questao` e `prova_aluno`; não existem tabelas físicas chamadas `prova_materia` ou `prova_enunciado`.
 
-~~~plantuml
-@startuml
+```plantuml
 title Diagrama Entidade-Relacionamento Físico - DER
 
 hide circle
@@ -4827,8 +4831,7 @@ ator_tipo aceita aluno, professor,
 coordenador ou sistema.
 end note
 
-@enduml
-~~~
+```
 
 Os índices físicos criados para apoiar consultas e filtros aparecem principalmente nas chaves estrangeiras e nos campos mais consultados: `professor.coordenador_id`, `materia_professor.professor_id`, `tema.materia_id`, `questao.materia_id`, `questao.tema_id`, `questao.tipo`, `alternativa.questao_id`, `prova.professor_id`, `prova.materia_id`, `prova.status`, o índice composto `prova(status, turma, semestre, materia_id, professor_id)`, `prova_status_historico.prova_id`, `prova_questao.questao_id`, `prova_aluno.prova_id`, `prova_aluno.aluno_id`, `prova_aluno.status`, `resposta_aluno.prova_aluno_id`, `resposta_aluno.questao_id`, `resposta_anexo.resposta_id`, `correcao.professor_id`, `feedback.correcao_id`, `feedback.professor_id`, `relatorio.prova_id`, `relatorio.coordenador_id`, `relatorio.tipo`, `email_envio.prova_aluno_id`, `email_envio.status`, `avaliacao_log.prova_id`, `avaliacao_log.prova_aluno_id` e `avaliacao_log.acao`.
 
@@ -5804,9 +5807,9 @@ Já os coordenadores e gestores educacionais atuam no acompanhamento pedagógico
 De forma geral, todos os públicos possuem contato frequente com ferramentas digitais, porém enfrentam dificuldades quando os sistemas exigem alto consumo de internet ou processos descentralizados. Por isso, a aplicação prioriza usabilidade, acessibilidade e centralização das informações.
 
 
-## 6.5 Posicionamento
+## 6.5 Posicionamento e Branding
 
-### 6.5.1 Proposta de Valor Única
+### 6.5.1 Proposta de Valor
 
 
 A aplicação entrega ao Instituto Ponte uma plataforma única para transformar avaliações remotas, hoje dependentes de canais dispersos, em um processo digital centralizado, seguro e orientado por dados. Sua proposta de valor está em unir inclusão, eficiência operacional e justiça avaliativa em uma solução feita para a realidade de uma organização social educacional.
@@ -5816,7 +5819,7 @@ Para os alunos, o valor está no acesso simples por link, na interface responsiv
 O diferencial da aplicação não está apenas em digitalizar provas, mas em adaptar o processo avaliativo às necessidades do Instituto Ponte: estudantes em diferentes contextos de acesso, professores com alto volume de correções e uma instituição que precisa demonstrar impacto educacional com dados confiáveis. Assim, a solução se posiciona como uma ferramenta de equidade e gestão, capaz de reduzir falhas operacionais, padronizar critérios de correção e fortalecer a missão institucional de promover ascensão social por meio da educação.
 
 
-### 6.5.2 Estratégia de Diferenciação
+### 6.5.2 Posicionamento e Diferenciação
 
 
 A estratégia de diferenciação da aplicação está em oferecer uma solução especializada para avaliações remotas em organizações educacionais de impacto social, em vez de competir diretamente com plataformas genéricas de ensino ou formulários digitais. Enquanto ferramentas amplas resolvem partes isoladas do processo, como aplicação de questionários, armazenamento de arquivos ou visualização de notas, a plataforma proposta integra todo o fluxo avaliativo do Instituto Ponte em um único ambiente.
