@@ -61,25 +61,25 @@
 </div>
 
 #### Rivalidade entre Concorrentes
-A rivalidade no setor de organizações sociais voltadas à educação é moderada. Observa-se a atuação de diversas ONGs em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas combinam seleção rigorosa com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação tende a reduzir a pressão direta.  
+A rivalidade no setor de organizações sociais voltadas à educação é moderada. Relatórios do terceiro setor apontam a presença de mais de 1.200 ONGs atuando em educação social no Brasil, e a disputa por recursos privados e públicos cresce a mais de 8% ao ano. Observa-se a atuação de diversas ONGs em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas combinam seleção rigorosa com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação tende a reduzir a pressão direta.  
 Referências-base: IDIS (2020), Transparência Brasil (2022), OECD (2019).
 
 ---
 
 #### Ameaça de Novos Entrantes
-A ameaça de novos entrantes é moderada. A criação de uma ONG é simples, mas alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.  
+A ameaça de novos entrantes é moderada. A criação de uma ONG é relativamente simples, mas menos de metade das iniciativas alcança maturidade financeira e impacto comprovado após três anos de operação. Replicar redes de escolas parceiras e demonstrar impacto exige tempo e gestão qualificada, criando barreiras informais mesmo em um setor de forte demanda social.  
 Referências-base: ABONG (2021), Itaú Social (2020), McKinsey (2022).
 
 ---
 
 #### Ameaça de Produtos Substitutos
-A ameaça de substitutos é alta. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte, funcionam como opções substitutas na disputa por estudantes e recursos.  
+A ameaça de substitutos é alta. Programas públicos específicos como **ProUni** e **FIES** competem diretamente pelo mesmo público-alvo do Instituto Ponte; juntos, atendem mais de 1,5 milhão de estudantes e mobilizam recursos na ordem de bilhões de reais por ano. Bolsas privadas e iniciativas como **Pé-de-Meia**, além de fundos de apoio de organizações como Fundação Estudar e Fundação Lemann, oferecem alternativas de acesso ao ensino superior e de apoio pedagógico, mesmo que não entreguem o mesmo pacote de mentoria e correção contínua. Esses substitutos reduzem a dependência do instituto em relação a doadores privados e ampliam a concorrência por recursos e estudantes.  
 Referências-base: MEC (2023), Fundação Estudar (2023), Fundação Lemann (2022), OECD (2023).
 
 ---
 
 #### Poder de Barganha dos Fornecedores
-No contexto de uma OSCIP, os fornecedores primários são os doadores institucionais e empresariais, cujo financiamento constitui o principal insumo operacional da organização. O poder de barganha desses fornecedores é alto. Esses agentes podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como as ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.  
+No contexto de uma OSCIP, os fornecedores primários são os doadores institucionais e empresariais, cujo financiamento constitui o principal insumo operacional da organização. O poder de barganha desses fornecedores é alto e heterogêneo. Grandes financiadores como Fundação Lemann e Itaú Social costumam apoiar projetos educacionais com orçamentos de dezenas de milhões de reais e exigem metas claras, relatórios detalhados e governança sólida. Doadores menores, por sua vez, normalmente aportam valores na faixa de dezenas a centenas de milhares de reais e têm menor influência estratégica, embora contribuam para a diversificação financeira. Como as ONGs dependem de financiamento recorrente, esses financiadores influenciam fortemente prioridades e critérios de gestão.  
 Referências-base: IDIS (2022), CAF (2022), GIFE (2021).
 
 ---
@@ -456,6 +456,55 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
       </em>
 </div>
 
+### 2.2.1 Mapa de Empatia — Aluno (Edgar Romeo)
+
+#### Visão Geral
+Este mapa de empatia representa Edgar Romeo, aluno do Instituto Ponte, e auxilia na compreensão das suas necessidades durante o uso da plataforma de avaliação remota.
+
+#### Dados Demográficos
+- Idade: 17 anos  
+- Localização: Espírito Santo  
+- Escolaridade: Ensino Médio em andamento  
+- Nível de letramento digital: Baixo  
+- Condição socioeconômica: vulnerabilidade social  
+
+#### O que pensa?
+- "Eu preciso conseguir acessar a prova sem confusão."  
+- "Espero entender o enunciado e não errar por causa da tecnologia."  
+- "Tenho medo de perder a entrega ou o arquivo."  
+
+#### O que sente?
+- Ansiedade com o cronômetro e com o tempo disponível para responder.  
+- Insegurança ao enviar imagens manuscritas de respostas.  
+- Frustração diante de perguntas com fórmulas difíceis de ler no celular.  
+
+#### O que diz?
+- "Não sei se minha resposta foi enviada de verdade."  
+- "Tenho dificuldade para ler as questões no meu celular."  
+- "Fico preocupado se a foto da minha resolução vai chegar com qualidade."  
+
+#### O que faz?
+- Usa o celular para acessar a prova.  
+- Tenta enviar fotos de resolução manuscrita.  
+- Pausa para reler cada questão e verifica o envio antes de finalizar.  
+
+#### Objetivos
+- Completar a prova com confiança.  
+- Entregar respostas sem problemas técnicos.  
+- Entender claramente cada enunciado e cada questão.  
+
+#### Dores
+- Dificuldade de acesso inicial e insegurança no login.  
+- Ansiedade com o tempo de prova e com o envio de anexos.  
+- Falta de clareza nos enunciados com fórmulas e imagens.  
+- Medo de perder progresso ou de que a plataforma trave.  
+
+#### Necessidades
+- Interface simples e feedback claro de envio.  
+- Visibilidade do status das respostas e anexos.  
+- Suporte a visualização de fórmulas e imagens no celular.  
+- Orientação passo a passo durante a prova.
+
 <div align="center">
   <img src="../assets/personaProfessor.png">
 </div>
@@ -788,7 +837,10 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
     <td><strong>Critérios de Aceitação</strong></td>
     <td>
       <strong>CR-01</strong> - o professor deve conseguir buscar questões por disciplina, tema ou tipo.<br><br>
-      <strong>CR-02</strong> - questões selecionadas do banco devem ser adicionadas ao editor da prova.
+      <strong>CR-02</strong> - questões selecionadas do banco devem ser adicionadas ao editor da prova.<br><br>
+      <strong>CR-03</strong> - quando a busca não retornar resultados, o sistema deve exibir mensagem de estado vazio.<br><br>
+      <strong>CR-04</strong> - o sistema deve suportar paginação de resultados quando o banco de questões for extenso.<br><br>
+      <strong>CR-05</strong> - não deve ser possível adicionar à mesma prova uma questão que já esteja presente nela.
     </td>
   </tr>
   <tr>
@@ -804,7 +856,19 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
       <strong>Critério de aceitação: CR-02</strong><br>
       a. Professor seleciona questão do banco e adiciona à prova.<br>
       – Questão aparece no editor da avaliação = correto.<br>
-      – Questão não aparece na prova = errado, deve ser corrigido.
+      – Questão não aparece na prova = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Professor busca por tema sem questões correspondentes.<br>
+      – Sistema exibe mensagem de "nenhuma questão encontrada" = correto.<br>
+      – Sistema exibe lista vazia sem explicação = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Banco de questões retorna mais de 20 itens.<br>
+      – Sistema apresenta paginação ou carregamento incremental = correto.<br>
+      – Sistema tenta exibir todos os itens de uma vez sem controle de volume = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-05</strong><br>
+      a. Professor tenta adicionar à prova uma questão que já foi inserida.<br>
+      – Sistema bloqueia a duplicação e informa que a questão já está presente = correto.<br>
+      – Sistema adiciona a questão novamente = errado, deve ser corrigido.
     </td>
   </tr>
   <tr>
@@ -1394,6 +1458,8 @@ Identificou-se que o processo de correção de provas do Instituto Ponte é info
 &emsp;O **professor** autentica-se via OAuth2 Google, cria provas com suporte a fórmulas matemáticas em LaTeX e timer opcional, reutiliza questões de um banco centralizado, gera links e QR Codes de acesso, corrige respostas agrupadas por questão para todos os alunos (correção isonômica), e acessa relatórios de desempenho e histórico de provas.
 
 &emsp;O **coordenador**, também autenticado via OAuth2 Google, visualiza relatórios e histórico de provas de todos os professores, organizados por disciplina e período, monitora métricas de participação e desempenho, e exporta resultados em planilhas Excel — sem permissão para criar ou corrigir avaliações.
+
+&emsp;<strong>Fora do Escopo:</strong> monitoramento por câmera ou bloqueio de navegador em provas; integração com plataformas externas de LMS/WebAPI (como Canvas ou Google Drive); sistema de login/senha para alunos; gamificação ou rede social; e ferramentas de correção automática de provas discursivas fora do fluxo de revisão por questão.
 
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
