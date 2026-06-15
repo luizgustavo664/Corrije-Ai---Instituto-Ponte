@@ -195,3 +195,23 @@ https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/Sem-t%C3%ADtulo?node-id=0-1&
 
 
 ### Alterações Realizadas: Completei a parte 'a' e 'b' da seção 6.4, com descrição da segmentação do mercado e público-alvo
+
+
+## ---------------------------Outro Dia-------------------------
+
+
+### Data: 15/06/2026
+
+
+### Objetivo do Dia: Preencher a seção 7 do WAD
+
+
+### Alterações Realizadas: 
+Foi preenchida a seção 7 do WAD, documentando as conclusões do projeto, os resultados alcançados e as oportunidades de evolução da solução.
+A atividade incluiu:
+
+* análise dos objetivos atingidos pelo projeto;
+* levantamento dos principais pontos fortes da solução desenvolvida;
+* identificação de melhorias observadas durante os testes;
+* definição de propostas para trabalhos futuros;
+* elaboração e revisão do texto da seção de conclusões.
