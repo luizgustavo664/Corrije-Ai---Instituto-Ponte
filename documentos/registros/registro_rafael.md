@@ -197,6 +197,30 @@ Rafael: Atualizar o modelo ER, identificar entidades e relacionamentos principai
 
 Rafael: Atualizar a seção 3.6 do WAD, com foco no refinamento do Diagrama Entidade-Relacionamento (DER) para refletir exatamente o estado atual da migration do banco de dados.
 
+### Data: 15/06/2026
+
+
+### Objetivo do Dia
+
+Rafael: Corrigir e documentar os feedbacks de Sprint 1 no WAD, incluindo análise de Porter, persona do aluno e US05.
+
+### Estudo realizado e documentação
+
+Colocar fotos se for preciso
+
+### Alterações Realizadas
+
+#### Rafael:
+
+- Alteração: Atualizada a seção 2.1.1 do WAD com dados quantitativos e menção a ProUni, FIES, Pé-de-Meia, Fundação Lemann e Itaú Social.
+- Alteração: Adicionado o Mapa de Empatia do aluno Edgar Romeo com dores no momento da prova, incluindo ansiedade com cronômetro, insegurança no envio de anexos e dificuldade de leitura de fórmulas.
+- Alteração: Ampliado US05 com critérios de aceite adicionais para busca sem resultados, paginação de resultados extensos e prevenção de duplicação de questão na prova.
+- Alteração: Incluído parágrafo de 'Fora do Escopo' no minimundo para delimitar claramente o contrato do projeto.
+
+## Link para onde está o arquivo WAD atualizado:
+
+`documentos/wad.md`
+
 
 ### Modelagem do banco de dados
 
