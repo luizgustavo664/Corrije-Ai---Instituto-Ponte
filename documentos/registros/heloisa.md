@@ -462,81 +462,22 @@ Heloísa: atualizar o diagrama de sequênciae o modelo relacional e o físico.
 
 - Alteração: Atualiza diagrama de sequência UML e o Modelo relacional e o modelo físico.
 
-### Banco De Dados artefato 13
+# Sprint 5
 
-### Data: 08/06/2026
+### Pitch artefato 17
+
+### Data: 15/06/2026
 
 ### Objetivo do Dia
 
-Heloísa:
+Heloísa: Criar roteiro do pitch final
 
-### Banco de dados
+### Pitch
 
 ### Alterações Realizadas
 
 #### Heloísa:
 
-- Alteração:
+- Alteração: Criação do esqueleto do pitch
+- Link: https://docs.google.com/document/d/1AMvmXl5BeJ5QGBZ593k_oOHAZRTguYG42vdOebSQW_A/edit?usp=sharing
 
-### Banco De Dados artefato 13
-
-### Data: 09/06/2026
-
-### Objetivo do Dia
-
-Heloísa:
-
-### Banco de dados
-
-### Alterações Realizadas
-
-#### Heloísa:
-
-- Alteração:
-
-### Banco De Dados artefato 13
-
-### Data: 10/06/2026
-
-### Objetivo do Dia
-
-Heloísa:
-
-### Banco de dados
-
-### Alterações Realizadas
-
-#### Heloísa:
-
-- Alteração:
-
-### Banco De Dados artefato 13
-
-### Data: 11/06/2026
-
-### Objetivo do Dia
-
-Heloísa:
-
-### Banco de dados
-
-### Alterações Realizadas
-
-#### Heloísa:
-
-- Alteração:
-
-### Banco De Dados artefato 13
-
-### Data: 12/06/2026
-
-### Objetivo do Dia
-
-Heloísa:
-
-### Banco de dados
-
-### Alterações Realizadas
-
-#### Heloísa:
-- Alteração:
