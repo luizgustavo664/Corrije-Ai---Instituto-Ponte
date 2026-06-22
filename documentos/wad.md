@@ -1679,6 +1679,48 @@ Esta matriz foi atualizada conforme o estado atual da implementação. O backend
 | RF027 | RN15 | `/api/v1/provas/:provaId/resultados/liberar-email`, `/api/v1/provas/:provaId/emails`, `/api/v1/emails/:emailEnvioId/reenviar` | POST, GET | Implementado de ponta a ponta para liberação, histórico e reenvio de e-mails de resultado |
 | RF028 | RN16 | `/api/v1/provas/:provaId/anexos/exportar` | POST | Implementado de ponta a ponta: backend lista anexos e a interface gera pacote ZIP consolidado com manifesto |
 
+### 3.6.5 RN → Entidade → Tabela
+
+Esta subseção faz a rastreabilidade das Regras de Negócio (RN) para as entidades de domínio e suas tabelas físicas (RN → Entidade → Tabela). O objetivo é facilitar a verificação de conformidade entre o WAD e a implementação (migrations / schema).
+
+- RN05 — Controle de tempo e acesso
+  - Entidade: Prova, ProvaAluno
+  - Tabelas: `prova` (data_inicio, data_fim, tempo_limite_min, url_acesso), `prova_aluno` (inicio_em, enviada_em, status, ordem_questoes)
+
+- RN08 — Identificação do aluno (unicidade / evit. de multi-submissões)
+  - Entidade: Aluno
+  - Tabelas: `aluno` (nome, email, cpf, aceitou_termos_em)
+  - Observação LGPD: atualmente o CPF é armazenado como `TEXT` com CHECK de formato. Ver nota de LGPD abaixo.
+
+- RN04 — Controle de envio de arquivos (anexos)
+  - Entidade: RespostaAluno, RespostaAnexo
+  - Tabelas: `resposta_aluno` (resposta_texto, rascunho, sincronizada_em), `resposta_anexo` (url_arquivo, mime_type, tamanho_bytes, nome_arquivo)
+
+- RN13 — Correção por questão
+  - Entidade: Correcao, RespostaAluno
+  - Tabelas: `correcao` (nota, observacao, tipo, corrigida_em), `resposta_aluno`
+
+- RN14 — Resultados e exportação
+  - Entidade: ResultadoAluno, ExportacaoResultado
+  - Tabelas: `resultado_aluno` (nota_total, percentual, liberado, liberado_em), `exportacao_resultado` (url_arquivo, formato)
+
+- RN01 — Estados da prova
+  - Entidade: Prova, ProvaStatusHistorico
+  - Tabelas: `prova`, `prova_status_historico`
+
+- RN16 — Integridade na exportação de anexos
+  - Entidade: RespostaAnexo, ExportacaoResultado
+  - Tabelas: `resposta_anexo`, `exportacao_resultado`
+
+Ação recomendada (LGPD / CPF):
+
+- Situação atual: o campo `aluno.cpf` está definido como `TEXT` com constraint de formato (`~ '^[0-9]{11}$'`) e `UNIQUE`.
+- Gap de requisito: o WAD/avaliação exige que dados pessoais sensíveis não sejam mantidos em texto legível em repouso.
+- Recomendação técnica imediata: aplicar pseudonimização/hashing do CPF antes da persistência (por exemplo, `sha256(salt || cpf)`) e armazenar apenas o hash com índice único sobre o hash. Alternativa: usar `pgcrypto` para criptografia simétrica das colunas sensíveis e gerenciar chaves.
+- Tarefas derivadas (próximo sprint): adicionar migration para criar coluna `cpf_hash`, migrar valores atuais para hash encriptado conforme política escolhida, atualizar repository/service para gravar somente hash, revisar índices/uniqueness e documentar o fluxo de acesso/descrifração (se aplicável).
+
+---
+
 ## 3.2. Arquitetura (sprints 1 a 5)
 
 ### 3.2.1. Diagrama de Arquitetura (sprints 3 a 5)
@@ -5201,7 +5243,7 @@ O backend registra `@fastify/swagger` e `@fastify/swagger-ui` em `src/backend/sr
 | Respostas | PUT | `/api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId` | Pública por tentativa | Texto ou alternativa | Resposta salva | 200, 404, 409, 422 | RF010/RF026 |
 | Respostas | GET | `/api/v1/public/provas-aluno/:provaAlunoId/respostas` | Pública por tentativa | Path `provaAlunoId` | Respostas salvas | 200, 404, 422 | RF026 |
 | Respostas | POST | `/api/v1/public/provas-aluno/:provaAlunoId/enviar` | Pública por tentativa | Confirmação | Prova enviada | 200, 404, 409, 422 | RF026 |
-| Anexos | POST | `/api/v1/public/respostas/:respostaId/anexos` | Pública por resposta | `multipart/form-data`, campo `file` | Anexo registrado | 201, 400, 404, 409, 422 | RF012/RF013 |
+| Anexos | POST | `/api/v1/public/respostas/:respostaId/anexos` | Pública por resposta | `multipart/form-data`, campo `file` | Anexo registrado | 201, 404, 409, 422 | RF012/RF013 |
 | Correção | GET | `/api/v1/provas/:provaId/correcao/questoes` | Professor/coordenador | Path `provaId` | Questões para correção | 200, 401, 403, 404, 422 | RF014 |
 | Correção | POST | `/api/v1/provas/:provaId/correcao/objetivas` | Professor/coordenador | Path `provaId` | Objetivas corrigidas | 200, 401, 403, 404, 422 | RF014 |
 | Correção | GET | `/api/v1/provas/:provaId/questoes/:questaoId/respostas` | Professor/coordenador | Path prova/questão | Respostas para correção | 200, 401, 403, 404, 422 | RF014/RF016 |
