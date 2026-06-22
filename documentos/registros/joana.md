@@ -215,3 +215,24 @@ A atividade incluiu:
 * identificação de melhorias observadas durante os testes;
 * definição de propostas para trabalhos futuros;
 * elaboração e revisão do texto da seção de conclusões.
+
+## ---------------------------Outro Dia-------------------------
+
+
+### Data: 22/06/2026
+
+
+### Objetivo do Dia: Preencher a tabela de testes de usabilidade
+
+
+### Alterações Realizadas: 
+Foi realizada a documentação dos testes de usabilidade conduzidos com usuários da aplicação, registrando os procedimentos executados, os resultados obtidos e os principais pontos de melhoria identificados.
+A atividade incluiu:
+
+* organização das evidências coletadas durante os testes;
+* registro dos cenários e tarefas avaliadas;
+* documentação das dificuldades e feedbacks observados;
+* análise dos resultados obtidos;
+* elaboração das descrições e conclusões do relatório de usabilidade.
+
+Link do teste de usabilidade feito antes de ser adaptado pro wad: [spreadsheet](https://docs.google.com/spreadsheets/d/1hcpx_V0Jqp82GtsUZMK0_2v0GpTi7MbSE-bkbz0ZfPc/edit?gid=0#gid=0)
