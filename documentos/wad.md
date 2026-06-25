@@ -5720,7 +5720,7 @@ Tests: 390 passed, 390 total
 Snapshots: 0 total
 ```
 
-Log completo anexado ao repositório: [`documentos/evidencias/webapi-npm-test.txt`](evidencias/webapi-npm-test.txt).
+Log completo anexado ao repositório: [`documentos/outros/evidencias/webapi-npm-test.txt`](evidencias/webapi-npm-test.txt).
 
 #### Relatório de cobertura por camada
 
@@ -5730,7 +5730,7 @@ O relatório de cobertura foi gerado com:
 npm test -- --coverage
 ```
 
-Log completo anexado ao repositório: [`documentos/evidencias/webapi-npm-test-coverage.txt`](evidencias/webapi-npm-test-coverage.txt).
+Log completo anexado ao repositório: [`documentos/outros/evidencias/webapi-npm-test-coverage.txt`](evidencias/webapi-npm-test-coverage.txt).
 
 Resumo por camada:
 
