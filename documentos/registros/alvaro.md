@@ -840,3 +840,57 @@ A seção 6.3 havia permanecido em branco por uma falha de acompanhamento do gru
 ## Link do docs:
 
 Nenhuma
+
+## --------------------------FIM DA SPRINT 4----------------------------
+
+### Data: 17/06/2026
+
+
+
+### Objetivo do Dia
+
+Criar roteiro do pitch:
+
+Abertura forte
+Comece com uma frase que prenda atenção: uma pergunta, um dado, uma situação comum ou uma dor real.
+
+Problema
+Explique qual problema existe hoje, quem sofre com ele e por que ele importa.
+
+Solução
+Apresente seu projeto como resposta ao problema. Diga o que ele faz de forma simples, sem entrar em detalhes técnicos demais.
+
+Público-alvo
+Mostre para quem o projeto foi feito: usuários, clientes, comunidade, empresas, estudantes etc.
+
+Diferencial
+Explique o que torna seu projeto melhor, mais prático, mais barato, mais acessível ou mais inovador do que alternativas existentes.
+
+Funcionamento
+Descreva rapidamente como o projeto funciona na prática. Se tiver protótipo, telas, fluxo ou demonstração, este é o momento.
+
+Impacto
+Mostre quais resultados o projeto pode gerar: economia de tempo, inclusão, redução de custos, melhoria de experiência, aumento de produtividade ou benefício social.
+
+Viabilidade
+Fale brevemente sobre como ele pode ser implementado, quais recursos precisa e se já existe alguma versão inicial.
+
+Fechamento
+Termine reforçando a ideia principal e fazendo um convite: investir, apoiar, testar, participar ou aprovar o projeto.
+
+### Alterações Realizadas
+
+
+#### Álvaro:
+
+Criei o roteiro do pitch do projeto contemplando todos os critérios necessários para a apresentação. O roteiro foi estruturado com abertura forte, apresentação do problema, solução proposta, público-alvo, diferencial da aplicação, funcionamento do projeto, impacto esperado, viabilidade de implementação e fechamento.
+
+Também organizei o conteúdo para que a apresentação fique clara, objetiva e convincente, destacando a importância do problema, a proposta de valor da solução e os benefícios que o projeto pode gerar para os usuários e para o Instituto Ponte.
+
+##### Observação:
+
+Esse documento será editado ao longo da sprint, então será criado varios cards parecidos
+
+## Link do docs:
+
+https://docs.google.com/document/d/1IrZEs_2yfGSoBBO1ZdN_jGb-xgApM2wKB8uoqXm8H7Q/edit?tab=t.0 
