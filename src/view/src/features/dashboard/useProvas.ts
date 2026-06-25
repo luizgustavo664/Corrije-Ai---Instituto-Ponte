@@ -6,6 +6,7 @@ import {
   arquivarProva,
   createProva,
   deleteProva,
+  despublicarProva,
   getProva,
   listProvas,
   publicarProva,
@@ -186,6 +187,22 @@ export function useProvas({
     },
   });
 
+  const despublicarProvaMutation = useMutation({
+    mutationFn: despublicarProva,
+    onSuccess: (prova) => {
+      const exam = mapProvaToExam(prova);
+      setSelectedExam(exam);
+      setExams((prev) => prev.map((item) => (item.id === exam.id ? exam : item)));
+      void queryClient.invalidateQueries({ queryKey: ["provas"] });
+      void queryClient.invalidateQueries({ queryKey: ["provas", exam.id] });
+      toastSuccess("Prova retirada da publicacao.");
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : "Erro ao tirar prova da publicacao.";
+      toast.error(message);
+    },
+  });
+
   useEffect(() => {
     if (provasQuery.data) {
       setExams(provasQuery.data.map((exam) => ({
@@ -239,6 +256,11 @@ export function useProvas({
     publicarProvaMutation.mutate({ provaId: selectedExamId, dataFim });
   }
 
+  function unpublishSelectedExam() {
+    if (!selectedExamId) return;
+    despublicarProvaMutation.mutate(selectedExamId);
+  }
+
   return {
     provasQuery,
     provaDetailQuery,
@@ -246,10 +268,12 @@ export function useProvas({
     deleteProvaMutation,
     updateProvaMutation,
     publicarProvaMutation,
+    despublicarProvaMutation,
     addExam,
     updateExam,
     deleteExam,
     arquivarExam,
     publishSelectedExam,
+    unpublishSelectedExam,
   };
 }

@@ -446,6 +446,29 @@ export class ProvaRepository {
   }
 
   /**
+   * Retorna uma prova publicada para rascunho, removendo link, QR Code e janela de acesso.
+   *
+   * @param provaId - ID da prova.
+   * @returns Prova atualizada ou null.
+   */
+  async unpublish(provaId: string) {
+    const result = await pool.query<ProvaRow>(
+      `
+        UPDATE "prova"
+        SET "url_acesso" = NULL,
+            "qr_code" = NULL,
+            "data_inicio" = NULL,
+            "data_fim" = NULL,
+            "status" = 'rascunho'
+        WHERE "id" = $1
+        RETURNING *
+      `,
+      [provaId],
+    );
+    return result.rows[0] ? mapProva(result.rows[0]) : null;
+  }
+
+  /**
    * Altera o status de uma prova para "encerrada" ou "antiga".
    *
    * @param provaId - ID da prova.

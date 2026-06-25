@@ -62,6 +62,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
     createProvaMutation,
     updateProvaMutation,
     publicarProvaMutation,
+    despublicarProvaMutation,
     createQuestaoMutation,
     updateQuestaoMutation,
     deleteQuestaoMutation,
@@ -72,9 +73,11 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
     deleteExam,
     arquivarExam,
     publishSelectedExam,
+    unpublishSelectedExam,
     addQuestions,
     deleteQuestion,
     updateQuestion,
+    reorderQuestion,
     addBancoQuestion,
     createQuestionForSelectedExam,
     updateBancoQuestion,
@@ -123,6 +126,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             questions={examQuestions}
             onDeleteQuestion={deleteQuestion}
             onUpdateQuestion={updateQuestion}
+            onReorderQuestion={reorderQuestion}
             onAddQuestions={addQuestions}
             bancoQuestoes={bancoQuestoes}
             examTitle={selectedExam?.title || "Título da Prova"}
@@ -137,6 +141,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             selectedExam={selectedExam ?? undefined}
             onUpdateExam={updateExam}
             onPublish={publishSelectedExam}
+            onUnpublish={unpublishSelectedExam}
             showPublishModal={showPublishModal}
             onClosePublishModal={() => setShowPublishModal(false)}
             isLoading={provaDetailQuery.isLoading || provaQuestoesQuery.isLoading}
@@ -151,9 +156,12 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
                       ? removeQuestaoProvaMutation.error.message
                       : publicarProvaMutation.isError
                         ? publicarProvaMutation.error.message
-                  : undefined
+                        : despublicarProvaMutation.isError
+                          ? despublicarProvaMutation.error.message
+                          : undefined
             }
             isPublishing={publicarProvaMutation.isPending}
+            isUnpublishing={despublicarProvaMutation.isPending}
             isUpdatingExam={updateProvaMutation.isPending}
             updateExamErrorMessage={
               updateProvaMutation.isError ? updateProvaMutation.error.message : undefined

@@ -237,6 +237,62 @@ export class ProvaQuestaoRepository {
   }
 
   /**
+   * Reordena uma questao e recompata as posicoes da prova.
+   *
+   * @param provaId - ID da prova.
+   * @param questaoId - ID da questao movida.
+   * @param ordemOriginal - Nova posicao desejada.
+   * @returns Lista atualizada de vinculos.
+   */
+  async reorder(provaId: string, questaoId: string, ordemOriginal: number) {
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+
+      const current = await client.query<ProvaQuestaoRow>(
+        `
+          SELECT *
+          FROM "prova_questao"
+          WHERE "prova_id" = $1
+          ORDER BY "ordem_original" ASC
+        `,
+        [provaId],
+      );
+
+      const rows = current.rows;
+      const currentIndex = rows.findIndex((row) => row.questao_id === questaoId);
+      if (currentIndex === -1) {
+        await client.query("ROLLBACK");
+        return null;
+      }
+
+      const [moved] = rows.splice(currentIndex, 1);
+      const nextIndex = Math.min(Math.max(ordemOriginal - 1, 0), rows.length);
+      rows.splice(nextIndex, 0, moved);
+
+      await client.query(
+        'UPDATE "prova_questao" SET "ordem_original" = "ordem_original" + 10000 WHERE "prova_id" = $1',
+        [provaId],
+      );
+
+      for (const [index, row] of rows.entries()) {
+        await client.query(
+          'UPDATE "prova_questao" SET "ordem_original" = $1 WHERE "prova_id" = $2 AND "questao_id" = $3',
+          [index + 1, provaId, row.questao_id],
+        );
+      }
+
+      await client.query("COMMIT");
+      return this.findByProva(provaId);
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  /**
    * Remove a associação entre uma questão e uma prova.
    *
    * @param provaId - ID da prova.

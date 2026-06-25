@@ -142,13 +142,12 @@ describe("prova detail and bank modal", () => {
     fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
     await waitFor(() => expect(onUpdateExam).toHaveBeenCalledWith(expect.objectContaining({ title: "Prova final" })));
 
-    const iconButtons = container.querySelectorAll("button");
-    fireEvent.click(iconButtons[8]);
+    fireEvent.click(screen.getAllByTitle("Editar")[0]);
     fireEvent.change(screen.getByDisplayValue("Quanto vale 2+2?"), { target: { value: "Quanto vale 3+3?" } });
     fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
     expect(onUpdateQuestion).toHaveBeenCalledWith(expect.objectContaining({ text: "Quanto vale 3+3?" }));
 
-    fireEvent.click(container.querySelectorAll("button")[9]);
+    fireEvent.click(screen.getAllByTitle("Excluir")[0]);
     expect(onDeleteQuestion).toHaveBeenCalledWith("questao-1");
 
     fireEvent.click(screen.getByRole("button", { name: /submiss/i }));

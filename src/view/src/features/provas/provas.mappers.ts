@@ -71,6 +71,7 @@ export function mapProvaQuestaoToQuestion(item: ProvaQuestaoDto): Question {
         letter: numberToLetter(alternativa.ordemOriginal || index + 1),
         text: alternativa.conteudoLatex,
         correct: alternativa.correta,
+        ...(alternativa.urlImagem ? { imageUrl: alternativa.urlImagem } : {}),
       }))
       : undefined,
     answer:

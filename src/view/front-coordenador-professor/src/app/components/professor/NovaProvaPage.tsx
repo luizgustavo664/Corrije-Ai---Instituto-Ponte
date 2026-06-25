@@ -62,6 +62,8 @@ export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, erro
   const [semestre, setSemestre] = useState("");
   const [orientacoes, setOrientacoes] = useState("");
   const [tempoProva, setTempoProva] = useState<string>("");
+  const [embaralharQuestoes, setEmbaralharQuestoes] = useState(false);
+  const [embaralharAlternativas, setEmbaralharAlternativas] = useState(false);
 
   const canSave =
     nome.trim() !== "" &&
@@ -76,7 +78,9 @@ export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, erro
     !!turma.trim() ||
     !!semestre ||
     !!orientacoes.trim() ||
-    !!tempoProva;
+    !!tempoProva ||
+    embaralharQuestoes ||
+    embaralharAlternativas;
 
   useUnsavedChangesWarning(hasUnsavedChanges && !isSaving);
 
@@ -95,8 +99,8 @@ export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, erro
         semestre,
         instrucoes: orientacoes.trim() || null,
         tempoLimiteMin: tempoProva !== "" && Number(tempoProva) > 0 ? Number(tempoProva) : null,
-        embaralharQuestoes: false,
-        embaralharAlternativas: false,
+        embaralharQuestoes,
+        embaralharAlternativas,
       });
       onBack();
     } catch {
@@ -264,6 +268,17 @@ export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, erro
               </span>
             </div>
 
+          </div>
+
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#111" }}>
+              <input type="checkbox" checked={embaralharQuestoes} onChange={(e) => setEmbaralharQuestoes(e.target.checked)} />
+              Embaralhar questoes
+            </label>
+            <label className="flex items-center gap-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#111" }}>
+              <input type="checkbox" checked={embaralharAlternativas} onChange={(e) => setEmbaralharAlternativas(e.target.checked)} />
+              Embaralhar alternativas
+            </label>
           </div>
 
           {/* Orientações */}

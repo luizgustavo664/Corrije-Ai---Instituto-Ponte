@@ -1,4 +1,4 @@
-import { createCipheriv, createDecipheriv, createHmac, randomBytes } from "node:crypto";
+import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes } from "node:crypto";
 
 const ENVELOPE_VERSION = "v1";
 const IV_LENGTH = 12;
@@ -17,10 +17,14 @@ const decodeKey = (value: string): Buffer => {
 
 export const getCpfEncryptionKey = (environment = process.env): Buffer => {
   const value = environment.CPF_ENCRYPTION_KEY?.trim();
-  if (!value) {
-    throw new Error("CPF_ENCRYPTION_KEY is required for CPF operations.");
+  if (value) return decodeKey(value);
+
+  const fallbackSecret = environment.SUPABASE_JWT_SECRET?.trim() || environment.SESSION_SECRET?.trim();
+  if (fallbackSecret) {
+    return createHash("sha256").update(fallbackSecret).digest();
   }
-  return decodeKey(value);
+
+  throw new Error("CPF_ENCRYPTION_KEY is required for CPF operations.");
 };
 
 export const normalizeCpf = (cpf: string): string => {

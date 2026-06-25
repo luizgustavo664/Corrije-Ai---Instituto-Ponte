@@ -37,6 +37,7 @@ export function mapQuestaoToQuestion(questao: QuestaoDto): Question {
         letter: numberToLetter(alternativa.ordemOriginal || index + 1),
         text: alternativa.conteudoLatex,
         correct: alternativa.correta,
+        ...(alternativa.urlImagem ? { imageUrl: alternativa.urlImagem } : {}),
       }))
       : undefined,
     answer:
@@ -95,6 +96,7 @@ export function mapQuestionToCreateQuestaoPayload(
         : (question.options ?? []).map((option, index) => ({
           ordemOriginal: letterToNumber(option.letter, index + 1),
           conteudoLatex: option.text,
+          ...(option.imageUrl ? { urlImagem: option.imageUrl } : {}),
           correta: option.correct,
         }));
 

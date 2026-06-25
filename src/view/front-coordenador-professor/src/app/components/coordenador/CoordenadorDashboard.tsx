@@ -68,16 +68,28 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
     materiasQuery,
     bancoQuestoes,
     exams,
+    examQuestions,
     selectedExam,
     setSelectedExam,
+    showPublishModal,
+    setShowPublishModal,
+    provaDetailQuery,
+    provaQuestoesQuery,
+    updateProvaMutation,
+    publicarProvaMutation,
+    despublicarProvaMutation,
     showCompletionModal,
     setShowCompletionModal,
     addExam,
     deleteExam,
     arquivarExam,
+    updateExam,
+    publishSelectedExam,
+    unpublishSelectedExam,
     addQuestions,
     deleteQuestion,
     updateQuestion,
+    reorderQuestion,
     addBancoQuestion,
     createQuestionForSelectedExam,
     updateBancoQuestion,
@@ -116,14 +128,43 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
           <ProvaDetailPage
             onBack={() => setActiveTab("provas")}
             onNavigate={(tab) => setActiveTab(tab as CoordenadorTab)}
-            questions={[]}
+            questions={examQuestions}
             onDeleteQuestion={deleteQuestion}
             onUpdateQuestion={updateQuestion}
+            onReorderQuestion={reorderQuestion}
             onAddQuestions={addQuestions}
             bancoQuestoes={bancoQuestoes}
             examTitle={selectedExam?.title || "Título da Prova"}
             examSubject={selectedExam?.subject || "Matéria"}
             examSemester={selectedExam?.semester || "Semestre"}
+            examTurma={selectedExam?.turma}
+            examModalidade={selectedExam?.modalidade}
+            examTempoProva={selectedExam?.tempoProva}
+            examDataInicio={selectedExam?.dataInicio}
+            examDataLimite={selectedExam?.dataLimite}
+            examOrientacoes={selectedExam?.orientacoes}
+            selectedExam={selectedExam ?? undefined}
+            onUpdateExam={updateExam}
+            onPublish={publishSelectedExam}
+            onUnpublish={unpublishSelectedExam}
+            showPublishModal={showPublishModal}
+            onClosePublishModal={() => setShowPublishModal(false)}
+            isLoading={provaDetailQuery.isLoading || provaQuestoesQuery.isLoading}
+            errorMessage={
+              provaDetailQuery.isError
+                ? provaDetailQuery.error.message
+                : provaQuestoesQuery.isError
+                  ? provaQuestoesQuery.error.message
+                  : publicarProvaMutation.isError
+                    ? publicarProvaMutation.error.message
+                    : despublicarProvaMutation.isError
+                      ? despublicarProvaMutation.error.message
+                      : undefined
+            }
+            isPublishing={publicarProvaMutation.isPending}
+            isUnpublishing={despublicarProvaMutation.isPending}
+            isUpdatingExam={updateProvaMutation.isPending}
+            updateExamErrorMessage={updateProvaMutation.isError ? updateProvaMutation.error.message : undefined}
           />
         );
       case "banco":

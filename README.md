@@ -1,236 +1,208 @@
-# Inteli - Instituto de Tecnologia e Liderança 
+# Corrije ai
 
-<p align="center">
-<a href= "https://www.inteli.edu.br/"><img src="./assets/inteli.png" alt="Inteli - Instituto de Tecnologia e Liderança" border="0"></a>
-</p>
+Sistema web para criacao, aplicacao, correcao e acompanhamento de provas do Instituto Ponte. A aplicacao possui backend Fastify/TypeScript com PostgreSQL e frontend React/Vite para os perfis de professor, coordenador e aluno.
 
-# Corrije aí 
-<div style="width: 500px; text-align: center; margin: 0 auto;">
-  <a href="https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/">
-    <img src="./assets/logo.png" alt="Corrije aí" style="border: none; display: inline-block;">
-  </a>
-</div>
+## Estrutura
 
+- `src/backend`: WebAPI, regras de negocio, repositories, models, migrations e testes.
+- `src/view`: frontend React/Vite e testes de interface/contrato.
+- `documentos`: WAD, evidencias e documentacao complementar.
+- `assets`: imagens, wireframes e materiais do projeto.
 
-## Integrantes: 
-<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; margin-top:1rem;">
+A organizacao em camadas esta em `src`: apresentacao em `src/view`, controllers/services/helpers em `src/backend/src`, models/repositories/database/config em `src/backend/src`.
 
-<div style="width:150px; text-align:center;">
-<a href="https://www.linkedin.com/in/luiz-gustavo-campos-cazelatto/" target="_blank">
-<img src="assets/fotos_integrantes/luiz.jpg" alt="Luiz Gustavo Campos Cazelatto" style="width:150px; height:150px; object-fit:cover; border-radius:12px;" />
-</a>
+## Pre-requisitos
 
-<a href="https://www.linkedin.com/in/luiz-gustavo-campos-cazelatto/" target="_blank"><strong>Luiz Gustavo Campos Cazelatto</strong></a>
-</div>
+- Node.js 20 ou superior.
+- npm 10 ou superior.
+- PostgreSQL 15 ou superior, local, Docker ou Supabase.
+- Navegador moderno.
 
-<div style="width:150px; text-align:center;">
-<a href="https://www.linkedin.com/in/matheus-viana-de-almeida/" target="_blank">
-<img src="assets/fotos_integrantes/matheus.png" alt="Matheus Viana de Almeida" style="width:150px; height:150px; object-fit:cover; border-radius:12px;" />
-</a>
+## Instalacao
 
-<a href="https://www.linkedin.com/in/matheus-viana-de-almeida/" target="_blank"><strong>Matheus Viana de Almeida</strong></a>
-</div>
-
-<div style="width:150px; text-align:center;">
-<a href="https://www.linkedin.com/in/heloisa-kadota/" target="_blank">
-<img src="assets/fotos_integrantes/heloisa.jpg" alt="Heloisa Kadota" style="width:150px; height:150px; object-fit:cover; border-radius:12px;" />
-</a>
-
-<a href="https://www.linkedin.com/in/heloisa-kadota/" target="_blank"><strong>Heloisa Kadota</strong></a>
-</div>
-
-<div style="width:150px; text-align:center;">
-<a href="https://www.linkedin.com/in/pablo-marchina/" target="_blank">
-<img src="assets/fotos_integrantes/pablo.jpeg" alt="Pablo Marchina" style="width:150px; height:150px; object-fit:cover; border-radius:12px;" />
-</a>
-
-<a href="https://www.linkedin.com/in/pablo-marchina/" target="_blank"><strong>Pablo Marchina</strong></a>
-</div>
-
-<div style="width:150px; text-align:center;">
-<a href="https://www.linkedin.com/in/joanaracy/" target="_blank">
-<img src="assets/fotos_integrantes/joana.jpg" alt="Joana Racy" style="width:150px; height:150px; object-fit:cover; border-radius:12px;" />
-</a>
-
-<a href="https://www.linkedin.com/in/joanaracy/" target="_blank"><strong>Joana Racy</strong></a>
-</div>
-
-<div style="width:150px; text-align:center;">
-<a href="https://www.linkedin.com/in/%C3%A1lvaro-leme-de-toledo-almeida-aa88503bb/recent-activity/all/" target="_blank">
-<img src="assets/fotos_integrantes/alvaro.PNG" alt="Álvaro Leme de Toledo Almeida" style="width:150px; height:150px; object-fit:cover; border-radius:12px;" />
-</a>
-
-<a href="https://www.linkedin.com/in/%C3%A1lvaro-leme-de-toledo-almeida-aa88503bb/recent-activity/all/" target="_blank"><strong>Álvaro Leme de Toledo Almeida</strong></a>
-</div>
-
-<div style="width:150px; text-align:center;">
-<a href="https://www.linkedin.com/in/rafael-morgado-ferreira-811a1b3bb/" target="_blank">
-<img src="assets/fotos_integrantes/rafael.png" alt="Rafael Morgado Ferreira" style="width:150px; height:150px; object-fit:cover; border-radius:12px;" />
-</a>
-
-<a href="https://www.linkedin.com/in/rafael-morgado-ferreira-811a1b3bb/" target="_blank"><strong>Rafael Morgado Ferreira</strong></a>
-</div>
-
-</div>
-
-## Professores:
-### Orientador(a) 
-- <a href="https://www.linkedin.com/in/laizaribeiro/">Laíza Ribeiro Silva</a>
-### Instrutores
-- <a href="https://www.linkedin.com/in/silva-wesley/?locale=pt-BR">Wesley Santos</a>
-- <a href="https://www.linkedin.com/in/pedroteberga/">Pedro Teberga</a> 
-- <a href="https://www.linkedin.com/in/geraldo-magela-severino-vasconcelos-22b1b220/">Geraldo Magela Severino Vasconcelos</a> 
-- <a href="https://www.linkedin.com/in/francisco-escobar/">Francisco Escobar</a>
-- <a href="https://www.linkedin.com/in/camilanarantes/">Camila Naves Arantes</a>
-
-## 📝 Descrição
-
-O projeto Corrije aí é uma aplicação web desenvolvida para o Instituto Ponte, com o objetivo de centralizar e simplificar a criação, aplicação e correção de avaliações remotas. A solução atende a alunos em situação de vulnerabilidade social que estudam em modelo híbrido, oferecendo uma plataforma única e acessível para envio de provas, respostas e trabalhos.
-
-A proposta resolve a atual dispersão do processo avaliativo, que é feito por WhatsApp, e-mail e outras ferramentas não estruturadas. Com o Corrije aí, as submissões de avaliações ficam organizadas em um único ambiente, o envio de arquivos é feito por questão, e a correção é padronizada para garantir mais equidade e transparência.
-
-Além de tornar o processo mais eficiente para professores e coordenadores, o aplicativo gera relatórios automáticos de desempenho e permite acompanhar resultados com maior segurança. A plataforma valoriza acessibilidade, usabilidade e justiça no processo avaliativo, reduzindo perdas de arquivos, sobrecarga administrativa e dificuldades técnicas dos usuários.
-
-## Demonstração e documentação da API
-
-A demonstração funcional pode ser realizada localmente seguindo as instruções abaixo. Com o backend em execução, a documentação OpenAPI/Swagger fica disponível em `http://localhost:3333/docs`.
-
-## 📁 Estrutura de pastas
-
-Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
-
-- **assets**: aqui estão os arquivos relacionados a elementos não-estruturados deste repositório, como imagens.
-- **documentos**: aqui estão todos os documentos do projeto, como o Web Application Document (WAD) e documentos complementares.
-- **src**: todo o código fonte criado para o desenvolvimento do projeto de aplicação web.
-- **README.md**: arquivo que serve como guia introdutório e explicação geral sobre o projeto e a aplicação (o mesmo arquivo que você está lendo agora).
-- **.gitignore**: lista de arquivos e pastas que não devem ser versionados pelo Git.
-- **.gitattributes**: configura atributos de arquivos para o repositório Git.
-- **.gitlab/**: arquivos de configuração e pipelines do GitLab.
-- **node_modules/**: dependências instaladas do Node.js (não devem ser versionadas, geralmente geradas via `npm install`).
-
-## 💻 Configuração para desenvolvimento e execução do código
-
-### Pré-requisitos
-
-- Node.js 18 ou superior
-- npm 10 ou superior (instalado junto com o Node.js)
-- Navegador moderno (Chrome, Edge, Firefox, Safari)
-- Acesso à internet para baixar dependências
-
-### 1. Clonar o repositório
+Na raiz do repositorio:
 
 ```sh
-git clone <URL_DO_REPOSITÓRIO>
-cd g05
+npm run install:all
 ```
 
-### 2. Instalar dependências do backend
+Ou, separadamente:
 
 ```sh
-cd src/backend
-npm ci
+npm --prefix src/backend ci
+npm --prefix src/view ci
 ```
 
-### 3. Configurar variáveis de ambiente do backend
+## Configuracao do backend
 
-O backend utiliza um arquivo local `.env` em `src/backend/.env`. Esse arquivo está listado em `.gitignore` e não é enviado ao repositório, portanto cada desenvolvedor deve criar seu próprio arquivo localmente.
-
-Exemplo de conteúdo mínimo:
+Crie `src/backend/.env`:
 
 ```env
-DATABASE_URL="postgresql://..."
+NODE_ENV=development
 PORT=3333
-SUPABASE_URL="https://seu-projeto.supabase.co"
-SUPABASE_JWT_SECRET="seu-segredo-jwt"
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/corrije_ai
+
+# Segredo JWT usado pelo middleware de autenticacao (equivalente ao SESSION_SECRET).
+SUPABASE_JWT_SECRET=cole_aqui_um_segredo_gerado
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_JWT_ISSUER=
+
+# OAuth Google usado pelo login de professor/coordenador.
+GOOGLE_CLIENT_ID=seu-google-client-id
+GOOGLE_REDIRECT_URI=http://localhost:5173/auth/callback
+
+# Opcional apenas para validacao local sem OAuth real.
+AUTH_MODE=
+
+# Chave de 32+ caracteres usada na cifragem/migracao de CPF.
+CPF_ENCRYPTION_KEY=troque-por-uma-chave-com-pelo-menos-32-caracteres
+
+# Frontend do aluno usado para gerar links publicos de prova.
+ALUNO_BASE_URL=http://localhost:5173/aluno/prova
+
+# Banco/resiliencia.
+DB_POOL_MAX=10
+DB_CONNECTION_TIMEOUT_MS=8000
+DB_IDLE_TIMEOUT_MS=30000
+DB_STATEMENT_TIMEOUT_MS=15000
+
+# Provedor de email opcional para envio de resultados.
+EMAIL_ADAPTER=fake
+EMAIL_WEBHOOK_URL=
+EMAIL_API_KEY=
+
+# Storage opcional para exportacoes/anexos.
+SUPABASE_STORAGE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_STORAGE_BUCKET=exports
 ```
 
-> Os testes de integração executam operações reais de leitura e escrita. Deve ser utilizado um banco PostgreSQL exclusivo para desenvolvimento/testes, nunca uma base de produção.
+Gere segredos localmente:
 
-### 4. Aplicar as migrations
+```sh
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+Use valores diferentes para `SUPABASE_JWT_SECRET` e `CPF_ENCRYPTION_KEY`. Em producao, configure as mesmas variaveis no ambiente do servidor em vez de versionar `.env`.
+
+## Configuracao do frontend
+
+Crie `src/view/.env`:
+
+```env
+VITE_API_URL=http://localhost:3333/api/v1
+VITE_ALUNO_BASE_URL=http://localhost:5173/aluno/prova
+
+# Apenas se a autenticacao externa/Supabase for usada no ambiente.
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+```
+
+## Banco e migrations
+
+Com `DATABASE_URL` apontando para um banco vazio:
 
 ```sh
 npm run migrate
 ```
 
-### 5. Iniciar o backend em modo de desenvolvimento
+Se existir base legada com CPF em texto plano, execute a migracao especifica depois de definir `CPF_ENCRYPTION_KEY`:
 
 ```sh
-npm run dev
+npm run migrate:cpf
 ```
 
-O servidor backend ficará disponível em `http://localhost:3333`.
+As migrations ficam em `src/backend/src/database/migrations` e rodam em ordem numerica. O schema inicial cria tabelas, enums, triggers, RLS compativel com Supabase e regras de janela de prova.
 
-### 6. Instalar dependências do frontend
+## Executar em desenvolvimento
+
+Terminal 1:
 
 ```sh
-cd ../frontend
-npm ci
+npm --prefix src/backend run dev
 ```
 
-### 7. Configurar e iniciar o frontend
-
-Crie `src/frontend/.env` com as URLs utilizadas pela aplicação:
-
-```env
-VITE_API_URL="http://localhost:3333/api/v1"
-VITE_SUPABASE_URL="https://seu-projeto.supabase.co"
-VITE_SUPABASE_ANON_KEY="sua-chave-anonima"
-```
+Terminal 2:
 
 ```sh
-npm run dev
+npm --prefix src/view run dev
 ```
 
-O frontend será servido pelo Vite e, por padrão, estará disponível em `http://localhost:5173`.
+URLs:
 
-### 8. Como acessar a aplicação
+- Frontend: `http://localhost:5173`
+- WebAPI: `http://localhost:3333`
+- Swagger/OpenAPI: `http://localhost:3333/docs`
+- Healthcheck: `http://localhost:3333/api/v1/health`
 
-- Acesse o frontend em `http://localhost:5173`
-- O frontend deve se conectar ao backend em `http://localhost:3333`
-- Consulte a documentação da WebAPI em `http://localhost:3333/docs`
-
-### 9. Executar testes e cobertura
-
-No diretório `src/backend`, com `DATABASE_URL` apontando para o banco de testes preparado pelas migrations:
+## Build e execucao de producao
 
 ```sh
+npm run build
+npm --prefix src/backend start
+npm --prefix src/view preview
+```
+
+Em hospedagem real, sirva `src/view/dist` como estatico e mantenha o backend com as variaveis de ambiente acima.
+
+## Testes
+
+Verificacoes principais:
+
+```sh
+npm run typecheck
 npm test
-npm test -- --coverage
 ```
 
-Os testes unitários de Service seguem a nomenclatura `*.service.test.ts`; os testes de integração HTTP seguem `*.integration.test.ts`. As evidências versionadas estão em `documentos/outros/evidencias/`.
+Cobertura:
 
-### Observações
+```sh
+npm run coverage
+```
 
-- Caso o backend precise ser recompilado, use `npm run build` em `src/backend`.
-- Para testar o backend, execute `npm test` em `src/backend`.
+Executar por modulo:
 
-## 🗃 Histórico de lançamentos
-<!-- 
-* 0.5.0 - XX/XX/2024
-    * 
-* 0.4.0 - XX/XX/2024
-    * 
-* 0.3.0 - XX/XX/2024
-    * 
-* 0.2.0 - XX/XX/2024
-    *  -->
-* 0.1.0 - 26/06/2026 (planejado)
-    Versão final do MVP
+```sh
+npm --prefix src/backend run test:unit
+npm --prefix src/backend test
+npm --prefix src/view test
+```
 
-## 📋 Licença/License
+Os testes de integracao do backend usam PostgreSQL real. Antes de roda-los, aponte `DATABASE_URL` para um banco de teste isolado e rode `npm run migrate`.
 
-- <a href="https://git.inteli.edu.br/graduacao/2026-1b/t24/g05">Corrije aí</a> © 2026 by 
-<a href="https://www.inteli.edu.br/">Inteli</a>, 
-<a href="https://www.linkedin.com/in/%C3%A1lvaro-leme-de-toledo-almeida-aa88503bb/recent-activity/all/">Álvaro Leme de Toledo Almeida</a>, 
-<a href="https://www.linkedin.com/in/heloisa-kadota/">Heloísa Noda Kadota</a>, 
-<a href="https://www.linkedin.com/in/joanaracy/">Joana Auriemo Racy</a>, 
-<a href="https://www.linkedin.com/in/luiz-gustavo-campos-cazelatto/">Luiz Gustavo Campos Cazelatto</a>, 
-<a href="https://www.linkedin.com/in/matheus-viana-de-almeida/">Matheus Viana de Almeida</a>, 
-<a href="https://www.linkedin.com/in/pablo-marchina/">Pablo Marchina</a>,  
-<a href="https://www.linkedin.com/in/rafael-morgado-ferreira-811a1b3bb/">Rafael Morgado Ferreira</a> 
+## Validacao ponta a ponta autenticada
 
-Is licensed under 
-<a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a>
-<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
-<img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+1. Suba banco, backend e frontend seguindo os passos anteriores.
+2. Abra `http://localhost:5173`.
+3. Entre como professor ou coordenador pelo fluxo de autenticacao configurado. Em ambiente de avaliacao sem OAuth real, use os endpoints documentados em `/docs` para criar/validar uma sessao de teste conforme `auth.controller.ts`.
+4. Como professor, crie uma prova em `Provas > Nova prova`. Confirme o feedback de rascunho salvo.
+5. Adicione questoes do banco ou crie uma nova questao. Questoes aceitam imagem no enunciado e alternativas quando informado `urlImagem`; respostas de aluno aceitam anexos conforme regras da API.
+6. Em `Prova > Configuracoes`, defina duracao, embaralhamento e demais opcoes.
+7. Clique em `Publicar` e informe apenas uma data/hora limite futura. O backend define `dataInicio` como o momento da publicacao e grava `dataFim` com o limite informado.
+8. Copie o link de aluno exibido no modal de compartilhamento.
+9. Acesse o link em janela anonima, informe os dados do aluno, inicie a prova, responda, anexe arquivos quando permitido e envie.
+10. Volte ao professor, abra `Correcao`, filtre provas com pendencias, corrija respostas discursivas e salve. O sistema exibe confirmacao e atualiza pendencias.
+11. Abra `Liberacao das Notas`, confira pendencias, exporte resultados/anexos se necessario e envie os resultados.
+
+## Resiliencia e qualidade
+
+- Timeout de banco configurado em `src/backend/src/database/pool.ts` por `DB_CONNECTION_TIMEOUT_MS`, `DB_IDLE_TIMEOUT_MS` e `DB_STATEMENT_TIMEOUT_MS`.
+- Regras de periodo da prova sao validadas no backend ao iniciar, salvar resposta e finalizar.
+- Operacoes criticas usam constraints, upserts, status condicionais e chaves idempotentes onde aplicavel.
+- Cliente HTTP do frontend aplica retry/backoff em falhas transitorias, mantendo erros de validacao sem retry.
+- Fluxos de professor possuem filtros, busca, status visual, priorizacao de provas abertas/com correcao pendente, aviso de alteracoes nao salvas e feedbacks padronizados.
+- Publicacao de prova e reversao para rascunho sao controladas no backend; provas com tentativas/submissoes nao podem ser tiradas da publicacao.
+
+## Checklist de avaliacao
+
+- `npm run migrate` sobe banco limpo.
+- `npm run typecheck` passa em backend e frontend.
+- `npm --prefix src/backend run test:unit` passa.
+- `npm --prefix src/view test` passa.
+- Backend inicia sem dados obrigatorios preexistentes.
+- Frontend abre sem erros impeditivos no terminal ou console.
+- Swagger fica disponivel em `/docs`.
+
+## Licenca
+
+Corrije ai (2026), projeto academico Inteli/Instituto Ponte. Consulte a documentacao do repositorio para creditos completos dos integrantes e orientadores.

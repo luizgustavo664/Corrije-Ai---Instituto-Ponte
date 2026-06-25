@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { XMarkIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import type { BancoQuestion, Exam } from "../../../../../src/features/dashboard/dashboard.types";
 
@@ -6,15 +7,26 @@ interface Props {
   onClose: () => void;
   questao: BancoQuestion | null;
   provas: Exam[];
-  onAddToProva: (provaId: Exam["id"], questao: BancoQuestion) => void;
+  onAddToProva: (provaId: Exam["id"], questao: BancoQuestion) => void | Promise<void>;
 }
 
 export function SelecionarProvaModal({ isOpen, onClose, questao, provas, onAddToProva }: Props) {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+
   if (!isOpen || !questao) return null;
 
-  const handleSelectProva = (provaId: Exam["id"]) => {
-    onAddToProva(provaId, questao);
-    onClose();
+  const handleSelectProva = async (provaId: Exam["id"]) => {
+    setErrorMessage(null);
+    setIsAdding(true);
+    try {
+      await onAddToProva(provaId, questao);
+      onClose();
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Nao foi possivel adicionar a questao a prova.");
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -62,6 +74,14 @@ export function SelecionarProvaModal({ isOpen, onClose, questao, provas, onAddTo
 
         {/* Lista de provas */}
         <div className="flex-1 overflow-y-auto space-y-3">
+          {errorMessage && (
+            <div
+              className="rounded-xl p-3"
+              style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: "13px" }}
+            >
+              {errorMessage}
+            </div>
+          )}
           {provas.length === 0 ? (
             <div className="text-center py-8">
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#B1B4BD" }}>
@@ -73,10 +93,13 @@ export function SelecionarProvaModal({ isOpen, onClose, questao, provas, onAddTo
               <button
                 key={prova.id}
                 onClick={() => handleSelectProva(prova.id)}
+                disabled={isAdding}
                 className="w-full text-left p-4 rounded-xl border-2 transition-all hover:border-opacity-70 hover:shadow-md"
                 style={{
                   borderColor: "#E5E7EB",
                   backgroundColor: "#FFFFFF",
+                  opacity: isAdding ? 0.65 : 1,
+                  cursor: isAdding ? "not-allowed" : "pointer",
                 }}
               >
                 <div className="flex items-start gap-3">

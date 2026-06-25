@@ -22,6 +22,12 @@ export const addQuestaoProvaBodySchema = z
   })
   .strict();
 
+export const reorderQuestaoProvaBodySchema = z
+  .object({
+    ordemOriginal: z.number().int().positive("A nova ordem deve ser positiva.").describe("Nova ordem da questao na prova."),
+  })
+  .strict();
+
 export const provaQuestaoResponseSchema = z.object({
   provaId: z.string().uuid().describe("Identificador único da prova."),
   questaoId: z.string().uuid().describe("Identificador único da questão."),
@@ -32,3 +38,4 @@ export const provaQuestaoResponseSchema = z.object({
 });
 
 export type AddQuestaoProvaInput = z.infer<typeof addQuestaoProvaBodySchema>;
+export type ReorderQuestaoProvaInput = z.infer<typeof reorderQuestaoProvaBodySchema>;

@@ -110,3 +110,7 @@ export type AddQuestaoProvaPayload = {
   ordemOriginal: number;
   pontuacaoMax?: number;
 };
+
+export type ReorderQuestaoProvaPayload = {
+  ordemOriginal: number;
+};

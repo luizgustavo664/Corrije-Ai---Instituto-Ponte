@@ -184,6 +184,8 @@ export class ProvaService {
       throw conflict("Apenas provas em rascunho podem ser publicadas.");
     }
 
+    const dataInicio = new Date();
+
     const dataFim = new Date(input.dataFim);
     if (Number.isNaN(dataFim.getTime()) || dataFim.getTime() <= Date.now()) {
       throw conflict("A data limite da prova deve ser futura.");
@@ -201,12 +203,39 @@ export class ProvaService {
 
     const baseUrl = input.baseUrlAluno.replace(/\/+$/, "");
     const urlAcesso = `${baseUrl}/${randomUUID()}`;
-    const published = await this.provaRepository.publish(provaId, urlAcesso, new Date(), dataFim);
+    const published = await this.provaRepository.publish(provaId, urlAcesso, dataInicio, dataFim);
     if (!published) {
       throw notFound("Prova não encontrada.");
     }
 
     return published;
+  }
+
+  /**
+   * Tira uma prova publicada do ar quando ainda nao houve tentativa de aluno.
+   *
+   * @param provaId - Identificador unico da prova.
+   * @param user - Usuario autenticado (deve ter permissao de acesso).
+   * @returns A prova de volta ao status "rascunho".
+   * @throws conflict - Se a prova nao estiver publicada ou se ja tiver submissoes.
+   */
+  async despublicar(provaId: string, user: AuthUser) {
+    const prova = await this.buscarPorId(provaId, user);
+    if (prova.status !== "publicada") {
+      throw conflict("Apenas provas publicadas podem ser tiradas da publicacao.");
+    }
+
+    const hasSubmissions = await this.provaRepository.hasSubmissions(provaId);
+    if (hasSubmissions) {
+      throw conflict("Nao e possivel tirar da publicacao uma prova com submissoes de alunos.");
+    }
+
+    const unpublished = await this.provaRepository.unpublish(provaId);
+    if (!unpublished) {
+      throw notFound("Prova nao encontrada.");
+    }
+
+    return unpublished;
   }
 
   /**

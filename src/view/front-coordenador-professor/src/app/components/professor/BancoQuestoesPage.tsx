@@ -11,7 +11,7 @@ interface Props {
   onUpdateQuestion?: (questao: BancoQuestion) => void;
   onDeleteQuestion?: (id: BancoQuestion["id"]) => void;
   provas?: Exam[];
-  onAddToProva?: (provaId: Exam["id"], questao: BancoQuestion) => void;
+  onAddToProva?: (provaId: Exam["id"], questao: BancoQuestion) => void | Promise<void>;
   isLoading?: boolean;
   errorMessage?: string;
 }
@@ -40,8 +40,9 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
     setEditingQuestao(null);
   };
 
-  const handleAddToProva = (provaId: Exam["id"], questao: BancoQuestion) => {
-    onAddToProva?.(provaId, questao);
+  const handleAddToProva = async (provaId: Exam["id"], questao: BancoQuestion) => {
+    await onAddToProva?.(provaId, questao);
+    setQuestaoParaAdicionar(null);
   };
 
   return (

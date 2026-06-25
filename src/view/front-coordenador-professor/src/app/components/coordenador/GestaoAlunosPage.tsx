@@ -14,6 +14,7 @@ interface Props {
 export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
   const queryClient = useQueryClient();
   const [alunoToDelete, setAlunoToDelete] = useState<string | null>(null);
+  const [showAllAlunos, setShowAllAlunos] = useState(false);
 
   const { data: alunos, isLoading, isError } = useQuery({
     queryKey: ["alunos"],
@@ -29,6 +30,8 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
 
   const analytics = useAnalyticsSummary(provas);
   const alunosComCadastroPendente = (alunos ?? []).filter((aluno) => !aluno.cpf).length;
+  const visibleAlunos = showAllAlunos ? alunos ?? [] : (alunos ?? []).slice(0, 10);
+  const hasHiddenAlunos = (alunos?.length ?? 0) > visibleAlunos.length;
 
   const deleteMutation = useMutation({
     mutationFn: deleteAluno,
@@ -197,7 +200,7 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
           )}
 
           <div className="space-y-3">
-            {(alunos ?? []).map((aluno) => (
+            {visibleAlunos.map((aluno) => (
               <div
                 key={aluno.id}
                 role="button"
@@ -237,6 +240,16 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
               </div>
             ))}
           </div>
+          {hasHiddenAlunos && (
+            <button
+              type="button"
+              onClick={() => setShowAllAlunos(true)}
+              className="mt-4 px-4 py-2 rounded-lg transition-opacity hover:opacity-85"
+              style={{ backgroundColor: "#05245F", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px" }}
+            >
+              Ver todos os alunos
+            </button>
+          )}
         </div>
       </div>
       </div>

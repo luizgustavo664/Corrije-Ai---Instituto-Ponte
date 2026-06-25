@@ -2,7 +2,12 @@ import { useEffect } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { addQuestaoToProva, listProvaQuestoes, removeQuestaoFromProva } from "../provas/provas.api";
+import {
+  addQuestaoToProva,
+  listProvaQuestoes,
+  removeQuestaoFromProva,
+  reorderQuestaoInProva,
+} from "../provas/provas.api";
 import { mapProvaQuestaoToQuestion } from "../provas/provas.mappers";
 import { mapQuestaoToQuestion } from "../questoes/questoes.mappers";
 import type { Question } from "../questoes/questao.types";
@@ -72,6 +77,23 @@ export function useProvaQuestoes({
     },
   });
 
+  const reorderQuestaoProvaMutation = useMutation({
+    mutationFn: ({
+      provaId,
+      questaoId,
+      ordemOriginal,
+    }: {
+      provaId: string;
+      questaoId: string;
+      ordemOriginal: number;
+    }) => reorderQuestaoInProva(provaId, questaoId, { ordemOriginal }),
+    onSuccess: (items, variables) => {
+      setExamQuestions(items.map(mapProvaQuestaoToQuestion));
+      void queryClient.invalidateQueries({ queryKey: ["provas", variables.provaId, "questoes"] });
+      toastSuccess("Ordem das questoes atualizada.");
+    },
+  });
+
   useEffect(() => {
     if (provaQuestoesQuery.data) {
       setExamQuestions(provaQuestoesQuery.data);
@@ -124,6 +146,28 @@ export function useProvaQuestoes({
     );
   }
 
+  function reorderQuestion(questionId: string, targetOrder: number) {
+    if (selectedExamId && isPersistedId(questionId)) {
+      reorderQuestaoProvaMutation.mutate({
+        provaId: selectedExamId,
+        questaoId: questionId,
+        ordemOriginal: targetOrder,
+      });
+      return;
+    }
+
+    setExamQuestions((prev) => {
+      const currentIndex = prev.findIndex((question) => question.id === questionId);
+      if (currentIndex === -1) return prev;
+      const next = [...prev];
+      const [moved] = next.splice(currentIndex, 1);
+      const nextIndex = Math.min(Math.max(targetOrder - 1, 0), next.length);
+      next.splice(nextIndex, 0, moved);
+      return next;
+    });
+    toastSuccess("Ordem das questoes atualizada.");
+  }
+
   async function createQuestionForSelectedExam(payload: CreateQuestaoPayload) {
     const questao = await createQuestao(payload);
 
@@ -143,25 +187,20 @@ export function useProvaQuestoes({
 
   async function addQuestionToExam(provaId: string, bancoQ: BancoQuestion) {
     if (isPersistedId(provaId) && isPersistedId(bancoQ.id)) {
-      try {
-        const currentQuestoes =
-          selectedExamId === provaId
-            ? examQuestions
-            : await queryClient.fetchQuery({
-              queryKey: ["provas", provaId, "questoes"],
-              queryFn: () => listProvaQuestoes(provaId),
-            });
+      const currentQuestoes =
+        selectedExamId === provaId
+          ? examQuestions
+          : await queryClient.fetchQuery({
+            queryKey: ["provas", provaId, "questoes"],
+            queryFn: () => listProvaQuestoes(provaId),
+          });
 
-        await addQuestaoProvaMutation.mutateAsync({
-          provaId,
-          questaoId: bancoQ.id,
-          ordemOriginal: currentQuestoes.length + 1,
-          pontuacaoMax: bancoQ.pontuacaoPadrao,
-        });
-      } catch {
-        const newQuestion = createDraftQuestionFromBanco(bancoQ, examQuestions);
-        await addQuestions([newQuestion]);
-      }
+      await addQuestaoProvaMutation.mutateAsync({
+        provaId,
+        questaoId: bancoQ.id,
+        ordemOriginal: currentQuestoes.length + 1,
+        pontuacaoMax: bancoQ.pontuacaoPadrao,
+      });
       return;
     }
 
@@ -173,10 +212,12 @@ export function useProvaQuestoes({
     provaQuestoesQuery,
     addQuestaoProvaMutation,
     removeQuestaoProvaMutation,
+    reorderQuestaoProvaMutation,
     addQuestion,
     addQuestions,
     deleteQuestion,
     updateQuestion,
+    reorderQuestion,
     createQuestionForSelectedExam,
     addQuestionToExam,
   };

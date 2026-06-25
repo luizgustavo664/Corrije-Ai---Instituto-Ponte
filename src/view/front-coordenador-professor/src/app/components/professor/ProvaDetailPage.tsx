@@ -24,6 +24,7 @@ interface Props {
   questions: Question[];
   onDeleteQuestion?: (id: Question["id"]) => void;
   onUpdateQuestion?: (question: Question) => void;
+  onReorderQuestion?: (id: Question["id"], targetOrder: number) => void;
   onAddQuestions?: (questions: Question[]) => void | Promise<void>;
   bancoQuestoes?: BancoQuestion[];
   examTitle?: string;
@@ -38,6 +39,7 @@ interface Props {
   selectedExam?: Exam;
   onUpdateExam?: (exam: Exam) => void | Promise<void>;
   onPublish?: (dataFim?: string) => void;
+  onUnpublish?: () => void;
   showPublishModal?: boolean;
   onClosePublishModal?: () => void;
   isLoading?: boolean;
@@ -45,6 +47,7 @@ interface Props {
   isUpdatingExam?: boolean;
   updateExamErrorMessage?: string;
   isPublishing?: boolean;
+  isUnpublishing?: boolean;
 }
 
 type TabId = "questoes" | "submissoes" | "respostas" | "configuracoes";
@@ -141,10 +144,49 @@ function PointsBadge() {
   );
 }
 
-function QuestionCard({ question, index, onDelete, onEdit }: { question: Question; index?: number; onDelete?: () => void; onEdit?: () => void }) {
+function QuestionCard({
+  question,
+  index,
+  canMoveUp,
+  canMoveDown,
+  onMoveUp,
+  onMoveDown,
+  onDelete,
+  onEdit,
+}: {
+  question: Question;
+  index?: number;
+  canMoveUp?: boolean;
+  canMoveDown?: boolean;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  onDelete?: () => void;
+  onEdit?: () => void;
+}) {
   return (
     <div className="bg-white rounded-xl p-4 flex gap-3 items-start" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.06)", border: "1px solid #EBEBEB" }}>
-      <Bars2Icon className="w-[18px] h-[18px] shrink-0 mt-0.5 cursor-grab" style={{ color: "#B1B4BD" }} />
+      <div className="flex flex-col gap-1 shrink-0">
+        <button
+          type="button"
+          onClick={onMoveUp}
+          disabled={!canMoveUp}
+          className="p-1 rounded-md transition-opacity"
+          style={{ backgroundColor: "#F2F3F5", opacity: canMoveUp ? 1 : 0.35, cursor: canMoveUp ? "pointer" : "not-allowed" }}
+          title="Mover para cima"
+        >
+          <Bars2Icon className="w-[16px] h-[16px]" style={{ color: "#6B6FA3", transform: "rotate(90deg)" }} />
+        </button>
+        <button
+          type="button"
+          onClick={onMoveDown}
+          disabled={!canMoveDown}
+          className="p-1 rounded-md transition-opacity"
+          style={{ backgroundColor: "#F2F3F5", opacity: canMoveDown ? 1 : 0.35, cursor: canMoveDown ? "pointer" : "not-allowed" }}
+          title="Mover para baixo"
+        >
+          <Bars2Icon className="w-[16px] h-[16px]" style={{ color: "#6B6FA3", transform: "rotate(90deg)" }} />
+        </button>
+      </div>
       <div className="flex items-center justify-center rounded-full shrink-0" style={{ width: 26, height: 26, backgroundColor: "#EEF1F8" }}>
         <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: 13, color: "#6B6FA3" }}>{index ?? question.id}</span>
       </div>
@@ -181,10 +223,10 @@ function QuestionCard({ question, index, onDelete, onEdit }: { question: Questio
         )}
       </div>
       <div className="flex gap-2 shrink-0">
-        <button onClick={onEdit} className="p-1.5 rounded-lg hover:opacity-70 transition-opacity" style={{ backgroundColor: "#EEF1F8" }}>
+        <button onClick={onEdit} title="Editar" className="p-1.5 rounded-lg hover:opacity-70 transition-opacity" style={{ backgroundColor: "#EEF1F8" }}>
           <PencilIcon className="w-[14px] h-[14px]" style={{ color: "#6B6FA3" }} />
         </button>
-        <button onClick={onDelete} className="p-1.5 rounded-lg hover:opacity-70 transition-opacity" style={{ backgroundColor: "#FEE2E2" }}>
+        <button onClick={onDelete} title="Excluir" className="p-1.5 rounded-lg hover:opacity-70 transition-opacity" style={{ backgroundColor: "#FEE2E2" }}>
           <TrashIcon className="w-[14px] h-[14px]" style={{ color: "#EF4444" }} />
         </button>
       </div>
@@ -458,11 +500,11 @@ function PublicarProvaModal({
 }
 
 export function ProvaDetailPage({
-  onBack, onNavigate, questions, onDeleteQuestion, onUpdateQuestion, onAddQuestions,
+  onBack, onNavigate, questions, onDeleteQuestion, onUpdateQuestion, onReorderQuestion, onAddQuestions,
   bancoQuestoes = [], examTitle = "Título da Prova", examSubject = "", examSemester = "",
   examTurma, examModalidade, examTempoProva, examDataInicio, examDataLimite, examOrientacoes,
-  selectedExam, onUpdateExam, onPublish, showPublishModal = false, onClosePublishModal,
-  isLoading = false, errorMessage, isUpdatingExam = false, updateExamErrorMessage, isPublishing = false,
+  selectedExam, onUpdateExam, onPublish, onUnpublish, showPublishModal = false, onClosePublishModal,
+  isLoading = false, errorMessage, isUpdatingExam = false, updateExamErrorMessage, isPublishing = false, isUnpublishing = false,
 }: Props) {
   const [activeTab, setActiveTab] = useState<TabId>("questoes");
   const [showOrigemModal, setShowOrigemModal] = useState(false);
@@ -657,6 +699,17 @@ export function ProvaDetailPage({
               <ShareIcon className="w-[15px] h-[15px]" />
               {isPublishing ? "Publicando..." : localExam.urlAcesso ? "Compartilhar" : "Publicar"}
             </button>
+            {localExam.urlAcesso && (
+              <button
+                onClick={onUnpublish}
+                disabled={isUnpublishing}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
+                style={{ border: "1.5px solid #EF4444", color: "#EF4444", backgroundColor: "#fff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 14, opacity: isUnpublishing ? 0.65 : 1, cursor: isUnpublishing ? "not-allowed" : "pointer" }}
+              >
+                <XMarkIcon className="w-[15px] h-[15px]" />
+                {isUnpublishing ? "Retirando..." : "Tirar publicacao"}
+              </button>
+            )}
             <button onClick={() => setShowOrigemModal(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
               style={{ backgroundColor: "#F9B233", color: "#6B6FA3", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 14 }}>
               <PlusIcon className="w-4 h-4" />
@@ -731,7 +784,17 @@ export function ProvaDetailPage({
         {activeTab === "questoes" && (
           <div className="flex flex-col gap-4">
             {questions.map((q, i) => (
-              <QuestionCard key={q.id} question={q} index={i + 1} onEdit={() => setEditingQuestion(q)} onDelete={() => onDeleteQuestion?.(q.id)} />
+              <QuestionCard
+                key={q.id}
+                question={q}
+                index={i + 1}
+                canMoveUp={i > 0}
+                canMoveDown={i < questions.length - 1}
+                onMoveUp={() => onReorderQuestion?.(q.id, i)}
+                onMoveDown={() => onReorderQuestion?.(q.id, i + 2)}
+                onEdit={() => setEditingQuestion(q)}
+                onDelete={() => onDeleteQuestion?.(q.id)}
+              />
             ))}
           </div>
         )}

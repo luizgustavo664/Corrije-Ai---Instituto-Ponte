@@ -17,6 +17,7 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
   const queryClient = useQueryClient();
   const [showNovoProfessorModal, setShowNovoProfessorModal] = useState(false);
   const [professorToDelete, setProfessorToDelete] = useState<string | null>(null);
+  const [showAllProfessores, setShowAllProfessores] = useState(false);
 
   const { data: professores, isLoading, isError } = useQuery({
     queryKey: ["professores"],
@@ -32,6 +33,8 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
 
   const analytics = useAnalyticsSummary(provas);
   const provasPublicadas = provas.filter((prova) => prova.status === "publicada").length;
+  const visibleProfessores = showAllProfessores ? professores ?? [] : (professores ?? []).slice(0, 10);
+  const hasHiddenProfessores = (professores?.length ?? 0) > visibleProfessores.length;
 
   const createMutation = useMutation({
     mutationFn: createProfessor,
@@ -235,7 +238,7 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
           )}
 
           <div className="space-y-3">
-            {(professores ?? []).map((professor) => (
+            {visibleProfessores.map((professor) => (
               <div
                 key={professor.id}
                 role="button"
@@ -275,6 +278,16 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
               </div>
             ))}
           </div>
+          {hasHiddenProfessores && (
+            <button
+              type="button"
+              onClick={() => setShowAllProfessores(true)}
+              className="mt-4 px-4 py-2 rounded-lg transition-opacity hover:opacity-85"
+              style={{ backgroundColor: "#05245F", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px" }}
+            >
+              Ver todos os professores
+            </button>
+          )}
         </div>
       </div>
       </div>

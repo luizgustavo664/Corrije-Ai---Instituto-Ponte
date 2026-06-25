@@ -8,6 +8,7 @@ import type {
   ProvaDto,
   ProvaQuestaoDto,
   PublicarProvaPayload,
+  ReorderQuestaoProvaPayload,
   UpdateProvaConfiguracoesPayload,
   UpdateProvaPayload,
 } from "./provas.types";
@@ -70,6 +71,13 @@ export function publicarProva(provaId: string, payload: PublicarProvaPayload) {
   });
 }
 
+export function despublicarProva(provaId: string) {
+  return apiRequest<ProvaDto>(`/provas/${provaId}/despublicar`, {
+    ...getAuthRequestOptions(),
+    method: "POST",
+  });
+}
+
 export function getProva(provaId: string) {
   return apiRequest<ProvaDto>(`/provas/${provaId}`, getAuthRequestOptions());
 }
@@ -100,5 +108,17 @@ export function removeQuestaoFromProva(provaId: string, questaoId: string) {
   return apiRequest<void>(`/provas/${provaId}/questoes/${questaoId}`, {
     ...getAuthRequestOptions(),
     method: "DELETE",
+  });
+}
+
+export function reorderQuestaoInProva(
+  provaId: string,
+  questaoId: string,
+  payload: ReorderQuestaoProvaPayload,
+) {
+  return apiRequest<ProvaQuestaoDto[]>(`/provas/${provaId}/questoes/${questaoId}/ordem`, {
+    ...getAuthRequestOptions(),
+    method: "PATCH",
+    body: JSON.stringify(payload),
   });
 }

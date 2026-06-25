@@ -9,6 +9,7 @@ import {
   provaQuestaoDeleteParamsSchema,
   provaQuestaoParamsSchema,
   provaQuestaoResponseSchema,
+  reorderQuestaoProvaBodySchema,
 } from "../schemas/prova-questao.schema.js";
 import {
   createProvaBodySchema,
@@ -209,6 +210,29 @@ export async function provaRoutes(app: FastifyInstance) {
   );
 
   app.withTypeProvider().post(
+    "/provas/:provaId/despublicar",
+    {
+      preHandler: requireRole("professor", "coordenador"),
+      schema: {
+        tags: ["Publicacao"],
+        summary: "Tirar prova da publicacao",
+        description:
+          "Remove o link publico de uma prova publicada e retorna a prova para rascunho. A operacao e bloqueada quando ja existem tentativas ou submissoes de alunos.",
+        params: provaParamsSchema,
+        response: {
+          200: successResponseSchema(provaSchema),
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          404: errorResponseSchema,
+          409: errorResponseSchema,
+          422: errorResponseSchema,
+        },
+      },
+    },
+    controller.despublicar,
+  );
+
+  app.withTypeProvider().post(
     "/provas/:provaId/encerrar",
     {
       preHandler: requireRole("professor", "coordenador"),
@@ -321,5 +345,29 @@ export async function provaRoutes(app: FastifyInstance) {
       },
     },
     provaQuestaoController.remover,
+  );
+
+  app.withTypeProvider().patch(
+    "/provas/:provaId/questoes/:questaoId/ordem",
+    {
+      preHandler: requireRole("professor", "coordenador"),
+      schema: {
+        tags: ["Questoes"],
+        summary: "Reordenar questao da prova",
+        description:
+          "Move uma questao dentro da prova e recompata a ordem das demais questoes. A prova deve estar em rascunho.",
+        params: provaQuestaoDeleteParamsSchema,
+        body: reorderQuestaoProvaBodySchema,
+        response: {
+          200: successResponseSchema(z.array(provaQuestaoResponseSchema)),
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          404: errorResponseSchema,
+          409: errorResponseSchema,
+          422: errorResponseSchema,
+        },
+      },
+    },
+    provaQuestaoController.reordenar,
   );
 }

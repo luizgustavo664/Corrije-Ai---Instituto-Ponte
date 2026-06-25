@@ -26,13 +26,14 @@ function toApiType(t: FormQuestionType): CreateQuestaoPayload["tipo"] {
   return "discursiva";
 }
 
-const letters = ["A", "B", "C", "D", "E"];
+const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
 const maxImageSizeBytes = 2 * 1024 * 1024;
 
 interface Alternative {
   id: string;
   text: string;
   correct: boolean;
+  imageUrl?: string | null;
 }
 
 const inputStyle: React.CSSProperties = {
@@ -67,7 +68,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
   const [materiaId, setMateriaId] = useState(defaultMateriaId ?? "");
   const [theme, setTheme] = useState("");
   const [enunciado, setEnunciado] = useState("");
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [imageError, setImageError] = useState("");
   const [allowPhotos, setAllowPhotos] = useState(false);
   const [vfAnswer, setVfAnswer] = useState<"Verdadeiro" | "Falso">("Verdadeiro");
@@ -108,7 +109,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
   const canSave = !!enunciado.trim() && !!materiaId && !isSaving && (type !== "Múltipla Escolha" || hasCorrectAlternative);
   const hasUnsavedChanges =
     !!enunciado.trim() ||
-    !!imageUrl ||
+    imageUrls.length > 0 ||
     !!materiaId ||
     !!theme.trim() ||
     alternatives.some((alternative) => alternative.text.trim() && !alternative.text.startsWith("Alternativa "));
@@ -133,10 +134,53 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
 
     const reader = new FileReader();
     reader.onload = () => {
-      if (typeof reader.result === "string") setImageUrl(reader.result);
+      if (typeof reader.result === "string") setImageUrls((prev) => [...prev, reader.result as string]);
     };
     reader.onerror = () => setImageError("Não foi possível carregar a imagem escolhida.");
     reader.readAsDataURL(file);
+  }
+
+  function handleAlternativeImageChange(id: string, file?: File) {
+    setImageError("");
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setImageError("Escolha um arquivo de imagem valido.");
+      return;
+    }
+    if (file.size > maxImageSizeBytes) {
+      setImageError("A imagem deve ter ate 2 MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setAlternatives((prev) => prev.map((alternative) => (
+          alternative.id === id ? { ...alternative, imageUrl: reader.result as string } : alternative
+        )));
+      }
+    };
+    reader.onerror = () => setImageError("Nao foi possivel carregar a imagem escolhida.");
+    reader.readAsDataURL(file);
+  }
+
+  function removeQuestionImage(index: number) {
+    setImageUrls((prev) => prev.filter((_, imageIndex) => imageIndex !== index));
+  }
+
+  function removeAlternativeImage(id: string) {
+    setAlternatives((prev) => prev.map((alternative) => (
+      alternative.id === id ? { ...alternative, imageUrl: null } : alternative
+    )));
+  }
+
+  function enunciadoComImagensExtras() {
+    const imagensExtras = imageUrls.slice(1);
+    if (imagensExtras.length === 0) return enunciado.trim();
+    return [
+      enunciado.trim(),
+      ...imagensExtras.map((url, index) => `![Imagem ${index + 2}](${url})`),
+    ].join("\n\n");
   }
 
   async function handleSave() {
@@ -157,8 +201,8 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
       permiteAnexo: tipo === "discursiva" ? allowPhotos : undefined,
       pontuacaoPadrao: Number(points) > 0 ? Number(points) : 1,
       enunciado: {
-        conteudoLatex: enunciado.trim(),
-        urlImagem: imageUrl,
+        conteudoLatex: enunciadoComImagensExtras(),
+        urlImagem: imageUrls[0] ?? null,
       },
       alternativas:
         tipo === "discursiva"
@@ -171,6 +215,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
             : alternatives.map((alternative, index) => ({
               ordemOriginal: index + 1,
               conteudoLatex: alternative.text,
+              urlImagem: alternative.imageUrl ?? null,
               correta: alternative.correct,
             })),
     };
@@ -184,12 +229,31 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
   }
 
   function addAlternative() {
-    if (alternatives.length >= 5) return;
+    if (alternatives.length >= letters.length) return;
     const nextLetter = letters[alternatives.length];
     setAlternatives((prev) => [
       ...prev,
       { id: nextLetter, text: `Alternativa ${nextLetter}`, correct: false },
     ]);
+  }
+
+  function removeAlternative(id: string) {
+    if (alternatives.length <= 2) return;
+    setAlternatives((prev) => prev.filter((alternative) => alternative.id !== id).map((alternative, index) => ({
+      ...alternative,
+      id: letters[index],
+    })));
+  }
+
+  function moveAlternative(id: string, direction: -1 | 1) {
+    setAlternatives((prev) => {
+      const currentIndex = prev.findIndex((alternative) => alternative.id === id);
+      const nextIndex = currentIndex + direction;
+      if (currentIndex < 0 || nextIndex < 0 || nextIndex >= prev.length) return prev;
+      const next = [...prev];
+      [next[currentIndex], next[nextIndex]] = [next[nextIndex], next[currentIndex]];
+      return next.map((alternative, index) => ({ ...alternative, id: letters[index] }));
+    });
   }
 
   return (
@@ -366,20 +430,22 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9FA3AC" }}>
               Suporta LaTeX entre <code>$$</code> — ex: <code>$$f'(x) = 2x$$</code>
             </p>
-            {imageUrl && (
-              <div className="rounded-xl overflow-hidden" style={{ border: "1px solid #E6E6E6", backgroundColor: "#F7F8FA" }}>
-                <img src={imageUrl} alt="Imagem do enunciado" style={{ width: "100%", maxHeight: 220, objectFit: "contain" }} />
+            {imageUrls.length > 0 && (
+              <div className="grid grid-cols-2 gap-3">
+                {imageUrls.map((url, index) => (
+                  <div key={`${url}-${index}`} className="rounded-xl overflow-hidden flex flex-col" style={{ border: "1px solid #E6E6E6", backgroundColor: "#F7F8FA" }}>
+                    <img src={url} alt={`Imagem ${index + 1} do enunciado`} style={{ width: "100%", height: 120, objectFit: "contain" }} />
+                    <button
+                      type="button"
+                      onClick={() => removeQuestionImage(index)}
+                      className="py-2 hover:opacity-75 transition-opacity"
+                      style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9A3412", fontWeight: 600 }}
+                    >
+                      Remover imagem
+                    </button>
+                  </div>
+                ))}
               </div>
-            )}
-            {imageUrl && (
-              <button
-                type="button"
-                onClick={() => setImageUrl(null)}
-                className="self-start hover:opacity-75 transition-opacity"
-                style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#9A3412", fontWeight: 600 }}
-              >
-                Remover imagem
-              </button>
             )}
             {imageError && (
               <p role="alert" style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9A3412" }}>
@@ -432,50 +498,81 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
               </div>
 
               <div className="flex flex-col gap-2">
-                {alternatives.map((alt) => (
-                  <div key={alt.id} className="flex items-center gap-3">
+                {alternatives.map((alt, index) => (
+                  <div key={alt.id} className="flex items-start gap-3">
                     <button
                       onClick={() => markCorrect(alt.id)}
                       className="shrink-0 hover:opacity-70 transition-opacity"
                       title="Marcar como gabarito"
+                      style={{ marginTop: 10 }}
                     >
                       {alt.correct
                         ? <CheckCircleIcon className="w-5 h-5" style={{ color: "#05245F" }} />
                         : <div className="rounded-full border-2" style={{ width: 20, height: 20, borderColor: "#D7D7D9" }} />
                       }
                     </button>
-                    <div
-                      className="flex items-center gap-2 flex-1 px-3 rounded-xl transition-all"
-                      style={{
-                        height: 42,
-                        backgroundColor: alt.correct ? "#E6FAF8" : "#F2F3F5",
-                        border: `1px solid ${alt.correct ? "#05245F" : "transparent"}`,
-                      }}
-                    >
-                      <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 13, color: "#6B6FA3", minWidth: 16 }}>
-                        {alt.id})
-                      </span>
-                      <input
-                        type="text"
-                        value={alt.text}
-                        onChange={(e) => updateAlt(alt.id, e.target.value)}
-                        placeholder={`Digite o texto da alternativa ${alt.id}`}
+                    <div className="flex-1 flex flex-col gap-2">
+                      <div
+                        className="flex items-center gap-2 flex-1 px-3 rounded-xl transition-all"
                         style={{
-                          flex: 1,
-                          background: "transparent",
-                          border: "none",
-                          outline: "none",
-                          fontFamily: "Inter, sans-serif",
-                          fontSize: 13,
-                          color: "#111",
+                          minHeight: 42,
+                          backgroundColor: alt.correct ? "#E6FAF8" : "#F2F3F5",
+                          border: `1px solid ${alt.correct ? "#05245F" : "transparent"}`,
                         }}
-                      />
+                      >
+                        <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 13, color: "#6B6FA3", minWidth: 16 }}>
+                          {alt.id})
+                        </span>
+                        <input
+                          type="text"
+                          value={alt.text}
+                          onChange={(e) => updateAlt(alt.id, e.target.value)}
+                          placeholder={`Digite o texto da alternativa ${alt.id}`}
+                          style={{
+                            flex: 1,
+                            background: "transparent",
+                            border: "none",
+                            outline: "none",
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: 13,
+                            color: "#111",
+                          }}
+                        />
+                      </div>
+                      {alt.imageUrl && (
+                        <div className="rounded-xl overflow-hidden flex flex-col" style={{ border: "1px solid #E6E6E6", backgroundColor: "#F7F8FA" }}>
+                          <img src={alt.imageUrl} alt={`Imagem da alternativa ${alt.id}`} style={{ width: "100%", maxHeight: 140, objectFit: "contain" }} />
+                          <button
+                            type="button"
+                            onClick={() => removeAlternativeImage(alt.id)}
+                            className="py-2 hover:opacity-75 transition-opacity"
+                            style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9A3412", fontWeight: 600 }}
+                          >
+                            Remover imagem
+                          </button>
+                        </div>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        <label className="px-3 py-1.5 rounded-lg cursor-pointer hover:opacity-80 transition-opacity" style={{ border: "1px solid #D7D7D9", fontFamily: "Inter, sans-serif", fontSize: 12, color: "#05245F", fontWeight: 600 }}>
+                          <input type="file" accept="image/*" className="hidden" onChange={(event) => handleAlternativeImageChange(alt.id, event.target.files?.[0])} />
+                          Imagem
+                        </label>
+                        <button type="button" disabled={index === 0} onClick={() => moveAlternative(alt.id, -1)} className="px-3 py-1.5 rounded-lg disabled:opacity-40" style={{ border: "1px solid #D7D7D9", fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181" }}>
+                          Subir
+                        </button>
+                        <button type="button" disabled={index === alternatives.length - 1} onClick={() => moveAlternative(alt.id, 1)} className="px-3 py-1.5 rounded-lg disabled:opacity-40" style={{ border: "1px solid #D7D7D9", fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181" }}>
+                          Descer
+                        </button>
+                        <button type="button" disabled={alternatives.length <= 2} onClick={() => removeAlternative(alt.id)} className="px-3 py-1.5 rounded-lg disabled:opacity-40" style={{ border: "1px solid #F4B4A8", fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9A3412" }}>
+                          Remover
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {alternatives.length < 5 && (
+              {alternatives.length < letters.length && (
                 <button
                   onClick={addAlternative}
                   className="flex items-center gap-1.5 hover:opacity-70 transition-opacity self-start mt-1"
@@ -527,21 +624,22 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
                   ? <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>{enunciado}</MathText>
                   : <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#B1B4BD", fontStyle: "italic" }}>O enunciado aparecerá aqui...</p>
                 }
-                {imageUrl && (
-                  <img src={imageUrl} alt="Preview da imagem do enunciado" style={{ width: "100%", maxHeight: 180, objectFit: "contain", marginTop: 12, borderRadius: 8 }} />
-                )}
+                {imageUrls.map((url, index) => (
+                  <img key={`${url}-${index}`} src={url} alt={`Preview da imagem ${index + 1} do enunciado`} style={{ width: "100%", maxHeight: 180, objectFit: "contain", marginTop: 12, borderRadius: 8 }} />
+                ))}
               </div>
 
               {type === "Múltipla Escolha" && alternatives.length > 0 ? (
                 <div className="flex flex-col gap-1.5">
                   {alternatives.map((alt) => (
-                    <div
-                      key={alt.id}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg"
-                      style={{ backgroundColor: "#F2F3F5" }}
-                    >
-                      <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, color: "#6B6FA3" }}>{alt.id})</span>
-                      <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#333" }}>{alt.text}</MathText>
+                    <div key={alt.id} className="flex flex-col gap-2 px-3 py-2 rounded-lg" style={{ backgroundColor: "#F2F3F5" }}>
+                      <div className="flex items-center gap-2">
+                        <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, color: "#6B6FA3" }}>{alt.id})</span>
+                        <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#333" }}>{alt.text}</MathText>
+                      </div>
+                      {alt.imageUrl && (
+                        <img src={alt.imageUrl} alt={`Preview da alternativa ${alt.id}`} style={{ width: "100%", maxHeight: 100, objectFit: "contain", borderRadius: 8 }} />
+                      )}
                     </div>
                   ))}
                 </div>
