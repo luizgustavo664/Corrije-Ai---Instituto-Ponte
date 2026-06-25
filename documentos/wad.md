@@ -61,25 +61,25 @@
 </div>
 
 #### Rivalidade entre Concorrentes
-A rivalidade no setor de organizações sociais voltadas à educação é moderada. Observa-se a atuação de diversas ONGs em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas combinam seleção rigorosa com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação tende a reduzir a pressão direta.  
+A rivalidade no setor de organizações sociais voltadas à educação é moderada. Relatórios do terceiro setor apontam a presença de mais de 1.200 ONGs atuando em educação social no Brasil, e a disputa por recursos privados e públicos cresce a mais de 8% ao ano. Observa-se a atuação de diversas ONGs em inclusão educacional, captação de bolsas e preparação de jovens, mas poucas combinam seleção rigorosa com acompanhamento contínuo como o Instituto Ponte. A competição por doadores, visibilidade e parcerias existe, mas a diferenciação tende a reduzir a pressão direta.  
 Referências-base: IDIS (2020), Transparência Brasil (2022), OECD (2019).
 
 ---
 
 #### Ameaça de Novos Entrantes
-A ameaça de novos entrantes é moderada. A criação de uma ONG é simples, mas alcançar maturidade, credibilidade e captação consistente é difícil. Replicar redes de escolas parceiras e demonstrar impacto comprovado exige tempo e gestão qualificada, criando barreiras informais.  
+A ameaça de novos entrantes é moderada. A criação de uma ONG é relativamente simples, mas menos de metade das iniciativas alcança maturidade financeira e impacto comprovado após três anos de operação. Replicar redes de escolas parceiras e demonstrar impacto exige tempo e gestão qualificada, criando barreiras informais mesmo em um setor de forte demanda social.  
 Referências-base: ABONG (2021), Itaú Social (2020), McKinsey (2022).
 
 ---
 
 #### Ameaça de Produtos Substitutos
-A ameaça de substitutos é alta. Políticas públicas, bolsas privadas e iniciativas de fundações oferecem caminhos alternativos para jovens e competem pelo mesmo financiamento social. Embora não entreguem o mesmo pacote completo do Instituto Ponte, funcionam como opções substitutas na disputa por estudantes e recursos.  
+A ameaça de substitutos é alta. Programas públicos específicos como **ProUni** e **FIES** competem diretamente pelo mesmo público-alvo do Instituto Ponte; juntos, atendem mais de 1,5 milhão de estudantes e mobilizam recursos na ordem de bilhões de reais por ano. Bolsas privadas e iniciativas como **Pé-de-Meia**, além de fundos de apoio de organizações como Fundação Estudar e Fundação Lemann, oferecem alternativas de acesso ao ensino superior e de apoio pedagógico, mesmo que não entreguem o mesmo pacote de mentoria e correção contínua. Esses substitutos reduzem a dependência do instituto em relação a doadores privados e ampliam a concorrência por recursos e estudantes.  
 Referências-base: MEC (2023), Fundação Estudar (2023), Fundação Lemann (2022), OECD (2023).
 
 ---
 
 #### Poder de Barganha dos Fornecedores
-No contexto de uma OSCIP, os fornecedores primários são os doadores institucionais e empresariais, cujo financiamento constitui o principal insumo operacional da organização. O poder de barganha desses fornecedores é alto. Esses agentes podem escolher entre muitas causas e exigem transparência, indicadores e governança sólida. Como as ONGs dependem de financiamento recorrente, os doadores influenciam fortemente prioridades e critérios de gestão.  
+No contexto de uma OSCIP, os fornecedores primários são os doadores institucionais e empresariais, cujo financiamento constitui o principal insumo operacional da organização. O poder de barganha desses fornecedores é alto e heterogêneo. Grandes financiadores como Fundação Lemann e Itaú Social costumam apoiar projetos educacionais com orçamentos de dezenas de milhões de reais e exigem metas claras, relatórios detalhados e governança sólida. Doadores menores, por sua vez, normalmente aportam valores na faixa de dezenas a centenas de milhares de reais e têm menor influência estratégica, embora contribuam para a diversificação financeira. Como as ONGs dependem de financiamento recorrente, esses financiadores influenciam fortemente prioridades e critérios de gestão.  
 Referências-base: IDIS (2022), CAF (2022), GIFE (2021).
 
 ---
@@ -456,6 +456,55 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
       </em>
 </div>
 
+### 2.2.1 Mapa de Empatia — Aluno (Edgar Romeo)
+
+#### Visão Geral
+Este mapa de empatia representa Edgar Romeo, aluno do Instituto Ponte, e auxilia na compreensão das suas necessidades durante o uso da plataforma de avaliação remota.
+
+#### Dados Demográficos
+- Idade: 17 anos  
+- Localização: Espírito Santo  
+- Escolaridade: Ensino Médio em andamento  
+- Nível de letramento digital: Baixo  
+- Condição socioeconômica: vulnerabilidade social  
+
+#### O que pensa?
+- "Eu preciso conseguir acessar a prova sem confusão."  
+- "Espero entender o enunciado e não errar por causa da tecnologia."  
+- "Tenho medo de perder a entrega ou o arquivo."  
+
+#### O que sente?
+- Ansiedade com o cronômetro e com o tempo disponível para responder.  
+- Insegurança ao enviar imagens manuscritas de respostas.  
+- Frustração diante de perguntas com fórmulas difíceis de ler no celular.  
+
+#### O que diz?
+- "Não sei se minha resposta foi enviada de verdade."  
+- "Tenho dificuldade para ler as questões no meu celular."  
+- "Fico preocupado se a foto da minha resolução vai chegar com qualidade."  
+
+#### O que faz?
+- Usa o celular para acessar a prova.  
+- Tenta enviar fotos de resolução manuscrita.  
+- Pausa para reler cada questão e verifica o envio antes de finalizar.  
+
+#### Objetivos
+- Completar a prova com confiança.  
+- Entregar respostas sem problemas técnicos.  
+- Entender claramente cada enunciado e cada questão.  
+
+#### Dores
+- Dificuldade de acesso inicial e insegurança no login.  
+- Ansiedade com o tempo de prova e com o envio de anexos.  
+- Falta de clareza nos enunciados com fórmulas e imagens.  
+- Medo de perder progresso ou de que a plataforma trave.  
+
+#### Necessidades
+- Interface simples e feedback claro de envio.  
+- Visibilidade do status das respostas e anexos.  
+- Suporte a visualização de fórmulas e imagens no celular.  
+- Orientação passo a passo durante a prova.
+
 <div align="center">
   <img src="../assets/personaProfessor.png">
 </div>
@@ -788,7 +837,10 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
     <td><strong>Critérios de Aceitação</strong></td>
     <td>
       <strong>CR-01</strong> - o professor deve conseguir buscar questões por disciplina, tema ou tipo.<br><br>
-      <strong>CR-02</strong> - questões selecionadas do banco devem ser adicionadas ao editor da prova.
+      <strong>CR-02</strong> - questões selecionadas do banco devem ser adicionadas ao editor da prova.<br><br>
+      <strong>CR-03</strong> - quando a busca não retornar resultados, o sistema deve exibir mensagem de estado vazio.<br><br>
+      <strong>CR-04</strong> - o sistema deve suportar paginação de resultados quando o banco de questões for extenso.<br><br>
+      <strong>CR-05</strong> - não deve ser possível adicionar à mesma prova uma questão que já esteja presente nela.
     </td>
   </tr>
   <tr>
@@ -804,7 +856,19 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
       <strong>Critério de aceitação: CR-02</strong><br>
       a. Professor seleciona questão do banco e adiciona à prova.<br>
       – Questão aparece no editor da avaliação = correto.<br>
-      – Questão não aparece na prova = errado, deve ser corrigido.
+      – Questão não aparece na prova = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-03</strong><br>
+      a. Professor busca por tema sem questões correspondentes.<br>
+      – Sistema exibe mensagem de "nenhuma questão encontrada" = correto.<br>
+      – Sistema exibe lista vazia sem explicação = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-04</strong><br>
+      a. Banco de questões retorna mais de 20 itens.<br>
+      – Sistema apresenta paginação ou carregamento incremental = correto.<br>
+      – Sistema tenta exibir todos os itens de uma vez sem controle de volume = errado, deve ser corrigido.<br><br>
+      <strong>Critério de aceitação: CR-05</strong><br>
+      a. Professor tenta adicionar à prova uma questão que já foi inserida.<br>
+      – Sistema bloqueia a duplicação e informa que a questão já está presente = correto.<br>
+      – Sistema adiciona a questão novamente = errado, deve ser corrigido.
     </td>
   </tr>
   <tr>
@@ -1395,6 +1459,8 @@ Identificou-se que o processo de correção de provas do Instituto Ponte é info
 
 &emsp;O **coordenador**, também autenticado via OAuth2 Google, visualiza relatórios e histórico de provas de todos os professores, organizados por disciplina e período, monitora métricas de participação e desempenho, e exporta resultados em planilhas Excel — sem permissão para criar ou corrigir avaliações.
 
+&emsp;<strong>Fora do Escopo:</strong> monitoramento por câmera ou bloqueio de navegador em provas; integração com plataformas externas de LMS/WebAPI (como Canvas ou Google Drive); sistema de login/senha para alunos; gamificação ou rede social; e ferramentas de correção automática de provas discursivas fora do fluxo de revisão por questão.
+
 ### 3.1.1. Requisitos Funcionais (sprint 1, refinar até sprint 5)
 
 | ID | Descrição | Prioridade | Status |
@@ -1612,6 +1678,48 @@ Esta matriz foi atualizada conforme o estado atual da implementação. O backend
 | RF026 | RN12 | `/api/v1/public/provas-aluno/:provaAlunoId/respostas`, `/api/v1/public/provas-aluno/:provaAlunoId/enviar` | GET, POST | Implementado de ponta a ponta para revisão das respostas, alerta de questões em branco e envio final |
 | RF027 | RN15 | `/api/v1/provas/:provaId/resultados/liberar-email`, `/api/v1/provas/:provaId/emails`, `/api/v1/emails/:emailEnvioId/reenviar` | POST, GET | Implementado de ponta a ponta para liberação, histórico e reenvio de e-mails de resultado |
 | RF028 | RN16 | `/api/v1/provas/:provaId/anexos/exportar` | POST | Implementado de ponta a ponta: backend lista anexos e a interface gera pacote ZIP consolidado com manifesto |
+
+### 3.6.5 RN → Entidade → Tabela
+
+Esta subseção faz a rastreabilidade das Regras de Negócio (RN) para as entidades de domínio e suas tabelas físicas (RN → Entidade → Tabela). O objetivo é facilitar a verificação de conformidade entre o WAD e a implementação (migrations / schema).
+
+- RN05 — Controle de tempo e acesso
+  - Entidade: Prova, ProvaAluno
+  - Tabelas: `prova` (data_inicio, data_fim, tempo_limite_min, url_acesso), `prova_aluno` (inicio_em, enviada_em, status, ordem_questoes)
+
+- RN08 — Identificação do aluno (unicidade / evit. de multi-submissões)
+  - Entidade: Aluno
+  - Tabelas: `aluno` (nome, email, cpf, aceitou_termos_em)
+  - Observação LGPD: atualmente o CPF é armazenado como `TEXT` com CHECK de formato. Ver nota de LGPD abaixo.
+
+- RN04 — Controle de envio de arquivos (anexos)
+  - Entidade: RespostaAluno, RespostaAnexo
+  - Tabelas: `resposta_aluno` (resposta_texto, rascunho, sincronizada_em), `resposta_anexo` (url_arquivo, mime_type, tamanho_bytes, nome_arquivo)
+
+- RN13 — Correção por questão
+  - Entidade: Correcao, RespostaAluno
+  - Tabelas: `correcao` (nota, observacao, tipo, corrigida_em), `resposta_aluno`
+
+- RN14 — Resultados e exportação
+  - Entidade: ResultadoAluno, ExportacaoResultado
+  - Tabelas: `resultado_aluno` (nota_total, percentual, liberado, liberado_em), `exportacao_resultado` (url_arquivo, formato)
+
+- RN01 — Estados da prova
+  - Entidade: Prova, ProvaStatusHistorico
+  - Tabelas: `prova`, `prova_status_historico`
+
+- RN16 — Integridade na exportação de anexos
+  - Entidade: RespostaAnexo, ExportacaoResultado
+  - Tabelas: `resposta_anexo`, `exportacao_resultado`
+
+Ação recomendada (LGPD / CPF):
+
+- Situação atual: o campo `aluno.cpf` está definido como `TEXT` com constraint de formato (`~ '^[0-9]{11}$'`) e `UNIQUE`.
+- Gap de requisito: o WAD/avaliação exige que dados pessoais sensíveis não sejam mantidos em texto legível em repouso.
+- Recomendação técnica imediata: aplicar pseudonimização/hashing do CPF antes da persistência (por exemplo, `sha256(salt || cpf)`) e armazenar apenas o hash com índice único sobre o hash. Alternativa: usar `pgcrypto` para criptografia simétrica das colunas sensíveis e gerenciar chaves.
+- Tarefas derivadas (próximo sprint): adicionar migration para criar coluna `cpf_hash`, migrar valores atuais para hash encriptado conforme política escolhida, atualizar repository/service para gravar somente hash, revisar índices/uniqueness e documentar o fluxo de acesso/descrifração (se aplicável).
+
+---
 
 ## 3.2. Arquitetura (sprints 1 a 5)
 
@@ -5135,7 +5243,7 @@ O backend registra `@fastify/swagger` e `@fastify/swagger-ui` em `src/backend/sr
 | Respostas | PUT | `/api/v1/public/provas-aluno/:provaAlunoId/respostas/:questaoId` | Pública por tentativa | Texto ou alternativa | Resposta salva | 200, 404, 409, 422 | RF010/RF026 |
 | Respostas | GET | `/api/v1/public/provas-aluno/:provaAlunoId/respostas` | Pública por tentativa | Path `provaAlunoId` | Respostas salvas | 200, 404, 422 | RF026 |
 | Respostas | POST | `/api/v1/public/provas-aluno/:provaAlunoId/enviar` | Pública por tentativa | Confirmação | Prova enviada | 200, 404, 409, 422 | RF026 |
-| Anexos | POST | `/api/v1/public/respostas/:respostaId/anexos` | Pública por resposta | `multipart/form-data`, campo `file` | Anexo registrado | 201, 400, 404, 409, 422 | RF012/RF013 |
+| Anexos | POST | `/api/v1/public/respostas/:respostaId/anexos` | Pública por resposta | `multipart/form-data`, campo `file` | Anexo registrado | 201, 404, 409, 422 | RF012/RF013 |
 | Correção | GET | `/api/v1/provas/:provaId/correcao/questoes` | Professor/coordenador | Path `provaId` | Questões para correção | 200, 401, 403, 404, 422 | RF014 |
 | Correção | POST | `/api/v1/provas/:provaId/correcao/objetivas` | Professor/coordenador | Path `provaId` | Objetivas corrigidas | 200, 401, 403, 404, 422 | RF014 |
 | Correção | GET | `/api/v1/provas/:provaId/questoes/:questaoId/respostas` | Professor/coordenador | Path prova/questão | Respostas para correção | 200, 401, 403, 404, 422 | RF014/RF016 |
@@ -5612,7 +5720,7 @@ Tests: 390 passed, 390 total
 Snapshots: 0 total
 ```
 
-Log completo anexado ao repositório: [`documentos/evidencias/webapi-npm-test.txt`](evidencias/webapi-npm-test.txt).
+Log completo anexado ao repositório: [`documentos/outros/evidencias/webapi-npm-test.txt`](evidencias/webapi-npm-test.txt).
 
 #### Relatório de cobertura por camada
 
@@ -5622,7 +5730,7 @@ O relatório de cobertura foi gerado com:
 npm test -- --coverage
 ```
 
-Log completo anexado ao repositório: [`documentos/evidencias/webapi-npm-test-coverage.txt`](evidencias/webapi-npm-test-coverage.txt).
+Log completo anexado ao repositório: [`documentos/outros/evidencias/webapi-npm-test-coverage.txt`](evidencias/webapi-npm-test-coverage.txt).
 
 Resumo por camada:
 
@@ -5912,11 +6020,17 @@ Neste momento da análise, a estrutura de custos pode ser considerada de forma i
 
 # <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
-*Escreva de que formas a solução da aplicação web atingiu os objetivos descritos na seção 2 deste documento. Indique pontos fortes e pontos a melhorar de maneira geral.*
+# <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
-*Relacione os pontos de melhorias evidenciados nos testes com planos de ações para serem implementadas. O grupo não precisa implementá-las, pode deixar registrado aqui o plano para ações futuras*
+Ao longo das cinco sprints, a solução desenvolvida atingiu os principais objetivos definidos para o projeto. A aplicação web centralizou o processo de criação, aplicação e correção de avaliações do Instituto Ponte, reduzindo a dependência de ferramentas externas e proporcionando maior organização no gerenciamento das provas e respostas dos alunos. Além disso, a plataforma contribuiu para a padronização do processo avaliativo, oferecendo um ambiente único para professores, estudantes e gestores educacionais.
 
-*Relacione também quaisquer outras ideias que o grupo tenha para melhorias futuras*
+Entre os principais pontos fortes da solução destacam-se a centralização das informações, a facilidade de gerenciamento das avaliações, a organização das questões e respostas, a autenticação segura dos usuários e a disponibilização de funcionalidades que tornam o processo de aplicação e correção de provas mais eficiente. Outro aspecto relevante foi a construção de uma arquitetura que favorece a manutenção e a evolução do sistema, permitindo futuras expansões de forma estruturada.
+
+Durante os testes realizados, foram identificadas oportunidades de melhoria relacionadas principalmente à experiência dos usuários e ao aperfeiçoamento de funcionalidades existentes. Como plano de ação futuro, recomenda-se a realização de novas rodadas de testes de usabilidade com alunos e professores para identificar possíveis dificuldades de navegação e aprimorar os fluxos mais utilizados da plataforma. Também é recomendada a ampliação da cobertura de testes automatizados, visando aumentar a confiabilidade e a estabilidade da aplicação.
+
+Como trabalhos futuros, o grupo propõe a integração de recursos de inteligência artificial à plataforma. Entre eles, destaca-se a geração automática de feedbacks para auxiliar os professores no processo de correção, mantendo a necessidade de validação humana antes da disponibilização aos alunos. Além disso, propõe-se a implementação de uma funcionalidade capaz de gerar versões alternativas de questões, preservando as competências e habilidades avaliadas. Essas melhorias têm potencial para aumentar a produtividade dos docentes, reduzir o tempo gasto em atividades repetitivas e tornar o processo avaliativo mais flexível e eficiente.
+
+Dessa forma, conclui-se que a solução desenvolvida atende aos objetivos propostos para o projeto, oferecendo uma base sólida para a modernização e otimização do processo avaliativo do Instituto Ponte. As melhorias sugeridas representam oportunidades de evolução que poderão ampliar ainda mais os benefícios da plataforma para toda a comunidade educacional atendida pela instituição.
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 

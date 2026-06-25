@@ -197,6 +197,30 @@ Rafael: Atualizar o modelo ER, identificar entidades e relacionamentos principai
 
 Rafael: Atualizar a seção 3.6 do WAD, com foco no refinamento do Diagrama Entidade-Relacionamento (DER) para refletir exatamente o estado atual da migration do banco de dados.
 
+### Data: 15/06/2026
+
+
+### Objetivo do Dia
+
+Rafael: Corrigir e documentar os feedbacks de Sprint 1 no WAD, incluindo análise de Porter, persona do aluno e US05.
+
+### Estudo realizado e documentação
+
+Colocar fotos se for preciso
+
+### Alterações Realizadas
+
+#### Rafael:
+
+- Alteração: Atualizada a seção 2.1.1 do WAD com dados quantitativos e menção a ProUni, FIES, Pé-de-Meia, Fundação Lemann e Itaú Social.
+- Alteração: Adicionado o Mapa de Empatia do aluno Edgar Romeo com dores no momento da prova, incluindo ansiedade com cronômetro, insegurança no envio de anexos e dificuldade de leitura de fórmulas.
+- Alteração: Ampliado US05 com critérios de aceite adicionais para busca sem resultados, paginação de resultados extensos e prevenção de duplicação de questão na prova.
+- Alteração: Incluído parágrafo de 'Fora do Escopo' no minimundo para delimitar claramente o contrato do projeto.
+
+## Link para onde está o arquivo WAD atualizado:
+
+`documentos/wad.md`
+
 
 ### Modelagem do banco de dados
 
@@ -208,3 +232,25 @@ Rafael: Atualizar a seção 3.6 do WAD, com foco no refinamento do Diagrama Enti
 
 
 - Alteração: Foi atualizada a seção 3.6.2 do WAD para representar o DER físico conforme a migration principal (`src/backend/src/database/migrations/migration.sql`). A documentação passou a usar os nomes reais das 22 tabelas de domínio, suas chaves primárias, chaves estrangeiras, restrições `UNIQUE`, restrições `CHECK`, enums, relacionamentos reais e índices físicos relevantes. Também foi registrado que `prova_materia` e `prova_enunciado` não existem como tabelas físicas, evitando componentes fantasmas na documentação.
+
+### Data: 22/06/2026
+
+### Objetivo do Dia
+
+Rafael: Consolidar e registrar as correções do repositório realizadas durante a auditoria de artefatos (migrations, WAD e documentação relacionada). Finalizar e documentar ações pendentes no WAD.
+
+### Alterações Realizadas
+
+#### Rafael:
+
+- Alteração: Adicionadas medidas para garantir a reprodutibilidade das migrations em ambiente limpo: criação de `src/backend/src/database/migrations/001_migration.sql` com o DDL canônico e remoção do arquivo legado `src/backend/migrations/migration.sql` para evitar duplicidade e problemas de ordenação.
+- Alteração: Atualizada a matriz de API no WAD (`documentos/wad.md`) para alinhar o código com a documentação, removendo o código `400` incorreto da rota de anexos e mantendo `422` para validação.
+- Alteração: Inserida subseção **3.6.5 RN → Entidade → Tabela** no WAD com mapeamento RN→Entidade→Tabela e recomendação técnica para tratamento de CPF (pseudonimização/hash ou criptografia via `pgcrypto`) para conformidade LGPD.
+- Alteração: Atualizados os TODOs do projeto para refletir conclusão das correções principais e finalização deste relatório.
+
+### Observações / Próximos Passos
+
+- Recomenda-se implementar a migração para `cpf_hash` (ou coluna encriptada) no próximo ciclo, definir política de salting/gerenciamento de chaves e atualizar os repositórios para persistirem o hash/valor encriptado.
+- Recomenda-se rodar os testes do backend e executar as migrations em um banco limpo para validação.
+
+---
