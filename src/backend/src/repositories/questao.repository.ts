@@ -12,6 +12,7 @@ type QuestaoRow = {
   materia_id: string;
   tema_id: string | null;
   tipo: string;
+  dificuldade: string | null;
   limite_caracteres: number | null;
   limite_palavras: number | null;
   permite_anexo: boolean;
@@ -40,6 +41,7 @@ const mapQuestao = (row: QuestaoRow): Questao => ({
   materiaId: row.materia_id,
   temaId: row.tema_id,
   tipo: row.tipo as QuestaoTipo,
+  dificuldade: row.dificuldade ?? "Media",
   limiteCaracteres: row.limite_caracteres,
   limitePalavras: row.limite_palavras,
   permiteAnexo: row.permite_anexo,
@@ -114,6 +116,10 @@ const insertAlternativas = async (
  * ocorre quando a questão já está vinculada a uma prova.
  */
 export class QuestaoRepository {
+  private async ensureSchema() {
+    await pool.query('ALTER TABLE "questao" ADD COLUMN IF NOT EXISTS "dificuldade" TEXT NULL');
+  }
+
   /**
    * Verifica se uma matéria existe pelo ID.
    *
@@ -121,6 +127,7 @@ export class QuestaoRepository {
    * @returns true se a matéria existir.
    */
   async materiaExists(materiaId: string) {
+    await this.ensureSchema();
     const result = await pool.query('SELECT EXISTS (SELECT 1 FROM "materia" WHERE "id" = $1) AS "exists"', [
       materiaId,
     ]);
@@ -135,6 +142,7 @@ export class QuestaoRepository {
    * @returns true se o tema pertencer à matéria.
    */
   async temaBelongsToMateria(temaId: string, materiaId: string) {
+    await this.ensureSchema();
     const result = await pool.query(
       'SELECT EXISTS (SELECT 1 FROM "tema" WHERE "id" = $1 AND "materia_id" = $2) AS "exists"',
       [temaId, materiaId],
@@ -150,6 +158,7 @@ export class QuestaoRepository {
    * @returns true se houver vínculo.
    */
   async professorMateriaVinculados(professorId: string, materiaId: string) {
+    await this.ensureSchema();
     const result = await pool.query(
       'SELECT EXISTS (SELECT 1 FROM "materia_professor" WHERE "professor_id" = $1 AND "materia_id" = $2) AS "exists"',
       [professorId, materiaId],
@@ -164,14 +173,15 @@ export class QuestaoRepository {
    * @returns A questão recém-criada com todos os relacionamentos.
    */
   async create(input: CreateQuestaoInput) {
+    await this.ensureSchema();
     return withTransaction(async (client) => {
       const questao = await client.query<{ id: string }>(
         `
           INSERT INTO "questao" (
             "materia_id", "tema_id", "tipo", "limite_caracteres", "limite_palavras",
-            "permite_anexo", "pontuacao_padrao", "ativa"
+            "permite_anexo", "pontuacao_padrao", "ativa", "dificuldade"
           )
-          VALUES ($1, $2, $3, $4, $5, COALESCE($6, FALSE), COALESCE($7, 1), COALESCE($8, TRUE))
+          VALUES ($1, $2, $3, $4, $5, COALESCE($6, FALSE), COALESCE($7, 1), COALESCE($8, TRUE), COALESCE($9, 'Media'))
           RETURNING "id"
         `,
         [
@@ -183,6 +193,7 @@ export class QuestaoRepository {
           input.permiteAnexo ?? null,
           input.pontuacaoPadrao ?? null,
           input.ativa ?? null,
+          input.dificuldade ?? null,
         ],
       );
 
@@ -205,6 +216,7 @@ export class QuestaoRepository {
    * @returns Lista paginada de questões com total de registros.
    */
   async findMany(query: ListQuestoesQuery, user: AuthUser) {
+    await this.ensureSchema();
     const params: unknown[] = [];
     const where: string[] = [];
 
@@ -270,6 +282,7 @@ export class QuestaoRepository {
    * @returns Questão encontrada ou null.
    */
   async findById(questaoId: string, client: PoolClient | typeof pool = pool) {
+    await this.ensureSchema();
     const result = await client.query<QuestaoRow>(
       `
         ${selectQuestaoSql}
@@ -290,6 +303,7 @@ export class QuestaoRepository {
    * @returns Questão atualizada com todos os relacionamentos.
    */
   async update(questaoId: string, input: UpdateQuestaoInput) {
+    await this.ensureSchema();
     return withTransaction(async (client) => {
       await client.query(
         `
@@ -302,8 +316,9 @@ export class QuestaoRepository {
             "limite_palavras" = $5,
             "permite_anexo" = COALESCE($6, FALSE),
             "pontuacao_padrao" = COALESCE($7, 1),
-            "ativa" = COALESCE($8, TRUE)
-          WHERE "id" = $9
+            "ativa" = COALESCE($8, TRUE),
+            "dificuldade" = COALESCE($9, "dificuldade", 'Media')
+          WHERE "id" = $10
         `,
         [
           input.materiaId,
@@ -314,6 +329,7 @@ export class QuestaoRepository {
           input.permiteAnexo ?? null,
           input.pontuacaoPadrao ?? null,
           input.ativa ?? null,
+          input.dificuldade ?? null,
           questaoId,
         ],
       );
@@ -348,6 +364,7 @@ export class QuestaoRepository {
    * @returns "deleted" se removida, "deactivated" se desativada.
    */
   async deleteOrDeactivate(questaoId: string) {
+    await this.ensureSchema();
     const linked = await pool.query(
       'SELECT EXISTS (SELECT 1 FROM "prova_questao" WHERE "questao_id" = $1) AS "exists"',
       [questaoId],

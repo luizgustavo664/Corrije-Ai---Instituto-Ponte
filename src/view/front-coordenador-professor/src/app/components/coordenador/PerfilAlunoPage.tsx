@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserIcon, DocumentTextIcon, ChartBarIcon, ExclamationTriangleIcon, PencilIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { getAluno, updateAluno } from "../../../../../src/features/alunos/alunos.api";
+import { listTurmas } from "../../../../../src/features/turmas/turmas.api";
 import { EditarAlunoModal } from "./EditarAlunoModal";
 
 interface Props {
@@ -17,6 +18,11 @@ export function PerfilAlunoPage({ onBack, alunoId }: Props): JSX.Element {
     queryKey: ["alunos", alunoId],
     queryFn: () => getAluno(alunoId),
     enabled: !!alunoId,
+  });
+
+  const { data: turmas = [] } = useQuery({
+    queryKey: ["turmas"],
+    queryFn: listTurmas,
   });
 
   const updateMutation = useMutation({
@@ -71,6 +77,7 @@ export function PerfilAlunoPage({ onBack, alunoId }: Props): JSX.Element {
         onClose={() => setShowEditModal(false)}
         onSave={handleSaveEdit}
         isSaving={updateMutation.isPending}
+        turmas={turmas.map((turma) => turma.nome)}
         initialData={{ nome: aluno.nome, email: aluno.email, cpf: aluno.cpf, turma: aluno.turma }}
       />
       <div className="p-8" style={{ backgroundColor: "#F2F2F2", minHeight: "100vh" }}>

@@ -25,6 +25,7 @@ type ProvaQuestaoRow = {
   pontuacao_max: string | number;
   criado_em: Date | string;
   questao_tipo?: string;
+  questao_dificuldade?: string | null;
   questao_materia_id?: string;
   questao_tema_id?: string | null;
   questao_limite_caracteres?: number | null;
@@ -54,6 +55,7 @@ const mapProvaQuestao = (row: ProvaQuestaoRow) => ({
         materiaId: row.questao_materia_id ?? "",
         temaId: row.questao_tema_id ?? null,
         tipo: row.questao_tipo,
+        dificuldade: row.questao_dificuldade ?? "Media",
         limiteCaracteres: row.questao_limite_caracteres ?? null,
         limitePalavras: row.questao_limite_palavras ?? null,
         permiteAnexo: row.questao_permite_anexo ?? false,
@@ -81,6 +83,7 @@ const selectProvaQuestaoSql = `
     pq."pontuacao_max",
     pq."criado_em",
     q."tipo" AS "questao_tipo",
+    q."dificuldade" AS "questao_dificuldade",
     q."materia_id" AS "questao_materia_id",
     q."tema_id" AS "questao_tema_id",
     q."limite_caracteres" AS "questao_limite_caracteres",
@@ -104,6 +107,10 @@ const selectProvaQuestaoSql = `
  * A consulta principal usa JOIN com questao e enunciado para evitar N+1.
  */
 export class ProvaQuestaoRepository {
+  private async ensureSchema() {
+    await pool.query('ALTER TABLE "questao" ADD COLUMN IF NOT EXISTS "dificuldade" TEXT NULL');
+  }
+
   /**
    * Busca dados resumidos da prova para validação de existência.
    *
@@ -111,6 +118,7 @@ export class ProvaQuestaoRepository {
    * @returns Dados resumidos da prova ou null.
    */
   async findProva(provaId: string) {
+    await this.ensureSchema();
     const result = await pool.query<ProvaResumoRow>(
       'SELECT "id", "materia_id", "status" FROM "prova" WHERE "id" = $1',
       [provaId],
@@ -156,6 +164,7 @@ export class ProvaQuestaoRepository {
    * @returns Dados resumidos da questão ou null.
    */
   async findQuestao(questaoId: string) {
+    await this.ensureSchema();
     const result = await pool.query<QuestaoResumoRow>(
       `
         SELECT q."id", q."materia_id", EXISTS (
@@ -225,6 +234,7 @@ export class ProvaQuestaoRepository {
    * @returns Lista de associações com dados completos das questões.
    */
   async findByProva(provaId: string) {
+    await this.ensureSchema();
     const result = await pool.query<ProvaQuestaoRow>(
       `
         ${selectProvaQuestaoSql}

@@ -28,6 +28,7 @@ import { PerfilAlunoPage } from "./PerfilAlunoPage";
 import { PerfilProfessorPage } from "./PerfilProfessorPage";
 import { useDashboard } from "../../../../../src/features/dashboard/useDashboard";
 import { listTurmas } from "../../../../../src/features/turmas/turmas.api";
+import { listProfessores } from "../../../../../src/features/professores/professores.api";
 
 export type CoordenadorTab =
   | "painel"
@@ -80,6 +81,7 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
     setShowPublishModal,
     provaDetailQuery,
     provaQuestoesQuery,
+    createProvaMutation,
     updateProvaMutation,
     publicarProvaMutation,
     despublicarProvaMutation,
@@ -102,6 +104,11 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
     addQuestionToExam,
   } = useDashboard();
   const turmasQuery = useQuery({ queryKey: ["turmas"], queryFn: listTurmas });
+  const professoresQuery = useQuery({
+    queryKey: ["professores"],
+    queryFn: listProfessores,
+    select: (result) => result.data,
+  });
   const turmaOptions = [
     ...new Set([
       ...(turmasQuery.data ?? []).map((turma) => turma.nome),
@@ -218,7 +225,25 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
           professorId={selectedProfessorId ?? ""}
         />;
       case "nova-prova":
-        return <NovaProvaPage onBack={() => setActiveTab("provas")} onSave={addExam} materias={materiasQuery.data ?? []} turmas={turmaOptions} />;
+        return (
+          <NovaProvaPage
+            onBack={() => setActiveTab("provas")}
+            onSave={addExam}
+            materias={materiasQuery.data ?? []}
+            professores={professoresQuery.data ?? []}
+            turmas={turmaOptions}
+            isSaving={createProvaMutation.isPending}
+            errorMessage={
+              createProvaMutation.isError
+                ? createProvaMutation.error.message
+                : materiasQuery.isError
+                  ? materiasQuery.error.message
+                  : professoresQuery.isError
+                    ? professoresQuery.error.message
+                    : undefined
+            }
+          />
+        );
       case "nova-questao":
         return (
           <NovaQuestaoPage

@@ -229,6 +229,19 @@ export class ProvaRepository {
     return result.rows[0]?.professor_id ?? null;
   }
 
+  async findProfessorIdsByMateria(materiaId: string) {
+    const result = await pool.query<{ professor_id: string }>(
+      `
+        SELECT "professor_id"
+        FROM "materia_professor"
+        WHERE "materia_id" = $1
+        ORDER BY "professor_id" ASC
+      `,
+      [materiaId],
+    );
+    return result.rows.map((row) => row.professor_id);
+  }
+
   /**
    * Cria uma nova prova com status "rascunho".
    *
@@ -554,6 +567,19 @@ export class ProvaRepository {
       [urlAcesso, dataInicio, dataFim, provaId],
     );
     return result.rows[0] ? mapProva(result.rows[0]) : null;
+  }
+
+  async removeQuestoesForaDaMateria(provaId: string, materiaId: string) {
+    await pool.query(
+      `
+        DELETE FROM "prova_questao" pq
+        USING "questao" q
+        WHERE pq."questao_id" = q."id"
+          AND pq."prova_id" = $1
+          AND q."materia_id" <> $2
+      `,
+      [provaId, materiaId],
+    );
   }
 
   /**

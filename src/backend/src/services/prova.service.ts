@@ -54,11 +54,16 @@ export class ProvaService {
       throw forbidden("Somente professores e coordenadores podem criar provas.");
     }
 
-    const professorId =
-      input.professorId ??
-      (user.perfil === "professor"
-        ? user.id
-        : await this.provaRepository.findFirstProfessorIdByMateria(input.materiaId));
+    let professorId = input.professorId ?? (user.perfil === "professor" ? user.id : undefined);
+    if (!professorId && user.perfil === "coordenador") {
+      const professoresDaMateria = await this.provaRepository.findProfessorIdsByMateria(input.materiaId);
+      if (professoresDaMateria.length === 1) {
+        professorId = professoresDaMateria[0];
+      } else if (professoresDaMateria.length > 1) {
+        throw businessRule("Selecione o professor responsavel pela prova.");
+      }
+    }
+
     if (!professorId) {
       throw businessRule("Vincule ao menos um professor a esta materia antes de criar a prova.");
     }
@@ -154,7 +159,11 @@ export class ProvaService {
       }
     }
 
-    return this.provaRepository.update(provaId, input);
+    const updated = await this.provaRepository.update(provaId, input);
+    if (input.materiaId && input.materiaId !== prova.materiaId) {
+      await this.provaRepository.removeQuestoesForaDaMateria(provaId, input.materiaId);
+    }
+    return updated;
   }
 
   /**

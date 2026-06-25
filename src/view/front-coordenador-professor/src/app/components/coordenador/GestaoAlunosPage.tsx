@@ -18,8 +18,8 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
   const [alunoToDelete, setAlunoToDelete] = useState<string | null>(null);
   const [showAllAlunos, setShowAllAlunos] = useState(false);
   const [turmaNome, setTurmaNome] = useState("");
-  const [turmaDescricao, setTurmaDescricao] = useState("");
   const [editingTurma, setEditingTurma] = useState<TurmaDto | null>(null);
+  const [selectedTurma, setSelectedTurma] = useState<string | null>(null);
 
   const { data: alunos, isLoading, isError } = useQuery({
     queryKey: ["alunos"],
@@ -55,6 +55,8 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
       alunos: (alunos ?? []).filter((aluno) => aluno.turma === turma).length,
       provas: provas.filter((prova) => prova.turma === turma).length,
     }));
+  const selectedTurmaAlunos = (alunos ?? []).filter((aluno) => aluno.turma === selectedTurma);
+  const selectedTurmaProvas = provas.filter((prova) => prova.turma === selectedTurma);
 
   const deleteMutation = useMutation({
     mutationFn: deleteAluno,
@@ -71,13 +73,12 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
 
   const saveTurmaMutation = useMutation({
     mutationFn: () => {
-      const payload = { nome: turmaNome.trim(), descricao: turmaDescricao.trim() || null };
+      const payload = { nome: turmaNome.trim(), descricao: null };
       return editingTurma ? updateTurma(editingTurma.id, payload) : createTurma(payload);
     },
     onSuccess: () => {
       toast.success(editingTurma ? "Turma atualizada com sucesso." : "Turma criada com sucesso.");
       setTurmaNome("");
-      setTurmaDescricao("");
       setEditingTurma(null);
       void queryClient.invalidateQueries({ queryKey: ["turmas"] });
     },
@@ -100,7 +101,6 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
   const startEditTurma = (turma: TurmaDto) => {
     setEditingTurma(turma);
     setTurmaNome(turma.nome);
-    setTurmaDescricao(turma.descricao ?? "");
   };
 
   const handleDeleteAluno = (e: React.MouseEvent, alunoId: string) => {
@@ -328,14 +328,6 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                 className="w-full px-4 py-3 rounded-lg"
                 style={{ border: "1px solid #D7D7D9", fontFamily: "Inter, sans-serif", fontSize: 14 }}
               />
-              <input
-                type="text"
-                value={turmaDescricao}
-                onChange={(event) => setTurmaDescricao(event.target.value)}
-                placeholder="Descricao opcional"
-                className="w-full px-4 py-3 rounded-lg"
-                style={{ border: "1px solid #D7D7D9", fontFamily: "Inter, sans-serif", fontSize: 14 }}
-              />
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -349,11 +341,10 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                 {editingTurma && (
                   <button
                     type="button"
-                    onClick={() => {
-                      setEditingTurma(null);
-                      setTurmaNome("");
-                      setTurmaDescricao("");
-                    }}
+                  onClick={() => {
+                    setEditingTurma(null);
+                    setTurmaNome("");
+                  }}
                     className="px-4 py-2 rounded-lg"
                     style={{ backgroundColor: "#F2F2F2", color: "#6A7181", fontFamily: "Poppins, sans-serif", fontWeight: 600, cursor: "pointer" }}
                   >
@@ -375,17 +366,58 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                       {item.alunos} alunos vinculados - {item.provas} provas cadastradas
                     </p>
                   </div>
-                  {turmas.find((turma) => turma.nome === item.turma) && (
-                    <div className="flex gap-2">
+                  <div className="flex gap-2">
+                    <button type="button" onClick={() => setSelectedTurma(selectedTurma === item.turma ? null : item.turma)} className="px-3 py-1.5 rounded-lg" style={{ border: "1px solid #D7D7D9", color: "#6B6FA3", fontFamily: "Inter, sans-serif", fontSize: 12, cursor: "pointer" }}>
+                      {selectedTurma === item.turma ? "Ocultar" : "Ver detalhes"}
+                    </button>
+                    {turmas.find((turma) => turma.nome === item.turma) && (
+                      <>
                       <button type="button" onClick={() => startEditTurma(turmas.find((turma) => turma.nome === item.turma)!)} className="px-3 py-1.5 rounded-lg" style={{ border: "1px solid #D7D7D9", color: "#05245F", fontFamily: "Inter, sans-serif", fontSize: 12, cursor: "pointer" }}>
                         Editar
                       </button>
                       <button type="button" onClick={() => deleteTurmaMutation.mutate(turmas.find((turma) => turma.nome === item.turma)!.id)} className="px-3 py-1.5 rounded-lg" style={{ border: "1px solid #F4B4A8", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: 12, cursor: "pointer" }}>
                         Remover
                       </button>
-                    </div>
-                  )}
+                      </>
+                    )}
+                  </div>
                 </div>
+                {selectedTurma === item.turma && (
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="rounded-lg p-3" style={{ backgroundColor: "#F8FAFC", border: "1px solid #E5E7EB" }}>
+                      <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, color: "#05245F", marginBottom: 8 }}>
+                        Alunos da turma
+                      </p>
+                      {selectedTurmaAlunos.length > 0 ? (
+                        <div className="space-y-1">
+                          {selectedTurmaAlunos.map((aluno) => (
+                            <p key={aluno.id} style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#374151" }}>
+                              {aluno.nome} - {aluno.email}
+                            </p>
+                          ))}
+                        </div>
+                      ) : (
+                        <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181" }}>Nenhum aluno vinculado.</p>
+                      )}
+                    </div>
+                    <div className="rounded-lg p-3" style={{ backgroundColor: "#F8FAFC", border: "1px solid #E5E7EB" }}>
+                      <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, color: "#05245F", marginBottom: 8 }}>
+                        Provas da turma
+                      </p>
+                      {selectedTurmaProvas.length > 0 ? (
+                        <div className="space-y-1">
+                          {selectedTurmaProvas.map((prova) => (
+                            <p key={prova.id} style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#374151" }}>
+                              {prova.titulo} - {prova.status}
+                            </p>
+                          ))}
+                        </div>
+                      ) : (
+                        <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181" }}>Nenhuma prova vinculada.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
             {turmasResumo.length === 0 && (

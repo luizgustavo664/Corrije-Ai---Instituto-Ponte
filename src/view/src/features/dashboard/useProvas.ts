@@ -170,6 +170,7 @@ export function useProvas({
       setSelectedExam(exam);
       void queryClient.invalidateQueries({ queryKey: ["provas"] });
       void queryClient.invalidateQueries({ queryKey: ["provas", exam.id] });
+      void queryClient.invalidateQueries({ queryKey: ["provas", exam.id, "questoes"] });
       toastSuccess("Prova salva com sucesso.");
     },
   });

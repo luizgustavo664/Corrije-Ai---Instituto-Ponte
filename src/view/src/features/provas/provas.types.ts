@@ -31,6 +31,7 @@ export type ProvaDto = {
 };
 
 export type CreateProvaPayload = {
+  professorId?: string;
   materiaId: string;
   titulo: string;
   modalidade?: string;
@@ -76,6 +77,7 @@ export type QuestaoDto = {
   materiaId: string;
   temaId: string | null;
   tipo: QuestaoTipoDto;
+  dificuldade?: string;
   limiteCaracteres: number | null;
   limitePalavras: number | null;
   permiteAnexo: boolean;

@@ -4,6 +4,7 @@ export type QuestaoPayload = {
   materiaId: string;
   temaId?: string | null;
   tipo: QuestaoTipoDto;
+  dificuldade?: string;
   limiteCaracteres?: number | null;
   limitePalavras?: number | null;
   permiteAnexo?: boolean;

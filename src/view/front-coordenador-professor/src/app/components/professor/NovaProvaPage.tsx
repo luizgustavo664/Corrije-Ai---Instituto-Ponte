@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, BookmarkIcon, ClockIcon } from "@heroicons/react/24/outline";
 import type { MateriaDto } from "../../../../../src/features/materias/materias.types";
+import type { ProfessorDto } from "../../../../../src/features/professores/professores.types";
 import type { CreateProvaPayload } from "../../../../../src/features/provas/provas.types";
 import { confirmDiscardChanges, useUnsavedChangesWarning } from "./useUnsavedChangesWarning";
 
@@ -10,6 +11,7 @@ interface Props {
   onBack: () => void;
   onSave: (input: NovaProvaInput) => Promise<void> | void;
   materias: MateriaDto[];
+  professores?: ProfessorDto[];
   turmas?: string[];
   isSaving?: boolean;
   errorMessage?: string;
@@ -58,10 +60,11 @@ const chevron = (
   </svg>
 );
 
-export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving = false, errorMessage }: Props) {
+export function NovaProvaPage({ onBack, onSave, materias, professores = [], turmas = [], isSaving = false, errorMessage }: Props) {
   const [nome, setNome] = useState("");
   const [modalidade, setModalidade] = useState("");
   const [materiaId, setMateriaId] = useState("");
+  const [professorId, setProfessorId] = useState("");
   const [turma, setTurma] = useState("");
   const [semestre, setSemestre] = useState("");
   const [orientacoes, setOrientacoes] = useState("");
@@ -76,6 +79,7 @@ export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving 
   const canSave =
     nome.trim() !== "" &&
     materiaId !== "" &&
+    (professores.length === 0 || professorId !== "") &&
     turma.trim() !== "" &&
     semestre !== "" &&
     !isSaving;
@@ -83,6 +87,7 @@ export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving 
     !!nome.trim() ||
     !!modalidade ||
     !!materiaId ||
+    !!professorId ||
     !!turma.trim() ||
     !!semestre ||
     !!orientacoes.trim() ||
@@ -100,6 +105,7 @@ export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving 
         nome: string;
         modalidade: string;
         materiaId: string;
+        professorId: string;
         turma: string;
         semestre: string;
         orientacoes: string;
@@ -110,6 +116,7 @@ export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving 
       setNome(draft.nome ?? "");
       setModalidade(draft.modalidade ?? "");
       setMateriaId(draft.materiaId ?? "");
+      setProfessorId(draft.professorId ?? "");
       setTurma(draft.turma ?? "");
       setSemestre(draft.semestre ?? "");
       setOrientacoes(draft.orientacoes ?? "");
@@ -132,6 +139,7 @@ export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving 
         nome,
         modalidade,
         materiaId,
+        professorId,
         turma,
         semestre,
         orientacoes,
@@ -140,7 +148,7 @@ export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving 
         embaralharAlternativas,
       }),
     );
-  }, [nome, modalidade, materiaId, turma, semestre, orientacoes, tempoProva, embaralharQuestoes, embaralharAlternativas, hasUnsavedChanges]);
+  }, [nome, modalidade, materiaId, professorId, turma, semestre, orientacoes, tempoProva, embaralharQuestoes, embaralharAlternativas, hasUnsavedChanges]);
 
   function handleBack() {
     if (confirmDiscardChanges(hasUnsavedChanges)) onBack();
@@ -151,6 +159,7 @@ export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving 
     try {
       await onSave({
         materiaId,
+        ...(professorId ? { professorId } : {}),
         titulo: nome.trim(),
         modalidade: modalidade || "Prova",
         turma: turma.trim(),
@@ -266,6 +275,27 @@ export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving 
               )}
             </div>
           </div>
+
+          {professores.length > 0 && (
+            <div className="flex flex-col gap-1.5 w-full">
+              <label style={labelStyle}>Professor responsavel *</label>
+              <div className="relative w-full">
+                <select
+                  value={professorId}
+                  onChange={(e) => setProfessorId(e.target.value)}
+                  style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
+                >
+                  <option value="">Selecionar professor</option>
+                  {professores.map((professor) => (
+                    <option key={professor.id} value={professor.id}>{professor.nome}</option>
+                  ))}
+                </select>
+                {chevron}
+              </div>
+            </div>
+          )}
 
           {/* Turma + Semestre */}
           <div className="flex gap-5">

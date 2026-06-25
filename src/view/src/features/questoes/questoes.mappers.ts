@@ -67,7 +67,7 @@ export function mapQuestaoToBancoQuestion(
     materia: materiaNome,
     materiaId: questao.materiaId,
     semestre: "Banco",
-    dificuldade: "Média",
+    dificuldade: questao.dificuldade ?? "Média",
     text: question.text,
     imageUrl: question.imageUrl,
     options: question.options,
@@ -82,6 +82,7 @@ export function mapQuestionToCreateQuestaoPayload(
   question: Question,
   materiaId: string,
   pontuacaoPadrao = 1,
+  dificuldade?: string,
 ): CreateQuestaoPayload {
   const tipo = questionTypeToTipo[question.type];
 
@@ -103,6 +104,7 @@ export function mapQuestionToCreateQuestaoPayload(
   return {
     materiaId,
     tipo,
+    ...(dificuldade ? { dificuldade } : {}),
     permiteAnexo: tipo === "discursiva" ? false : undefined,
     pontuacaoPadrao,
       enunciado: {
@@ -125,5 +127,6 @@ export function mapBancoQuestionToUpdatePayload(questao: BancoQuestion): CreateQ
     },
     questao.materiaId,
     questao.pontuacaoPadrao ?? 1,
+    questao.dificuldade,
   );
 }

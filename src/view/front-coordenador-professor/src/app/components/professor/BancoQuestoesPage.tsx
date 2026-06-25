@@ -270,6 +270,30 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
             <MathText style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px", color: "#000" }}>
               {q.text}
             </MathText>
+            {q.imageUrl && (
+              <img
+                src={q.imageUrl}
+                alt="Imagem do enunciado"
+                className="rounded-xl"
+                style={{ width: "100%", maxHeight: 220, objectFit: "contain", border: "1px solid #E6E6E6", backgroundColor: "#F7F8FA" }}
+              />
+            )}
+            {q.options?.some((option) => option.imageUrl) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {q.options.filter((option) => option.imageUrl).map((option) => (
+                  <div key={option.letter} className="rounded-lg p-2" style={{ border: "1px solid #E6E6E6", backgroundColor: "#F7F8FA" }}>
+                    <p style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#6A7181", marginBottom: 6 }}>
+                      Alternativa {option.letter}
+                    </p>
+                    <img
+                      src={option.imageUrl ?? undefined}
+                      alt={`Imagem da alternativa ${option.letter}`}
+                      style={{ width: "100%", maxHeight: 120, objectFit: "contain" }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
               {q.timesUsed === 1
                 ? `Utilizada ${q.timesUsed} vez - Taxa de acerto: ${q.successRate}%`

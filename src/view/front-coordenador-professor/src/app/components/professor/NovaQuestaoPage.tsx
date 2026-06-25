@@ -19,6 +19,7 @@ interface Props {
 type FormQuestionType = "Múltipla Escolha" | "Verdadeiro/Falso" | "Discursiva";
 
 const questionTypes: FormQuestionType[] = ["Múltipla Escolha", "Verdadeiro/Falso", "Discursiva"];
+const dificuldades = ["Facil", "Media", "Dificil"];
 
 function toApiType(t: FormQuestionType): CreateQuestaoPayload["tipo"] {
   if (t === "Múltipla Escolha") return "multipla_escolha";
@@ -66,6 +67,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
   const queryClient = useQueryClient();
   const [showPreview, setShowPreview] = useState(true);
   const [type, setType] = useState<FormQuestionType>("Múltipla Escolha");
+  const [dificuldade, setDificuldade] = useState("Media");
   const [points, setPoints] = useState("1");
   const [materiaId, setMateriaId] = useState(defaultMateriaId ?? "");
   const [theme, setTheme] = useState("");
@@ -114,6 +116,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
     !!enunciado.trim() ||
     imageUrls.length > 0 ||
     !!materiaId ||
+    dificuldade !== "Media" ||
     !!theme.trim() ||
     alternatives.some((alternative) => alternative.text.trim() && !alternative.text.startsWith("Alternativa "));
 
@@ -219,6 +222,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
       materiaId,
       temaId,
       tipo,
+      dificuldade,
       permiteAnexo: tipo === "discursiva" ? allowPhotos : undefined,
       pontuacaoPadrao: Number(points) > 0 ? Number(points) : 1,
       enunciado: {
@@ -379,6 +383,26 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
                   onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
                   onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
                 />
+              </div>
+
+              <div className="flex flex-col gap-1.5" style={{ width: 150 }}>
+                <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#111" }}>Dificuldade</span>
+                <div className="relative">
+                  <select
+                    value={dificuldade}
+                    onChange={(e) => setDificuldade(e.target.value)}
+                    style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
+                  >
+                    {dificuldades.map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </select>
+                  <svg className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width={16} height={16} viewBox="0 0 16 16" fill="none">
+                    <path d="M4 6L8 10L12 6" stroke="#6B6B6B" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
               </div>
             </div>
 

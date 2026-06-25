@@ -5,6 +5,7 @@ interface Props {
   onClose: () => void;
   onSave: (data: { nome: string; email: string; cpf: string | null; turma: string | null }) => void;
   isSaving?: boolean;
+  turmas?: string[];
   initialData?: {
     nome: string;
     email: string;
@@ -13,7 +14,7 @@ interface Props {
   };
 }
 
-export function EditarAlunoModal({ isOpen, onClose, onSave, isSaving, initialData }: Props): JSX.Element | null {
+export function EditarAlunoModal({ isOpen, onClose, onSave, isSaving, turmas = [], initialData }: Props): JSX.Element | null {
   const [nome, setNome] = useState(initialData?.nome ?? "");
   const [email, setEmail] = useState(initialData?.email ?? "");
   const [cpf, setCpf] = useState(initialData?.cpf ?? "");
@@ -131,9 +132,8 @@ export function EditarAlunoModal({ isOpen, onClose, onSave, isSaving, initialDat
             >
               Turma:
             </label>
-            <input
+            <select
               id="turma"
-              type="text"
               value={turma}
               onChange={(e) => setTurma(e.target.value)}
               className="w-full px-4 py-3 rounded-lg"
@@ -143,8 +143,12 @@ export function EditarAlunoModal({ isOpen, onClose, onSave, isSaving, initialDat
                 fontSize: "16px",
                 color: "#6B6FA3",
               }}
-              placeholder="3A"
-            />
+            >
+              <option value="">Sem turma vinculada</option>
+              {turmas.map((item) => (
+                <option key={item} value={item}>{item}</option>
+              ))}
+            </select>
           </div>
         </div>
 

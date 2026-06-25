@@ -6,7 +6,7 @@ const mockHasAccess = jest.fn<any>();
 const mockProfessorExists = jest.fn<any>();
 const mockMateriaExists = jest.fn<any>();
 const mockProfessorMateriaVinculados = jest.fn<any>();
-const mockFindFirstProfessorIdByMateria = jest.fn<any>();
+const mockFindProfessorIdsByMateria = jest.fn<any>();
 const mockCreate = jest.fn<any>();
 const mockFindMany = jest.fn<any>();
 const mockUpdate = jest.fn<any>();
@@ -18,6 +18,7 @@ const mockUpdateStatus = jest.fn<any>();
 const mockDelete = jest.fn<any>();
 const mockHasSubmissions = jest.fn<any>();
 const mockFindStatusHistorico = jest.fn<any>();
+const mockRemoveQuestoesForaDaMateria = jest.fn<any>();
 
 jest.unstable_mockModule("../../repositories/prova.repository.js", () => ({
   ProvaRepository: jest.fn().mockImplementation(() => ({
@@ -26,7 +27,7 @@ jest.unstable_mockModule("../../repositories/prova.repository.js", () => ({
     professorExists: mockProfessorExists,
     materiaExists: mockMateriaExists,
     professorMateriaVinculados: mockProfessorMateriaVinculados,
-    findFirstProfessorIdByMateria: mockFindFirstProfessorIdByMateria,
+    findProfessorIdsByMateria: mockFindProfessorIdsByMateria,
     create: mockCreate,
     findMany: mockFindMany,
     update: mockUpdate,
@@ -38,6 +39,7 @@ jest.unstable_mockModule("../../repositories/prova.repository.js", () => ({
     delete: mockDelete,
     hasSubmissions: mockHasSubmissions,
     findStatusHistorico: mockFindStatusHistorico,
+    removeQuestoesForaDaMateria: mockRemoveQuestoesForaDaMateria,
   })),
 }));
 
@@ -90,7 +92,7 @@ beforeEach(async () => {
   mockProfessorExists.mockReset();
   mockMateriaExists.mockReset();
   mockProfessorMateriaVinculados.mockReset();
-  mockFindFirstProfessorIdByMateria.mockReset();
+  mockFindProfessorIdsByMateria.mockReset();
   mockCreate.mockReset();
   mockFindMany.mockReset();
   mockUpdate.mockReset();
@@ -102,6 +104,7 @@ beforeEach(async () => {
   mockDelete.mockReset();
   mockHasSubmissions.mockReset();
   mockFindStatusHistorico.mockReset();
+  mockRemoveQuestoesForaDaMateria.mockReset();
   const mod = await import("../../services/prova.service.js");
   ProvaService = mod.ProvaService;
 });
@@ -124,7 +127,7 @@ describe("ProvaService - unitário", () => {
     });
 
     it("deve criar prova como coordenador usando professor vinculado a materia", async () => {
-      mockFindFirstProfessorIdByMateria.mockResolvedValue("prof-1");
+      mockFindProfessorIdsByMateria.mockResolvedValue(["prof-1"]);
       mockProfessorExists.mockResolvedValue(true);
       mockMateriaExists.mockResolvedValue(true);
       mockProfessorMateriaVinculados.mockResolvedValue(true);
