@@ -26,6 +26,31 @@ const runWithConcurrency = async <T>(
   await Promise.allSettled(executing);
 };
 
+const formatNumber = (value: string | number | null | undefined) => {
+  const parsed = Number(value ?? 0);
+  return Number.isFinite(parsed) ? parsed.toFixed(2) : "0.00";
+};
+
+const buildResultadoEmailBody = (aluno: Awaited<ReturnType<EmailEnvioRepository["findAlunosComResultado"]>>[number]) => {
+  const provaTitulo = aluno.prova_titulo ? `"${aluno.prova_titulo}"` : "sua avaliacao";
+  const feedbacks = aluno.feedbacks?.trim()
+    ? `Feedback:\n- ${aluno.feedbacks.trim()}`
+    : "Feedback: nenhum comentario textual foi registrado.";
+
+  return [
+    `Ola ${aluno.aluno_nome},`,
+    "",
+    `Seu resultado de ${provaTitulo} esta disponivel.`,
+    "",
+    `Nota: ${formatNumber(aluno.nota_total)} de ${formatNumber(aluno.pontuacao_total)} (${formatNumber(aluno.percentual)}%).`,
+    "",
+    feedbacks,
+    "",
+    "Atenciosamente,",
+    "Equipe Corrije Ai",
+  ].join("\n");
+};
+
 /**
  * Envio de resultados por email para alunos com controle de
  * concorrência.
@@ -85,18 +110,20 @@ export class EmailResultadoService {
     let falhas = 0;
 
     const processarAluno = async (aluno: typeof alunos[number]) => {
+      const emailAssunto = "Resultado da avaliacao";
+      const emailCorpo = buildResultadoEmailBody(aluno);
       const assunto = `Resultado da avaliação`;
       const corpo = `Olá ${aluno.aluno_nome},\n\nSeu resultado já está disponível.`;
 
       const envioId = await this.emailRepository.createEnvio(
         aluno.prova_aluno_id,
         aluno.aluno_email,
-        assunto,
-        corpo,
+        emailAssunto,
+        emailCorpo,
       );
 
       try {
-        const result = await this.emailAdapter.send(aluno.aluno_email, assunto, corpo);
+        const result = await this.emailAdapter.send(aluno.aluno_email, emailAssunto, emailCorpo);
         if (result.success) {
           await this.emailRepository.markAsSent(envioId);
           enviados += 1;

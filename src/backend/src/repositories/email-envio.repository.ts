@@ -24,6 +24,11 @@ type AlunoResultadoRow = {
   aluno_id: string;
   aluno_nome: string;
   aluno_email: string;
+  prova_titulo: string | null;
+  nota_total: string | number | null;
+  pontuacao_total: string | number | null;
+  percentual: string | number | null;
+  feedbacks: string | null;
 };
 
 /** Converte uma EmailEnvioRow (snake_case) para o formato de envio (camelCase).
@@ -97,15 +102,51 @@ export class EmailEnvioRepository {
    */
   async findAlunosComResultado(provaId: string) {
     const result = await pool.query<AlunoResultadoRow>(
-      `SELECT
+      `WITH feedback_por_correcao AS (
+        SELECT
+          "correcao_id",
+          STRING_AGG(DISTINCT NULLIF(BTRIM("mensagem"), ''), E'\n- ') AS "feedbacks"
+        FROM "feedback"
+        GROUP BY "correcao_id"
+      ),
+      itens AS (
+        SELECT
+          pa."id" AS "prova_aluno_id",
+          COALESCE(c."nota", 0) AS "nota",
+          COALESCE(pq."pontuacao_max", 0) AS "pontuacao_max",
+          COALESCE(fpc."feedbacks", NULLIF(BTRIM(c."observacao"), '')) AS "feedback"
+        FROM "prova_aluno" pa
+        LEFT JOIN "resposta_aluno" ra ON ra."prova_aluno_id" = pa."id"
+        LEFT JOIN "prova_questao" pq ON pq."prova_id" = pa."prova_id" AND pq."questao_id" = ra."questao_id"
+        LEFT JOIN "correcao" c ON c."resposta_id" = ra."id"
+        LEFT JOIN feedback_por_correcao fpc ON fpc."correcao_id" = c."id"
+        WHERE pa."prova_id" = $1
+          AND pa."status" = 'corrigida'
+      )
+      SELECT
         pa."id" AS "prova_aluno_id",
         a."id" AS "aluno_id",
         a."nome" AS "aluno_nome",
-        a."email" AS "aluno_email"
+        a."email" AS "aluno_email",
+        p."titulo" AS "prova_titulo",
+        COALESCE(SUM(i."nota"), 0) AS "nota_total",
+        COALESCE(SUM(i."pontuacao_max"), 0) AS "pontuacao_total",
+        CASE
+          WHEN COALESCE(SUM(i."pontuacao_max"), 0) > 0
+            THEN ROUND((COALESCE(SUM(i."nota"), 0) / SUM(i."pontuacao_max")) * 100, 2)
+          ELSE 0
+        END AS "percentual",
+        NULLIF(
+          STRING_AGG(DISTINCT i."feedback", E'\n- ') FILTER (WHERE i."feedback" IS NOT NULL),
+          ''
+        ) AS "feedbacks"
       FROM "prova_aluno" pa
+      JOIN "prova" p ON p."id" = pa."prova_id"
       JOIN "aluno" a ON a."id" = pa."aluno_id"
+      LEFT JOIN itens i ON i."prova_aluno_id" = pa."id"
       WHERE pa."prova_id" = $1
         AND pa."status" = 'corrigida'
+      GROUP BY pa."id", a."id", a."nome", a."email", p."titulo"
       ORDER BY a."nome" ASC`,
       [provaId],
     );

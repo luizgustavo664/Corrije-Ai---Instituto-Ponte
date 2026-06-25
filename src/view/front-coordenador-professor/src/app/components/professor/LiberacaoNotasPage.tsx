@@ -136,14 +136,25 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
       const ids = provaIds.filter((id): id is string => typeof id === "string");
       return Promise.all(ids.map((id) => liberarEmailsResultado(id, true)));
     },
-    onSuccess: async (_data, provaIds) => {
+    onSuccess: async (resultados, provaIds) => {
       await Promise.all(
         provaIds
           .filter((id): id is string => typeof id === "string")
           .map((id) => queryClient.invalidateQueries({ queryKey: ["emails", "prova", id] })),
       );
+      const enviados = resultados.reduce((total, resultado) => total + resultado.enviados, 0);
+      const falhas = resultados.reduce((total, resultado) => total + resultado.falhas, 0);
       setProgresso(100);
       setEnviando(false);
+      if (falhas > 0 || enviados === 0) {
+        setSendError(
+          falhas > 0
+            ? `${falhas} envio(s) falharam. Verifique a configuracao de email e tente reenviar.`
+            : "Nenhum email foi enviado. Verifique se ha alunos corrigidos e email real configurado.",
+        );
+        setConcluido(false);
+        return;
+      }
       setConcluido(true);
     },
     onError: (error) => {

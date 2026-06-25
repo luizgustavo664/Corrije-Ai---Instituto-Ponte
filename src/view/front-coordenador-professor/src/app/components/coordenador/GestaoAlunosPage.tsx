@@ -60,10 +60,21 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
 
   const deleteMutation = useMutation({
     mutationFn: deleteAluno,
-    onSuccess: () => {
+    onSuccess: (_data, alunoId) => {
       setAlunoToDelete(null);
+      queryClient.setQueryData<Awaited<ReturnType<typeof listAlunos>>>(["alunos"], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          data: old.data.filter((aluno) => aluno.id !== alunoId),
+          meta: old.meta
+            ? { ...old.meta, total: old.meta.total === undefined ? undefined : Math.max(0, old.meta.total - 1) }
+            : old.meta,
+        };
+      });
       toast.success("Aluno removido com sucesso.");
       void queryClient.invalidateQueries({ queryKey: ["alunos"] });
+      void queryClient.invalidateQueries({ queryKey: ["analytics"] });
     },
     onError: (error) => {
       const message = error instanceof Error ? error.message : "Erro ao remover aluno.";

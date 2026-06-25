@@ -76,6 +76,7 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
     exams,
     examQuestions,
     selectedExam,
+    selectedExamId,
     setSelectedExam,
     showPublishModal,
     setShowPublishModal,
@@ -115,6 +116,7 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
       ...exams.map((exam) => exam.turma).filter(Boolean),
     ]),
   ];
+  const selectedCorrectionProvaId = selectedExam?.id ? String(selectedExam.id) : selectedExamId;
 
   useEffect(() => {
     setActiveTabState(initialTab);
@@ -269,13 +271,13 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
             setCurrentQuestaoId(questaoId);
             setActiveTab("questao-correcao");
           }}
-          provaId={selectedExam.id}
+          provaId={selectedCorrectionProvaId}
           examTitle={selectedExam.title || "Título da Prova — Semestre"}
           showCompletionModal={showCompletionModal}
           onResetCompletionModal={() => setShowCompletionModal(false)}
         />;
       case "questao-correcao":
-        if (!selectedExam) return null;
+        if (!selectedCorrectionProvaId) return null;
         return <QuestaoCorrecaoPage
           onBack={() => {
             setActiveTab("prova-questoes-correcao");
@@ -284,16 +286,16 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
             setShowCompletionModal(true);
             setActiveTab("prova-questoes-correcao");
           }}
-          provaId={selectedExam.id}
+          provaId={selectedCorrectionProvaId}
           questaoId={currentQuestaoId}
         />;
       case "correcao-aluno":
-        if (!selectedExam) return null;
+        if (!selectedCorrectionProvaId) return null;
         return (
           <CorrecaoAlunoPage
             onBack={() => setActiveTab("correcao")}
-            provaId={selectedExam.id}
-            examTitle={selectedExam.title}
+            provaId={selectedCorrectionProvaId}
+            examTitle={selectedExam?.title || "Prova"}
           />
         );
       default:

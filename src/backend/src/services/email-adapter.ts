@@ -14,6 +14,12 @@ export class FakeEmailAdapter implements EmailAdapter {
     if (process.env.EMAIL_FAIL_MODE === "always") {
       return { success: false, error: "Falha simulada no envio de e-mail." };
     }
+    if (process.env.NODE_ENV !== "test" && process.env.AUTH_MODE !== "test") {
+      return {
+        success: false,
+        error: "Envio real de email nao configurado. Configure EMAIL_WEBHOOK_URL para entregar mensagens aos alunos.",
+      };
+    }
     return { success: true };
   }
 }

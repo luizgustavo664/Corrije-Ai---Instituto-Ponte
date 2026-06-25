@@ -1,4 +1,5 @@
 import { pool } from "../database/pool.js";
+import { withTransaction } from "../database/transaction.js";
 import type { Aluno } from "../models/aluno.model.js";
 import { decryptCpf, encryptCpf, hashCpf, isEncryptedCpf, normalizeCpf } from "../security/cpf-crypto.js";
 
@@ -177,10 +178,50 @@ export class AlunoRepository {
    */
   async delete(id: string) {
     await this.ensureSchema();
-    const result = await pool.query(
-      'DELETE FROM "aluno" WHERE "id" = $1',
-      [id],
-    );
-    return (result.rowCount ?? 0) > 0;
+    return withTransaction(async (client) => {
+      const provaAlunoResult = await client.query<{ id: string }>(
+        'SELECT "id" FROM "prova_aluno" WHERE "aluno_id" = $1',
+        [id],
+      );
+      const provaAlunoIds = provaAlunoResult.rows.map((row) => row.id);
+
+      if (provaAlunoIds.length > 0) {
+        await client.query(
+          'UPDATE "avaliacao_log" SET "prova_aluno_id" = NULL WHERE "prova_aluno_id" = ANY($1::uuid[])',
+          [provaAlunoIds],
+        );
+        await client.query(
+          `DELETE FROM "resposta_anexo"
+           WHERE "resposta_id" IN (
+             SELECT "id" FROM "resposta_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])
+           )`,
+          [provaAlunoIds],
+        );
+        await client.query(
+          `DELETE FROM "feedback"
+           WHERE "correcao_id" IN (
+             SELECT c."id"
+             FROM "correcao" c
+             JOIN "resposta_aluno" ra ON ra."id" = c."resposta_id"
+             WHERE ra."prova_aluno_id" = ANY($1::uuid[])
+           )`,
+          [provaAlunoIds],
+        );
+        await client.query(
+          `DELETE FROM "correcao"
+           WHERE "resposta_id" IN (
+             SELECT "id" FROM "resposta_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])
+           )`,
+          [provaAlunoIds],
+        );
+        await client.query('DELETE FROM "email_envio" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
+        await client.query('DELETE FROM "resultado_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
+        await client.query('DELETE FROM "resposta_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
+        await client.query('DELETE FROM "prova_aluno" WHERE "id" = ANY($1::uuid[])', [provaAlunoIds]);
+      }
+
+      const result = await client.query('DELETE FROM "aluno" WHERE "id" = $1', [id]);
+      return (result.rowCount ?? 0) > 0;
+    });
   }
 }
