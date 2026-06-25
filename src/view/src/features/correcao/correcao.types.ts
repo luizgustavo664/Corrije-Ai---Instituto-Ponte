@@ -3,6 +3,8 @@ export type CorrecaoQuestaoDto = {
   ordemOriginal: number;
   pontuacaoMax: number;
   tipo: string;
+  enunciado: string | null;
+  imagemUrl: string | null;
   respostas: {
     total: number;
     corrigidas: number;
@@ -23,21 +25,36 @@ export type CorrecaoRealizadaDto = {
   corrigidaEm: string | null;
 };
 
+export type AlternativaCorrecaoDto = {
+  id: string;
+  ordemOriginal: number;
+  conteudoLatex: string;
+  urlImagem: string | null;
+  correta: boolean;
+};
+
 export type CorrecaoRespostaDto = {
   respostaId: string;
+  questaoId: string;
+  questaoTipo: string;
+  questaoEnunciado: string | null;
+  questaoImagemUrl: string | null;
+  pontuacaoMax: number;
   aluno: {
     id: string;
     nome: string;
   };
   respostaTexto: string | null;
   anexos: AnexoCorrecaoDto[];
+  alternativaSelecionada: AlternativaCorrecaoDto | null;
+  alternativaCorreta: AlternativaCorrecaoDto | null;
   correcao: CorrecaoRealizadaDto | null;
 };
 
 export type CorrecaoSalvaDto = {
   id: string;
   nota: number;
-  tipo: "manual";
+  tipo: "manual" | "automatica";
   corrigidaEm: string;
 };
 

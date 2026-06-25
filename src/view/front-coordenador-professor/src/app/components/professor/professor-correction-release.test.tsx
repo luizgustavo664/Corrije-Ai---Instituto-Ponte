@@ -76,23 +76,39 @@ const questao = {
   ordemOriginal: 1,
   pontuacaoMax: 2,
   tipo: "discursiva",
+  enunciado: "Explique o conceito.",
+  imagemUrl: null,
   respostas: { total: 2, corrigidas: 1 },
 };
 
 const respostas = [
   {
     respostaId: "resposta-1",
+    questaoId: QUESTAO_ID,
+    questaoTipo: "discursiva",
+    questaoEnunciado: "Explique o conceito.",
+    questaoImagemUrl: null,
+    pontuacaoMax: 2,
     aluno: { id: "aluno-1", nome: "Ada Lovelace" },
-    conteudo: { texto: "Resposta discursiva", alternativaId: null },
-    anexos: [{ id: "anexo-1", nomeArquivo: "rascunho.pdf", url: "https://example.com/a.pdf", mimeType: "application/pdf" }],
+    respostaTexto: "Resposta discursiva",
+    anexos: [{ id: "anexo-1", nomeArquivo: "rascunho.pdf", urlArquivo: "https://example.com/a.pdf", mimeType: "application/pdf" }],
+    alternativaSelecionada: null,
+    alternativaCorreta: null,
     correcao: null,
   },
   {
     respostaId: "resposta-2",
+    questaoId: QUESTAO_ID,
+    questaoTipo: "discursiva",
+    questaoEnunciado: "Explique o conceito.",
+    questaoImagemUrl: null,
+    pontuacaoMax: 2,
     aluno: { id: "aluno-2", nome: "Grace Hopper" },
-    conteudo: { texto: "Outra resposta", alternativaId: null },
+    respostaTexto: "Outra resposta",
     anexos: [],
-    correcao: { nota: 2, observacao: "Boa" },
+    alternativaSelecionada: null,
+    alternativaCorreta: null,
+    correcao: { id: "correcao-2", nota: 2, observacao: "Boa", tipo: "manual", corrigidaEm: "2026-06-16T10:00:00.000Z" },
   },
 ];
 

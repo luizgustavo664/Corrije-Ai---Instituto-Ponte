@@ -10,6 +10,7 @@ import { listarQuestoesCorrecao, listarRespostasPorQuestao, salvarCorrecao } fro
 import type { CorrecaoQuestaoDto, CorrecaoRespostaDto } from "../../../../../src/features/correcao/correcao.types";
 import { useCorrecaoAutomaticaObjetivas } from "../../../../../src/features/correcao/useCorrecaoAutomaticaObjetivas";
 import { AnexosGallery } from "./AnexosGallery";
+import { AlternativaCorrecaoCard, CorrecaoQuestionAssets } from "./CorrecaoQuestionAssets";
 
 interface Props {
   onBack: () => void;
@@ -66,6 +67,9 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
       void queryClient.invalidateQueries({ queryKey: ["correcao", "respostas", provaId] });
       void queryClient.invalidateQueries({ queryKey: ["correcao", "questoes", provaId] });
     },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : "Erro ao salvar correcao.");
+    },
   });
 
   const allRespostas: RespostaComQuestao[] = useMemo(
@@ -110,13 +114,22 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
     setComments((prev) => ({ ...prev, [respostaId]: val }));
   }
 
+  function getRespostaGrade(resposta: RespostaComQuestao) {
+    if (grades[resposta.respostaId] !== undefined) return grades[resposta.respostaId];
+    if (resposta.correcao?.nota !== undefined) return resposta.correcao.nota;
+    if (resposta.questaoTipo !== "discursiva" && resposta.alternativaSelecionada) {
+      return resposta.alternativaSelecionada.correta ? resposta.pontuacaoMax : 0;
+    }
+    return 0;
+  }
+
   async function handleSaveStudent() {
     if (!selectedStudent) return;
 
     const promises = selectedStudent.respostas.map((r) =>
       salvarMutation.mutateAsync({
         respostaId: r.respostaId,
-        nota: grades[r.respostaId] ?? r.correcao?.nota ?? 0,
+        nota: getRespostaGrade(r),
         observacao: comments[r.respostaId]?.trim() || r.correcao?.observacao || undefined,
       }),
     );
@@ -349,8 +362,8 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
           {selectedStudent.respostas.map((resposta) => {
             const questaoInfo = questoesMap.get(resposta.questaoId);
             const ordem = questaoInfo?.ordemOriginal ?? 0;
-            const gk = resposta.respostaId;
-            const currentGrade = grades[gk] ?? resposta.correcao?.nota;
+            const currentGrade = getRespostaGrade(resposta);
+            const isObjective = resposta.questaoTipo !== "discursiva";
 
             return (
               <div key={resposta.respostaId} className="bg-white rounded-xl flex flex-col" style={{ border: "1px solid #EBEBEB", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
@@ -362,9 +375,7 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
                     <span className="px-2 py-0.5 rounded-md" style={{ backgroundColor: "#EEF1F8", color: "#6B6FA3", fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 600, alignSelf: "flex-start" }}>
                       {questaoInfo?.ordemOriginal ?? ""}ª Questão
                     </span>
-                    <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111" }}>
-                      {resposta.respostaTexto ?? "Nenhuma resposta textual."}
-                    </MathText>
+                    <CorrecaoQuestionAssets enunciado={resposta.questaoEnunciado} imagemUrl={resposta.questaoImagemUrl} />
                   </div>
                 </div>
 
@@ -372,9 +383,22 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
                   <div className="flex-1 flex flex-col gap-2">
                     <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 600, color: "#6A7181" }}>Resposta do aluno</p>
                     <div className="rounded-xl p-3" style={{ backgroundColor: "#F7F8FA", border: "1px solid #E6E6E6" }}>
-                      <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111", lineHeight: 1.6 }}>
-                        {resposta.respostaTexto ?? "Em branco"}
-                      </MathText>
+                      {resposta.alternativaSelecionada ? (
+                        <div className="grid grid-cols-1 gap-3">
+                          <AlternativaCorrecaoCard
+                            title={resposta.alternativaSelecionada.correta ? "Alternativa marcada correta" : "Alternativa marcada"}
+                            alternativa={resposta.alternativaSelecionada}
+                            tone={resposta.alternativaSelecionada.correta ? "success" : "warning"}
+                          />
+                          {!resposta.alternativaSelecionada.correta && (
+                            <AlternativaCorrecaoCard title="Alternativa correta" alternativa={resposta.alternativaCorreta} tone="success" />
+                          )}
+                        </div>
+                      ) : (
+                        <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#111", lineHeight: 1.6 }}>
+                          {resposta.respostaTexto ?? "Em branco"}
+                        </MathText>
+                      )}
                     </div>
                     {resposta.anexos.length > 0 && (
                       <AnexosGallery anexos={resposta.anexos} />
@@ -386,13 +410,14 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
                     <input
                       type="number"
                       min={0}
-                      max={10}
+                      max={resposta.pontuacaoMax}
                       step={0.5}
                       value={currentGrade ?? 0}
+                      disabled={isObjective}
                       onChange={(e) => handleGrade(resposta.respostaId, Number(e.target.value))}
                       style={{
                         height: 40,
-                        backgroundColor: "#F2F3F5",
+                        backgroundColor: isObjective ? "#E6FAF8" : "#F2F3F5",
                         border: "1px solid transparent",
                         borderRadius: 8,
                         padding: "0 12px",
@@ -403,6 +428,7 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
                         outline: "none",
                         textAlign: "center",
                         width: "100%",
+                        cursor: isObjective ? "not-allowed" : "text",
                       }}
                       onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
                       onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}

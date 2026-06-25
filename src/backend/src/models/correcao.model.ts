@@ -13,6 +13,8 @@ export type CorrecaoQuestao = {
   ordemOriginal: number;
   pontuacaoMax: number;
   tipo: string;
+  enunciado: string | null;
+  imagemUrl: string | null;
   respostas: {
     total: number;
     /** Quantidade já corrigida (manual ou automática). */
@@ -69,6 +71,14 @@ export type CorrecaoRealizada = {
   corrigidaEm: string | null;
 };
 
+export type AlternativaCorrecao = {
+  id: string;
+  ordemOriginal: number;
+  conteudoLatex: string;
+  urlImagem: string | null;
+  correta: boolean;
+};
+
 /**
  * Resposta com dados do aluno e status da correção.
  *
@@ -83,9 +93,16 @@ export type CorrecaoRealizada = {
  */
 export type CorrecaoResposta = {
   respostaId: string;
+  questaoId: string;
+  questaoTipo: string;
+  questaoEnunciado: string | null;
+  questaoImagemUrl: string | null;
+  pontuacaoMax: number;
   aluno: CorrecaoAluno;
   respostaTexto: string | null;
   anexos: AnexoCorrecao[];
+  alternativaSelecionada: AlternativaCorrecao | null;
+  alternativaCorreta: AlternativaCorrecao | null;
   correcao: CorrecaoRealizada | null;
 };
 
@@ -99,7 +116,7 @@ export type CorrecaoResposta = {
 export type CorrecaoSalva = {
   id: string;
   nota: number;
-  tipo: "manual";
+  tipo: "manual" | "automatica";
   corrigidaEm: string;
 };
 

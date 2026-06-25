@@ -6,6 +6,7 @@ import { MathText } from "../../../../../src/components/math/MathText";
 import { listarRespostasPorQuestao, salvarCorrecao } from "../../../../../src/features/correcao/correcao.api";
 import type { CorrecaoRespostaDto } from "../../../../../src/features/correcao/correcao.types";
 import { AnexosGallery } from "./AnexosGallery";
+import { AlternativaCorrecaoCard, CorrecaoQuestionAssets } from "./CorrecaoQuestionAssets";
 
 interface Props {
   onBack: () => void;
@@ -35,6 +36,9 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
       void queryClient.invalidateQueries({ queryKey: ["correcao", "respostas", provaId, questaoId] });
       void queryClient.invalidateQueries({ queryKey: ["correcao", "questoes", provaId] });
       toast.success("Correção salva com sucesso.");
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : "Erro ao salvar correcao.");
     },
   });
 
@@ -77,6 +81,9 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
 
   function getAutoGrade(resposta: CorrecaoRespostaDto): number | null {
     if (resposta.correcao) return resposta.correcao.nota;
+    if (resposta.questaoTipo !== "discursiva" && resposta.alternativaSelecionada) {
+      return resposta.alternativaSelecionada.correta ? resposta.pontuacaoMax : 0;
+    }
     return null;
   }
 
@@ -142,6 +149,7 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
 
   const grade = grades[student.respostaId] ?? getAutoGrade(student) ?? 0;
   const progress = totalStudents > 0 ? Math.round((correctedCount / totalStudents) * 100) : 0;
+  const isObjective = student.questaoTipo !== "discursiva";
 
   return (
     <div className="p-8 flex flex-col gap-5">
@@ -290,13 +298,28 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
         </div>
 
         <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: "1px solid #EBEBEB" }}>
+          <CorrecaoQuestionAssets enunciado={student.questaoEnunciado} imagemUrl={student.questaoImagemUrl} />
+
           <div className="rounded-xl p-4" style={{ backgroundColor: "#EAECF0" }}>
             <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 14, color: "#111", marginBottom: 8 }}>
               Resposta do Aluno
             </p>
-            <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#504F4F", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-              {student.respostaTexto ?? "Nenhuma resposta textual."}
-            </MathText>
+            {student.alternativaSelecionada ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <AlternativaCorrecaoCard
+                  title={student.alternativaSelecionada.correta ? "Alternativa marcada correta" : "Alternativa marcada"}
+                  alternativa={student.alternativaSelecionada}
+                  tone={student.alternativaSelecionada.correta ? "success" : "warning"}
+                />
+                {!student.alternativaSelecionada.correta && (
+                  <AlternativaCorrecaoCard title="Alternativa correta" alternativa={student.alternativaCorreta} tone="success" />
+                )}
+              </div>
+            ) : (
+              <MathText style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#504F4F", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+                {student.respostaTexto ?? "Nenhuma resposta textual."}
+              </MathText>
+            )}
           </div>
 
           {student.anexos.length > 0 && (
@@ -320,13 +343,15 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
               <input
                 type="number"
                 min={0}
-                max={10}
+                max={student.pontuacaoMax}
                 step={0.5}
                 value={grade}
+                disabled={isObjective}
                 onChange={(e) => setGrades((prev) => ({ ...prev, [student.respostaId]: Number(e.target.value) }))}
                 style={{
                   height: 44,
                   border: "1.5px solid #D7D7D9",
+                  backgroundColor: isObjective ? "#E6FAF8" : "#fff",
                   borderRadius: 12,
                   padding: "0 12px",
                   fontFamily: "Poppins, sans-serif",
@@ -336,8 +361,14 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
                   outline: "none",
                   width: "100%",
                   textAlign: "center",
+                  cursor: isObjective ? "not-allowed" : "text",
                 }}
               />
+              {isObjective && (
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#05245F", textAlign: "center" }}>
+                  Nota atribuida automaticamente.
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 flex-1">

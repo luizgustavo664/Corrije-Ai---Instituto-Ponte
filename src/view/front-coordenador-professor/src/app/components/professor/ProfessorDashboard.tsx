@@ -93,6 +93,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
       ...exams.map((exam) => exam.turma).filter(Boolean),
     ]),
   ];
+  const selectedCorrectionProvaId = selectedExam?.id ? String(selectedExam.id) : selectedExamId;
 
   useEffect(() => {
     setActiveTabState(initialTab);
@@ -258,7 +259,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
         return selectedExam ? (
           <CorrecaoAlunoPage
             onBack={() => setActiveTab("correcao")}
-            provaId={selectedExamId}
+            provaId={selectedCorrectionProvaId}
             examTitle={selectedExam.title}
           />
         ) : null;
@@ -288,7 +289,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             setCurrentQuestaoId(id);
             setActiveTab("questao-correcao");
           }}
-          provaId={selectedExamId}
+          provaId={selectedCorrectionProvaId}
           examTitle={selectedExam?.title || "Título da Prova — Semestre"}
           showCompletionModal={showCompletionModal}
           onResetCompletionModal={() => setShowCompletionModal(false)}
@@ -302,7 +303,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             setShowCompletionModal(true);
             setActiveTab("prova-questoes-correcao");
           }}
-          provaId={selectedExamId}
+          provaId={selectedCorrectionProvaId}
           questaoId={currentQuestaoId}
         />;
     }

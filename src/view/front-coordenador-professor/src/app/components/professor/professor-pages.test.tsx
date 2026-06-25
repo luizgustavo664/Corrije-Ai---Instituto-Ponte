@@ -87,6 +87,8 @@ describe("professor large pages", () => {
         ordemOriginal: 1,
         pontuacaoMax: 2,
         tipo: "discursiva",
+        enunciado: "Explique.",
+        imagemUrl: null,
         respostas: { total: 5, corrigidas: 3 },
       },
     ]);

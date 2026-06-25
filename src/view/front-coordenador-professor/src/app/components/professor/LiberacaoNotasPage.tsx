@@ -86,7 +86,10 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
       .map((item) => [item.provaId, item]),
   );
   const emailRows = emailQueries
-    .flatMap((query) => query.data ?? [])
+    .flatMap((query, index) => {
+      const provaId = realExams[index]?.id;
+      return (query.data ?? []).map((row) => ({ ...row, provaId }));
+    })
     .sort((a, b) => new Date(b.criadoEm).getTime() - new Date(a.criadoEm).getTime());
   const provasDisponiveis = convertExamsToProvasDisponiveis(exams, analyticsByProvaId);
   const [selectedProvas, setSelectedProvas] = useState<Array<Exam["id"]>>([]);
@@ -113,6 +116,10 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
   ];
 
   const progressoEnvio = totalAlunos > 0 ? Math.round((emailsEnviados / totalAlunos) * 100) : 0;
+  const enviadosPorProva = new Map<Exam["id"], number>();
+  emailRows
+    .filter((row) => row.status === "enviado" && row.provaId)
+    .forEach((row) => enviadosPorProva.set(row.provaId!, (enviadosPorProva.get(row.provaId!) ?? 0) + 1));
 
   const toggleProva = (id: Exam["id"]) => {
     setSelectedProvas((prev) =>
@@ -322,7 +329,8 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
             const isSelected = selectedProvas.includes(prova.id);
             const semSubmissoes = prova.totalAlunos === 0;
             const semCorrecoes = prova.corrigidas === 0 && prova.totalAlunos > 0;
-            const podeSelecionar = prova.corrigidas > 0;
+            const jaEnviada = prova.totalAlunos > 0 && (enviadosPorProva.get(prova.id) ?? 0) >= prova.totalAlunos;
+            const podeSelecionar = prova.corrigidas > 0 && !jaEnviada;
             const isCompleta = prova.status === "Completa";
 
             return (
@@ -388,7 +396,21 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
                           Sem correções
                         </span>
                       )}
-                      {podeSelecionar && (
+                      {jaEnviada && (
+                        <span
+                          className="inline-block px-2 py-0.5 rounded-full"
+                          style={{
+                            backgroundColor: "rgba(34,197,94,0.2)",
+                            color: "#15803D",
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "11px",
+                            fontWeight: 600,
+                          }}
+                        >
+                          Feedback enviado
+                        </span>
+                      )}
+                      {(podeSelecionar || jaEnviada) && (
                         <>
                           <span
                             className="inline-block px-2 py-0.5 rounded-full"
