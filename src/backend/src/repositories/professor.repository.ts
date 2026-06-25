@@ -169,6 +169,29 @@ export class ProfessorRepository {
    * @returns true se removido, false se não encontrado.
    */
   async delete(id: string) {
+    const usage = await pool.query<{
+      provas: string;
+      questoes: string;
+      vinculos: string;
+    }>(
+      `
+        SELECT
+          (SELECT COUNT(*) FROM "prova" WHERE "professor_id" = $1) AS "provas",
+          0 AS "questoes",
+          (SELECT COUNT(*) FROM "materia_professor" WHERE "professor_id" = $1) AS "vinculos"
+      `,
+      [id],
+    );
+    const counts = usage.rows[0];
+    const total =
+      Number(counts?.provas ?? 0) +
+      Number(counts?.questoes ?? 0) +
+      Number(counts?.vinculos ?? 0);
+
+    if (total > 0) {
+      return false;
+    }
+
     const result = await pool.query('DELETE FROM "professor" WHERE "id" = $1', [id]);
     return (result.rowCount ?? 0) > 0;
   }

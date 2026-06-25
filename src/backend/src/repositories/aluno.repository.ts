@@ -1,5 +1,6 @@
 import { pool } from "../database/pool.js";
 import type { Aluno } from "../models/aluno.model.js";
+import { decryptCpf, encryptCpf, hashCpf, isEncryptedCpf, normalizeCpf } from "../security/cpf-crypto.js";
 
 /** Linha bruta da tabela `aluno`. Campos em snake_case mapeados do PostgreSQL. */
 type AlunoRow = {
@@ -14,11 +15,22 @@ type AlunoRow = {
 
 /** Converte uma AlunoRow (snake_case) para o modelo Aluno (camelCase).
  *  aceitou_termos_em é opcional (pode ser null) — usa encadeamento opcional com fallback para null. */
+export const safeDecodeCpf = (cpf: string | null): string | null => {
+  if (!cpf) return null;
+
+  try {
+    if (isEncryptedCpf(cpf)) return decryptCpf(cpf);
+    return normalizeCpf(cpf);
+  } catch {
+    return null;
+  }
+};
+
 const mapAluno = (row: AlunoRow): Aluno => ({
   id: row.id,
   nome: row.nome,
   email: row.email,
-  cpf: row.cpf,
+  cpf: safeDecodeCpf(row.cpf),
   aceitouTermosEm: row.aceitou_termos_em?.toISOString() ?? null,
   criadoEm: row.criado_em.toISOString(),
   atualizadoEm: row.atualizado_em.toISOString(),
@@ -85,9 +97,10 @@ export class AlunoRepository {
    * @returns Aluno encontrado ou null.
    */
   async findByCpf(cpf: string) {
+    const cpfHash = hashCpf(cpf);
     const result = await pool.query<AlunoRow>(
-      'SELECT * FROM "aluno" WHERE "cpf" = $1',
-      [cpf],
+      'SELECT * FROM "aluno" WHERE "cpf_hash" = $1 OR ("cpf_hash" IS NULL AND "cpf" = $2)',
+      [cpfHash, cpf],
     );
     return result.rows[0] ? mapAluno(result.rows[0]) : null;
   }
@@ -117,7 +130,9 @@ export class AlunoRepository {
     }
     if (input.cpf !== undefined) {
       fields.push(`"cpf" = $${index++}`);
-      values.push(input.cpf);
+      values.push(input.cpf === null ? null : encryptCpf(input.cpf));
+      fields.push(`"cpf_hash" = $${index++}`);
+      values.push(input.cpf === null ? null : hashCpf(input.cpf));
     }
 
     if (fields.length === 0) {

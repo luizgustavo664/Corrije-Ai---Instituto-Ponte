@@ -428,17 +428,19 @@ export class ProvaRepository {
    * @param urlAcesso - URL de acesso para os alunos.
    * @returns Prova atualizada ou null.
    */
-  async publish(provaId: string, urlAcesso: string) {
+  async publish(provaId: string, urlAcesso: string, dataInicio: Date, dataFim: Date) {
     const result = await pool.query<ProvaRow>(
       `
         UPDATE "prova"
         SET "url_acesso" = $1,
             "qr_code" = $1,
+            "data_inicio" = $2,
+            "data_fim" = $3,
             "status" = 'publicada'
-        WHERE "id" = $2
+        WHERE "id" = $4
         RETURNING *
       `,
-      [urlAcesso, provaId],
+      [urlAcesso, dataInicio, dataFim, provaId],
     );
     return result.rows[0] ? mapProva(result.rows[0]) : null;
   }

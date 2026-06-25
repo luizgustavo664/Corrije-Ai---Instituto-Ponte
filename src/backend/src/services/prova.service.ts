@@ -184,8 +184,9 @@ export class ProvaService {
       throw conflict("Apenas provas em rascunho podem ser publicadas.");
     }
 
-    if (!prova.dataInicio || !prova.dataFim) {
-      throw conflict("Prova precisa ter data de início e fim para ser publicada.");
+    const dataFim = new Date(input.dataFim);
+    if (Number.isNaN(dataFim.getTime()) || dataFim.getTime() <= Date.now()) {
+      throw conflict("A data limite da prova deve ser futura.");
     }
 
     const quantidadeQuestoes = await this.provaRepository.countQuestoes(provaId);
@@ -200,7 +201,7 @@ export class ProvaService {
 
     const baseUrl = input.baseUrlAluno.replace(/\/+$/, "");
     const urlAcesso = `${baseUrl}/${randomUUID()}`;
-    const published = await this.provaRepository.publish(provaId, urlAcesso);
+    const published = await this.provaRepository.publish(provaId, urlAcesso, new Date(), dataFim);
     if (!published) {
       throw notFound("Prova não encontrada.");
     }

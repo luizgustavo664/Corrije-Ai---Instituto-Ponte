@@ -120,8 +120,8 @@ describe("AlunoController - integração", () => {
     expect(persisted.rows[0]).toMatchObject({
       nome: "Daniel Atualizado",
       email: `${TEST_PREFIX}-daniel-atualizado@example.com`,
-      cpf: "90012345678",
     });
+    expect(persisted.rows[0].cpf).toMatch(/^v1:/);
   });
 
   it("deve bloquear com 403 quando professor tenta atualizar aluno", async () => {

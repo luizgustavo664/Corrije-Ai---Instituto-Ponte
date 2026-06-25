@@ -28,10 +28,13 @@ jest.unstable_mockModule("../../repositories/email-envio.repository.js", () => (
 }));
 
 jest.unstable_mockModule("../../services/email-adapter.js", () => ({
-  EmailAdapter: jest.fn(),
+  createEmailAdapter: jest.fn().mockImplementation(() => ({
+    send: mockSend,
+  })),
   FakeEmailAdapter: jest.fn().mockImplementation(() => ({
     send: mockSend,
   })),
+  HttpEmailAdapter: jest.fn(),
 }));
 
 type ServiceModule = typeof import("../../services/email-resultado.service.js");
@@ -194,6 +197,7 @@ describe("EmailResultadoService - unitário", () => {
     const envioErro = {
       id: "envio-1",
       provaAlunoId: "pa-1",
+      provaId: "prova-1",
       destinatario: "aluno@test.com",
       assunto: "Resultado",
       corpo: "Seu resultado...",
@@ -212,6 +216,7 @@ describe("EmailResultadoService - unitário", () => {
       const result = await service.reenviar("envio-1", professor);
 
       expect(result.status).toBe("enviado");
+      expect(mockHasAccessToProva).toHaveBeenCalledWith("prova-1", professor);
     });
 
     it("deve lançar notFound quando envio não existe", async () => {

@@ -26,6 +26,7 @@ import { questaoRoutes } from "./routes/questao.routes.js";
 import { respostaAnexoRoutes } from "./routes/resposta-anexo.routes.js";
 import { respostaAlunoRoutes } from "./routes/resposta-aluno.routes.js";
 import { resultadoRoutes } from "./routes/resultado.routes.js";
+import { registerIdempotency } from "./middlewares/idempotency.js";
 
 const validationDetails = (error: Error & { validation?: unknown }) => {
   if (error instanceof ZodError) {
@@ -54,7 +55,7 @@ export function buildApp() {
   app.register(fastifyCors, {
     origin: true,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "x-user-role"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-user-role", "Idempotency-Key"],
     credentials: true,
   });
   app.register(fastifySwagger, {
@@ -69,6 +70,7 @@ export function buildApp() {
   app.register(fastifySwaggerUi, {
     routePrefix: "/docs",
   });
+  registerIdempotency(app);
 
   app.register(
     async (api) => {

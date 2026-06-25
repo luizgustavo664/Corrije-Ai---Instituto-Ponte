@@ -12,37 +12,34 @@ const makeRepo = () => ({
   findAll: jest.fn<any>().mockResolvedValue({ data: [professor], total: 1 }),
   findById: jest.fn<any>().mockResolvedValue(professor),
   update: jest.fn<any>().mockResolvedValue({ ...professor, nome: "Novo" }),
-  delete: jest.fn<any>().mockResolvedValue(undefined),
+  delete: jest.fn<any>().mockResolvedValue(true),
   materiaExists: jest.fn<any>().mockResolvedValue(true),
   vinculoExists: jest.fn<any>().mockResolvedValue(false),
   criarVinculo: jest.fn<any>().mockResolvedValue({ professorId: "prof-1", materiaId: "mat-1" }),
   removerVinculo: jest.fn<any>().mockResolvedValue(true),
+  findMateriasByProfessor: jest.fn<any>().mockResolvedValue([{ id: "mat-1" }]),
 });
 
-describe("ProfessorService - unitário", () => {
-  it("deve criar professor quando coordenador existe e email é único", async () => {
+describe("ProfessorService - unitario", () => {
+  it("cria professor quando coordenador existe e email e unico", async () => {
     const service = new ProfessorService(makeRepo() as any);
 
     await expect(service.criar({ nome: "Professor", email: "p@test.com", coordenadorId: "coord-1" } as any, user)).resolves.toEqual(professor);
   });
 
-  it("deve lançar businessRule quando coordenador não existe", async () => {
+  it("bloqueia criacao com coordenador inexistente ou email duplicado", async () => {
     const repo = makeRepo();
-    repo.coordenadorExists.mockResolvedValue(false);
     const service = new ProfessorService(repo as any);
 
-    await expect(service.criar({ coordenadorId: "x" } as any, user)).rejects.toThrow("O coordenador informado não existe.");
+    repo.coordenadorExists.mockResolvedValueOnce(false);
+    await expect(service.criar({ coordenadorId: "x" } as any, user)).rejects.toThrow(/coordenador informado/);
+
+    repo.coordenadorExists.mockResolvedValueOnce(true);
+    repo.findByEmail.mockResolvedValueOnce(professor);
+    await expect(service.criar({ email: "p@test.com", coordenadorId: "coord-1" } as any, user)).rejects.toThrow(/professor com este e-mail/);
   });
 
-  it("deve lançar conflict quando email já existe", async () => {
-    const repo = makeRepo();
-    repo.findByEmail.mockResolvedValue(professor);
-    const service = new ProfessorService(repo as any);
-
-    await expect(service.criar({ email: "p@test.com", coordenadorId: "coord-1" } as any, user)).rejects.toThrow("Já existe um professor com este e-mail.");
-  });
-
-  it("deve listar, buscar, atualizar e remover professor", async () => {
+  it("lista, busca, atualiza e remove professor", async () => {
     const repo = makeRepo();
     const service = new ProfessorService(repo as any);
 
@@ -53,36 +50,66 @@ describe("ProfessorService - unitário", () => {
     expect(repo.delete).toHaveBeenCalledWith("prof-1");
   });
 
-  it("deve lançar notFound ao buscar professor inexistente", async () => {
+  it("cobre erros de busca, atualizacao e remocao", async () => {
     const repo = makeRepo();
-    repo.findById.mockResolvedValue(null);
     const service = new ProfessorService(repo as any);
 
-    await expect(service.buscarPorId("x", user)).rejects.toThrow("Professor não encontrado.");
+    repo.findById.mockResolvedValueOnce(null);
+    await expect(service.buscarPorId("x", user)).rejects.toThrow(/Professor/);
+
+    repo.findByEmail.mockResolvedValueOnce({ id: "outro" });
+    await expect(service.atualizar("prof-1", { email: "x@test.com" } as any, user)).rejects.toThrow(/professor com este e-mail/);
+
+    repo.coordenadorExists.mockResolvedValueOnce(false);
+    await expect(service.atualizar("prof-1", { coordenadorId: "coord-x" } as any, user)).rejects.toThrow(/coordenador informado/);
+
+    repo.coordenadorExists.mockResolvedValueOnce(true);
+    repo.update.mockResolvedValueOnce(null);
+    await expect(service.atualizar("prof-1", { coordenadorId: "coord-1" } as any, user)).rejects.toThrow(/Professor/);
+
+    repo.findById.mockResolvedValueOnce(null);
+    await expect(service.atualizar("prof-x", { nome: "Novo" } as any, user)).rejects.toThrow(/Professor/);
+
+    repo.findById.mockResolvedValueOnce(null);
+    await expect(service.remover("prof-x", user)).rejects.toThrow(/Professor/);
+
+    repo.delete.mockResolvedValueOnce(false);
+    await expect(service.remover("prof-1", user)).rejects.toThrow(/vinculos|v.nculos|associadas/i);
   });
 
-  it("deve lançar conflict ao atualizar para email de outro professor", async () => {
-    const repo = makeRepo();
-    repo.findByEmail.mockResolvedValue({ id: "outro" });
-    const service = new ProfessorService(repo as any);
-
-    await expect(service.atualizar("prof-1", { email: "x@test.com" } as any, user)).rejects.toThrow("Já existe um professor com este e-mail.");
-  });
-
-  it("deve criar e remover vínculo professor-matéria", async () => {
+  it("cria, lista e remove vinculos professor-materia", async () => {
     const repo = makeRepo();
     const service = new ProfessorService(repo as any);
 
     await expect(service.criarVinculo("prof-1", "mat-1", user)).resolves.toEqual({ professorId: "prof-1", materiaId: "mat-1" });
+    await expect(service.listarMaterias("prof-1", user)).resolves.toEqual([{ id: "mat-1" }]);
     await service.removerVinculo("prof-1", "mat-1", user);
+    expect(repo.findMateriasByProfessor).toHaveBeenCalledWith("prof-1");
     expect(repo.removerVinculo).toHaveBeenCalledWith("prof-1", "mat-1");
   });
 
-  it("deve bloquear vínculo duplicado", async () => {
+  it("cobre validacoes de vinculos", async () => {
     const repo = makeRepo();
-    repo.vinculoExists.mockResolvedValue(true);
     const service = new ProfessorService(repo as any);
 
-    await expect(service.criarVinculo("prof-1", "mat-1", user)).rejects.toThrow("Vínculo já existe.");
+    repo.vinculoExists.mockResolvedValueOnce(true);
+    await expect(service.criarVinculo("prof-1", "mat-1", user)).rejects.toThrow(/V.nculo/);
+
+    repo.findById.mockResolvedValueOnce(null);
+    await expect(service.criarVinculo("prof-x", "mat-1", user)).rejects.toThrow(/Professor/);
+
+    repo.findById.mockResolvedValueOnce(professor);
+    repo.materiaExists.mockResolvedValueOnce(false);
+    await expect(service.criarVinculo("prof-1", "mat-x", user)).rejects.toThrow(/Mat/);
+
+    repo.findById.mockResolvedValueOnce(null);
+    await expect(service.listarMaterias("prof-x", user)).rejects.toThrow(/Professor/);
+
+    repo.findById.mockResolvedValueOnce(null);
+    await expect(service.removerVinculo("prof-x", "mat-1", user)).rejects.toThrow(/Professor/);
+
+    repo.findById.mockResolvedValueOnce(professor);
+    repo.removerVinculo.mockResolvedValueOnce(false);
+    await expect(service.removerVinculo("prof-1", "mat-x", user)).rejects.toThrow(/V.nculo/);
   });
 });

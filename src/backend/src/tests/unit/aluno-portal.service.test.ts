@@ -45,7 +45,13 @@ describe("AlunoPortalService - unitário", () => {
   it("deve iniciar prova e retornar provaAluno e questões", async () => {
     const result = await service.iniciarProva("url-1", { nome: "Aluno", email: "a@test.com", cpf: "12345678901", aceiteTermos: true } as any);
 
-    expect(result).toEqual({ provaAlunoId: "pa-1", status: "em_andamento", questoes: [{ id: "q-1" }] });
+    expect(result).toMatchObject({
+      provaAlunoId: "pa-1",
+      status: "em_andamento",
+      inicioEm: expect.any(String),
+      expiraEm: expect.any(String),
+      questoes: [{ id: "q-1" }],
+    });
   });
 
   it("deve lançar notFound quando link não existe", async () => {

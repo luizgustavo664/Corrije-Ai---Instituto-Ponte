@@ -6,6 +6,7 @@ import type { AuthUser } from "../models/auth.model.js";
 type EmailEnvioRow = {
   id: string;
   prova_aluno_id: string;
+  prova_id?: string;
   destinatario: string;
   assunto: string;
   corpo: string | null;
@@ -30,6 +31,7 @@ type AlunoResultadoRow = {
 const mapEnvio = (row: EmailEnvioRow) => ({
   id: row.id,
   provaAlunoId: row.prova_aluno_id,
+  ...(row.prova_id ? { provaId: row.prova_id } : {}),
   destinatario: row.destinatario,
   assunto: row.assunto,
   status: row.status,
@@ -212,8 +214,11 @@ export class EmailEnvioRepository {
    */
   async findById(id: string) {
     const result = await pool.query<EmailEnvioRow>(
-      `SELECT "id", "prova_aluno_id", "destinatario", "assunto", "status", "erro", "enviado_em", "criado_em"
-       FROM "email_envio" WHERE "id" = $1`,
+      `SELECT ee."id", ee."prova_aluno_id", pa."prova_id", ee."destinatario", ee."assunto", ee."status",
+              ee."erro", ee."enviado_em", ee."criado_em"
+       FROM "email_envio" ee
+       JOIN "prova_aluno" pa ON pa."id" = ee."prova_aluno_id"
+       WHERE ee."id" = $1`,
       [id],
     );
     return result.rows[0] ? mapEnvio(result.rows[0]) : null;

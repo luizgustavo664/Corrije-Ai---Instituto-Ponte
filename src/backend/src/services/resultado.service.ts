@@ -3,7 +3,7 @@ import type { AuthUser } from "../middlewares/auth.js";
 import { ResultadoRepository } from "../repositories/resultado.repository.js";
 import type { ExportarResultadoInput } from "../schemas/resultado.schema.js";
 import { StorageService } from "./storage.service.js";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 
 type ResultadoConsolidado = Awaited<ReturnType<ResultadoRepository["findByProva"]>>[number];
 
@@ -39,12 +39,13 @@ const gerarCsvResultados = (resultados: ResultadoConsolidado[]) => {
   return montarLinhasResultados(resultados).map((row) => row.map(csvValue).join(",")).join("\n");
 };
 
-const gerarXlsxResultados = (resultados: ResultadoConsolidado[]) => {
-  const workbook = XLSX.utils.book_new();
-  const worksheet = XLSX.utils.aoa_to_sheet(montarLinhasResultados(resultados));
-
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Resultados");
-  return XLSX.write(workbook, { type: "buffer", bookType: "xlsx" }) as Buffer;
+const gerarXlsxResultados = async (resultados: ResultadoConsolidado[]) => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Resultados");
+  worksheet.addRows(montarLinhasResultados(resultados));
+  worksheet.getRow(1).font = { bold: true };
+  const content = await workbook.xlsx.writeBuffer();
+  return Buffer.from(content);
 };
 
 /**
@@ -123,7 +124,7 @@ export class ResultadoService {
             contentType: "text/csv; charset=utf-8",
           }
         : {
-            content: gerarXlsxResultados(resultados),
+            content: await gerarXlsxResultados(resultados),
             contentType: XLSX_CONTENT_TYPE,
           };
     const urlArquivo = await this.storageService.upload({

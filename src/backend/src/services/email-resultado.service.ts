@@ -2,7 +2,7 @@ import { conflict, forbidden, notFound } from "../errors/api-error.js";
 import type { AuthUser } from "../models/auth.model.js";
 import { EmailEnvioRepository } from "../repositories/email-envio.repository.js";
 import type { LiberarEmailInput } from "../schemas/email.schema.js";
-import { EmailAdapter, FakeEmailAdapter } from "./email-adapter.js";
+import { createEmailAdapter, type EmailAdapter } from "./email-adapter.js";
 
 /** Limite de envios simultâneos de email. */
 const CONCURRENCY_LIMIT = 10;
@@ -38,9 +38,8 @@ const runWithConcurrency = async <T>(
  * 3. `reenviar`: apenas registros com status "erro" podem ser reenviados.
  *
  * ## Adapter de email
- * O adapter padrão é `FakeEmailAdapter` (nunca envia de verdade).
- * Em produção, deve ser substituído por uma implementação real
- * (ex.: Resend, SendGrid, AWS SES).
+ * O adapter padrão é resolvido por configuração. Em teste/dev explícito,
+ * usa o fake; em runtime real, exige um webhook de envio configurado.
  *
  * ## Tratamento de pendências
  * Se a prova ainda tem correções pendentes, o método `liberar` exige
@@ -49,7 +48,7 @@ const runWithConcurrency = async <T>(
 export class EmailResultadoService {
   constructor(
     private readonly emailRepository = new EmailEnvioRepository(),
-    private readonly emailAdapter: EmailAdapter = new FakeEmailAdapter(),
+    private readonly emailAdapter: EmailAdapter = createEmailAdapter(),
   ) {}
 
   /**
@@ -164,7 +163,7 @@ export class EmailResultadoService {
       throw conflict("Apenas envios com status 'erro' podem ser reenviados.");
     }
 
-    const hasAccess = await this.emailRepository.hasAccessToProva(envio.provaAlunoId, user);
+    const hasAccess = await this.emailRepository.hasAccessToProva(envio.provaId!, user);
     if (!hasAccess) {
       throw forbidden("Usuário sem permissão para reenviar e-mail.");
     }

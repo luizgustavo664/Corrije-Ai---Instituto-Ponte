@@ -300,9 +300,14 @@ describe("ProvaService - unitário", () => {
   });
 
   describe("publicar", () => {
+    const publicarPayload = () => ({
+      baseUrlAluno: "http://aluno.com",
+      dataFim: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+    });
+
     it("deve publicar prova com todos os pré-requisitos", async () => {
       mockFindById.mockResolvedValue(
-        makeProva({ dataInicio: "2025-06-01T00:00:00Z", dataFim: "2025-06-30T00:00:00Z" }),
+        makeProva({ dataInicio: null, dataFim: null }),
       );
       mockHasAccess.mockResolvedValue(true);
       mockCountQuestoes.mockResolvedValue(5);
@@ -310,9 +315,10 @@ describe("ProvaService - unitário", () => {
       mockPublish.mockResolvedValue(makeProva({ status: "publicada" }));
 
       const service = new ProvaService();
-      const result = await service.publicar("prova-1", { baseUrlAluno: "http://aluno.com" }, professor);
+      const result = await service.publicar("prova-1", publicarPayload(), professor);
 
       expect(result.status).toBe("publicada");
+      expect(mockPublish).toHaveBeenCalledWith("prova-1", expect.any(String), expect.any(Date), expect.any(Date));
     });
 
     it("deve lançar conflict quando prova não está em rascunho", async () => {
@@ -321,18 +327,18 @@ describe("ProvaService - unitário", () => {
 
       const service = new ProvaService();
       await expect(
-        service.publicar("prova-1", { baseUrlAluno: "http://aluno.com" }, professor),
+        service.publicar("prova-1", publicarPayload(), professor),
       ).rejects.toThrow("Apenas provas em rascunho podem ser publicadas.");
     });
 
-    it("deve lançar conflict quando faltam dataInicio/dataFim", async () => {
+    it("deve lançar conflict quando data limite não é futura", async () => {
       mockFindById.mockResolvedValue(makeProva({ dataInicio: null, dataFim: null }));
       mockHasAccess.mockResolvedValue(true);
 
       const service = new ProvaService();
       await expect(
-        service.publicar("prova-1", { baseUrlAluno: "http://aluno.com" }, professor),
-      ).rejects.toThrow("Prova precisa ter data de início e fim para ser publicada.");
+        service.publicar("prova-1", { baseUrlAluno: "http://aluno.com", dataFim: "2020-01-01T00:00:00.000Z" }, professor),
+      ).rejects.toThrow("A data limite da prova deve ser futura.");
     });
 
     it("deve lançar conflict quando não há questões", async () => {
@@ -344,7 +350,7 @@ describe("ProvaService - unitário", () => {
 
       const service = new ProvaService();
       await expect(
-        service.publicar("prova-1", { baseUrlAluno: "http://aluno.com" }, professor),
+        service.publicar("prova-1", publicarPayload(), professor),
       ).rejects.toThrow("Não é possível publicar uma prova sem questões.");
     });
 
@@ -358,7 +364,7 @@ describe("ProvaService - unitário", () => {
 
       const service = new ProvaService();
       await expect(
-        service.publicar("prova-1", { baseUrlAluno: "http://aluno.com" }, professor),
+        service.publicar("prova-1", publicarPayload(), professor),
       ).rejects.toThrow("Questões objetivas precisam ter alternativas válidas e gabarito.");
     });
 
@@ -373,7 +379,7 @@ describe("ProvaService - unitário", () => {
 
       const service = new ProvaService();
       await expect(
-        service.publicar("prova-1", { baseUrlAluno: "http://aluno.com" }, professor),
+        service.publicar("prova-1", publicarPayload(), professor),
       ).rejects.toThrow("Prova não encontrada.");
     });
   });

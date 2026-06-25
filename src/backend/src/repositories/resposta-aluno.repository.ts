@@ -13,6 +13,8 @@ type ProvaAlunoContextRow = {
   prova_status: string;
   data_inicio: Date | string | null;
   data_fim: Date | string | null;
+  inicio_em: Date | string | null;
+  tempo_limite_min: number | null;
 };
 
 /** Linha resumo da tabela `questao` para validação de tipo e limites. */
@@ -82,7 +84,9 @@ export class RespostaAlunoRepository {
           pa."status",
           p."status" AS "prova_status",
           p."data_inicio",
-          p."data_fim"
+          p."data_fim",
+          pa."inicio_em",
+          p."tempo_limite_min"
         FROM "prova_aluno" pa
         JOIN "prova" p ON p."id" = pa."prova_id"
         WHERE pa."id" = $1
@@ -98,6 +102,8 @@ export class RespostaAlunoRepository {
           provaStatus: result.rows[0].prova_status,
           dataInicio: toIsoString(result.rows[0].data_inicio),
           dataFim: toIsoString(result.rows[0].data_fim),
+          inicioEm: toIsoString(result.rows[0].inicio_em),
+          tempoLimiteMin: result.rows[0].tempo_limite_min,
         }
       : null;
   }
