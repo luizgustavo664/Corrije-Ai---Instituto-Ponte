@@ -5,7 +5,6 @@ import type { Exam } from "../../../../../src/features/dashboard/dashboard.types
 import { isPersistedExam } from "../../../../../src/features/dashboard/dashboard.ui-adapter";
 import { getProvaAnalytics } from "../../../../../src/features/analytics/analytics.api";
 import type { ProvaAnalyticsDto } from "../../../../../src/features/analytics/analytics.types";
-import { getStoredAuthSession } from "../../../../../src/features/auth/auth.storage";
 import { exportarAnexosProva } from "../../../../../src/features/anexos/anexos.api";
 import type { AnexoExportarItemDto } from "../../../../../src/features/anexos/anexos.types";
 import { buildAnexosZip } from "../../../../../src/features/anexos/anexos.zip";
@@ -26,6 +25,8 @@ interface ProvaDisponivel {
 interface Props {
   exams?: Exam[];
 }
+
+type EnvioTab = "finalizadas" | "sem-submissoes" | "a-corrigir";
 
 function convertExamsToProvasDisponiveis(
   exams: Exam[],
@@ -65,7 +66,6 @@ function convertExamsToProvasDisponiveis(
 
 export function LiberacaoNotasPage({ exams = [] }: Props) {
   const queryClient = useQueryClient();
-  const isCoordenador = getStoredAuthSession()?.usuario.perfil === "coordenador";
   const realExams = exams.filter(isPersistedExam);
   const analyticsQueries = useQueries({
     queries: realExams.map((exam) => ({
@@ -100,6 +100,7 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
   const [sendError, setSendError] = useState<string | null>(null);
   const [exportMessage, setExportMessage] = useState<string | null>(null);
   const [anexosExportados, setAnexosExportados] = useState<AnexoExportarItemDto[]>([]);
+  const [selectedEnvioTab, setSelectedEnvioTab] = useState<EnvioTab>("finalizadas");
 
   const provasComCorrecoes = provasDisponiveis.filter(p => p.corrigidas > 0);
   const totalAlunos = provasComCorrecoes.reduce((sum, p) => sum + p.totalAlunos, 0);
@@ -120,6 +121,32 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
   emailRows
     .filter((row) => row.status === "enviado" && row.provaId)
     .forEach((row) => enviadosPorProva.set(row.provaId!, (enviadosPorProva.get(row.provaId!) ?? 0) + 1));
+  const isJaEnviada = (prova: ProvaDisponivel) =>
+    prova.totalAlunos > 0 && (enviadosPorProva.get(prova.id) ?? 0) >= prova.totalAlunos;
+  const isFinalizada = (prova: ProvaDisponivel) => prova.totalAlunos > 0 && prova.corrigidas >= prova.totalAlunos;
+  const envioTabs: Array<{ id: EnvioTab; label: string; count: number }> = [
+    {
+      id: "finalizadas",
+      label: "Correcoes finalizadas",
+      count: provasDisponiveis.filter(isFinalizada).length,
+    },
+    {
+      id: "sem-submissoes",
+      label: "Sem submissoes",
+      count: provasDisponiveis.filter((prova) => prova.totalAlunos === 0).length,
+    },
+    {
+      id: "a-corrigir",
+      label: "Submissoes a corrigir",
+      count: provasDisponiveis.filter((prova) => prova.totalAlunos > 0 && prova.corrigidas < prova.totalAlunos).length,
+    },
+  ];
+  const provasEnvioVisiveis = provasDisponiveis.filter((prova) => {
+    if (selectedEnvioTab === "finalizadas") return isFinalizada(prova);
+    if (selectedEnvioTab === "sem-submissoes") return prova.totalAlunos === 0;
+    return prova.totalAlunos > 0 && prova.corrigidas < prova.totalAlunos;
+  });
+  const provasExportaveis = provasDisponiveis.filter(isFinalizada);
 
   const toggleProva = (id: Exam["id"]) => {
     setSelectedProvas((prev) =>
@@ -328,20 +355,40 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
           )}
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          {envioTabs.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setSelectedEnvioTab(tab.id)}
+              className="px-3 py-2 rounded-lg transition-opacity hover:opacity-85"
+              style={{
+                backgroundColor: selectedEnvioTab === tab.id ? "#F9B233" : "#F2F2F2",
+                color: selectedEnvioTab === tab.id ? "#6B6FA3" : "#6A7181",
+                fontFamily: "Poppins, sans-serif",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}
+            >
+              {tab.label} ({tab.count})
+            </button>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {provasDisponiveis.length === 0 ? (
+          {provasEnvioVisiveis.length === 0 ? (
             <div className="col-span-2 text-center py-8">
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#B1B4BD" }}>
                 Nenhuma prova criada ainda. Crie uma prova para começar.
               </p>
             </div>
           ) : (
-            provasDisponiveis.map((prova) => {
+            provasEnvioVisiveis.map((prova) => {
             const isSelected = selectedProvas.includes(prova.id);
             const semSubmissoes = prova.totalAlunos === 0;
             const semCorrecoes = prova.corrigidas === 0 && prova.totalAlunos > 0;
-            const jaEnviada = prova.totalAlunos > 0 && (enviadosPorProva.get(prova.id) ?? 0) >= prova.totalAlunos;
-            const podeSelecionar = prova.corrigidas > 0 && !jaEnviada;
+            const jaEnviada = isJaEnviada(prova);
+            const podeSelecionar = isFinalizada(prova) && !jaEnviada;
             const isCompleta = prova.status === "Completa";
 
             return (
@@ -450,7 +497,7 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
         </div>
       </div>
 
-      {isCoordenador && (
+      {(
         <div className="bg-white rounded-xl p-5 flex flex-col gap-4" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
           <div>
             <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "16px", color: "#6B6FA3" }}>
@@ -466,20 +513,27 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
             </p>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {realExams.map((exam) => (
-              <div key={exam.id} className="rounded-xl p-4 flex items-center justify-between gap-3" style={{ border: "1px solid #E5E7EB" }}>
+            {provasExportaveis.length === 0 && (
+              <div className="md:col-span-2 rounded-xl p-4" style={{ border: "1px solid #E5E7EB" }}>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181" }}>
+                  Nenhuma prova com submissões totalmente corrigidas para exportar.
+                </p>
+              </div>
+            )}
+            {provasExportaveis.map((prova) => (
+              <div key={prova.id} className="rounded-xl p-4 flex items-center justify-between gap-3" style={{ border: "1px solid #E5E7EB" }}>
                 <div className="min-w-0">
                   <p className="truncate" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px", color: "#6B6FA3" }}>
-                    {exam.title}
+                    {prova.nome}
                   </p>
                   <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
-                    {exam.subject} • {exam.turma}
+                    {prova.disciplina} • {prova.turma}
                   </p>
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <button
                     type="button"
-                    onClick={() => exportarResultadosMutation.mutate(String(exam.id))}
+                    onClick={() => exportarResultadosMutation.mutate(String(prova.id))}
                     disabled={exportarResultadosMutation.isPending}
                     className="flex items-center gap-1 px-3 py-2 rounded-lg hover:opacity-85 transition-opacity disabled:opacity-50"
                     style={{ backgroundColor: "#05245F", color: "#fff", fontFamily: "Inter, sans-serif", fontSize: "12px", fontWeight: 600 }}
@@ -489,7 +543,7 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => exportarAnexosMutation.mutate(String(exam.id))}
+                    onClick={() => exportarAnexosMutation.mutate(String(prova.id))}
                     disabled={exportarAnexosMutation.isPending}
                     className="flex items-center gap-1 px-3 py-2 rounded-lg hover:opacity-85 transition-opacity disabled:opacity-50"
                     style={{ border: "1px solid #6B6FA3", color: "#6B6FA3", backgroundColor: "#fff", fontFamily: "Inter, sans-serif", fontSize: "12px", fontWeight: 600 }}

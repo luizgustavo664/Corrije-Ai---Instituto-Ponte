@@ -46,6 +46,7 @@ const coordenadorTabs: CoordenadorTab[] = [
   "nova-questao-banco",
   "questao-correcao",
   "prova-questoes-correcao",
+  "correcao-aluno",
 ];
 
 function AuthLayout({ mode }: { mode: "login" | "cadastro" }) {

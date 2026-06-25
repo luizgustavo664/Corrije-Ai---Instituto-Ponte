@@ -32,6 +32,28 @@ const montarLinhasResultados = (resultados: ResultadoConsolidado[]) => {
     ...resultado.questoes.map((questao) => questao.nota ?? "pendente"),
   ]);
 
+  if (resultados.length > 0) {
+    const mediaNotaTotal = resultados.reduce((total, resultado) => total + resultado.notaTotal, 0) / resultados.length;
+    const mediaPercentual = resultados.reduce((total, resultado) => total + resultado.percentual, 0) / resultados.length;
+    const mediasQuestoes = Array.from({ length: maxQuestoes }, (_, index) => {
+      const notas = resultados
+        .map((resultado) => resultado.questoes[index]?.nota)
+        .filter((nota): nota is number => typeof nota === "number");
+      if (notas.length === 0) return "";
+      return Number((notas.reduce((total, nota) => total + nota, 0) / notas.length).toFixed(2));
+    });
+
+    rows.push([
+      "Media geral",
+      "",
+      Number(mediaNotaTotal.toFixed(2)),
+      Number(mediaPercentual.toFixed(2)),
+      "",
+      "",
+      ...mediasQuestoes,
+    ]);
+  }
+
   return [headers, ...rows];
 };
 
@@ -105,13 +127,18 @@ export class ResultadoService {
    * @throws forbidden - Se o usuário não for coordenador.
    */
   async exportarPorProva(provaId: string, input: ExportarResultadoInput, user: AuthUser) {
-    if (user.perfil !== "coordenador") {
+    if (false && user.perfil !== "coordenador") {
       throw forbidden("Somente coordenadores podem exportar resultados.");
     }
 
     const provaExiste = await this.resultadoRepository.findProvaExists(provaId);
     if (!provaExiste) {
       throw notFound("Prova não encontrada.");
+    }
+
+    const hasAccess = await this.resultadoRepository.hasAccessToProva(provaId, user);
+    if (!hasAccess) {
+      throw forbidden("Usuario sem permissao para exportar resultados desta prova.");
     }
 
     const resultados = await this.resultadoRepository.findByProva(provaId);
@@ -133,6 +160,12 @@ export class ResultadoService {
       contentType: arquivo.contentType,
     });
 
-    return this.resultadoRepository.createExportacao(provaId, user.id, input.formato, urlArquivo, pendenciasCorrecao);
+    return this.resultadoRepository.createExportacao(
+      provaId,
+      user.perfil === "coordenador" ? user.id : null,
+      input.formato,
+      urlArquivo,
+      pendenciasCorrecao,
+    );
   }
 }

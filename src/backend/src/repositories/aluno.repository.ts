@@ -186,18 +186,32 @@ export class AlunoRepository {
       const provaAlunoIds = provaAlunoResult.rows.map((row) => row.id);
 
       if (provaAlunoIds.length > 0) {
-        await client.query(
+        const tablesResult = await client.query<{ table_name: string }>(
+          `SELECT table_name
+           FROM information_schema.tables
+           WHERE table_schema = 'public'
+             AND table_name = ANY($1::text[])`,
+          [["avaliacao_log", "resposta_anexo", "feedback", "correcao", "email_envio", "resultado_aluno", "resposta_aluno"]],
+        );
+        const existingTables = new Set(tablesResult.rows.map((row) => row.table_name));
+
+        if (existingTables.has("avaliacao_log")) {
+          await client.query(
           'UPDATE "avaliacao_log" SET "prova_aluno_id" = NULL WHERE "prova_aluno_id" = ANY($1::uuid[])',
           [provaAlunoIds],
-        );
-        await client.query(
+          );
+        }
+        if (existingTables.has("resposta_anexo") && existingTables.has("resposta_aluno")) {
+          await client.query(
           `DELETE FROM "resposta_anexo"
            WHERE "resposta_id" IN (
              SELECT "id" FROM "resposta_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])
            )`,
           [provaAlunoIds],
-        );
-        await client.query(
+          );
+        }
+        if (existingTables.has("feedback") && existingTables.has("correcao") && existingTables.has("resposta_aluno")) {
+          await client.query(
           `DELETE FROM "feedback"
            WHERE "correcao_id" IN (
              SELECT c."id"
@@ -206,17 +220,26 @@ export class AlunoRepository {
              WHERE ra."prova_aluno_id" = ANY($1::uuid[])
            )`,
           [provaAlunoIds],
-        );
-        await client.query(
+          );
+        }
+        if (existingTables.has("correcao") && existingTables.has("resposta_aluno")) {
+          await client.query(
           `DELETE FROM "correcao"
            WHERE "resposta_id" IN (
              SELECT "id" FROM "resposta_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])
            )`,
           [provaAlunoIds],
-        );
-        await client.query('DELETE FROM "email_envio" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
-        await client.query('DELETE FROM "resultado_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
-        await client.query('DELETE FROM "resposta_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
+          );
+        }
+        if (existingTables.has("email_envio")) {
+          await client.query('DELETE FROM "email_envio" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
+        }
+        if (existingTables.has("resultado_aluno")) {
+          await client.query('DELETE FROM "resultado_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
+        }
+        if (existingTables.has("resposta_aluno")) {
+          await client.query('DELETE FROM "resposta_aluno" WHERE "prova_aluno_id" = ANY($1::uuid[])', [provaAlunoIds]);
+        }
         await client.query('DELETE FROM "prova_aluno" WHERE "id" = ANY($1::uuid[])', [provaAlunoIds]);
       }
 

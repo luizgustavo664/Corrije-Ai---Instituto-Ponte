@@ -68,8 +68,10 @@ DB_STATEMENT_TIMEOUT_MS=15000
 
 # Provedor de email opcional para envio de resultados.
 EMAIL_ADAPTER=fake
+EMAIL_PROVIDER=
 EMAIL_WEBHOOK_URL=
 EMAIL_API_KEY=
+EMAIL_FROM=
 
 # Storage opcional para exportacoes/anexos.
 SUPABASE_STORAGE_URL=
@@ -84,6 +86,17 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
 
 Use valores diferentes para `SUPABASE_JWT_SECRET` e `CPF_ENCRYPTION_KEY`. Em producao, configure as mesmas variaveis no ambiente do servidor em vez de versionar `.env`.
+
+Para enviar e-mails reais pela Resend, troque o bloco de email por:
+
+```env
+EMAIL_ADAPTER=
+EMAIL_PROVIDER=resend
+EMAIL_API_KEY=re_sua_chave_da_resend
+EMAIL_FROM=Corrije Ai <onboarding@resend.dev>
+```
+
+Em producao, substitua `EMAIL_FROM` por um remetente de dominio verificado na Resend, por exemplo `Corrije Ai <noreply@seudominio.com>`. O endpoint padrao usado pelo sistema e `https://api.resend.com/emails`; `EMAIL_WEBHOOK_URL` so precisa ser preenchido se voce quiser sobrescrever esse endpoint.
 
 ## Configuracao do frontend
 

@@ -1,4 +1,8 @@
 /** Contrato para envio de emails. Pode ser substituído por um adaptador real (ex.: Resend, SendGrid). */
+import dotenv from "dotenv";
+
+dotenv.config();
+
 export interface EmailAdapter {
   send(para: string, assunto: string, corpo: string): Promise<{ success: boolean; error?: string }>;
 }
@@ -52,12 +56,66 @@ export class HttpEmailAdapter implements EmailAdapter {
   }
 }
 
+export class ResendEmailAdapter implements EmailAdapter {
+  constructor(
+    private readonly apiKey = process.env.EMAIL_API_KEY,
+    private readonly from = process.env.EMAIL_FROM ?? "Corrije Ai <onboarding@resend.dev>",
+    private readonly url = process.env.EMAIL_WEBHOOK_URL ?? "https://api.resend.com/emails",
+  ) {
+    if (!apiKey) {
+      throw new Error("EMAIL_API_KEY is required for Resend email delivery.");
+    }
+  }
+
+  async send(para: string, assunto: string, corpo: string) {
+    const response = await fetch(this.url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+      body: JSON.stringify({
+        from: this.from,
+        to: [para],
+        subject: assunto,
+        text: corpo,
+      }),
+    });
+
+    if (!response.ok) {
+      let details = "";
+      try {
+        const body = await response.json() as { message?: string; error?: string };
+        details = body.message ?? body.error ?? "";
+      } catch {
+        details = "";
+      }
+      return {
+        success: false,
+        error: details ? `Resend returned ${response.status}: ${details}` : `Resend returned ${response.status}.`,
+      };
+    }
+
+    return { success: true };
+  }
+}
+
 export const createEmailAdapter = (environment = process.env): EmailAdapter => {
-  const explicitFake = environment.EMAIL_ADAPTER === "fake" || environment.EMAIL_FAKE === "true";
+  const adapter = environment.EMAIL_ADAPTER?.trim().toLowerCase();
+  const provider = environment.EMAIL_PROVIDER?.trim().toLowerCase();
+  const explicitFake = adapter === "fake" || environment.EMAIL_FAKE === "true";
   const testRuntime = environment.NODE_ENV === "test" || environment.AUTH_MODE === "test";
 
   if (explicitFake || testRuntime) {
     return new FakeEmailAdapter();
+  }
+
+  if (adapter === "resend" || provider === "resend" || environment.EMAIL_WEBHOOK_URL?.includes("api.resend.com")) {
+    return new ResendEmailAdapter(
+      environment.EMAIL_API_KEY,
+      environment.EMAIL_FROM,
+      environment.EMAIL_WEBHOOK_URL,
+    );
   }
 
   if (environment.EMAIL_WEBHOOK_URL) {
