@@ -312,6 +312,27 @@ export class CorrecaoRepository {
         );
       }
 
+      await client.query(
+        `
+          UPDATE "prova_aluno" pa
+          SET "status" = 'corrigida'
+          WHERE pa."id" = (
+            SELECT ra."prova_aluno_id"
+            FROM "resposta_aluno" ra
+            WHERE ra."id" = $1
+          )
+            AND pa."status" IN ('enviada', 'corrigida')
+            AND NOT EXISTS (
+              SELECT 1
+              FROM "resposta_aluno" pendente
+              LEFT JOIN "correcao" c ON c."resposta_id" = pendente."id"
+              WHERE pendente."prova_aluno_id" = pa."id"
+                AND c."id" IS NULL
+            )
+        `,
+        [respostaId],
+      );
+
       return mapCorrecao(result.rows[0]);
     });
   }
@@ -378,6 +399,23 @@ export class CorrecaoRepository {
             AND pa."status" IN ('enviada', 'corrigida')
             AND q."tipo" IN ('multipla_escolha', 'verdadeiro_falso')
             AND ra."alternativa_id" IS NOT NULL
+        `,
+        [provaId],
+      );
+
+      await client.query(
+        `
+          UPDATE "prova_aluno" pa
+          SET "status" = 'corrigida'
+          WHERE pa."prova_id" = $1
+            AND pa."status" IN ('enviada', 'corrigida')
+            AND NOT EXISTS (
+              SELECT 1
+              FROM "resposta_aluno" pendente
+              LEFT JOIN "correcao" c ON c."resposta_id" = pendente."id"
+              WHERE pendente."prova_aluno_id" = pa."id"
+                AND c."id" IS NULL
+            )
         `,
         [provaId],
       );

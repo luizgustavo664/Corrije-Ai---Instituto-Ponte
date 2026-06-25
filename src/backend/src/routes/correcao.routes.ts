@@ -86,7 +86,7 @@ export async function correcaoRoutes(app: FastifyInstance) {
   app.withTypeProvider().put(
     "/respostas/:respostaId/correcao",
     {
-      preHandler: requireRole("professor"),
+      preHandler: requireRole("professor", "coordenador"),
       schema: {
         tags: ["Correção"],
         summary: "Corrigir resposta manualmente",

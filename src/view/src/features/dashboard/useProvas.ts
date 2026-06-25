@@ -31,6 +31,7 @@ function toIsoOrNull(value?: string) {
 
 function buildUpdateProvaPayload(exam: Exam): UpdateProvaPayload {
   return {
+    materiaId: exam.materiaId,
     titulo: exam.title.trim(),
     modalidade: exam.modalidade || undefined,
     turma: exam.turma.trim(),

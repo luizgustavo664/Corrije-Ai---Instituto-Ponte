@@ -21,6 +21,7 @@ import { ProvaDetailPage } from "../professor/ProvaDetailPage";
 import { NovaQuestaoPage } from "../professor/NovaQuestaoPage";
 import { QuestaoCorrecaoPage } from "../professor/QuestaoCorrecaoPage";
 import { ProvaQuestoesCorrecaoPage } from "../professor/ProvaQuestoesCorrecaoPage";
+import { CorrecaoAlunoPage } from "../professor/CorrecaoAlunoPage";
 import { GestaoProfessoresPage } from "./GestaoProfessoresPage";
 import { GestaoAlunosPage } from "./GestaoAlunosPage";
 import { PerfilAlunoPage } from "./PerfilAlunoPage";
@@ -43,7 +44,8 @@ export type CoordenadorTab =
   | "nova-questao"
   | "nova-questao-banco"
   | "questao-correcao"
-  | "prova-questoes-correcao";
+  | "prova-questoes-correcao"
+  | "correcao-aluno";
 
 interface Props {
   onLogout: () => void;
@@ -65,6 +67,7 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
   const [activeTab, setActiveTabState] = useState<CoordenadorTab>(initialTab);
   const [selectedProfessorId, setSelectedProfessorId] = useState<string | null>(null);
   const [selectedAlunoId, setSelectedAlunoId] = useState<string | null>(null);
+  const [currentQuestaoId, setCurrentQuestaoId] = useState<string | null>(null);
 
   const {
     materiasQuery,
@@ -157,6 +160,7 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
             examDataLimite={selectedExam?.dataLimite}
             examOrientacoes={selectedExam?.orientacoes}
             selectedExam={selectedExam ?? undefined}
+            materias={materiasQuery.data ?? []}
             onUpdateExam={updateExam}
             onPublish={publishSelectedExam}
             onUnpublish={unpublishSelectedExam}
@@ -236,7 +240,8 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
         if (!selectedExam) return null;
         return <ProvaQuestoesCorrecaoPage
           onBack={() => setActiveTab("correcao")}
-          onNavigateToQuestion={() => {
+          onNavigateToQuestion={(questaoId) => {
+            setCurrentQuestaoId(questaoId);
             setActiveTab("questao-correcao");
           }}
           provaId={selectedExam.id}
@@ -255,8 +260,17 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
             setActiveTab("prova-questoes-correcao");
           }}
           provaId={selectedExam.id}
-          questaoId={null}
+          questaoId={currentQuestaoId}
         />;
+      case "correcao-aluno":
+        if (!selectedExam) return null;
+        return (
+          <CorrecaoAlunoPage
+            onBack={() => setActiveTab("correcao")}
+            provaId={selectedExam.id}
+            examTitle={selectedExam.title}
+          />
+        );
       default:
         return (
           <PainelPage

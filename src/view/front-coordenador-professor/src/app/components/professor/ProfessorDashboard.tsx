@@ -158,6 +158,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             examDataLimite={selectedExam?.dataLimite}
             examOrientacoes={selectedExam?.orientacoes}
             selectedExam={selectedExam ?? undefined}
+            materias={materiasQuery.data ?? []}
             onUpdateExam={updateExam}
             onPublish={publishSelectedExam}
             onUnpublish={unpublishSelectedExam}

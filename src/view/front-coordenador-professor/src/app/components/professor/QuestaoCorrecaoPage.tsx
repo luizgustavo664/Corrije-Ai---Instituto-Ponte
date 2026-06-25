@@ -91,16 +91,14 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
   async function saveAndAdvance() {
     if (!student) return;
 
-    const grade = grades[student.respostaId];
+    const grade = grades[student.respostaId] ?? getAutoGrade(student) ?? 0;
     const comment = comments[student.respostaId]?.trim();
 
-    if (grade !== undefined) {
-      await salvarMutation.mutateAsync({
-        respostaId: student.respostaId,
-        nota: grade,
-        observacao: comment || undefined,
-      });
-    }
+    await salvarMutation.mutateAsync({
+      respostaId: student.respostaId,
+      nota: grade,
+      observacao: comment || student.correcao?.observacao || undefined,
+    });
 
     setCorrectedSet((prev) => new Set([...prev, student.respostaId]));
 

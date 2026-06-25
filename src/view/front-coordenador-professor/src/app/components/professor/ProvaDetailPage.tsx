@@ -15,6 +15,7 @@ import { getProvaAnalytics } from "../../../../../src/features/analytics/analyti
 import { listarQuestoesCorrecao } from "../../../../../src/features/correcao/correcao.api";
 import { isPersistedId } from "../../../../../src/features/dashboard/dashboard.ui-adapter";
 import type { BancoQuestion, Exam } from "../../../../../src/features/dashboard/dashboard.types";
+import type { MateriaDto } from "../../../../../src/features/materias/materias.types";
 import type { Question, QuestionType } from "../../../../../src/features/questoes/questao.types";
 import { confirmDiscardChanges, useUnsavedChangesWarning } from "./useUnsavedChangesWarning";
 
@@ -38,6 +39,7 @@ interface Props {
   examDataLimite?: string;
   examOrientacoes?: string;
   selectedExam?: Exam;
+  materias?: MateriaDto[];
   onUpdateExam?: (exam: Exam) => void | Promise<void>;
   onPublish?: (dataFim?: string) => void;
   onUnpublish?: () => void;
@@ -239,16 +241,17 @@ function QuestionCard({
 interface EditModalProps {
   exam: Exam;
   turmas?: string[];
+  materias?: MateriaDto[];
   onClose: () => void;
   onSave: (exam: Exam) => void | Promise<void>;
   isSaving?: boolean;
   errorMessage?: string;
 }
 
-function EditarDadosProvaModal({ exam, turmas = [], onClose, onSave, isSaving = false, errorMessage }: EditModalProps) {
+function EditarDadosProvaModal({ exam, turmas = [], materias = [], onClose, onSave, isSaving = false, errorMessage }: EditModalProps) {
   const [nome, setNome] = useState(exam.title);
   const [modalidade, setModalidade] = useState(exam.modalidade || "");
-  const [disciplina, setDisciplina] = useState(exam.discipline || "");
+  const [materiaId, setMateriaId] = useState(exam.materiaId || "");
   const [turma, setTurma] = useState(exam.turma || "");
   const [semestre, setSemestre] = useState(exam.semester || "");
   const [tempoProva, setTempoProva] = useState(exam.tempoProva != null ? String(exam.tempoProva) : "");
@@ -257,11 +260,12 @@ function EditarDadosProvaModal({ exam, turmas = [], onClose, onSave, isSaving = 
   const [embaralharAlternativas, setEmbaralharAlternativas] = useState(exam.embaralharAlternativas ?? false);
   const turmaOptions = Array.from(new Set([exam.turma, ...turmas, ...turmasPadrao].map((item) => item?.trim()).filter(Boolean) as string[])).sort();
 
-  const canSave = nome.trim() !== "" && !isSaving;
+  const selectedMateriaName = materias.find((materia) => materia.id === materiaId)?.nome ?? exam.discipline ?? "";
+  const canSave = nome.trim() !== "" && turma.trim() !== "" && semestre !== "" && !isSaving;
   const hasUnsavedChanges =
     nome !== exam.title ||
     modalidade !== (exam.modalidade || "") ||
-    disciplina !== (exam.discipline || "") ||
+    materiaId !== (exam.materiaId || "") ||
     turma !== (exam.turma || "") ||
     semestre !== (exam.semester || "") ||
     tempoProva !== (exam.tempoProva != null ? String(exam.tempoProva) : "") ||
@@ -282,8 +286,9 @@ function EditarDadosProvaModal({ exam, turmas = [], onClose, onSave, isSaving = 
         ...exam,
         title: nome.trim(),
         modalidade: modalidade || exam.modalidade,
-        discipline: disciplina,
-        subject: disciplina,
+        materiaId: materiaId || exam.materiaId,
+        discipline: selectedMateriaName,
+        subject: selectedMateriaName,
         turma,
         semester: semestre || exam.semester,
         tempoProva: tempoProva !== "" ? Number(tempoProva) : undefined,
@@ -335,9 +340,21 @@ function EditarDadosProvaModal({ exam, turmas = [], onClose, onSave, isSaving = 
             </div>
             <div className="flex flex-col gap-1 w-full">
               <label style={labelStyle}>Disciplina</label>
-              <input type="text" value={disciplina} onChange={(e) => setDisciplina(e.target.value)} placeholder="Ex: Matemática" style={inputStyle}
-                onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
-                onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }} />
+              <div className="relative w-full">
+                <select
+                  value={materiaId}
+                  onChange={(e) => setMateriaId(e.target.value)}
+                  disabled={materias.length === 0}
+                  style={{ ...inputStyle, appearance: "none", cursor: materias.length > 0 ? "pointer" : "not-allowed" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
+                >
+                  {!materiaId && <option value="">Selecionar disciplina</option>}
+                  {materias.length === 0 && <option value={exam.materiaId ?? ""}>{exam.discipline || "Materia atual"}</option>}
+                  {materias.map((materia) => <option key={materia.id} value={materia.id}>{materia.nome}</option>)}
+                </select>
+                {chevron}
+              </div>
             </div>
           </div>
 
@@ -513,7 +530,7 @@ export function ProvaDetailPage({
   onBack, onNavigate, questions, onDeleteQuestion, onUpdateQuestion, onReorderQuestion, onAddQuestions,
   bancoQuestoes = [], examTitle = "Título da Prova", examSubject = "", examSemester = "",
   examTurma, turmas = [], examModalidade, examTempoProva, examDataInicio, examDataLimite, examOrientacoes,
-  selectedExam, onUpdateExam, onPublish, onUnpublish, showPublishModal = false, onClosePublishModal,
+  selectedExam, materias = [], onUpdateExam, onPublish, onUnpublish, showPublishModal = false, onClosePublishModal,
   isLoading = false, errorMessage, isUpdatingExam = false, updateExamErrorMessage, isPublishing = false, isUnpublishing = false,
 }: Props) {
   const [activeTab, setActiveTab] = useState<TabId>("questoes");
@@ -660,6 +677,7 @@ export function ProvaDetailPage({
         <EditarDadosProvaModal
           exam={localExam}
           turmas={turmas}
+          materias={materias}
           onClose={() => setShowEditExam(false)}
           isSaving={isUpdatingExam}
           errorMessage={updateExamErrorMessage}

@@ -45,7 +45,7 @@ export type CreateProvaPayload = {
 };
 
 export type UpdateProvaPayload = Partial<
-  Pick<CreateProvaPayload, "titulo" | "modalidade" | "turma" | "semestre" | "instrucoes">
+  Pick<CreateProvaPayload, "materiaId" | "titulo" | "modalidade" | "turma" | "semestre" | "instrucoes">
 >;
 
 export type UpdateProvaConfiguracoesPayload = Partial<

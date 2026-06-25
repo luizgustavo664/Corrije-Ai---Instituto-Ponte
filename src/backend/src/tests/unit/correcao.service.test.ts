@@ -40,6 +40,13 @@ const coordenador: AuthUser = {
   perfil: "coordenador",
 };
 
+const aluno = {
+  id: "aluno-1",
+  nome: "Aluno",
+  email: "aluno@test.com",
+  perfil: "aluno",
+} as unknown as AuthUser;
+
 beforeEach(async () => {
   jest.resetModules();
   mockHasAccessToProva.mockReset();
@@ -132,11 +139,11 @@ describe("CorrecaoService - unitário", () => {
       expect(result).toEqual({ id: "corr-1", nota: 8 });
     });
 
-    it("deve lançar forbidden quando perfil não é professor", async () => {
+    it("deve lançar forbidden quando perfil não pode corrigir", async () => {
       const service = new CorrecaoService();
       await expect(
-        service.salvarCorrecao("resp-1", { nota: 8 }, coordenador),
-      ).rejects.toThrow("Somente professores podem corrigir respostas.");
+        service.salvarCorrecao("resp-1", { nota: 8 }, aluno),
+      ).rejects.toThrow("Somente professores e coordenadores podem corrigir respostas.");
     });
 
     it("deve lançar notFound quando resposta não existe", async () => {

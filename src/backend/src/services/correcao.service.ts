@@ -66,8 +66,8 @@ export class CorrecaoService {
    * @throws businessRule - Se a nota exceder a pontuação máxima da questão.
    */
   async salvarCorrecao(respostaId: string, input: SalvarCorrecaoInput, user: AuthUser) {
-    if (user.perfil !== "professor") {
-      throw forbidden("Somente professores podem corrigir respostas.");
+    if (user.perfil !== "professor" && user.perfil !== "coordenador") {
+      throw forbidden("Somente professores e coordenadores podem corrigir respostas.");
     }
 
     const context = await this.correcaoRepository.findRespostaContext(respostaId);
@@ -83,14 +83,15 @@ export class CorrecaoService {
       throw businessRule("A nota não pode ser maior que a pontuação máxima da questão.");
     }
 
-    if (context.professorId !== user.id) {
+    if (user.perfil === "professor" && context.professorId !== user.id) {
       const linked = await this.correcaoRepository.professorLinkedToMateria(user.id, context.materiaId);
       if (!linked) {
         throw forbidden("Professor sem vínculo com esta prova.");
       }
     }
 
-    return this.correcaoRepository.upsertCorrecao(respostaId, user.id, input);
+    const corretorProfessorId = user.perfil === "coordenador" ? context.professorId : user.id;
+    return this.correcaoRepository.upsertCorrecao(respostaId, corretorProfessorId, input);
   }
 
   /**

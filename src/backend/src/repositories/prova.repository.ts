@@ -308,6 +308,7 @@ export class ProvaRepository {
     const fields: string[] = [];
     const values: unknown[] = [];
     const columns: Record<string, string> = {
+      materiaId: "materia_id",
       titulo: "titulo",
       modalidade: "modalidade",
       turma: "turma",

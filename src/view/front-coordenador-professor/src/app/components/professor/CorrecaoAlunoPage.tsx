@@ -113,15 +113,13 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
   async function handleSaveStudent() {
     if (!selectedStudent) return;
 
-    const promises = selectedStudent.respostas
-      .filter((r) => grades[r.respostaId] !== undefined || comments[r.respostaId]?.trim())
-      .map((r) =>
-        salvarMutation.mutateAsync({
-          respostaId: r.respostaId,
-          nota: grades[r.respostaId] ?? r.correcao?.nota ?? 0,
-          observacao: comments[r.respostaId]?.trim() || undefined,
-        }),
-      );
+    const promises = selectedStudent.respostas.map((r) =>
+      salvarMutation.mutateAsync({
+        respostaId: r.respostaId,
+        nota: grades[r.respostaId] ?? r.correcao?.nota ?? 0,
+        observacao: comments[r.respostaId]?.trim() || r.correcao?.observacao || undefined,
+      }),
+    );
 
     await Promise.all(promises);
     toast.success("Correções do aluno salvas com sucesso.");

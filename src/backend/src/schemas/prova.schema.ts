@@ -96,6 +96,7 @@ export const createProvaBodySchema = z
 
 export const updateProvaBodySchema = z
   .object({
+    materiaId: createProvaShape.materiaId,
     titulo: createProvaShape.titulo,
     modalidade: createProvaShape.modalidade,
     turma: createProvaShape.turma,

@@ -142,6 +142,18 @@ export class ProvaService {
       throw conflict("Apenas provas em rascunho podem ser editadas.");
     }
 
+    if (input.materiaId && input.materiaId !== prova.materiaId) {
+      const materiaExists = await this.provaRepository.materiaExists(input.materiaId);
+      if (!materiaExists) {
+        throw businessRule("Matéria informada não existe.");
+      }
+
+      const vinculado = await this.provaRepository.professorMateriaVinculados(prova.professorId, input.materiaId);
+      if (!vinculado) {
+        throw forbidden("Professor da prova não está vinculado à matéria informada.");
+      }
+    }
+
     return this.provaRepository.update(provaId, input);
   }
 
