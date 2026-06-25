@@ -58,7 +58,6 @@ interface Props {
   onGoToQuestion: (index: number) => void;
   onDismissTimeWarning: () => void;
   onTimeWarningFinalize: () => void;
-  onTriggerWarningDemo: () => void;
   onFileUpload: (questaoId: string) => void;
   studentInfo: StudentInfo;
   syncMessage?: string;
@@ -79,7 +78,6 @@ export function TelaProva({
   onGoToQuestion,
   onDismissTimeWarning,
   onTimeWarningFinalize,
-  onTriggerWarningDemo,
   onFileUpload,
   syncMessage,
   uploadMessage,
@@ -249,15 +247,6 @@ export function TelaProva({
           </button>
         )}
 
-        {import.meta.env.DEV && (
-          <button
-            onClick={onTriggerWarningDemo}
-            className="flex items-center gap-1.5 self-center mx-auto text-[10px] text-[#F9B233] border border-dashed border-[#F9B233] px-3 py-1.5 rounded-lg bg-[#05245F]"
-          >
-            <AlertTriangle size={11} />
-            Simular aviso de tempo
-          </button>
-        )}
       </div>
 
       {/* Fixed bottom nav */}

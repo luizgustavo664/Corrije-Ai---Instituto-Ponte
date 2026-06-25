@@ -253,6 +253,8 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
                   + Incluir na prova
                 </button>
                 <button
+                  type="button"
+                  title="Remover questao"
                   onClick={(e) => {
                     e.stopPropagation();
                     onDeleteQuestion?.(q.id);

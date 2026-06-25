@@ -90,6 +90,15 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
   }, [initialTab]);
 
   const setActiveTab = (tab: ProfessorTab) => {
+    createProvaMutation.reset();
+    updateProvaMutation.reset();
+    publicarProvaMutation.reset();
+    despublicarProvaMutation.reset();
+    createQuestaoMutation.reset();
+    updateQuestaoMutation.reset();
+    deleteQuestaoMutation.reset();
+    addQuestaoProvaMutation.reset();
+    removeQuestaoProvaMutation.reset();
     setActiveTabState(tab);
     onNavigateTab?.(tab);
   };
@@ -204,6 +213,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             onBack={() => setActiveTab("provas")}
             onSave={addExam}
             materias={materiasQuery.data ?? []}
+            turmas={[...new Set(exams.map((exam) => exam.turma).filter(Boolean))]}
             isSaving={createProvaMutation.isPending}
             errorMessage={
               createProvaMutation.isError

@@ -155,7 +155,6 @@ describe("student flow screens", () => {
       onGoToQuestion: vi.fn(),
       onDismissTimeWarning: vi.fn(),
       onTimeWarningFinalize: vi.fn(),
-      onTriggerWarningDemo: vi.fn(),
       onFileUpload: vi.fn(),
     };
     const provaQuestions: Question[] = [

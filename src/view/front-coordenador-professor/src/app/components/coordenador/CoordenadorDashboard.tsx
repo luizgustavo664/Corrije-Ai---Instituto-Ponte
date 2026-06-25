@@ -102,6 +102,9 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
   }, [initialTab]);
 
   const setActiveTab = (tab: CoordenadorTab) => {
+    updateProvaMutation.reset();
+    publicarProvaMutation.reset();
+    despublicarProvaMutation.reset();
     setActiveTabState(tab);
     onNavigateTab?.(tab);
   };
@@ -201,7 +204,7 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
           professorId={selectedProfessorId ?? ""}
         />;
       case "nova-prova":
-        return <NovaProvaPage onBack={() => setActiveTab("provas")} onSave={addExam} materias={materiasQuery.data ?? []} />;
+        return <NovaProvaPage onBack={() => setActiveTab("provas")} onSave={addExam} materias={materiasQuery.data ?? []} turmas={[...new Set(exams.map((exam) => exam.turma).filter(Boolean))]} />;
       case "nova-questao":
         return (
           <NovaQuestaoPage

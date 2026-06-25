@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, BookmarkIcon, ClockIcon } from "@heroicons/react/24/outline";
 import type { MateriaDto } from "../../../../../src/features/materias/materias.types";
 import type { CreateProvaPayload } from "../../../../../src/features/provas/provas.types";
@@ -10,12 +10,16 @@ interface Props {
   onBack: () => void;
   onSave: (input: NovaProvaInput) => Promise<void> | void;
   materias: MateriaDto[];
+  turmas?: string[];
   isSaving?: boolean;
   errorMessage?: string;
 }
 
 const modalidades = ["Prova", "Trabalho", "Atividade", "Simulado"];
 const semestres = ["1º Semestre 2026", "2º Semestre 2025", "1º Semestre 2025", "2º Semestre 2024"];
+const turmasPadrao = ["3A", "3B", "Extensivo", "Turma 2026"];
+const draftStorageKey = "corrije-ai:nova-prova-draft";
+
 const duracoes = [
   { label: "30 minutos", value: 30 },
   { label: "45 minutos", value: 45 },
@@ -54,7 +58,7 @@ const chevron = (
   </svg>
 );
 
-export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, errorMessage }: Props) {
+export function NovaProvaPage({ onBack, onSave, materias, turmas = [], isSaving = false, errorMessage }: Props) {
   const [nome, setNome] = useState("");
   const [modalidade, setModalidade] = useState("");
   const [materiaId, setMateriaId] = useState("");
@@ -64,6 +68,10 @@ export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, erro
   const [tempoProva, setTempoProva] = useState<string>("");
   const [embaralharQuestoes, setEmbaralharQuestoes] = useState(false);
   const [embaralharAlternativas, setEmbaralharAlternativas] = useState(false);
+  const turmaOptions = useMemo(
+    () => [...new Set([...turmas, ...turmasPadrao].map((item) => item.trim()).filter(Boolean))].sort(),
+    [turmas],
+  );
 
   const canSave =
     nome.trim() !== "" &&
@@ -84,6 +92,56 @@ export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, erro
 
   useUnsavedChangesWarning(hasUnsavedChanges && !isSaving);
 
+  useEffect(() => {
+    const rawDraft = window.localStorage.getItem(draftStorageKey);
+    if (!rawDraft) return;
+    try {
+      const draft = JSON.parse(rawDraft) as Partial<{
+        nome: string;
+        modalidade: string;
+        materiaId: string;
+        turma: string;
+        semestre: string;
+        orientacoes: string;
+        tempoProva: string;
+        embaralharQuestoes: boolean;
+        embaralharAlternativas: boolean;
+      }>;
+      setNome(draft.nome ?? "");
+      setModalidade(draft.modalidade ?? "");
+      setMateriaId(draft.materiaId ?? "");
+      setTurma(draft.turma ?? "");
+      setSemestre(draft.semestre ?? "");
+      setOrientacoes(draft.orientacoes ?? "");
+      setTempoProva(draft.tempoProva ?? "");
+      setEmbaralharQuestoes(draft.embaralharQuestoes ?? false);
+      setEmbaralharAlternativas(draft.embaralharAlternativas ?? false);
+    } catch {
+      window.localStorage.removeItem(draftStorageKey);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) {
+      window.localStorage.removeItem(draftStorageKey);
+      return;
+    }
+    window.localStorage.setItem(
+      draftStorageKey,
+      JSON.stringify({
+        nome,
+        modalidade,
+        materiaId,
+        turma,
+        semestre,
+        orientacoes,
+        tempoProva,
+        embaralharQuestoes,
+        embaralharAlternativas,
+      }),
+    );
+  }, [nome, modalidade, materiaId, turma, semestre, orientacoes, tempoProva, embaralharQuestoes, embaralharAlternativas, hasUnsavedChanges]);
+
   function handleBack() {
     if (confirmDiscardChanges(hasUnsavedChanges)) onBack();
   }
@@ -102,6 +160,7 @@ export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, erro
         embaralharQuestoes,
         embaralharAlternativas,
       });
+      window.localStorage.removeItem(draftStorageKey);
       onBack();
     } catch {
       // A mutation do TanStack Query já expõe a mensagem para renderização.
@@ -212,7 +271,23 @@ export function NovaProvaPage({ onBack, onSave, materias, isSaving = false, erro
           <div className="flex gap-5">
             <div className="flex flex-col gap-1.5 w-full">
               <label style={labelStyle}>Turma *</label>
+              <div className="relative w-full">
+                <select
+                  value={turma}
+                  onChange={(e) => setTurma(e.target.value)}
+                  style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
+                >
+                  <option value="">Selecionar</option>
+                  {turmaOptions.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+                {chevron}
+              </div>
               <input
+                hidden
                 type="text"
                 value={turma}
                 onChange={(e) => setTurma(e.target.value)}

@@ -102,8 +102,8 @@ export class ProvaQuestaoService {
 
   async reordenar(provaId: string, questaoId: string, input: ReorderQuestaoProvaInput, user: AuthUser) {
     const prova = await this.getProvaWithAccess(provaId, user);
-    if (prova.status !== "rascunho") {
-      throw conflict("Questoes so podem ser reordenadas em provas com status rascunho.");
+    if (prova.status === "encerrada" || prova.status === "antiga") {
+      throw conflict("Questoes nao podem ser reordenadas em provas encerradas ou arquivadas.");
     }
 
     const questaoVinculada = await this.provaQuestaoRepository.hasQuestao(provaId, questaoId);

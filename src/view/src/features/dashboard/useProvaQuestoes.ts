@@ -32,6 +32,16 @@ function toastSuccess(message: string) {
   toast.success?.(message);
 }
 
+function reorderQuestionsLocally(questions: Question[], questionId: string, targetOrder: number) {
+  const currentIndex = questions.findIndex((question) => question.id === questionId);
+  if (currentIndex === -1) return questions;
+  const next = [...questions];
+  const [moved] = next.splice(currentIndex, 1);
+  const nextIndex = Math.min(Math.max(targetOrder - 1, 0), next.length);
+  next.splice(nextIndex, 0, moved);
+  return next;
+}
+
 export function useProvaQuestoes({
   selectedExamId,
   examQuestions,
@@ -87,10 +97,24 @@ export function useProvaQuestoes({
       questaoId: string;
       ordemOriginal: number;
     }) => reorderQuestaoInProva(provaId, questaoId, { ordemOriginal }),
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({ queryKey: ["provas", variables.provaId, "questoes"] });
+      const previousQuestions = examQuestions;
+      setExamQuestions((prev) => reorderQuestionsLocally(prev, variables.questaoId, variables.ordemOriginal));
+      return { previousQuestions };
+    },
     onSuccess: (items, variables) => {
       setExamQuestions(items.map(mapProvaQuestaoToQuestion));
       void queryClient.invalidateQueries({ queryKey: ["provas", variables.provaId, "questoes"] });
       toastSuccess("Ordem das questoes atualizada.");
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousQuestions) {
+        setExamQuestions(context.previousQuestions);
+      }
+      const message = error instanceof Error ? error.message : "Erro ao atualizar ordem das questoes.";
+      toast.error(message);
+      void queryClient.invalidateQueries({ queryKey: ["provas", variables.provaId, "questoes"] });
     },
   });
 
@@ -156,15 +180,7 @@ export function useProvaQuestoes({
       return;
     }
 
-    setExamQuestions((prev) => {
-      const currentIndex = prev.findIndex((question) => question.id === questionId);
-      if (currentIndex === -1) return prev;
-      const next = [...prev];
-      const [moved] = next.splice(currentIndex, 1);
-      const nextIndex = Math.min(Math.max(targetOrder - 1, 0), next.length);
-      next.splice(nextIndex, 0, moved);
-      return next;
-    });
+    setExamQuestions((prev) => reorderQuestionsLocally(prev, questionId, targetOrder));
     toastSuccess("Ordem das questoes atualizada.");
   }
 

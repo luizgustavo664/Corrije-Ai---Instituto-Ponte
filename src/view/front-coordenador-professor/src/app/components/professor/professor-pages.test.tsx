@@ -138,7 +138,7 @@ describe("professor large pages", () => {
     fireEvent.click(screen.getByText("Prova de Calculo"));
     expect(onAddToProva).toHaveBeenCalledWith(PROVA_ID, expect.objectContaining({ id: QUESTAO_ID }));
 
-    fireEvent.click(container.querySelectorAll("button")[3]);
+    fireEvent.click(screen.getByTitle("Remover questao"));
     expect(onDeleteQuestion).toHaveBeenCalledWith(QUESTAO_ID);
   });
 
@@ -158,9 +158,6 @@ describe("professor large pages", () => {
     fireEvent.change(screen.getByPlaceholderText(/prova de/i), {
       target: { value: "Prova de Calculo" },
     });
-    fireEvent.change(screen.getByPlaceholderText(/3.*a/i), {
-      target: { value: "3A" },
-    });
     fireEvent.change(screen.getByPlaceholderText(/instru/i), {
       target: { value: "Sem consulta" },
     });
@@ -168,8 +165,9 @@ describe("professor large pages", () => {
     const selects = container.querySelectorAll("select");
     fireEvent.change(selects[0], { target: { value: "Prova" } });
     fireEvent.change(selects[1], { target: { value: materia.id } });
-    fireEvent.change(selects[2], { target: { value: selects[2].options[1].value } });
-    fireEvent.change(selects[3], { target: { value: "60" } });
+    fireEvent.change(selects[2], { target: { value: "3A" } });
+    fireEvent.change(selects[3], { target: { value: selects[3].options[1].value } });
+    fireEvent.change(selects[4], { target: { value: "60" } });
 
     fireEvent.click(screen.getByRole("button", { name: /salvar como rascunho/i }));
 

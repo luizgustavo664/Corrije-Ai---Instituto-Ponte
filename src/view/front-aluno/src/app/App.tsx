@@ -407,7 +407,6 @@ export default function App() {
             onReviewMarked={() => setScreen("revisao")}
             onDismissTimeWarning={() => setShowTimeWarning(false)}
             onTimeWarningFinalize={handleFinalize}
-            onTriggerWarningDemo={() => setShowTimeWarning(true)}
             onFileUpload={handleFileUpload}
           />
         )}

@@ -707,7 +707,7 @@ export function ProvaDetailPage({
                 style={{ border: "1.5px solid #EF4444", color: "#EF4444", backgroundColor: "#fff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 14, opacity: isUnpublishing ? 0.65 : 1, cursor: isUnpublishing ? "not-allowed" : "pointer" }}
               >
                 <XMarkIcon className="w-[15px] h-[15px]" />
-                {isUnpublishing ? "Retirando..." : "Tirar publicacao"}
+                {isUnpublishing ? "Cancelando..." : "Cancelar publicacao"}
               </button>
             )}
             <button onClick={() => setShowOrigemModal(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"

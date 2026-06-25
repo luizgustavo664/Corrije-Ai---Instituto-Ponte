@@ -185,6 +185,10 @@ export function useProvas({
       void queryClient.invalidateQueries({ queryKey: ["provas", exam.id] });
       toastSuccess("Prova publicada com sucesso.");
     },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : "Erro ao publicar prova.";
+      toast.error(message);
+    },
   });
 
   const despublicarProvaMutation = useMutation({
@@ -193,6 +197,7 @@ export function useProvas({
       const exam = mapProvaToExam(prova);
       setSelectedExam(exam);
       setExams((prev) => prev.map((item) => (item.id === exam.id ? exam : item)));
+      setShowPublishModal(false);
       void queryClient.invalidateQueries({ queryKey: ["provas"] });
       void queryClient.invalidateQueries({ queryKey: ["provas", exam.id] });
       toastSuccess("Prova retirada da publicacao.");
