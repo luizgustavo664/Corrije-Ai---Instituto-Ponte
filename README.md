@@ -63,14 +63,6 @@
 <a href="https://www.linkedin.com/in/%C3%A1lvaro-leme-de-toledo-almeida-aa88503bb/recent-activity/all/" target="_blank"><strong>Álvaro Leme de Toledo Almeida</strong></a>
 </div>
 
-<div style="width:150px; text-align:center;">
-<a href="https://www.linkedin.com/in/rafael-morgado-ferreira-811a1b3bb/" target="_blank">
-<img src="assets/fotos_integrantes/rafael.png" alt="Rafael Morgado Ferreira" style="width:150px; height:150px; object-fit:cover; border-radius:12px;" />
-</a>
-
-<a href="https://www.linkedin.com/in/rafael-morgado-ferreira-811a1b3bb/" target="_blank"><strong>Rafael Morgado Ferreira</strong></a>
-</div>
-
 </div>
 
 ## Professores:
@@ -198,7 +190,7 @@ npm test
 npm test -- --coverage
 ```
 
-Os testes unitários de Service seguem a nomenclatura `*.service.test.ts`; os testes de integração HTTP seguem `*.integration.test.ts`. As evidências versionadas estão em `documentos/outros/evidencias/`.
+Os testes unitários de Service seguem a nomenclatura `*.service.test.ts`; os testes de integração HTTP seguem `*.integration.test.ts`. As evidências versionadas estão em `documentos/evidencias/`.
 
 ### Observações
 
@@ -220,17 +212,8 @@ Os testes unitários de Service seguem a nomenclatura `*.service.test.ts`; os te
 
 ## 📋 Licença/License
 
-- <a href="https://git.inteli.edu.br/graduacao/2026-1b/t24/g05">Corrije aí</a> © 2026 by 
-<a href="https://www.inteli.edu.br/">Inteli</a>, 
-<a href="https://www.linkedin.com/in/%C3%A1lvaro-leme-de-toledo-almeida-aa88503bb/recent-activity/all/">Álvaro Leme de Toledo Almeida</a>, 
-<a href="https://www.linkedin.com/in/heloisa-kadota/">Heloísa Noda Kadota</a>, 
-<a href="https://www.linkedin.com/in/joanaracy/">Joana Auriemo Racy</a>, 
-<a href="https://www.linkedin.com/in/luiz-gustavo-campos-cazelatto/">Luiz Gustavo Campos Cazelatto</a>, 
-<a href="https://www.linkedin.com/in/matheus-viana-de-almeida/">Matheus Viana de Almeida</a>, 
-<a href="https://www.linkedin.com/in/pablo-marchina/">Pablo Marchina</a>,  
-<a href="https://www.linkedin.com/in/rafael-morgado-ferreira-811a1b3bb/">Rafael Morgado Ferreira</a> 
+- <a href="https://git.inteli.edu.br/graduacao/2026-1b/t24/g05">Corrije aí</a> © 2026 by <a href="https://git.inteli.edu.br/graduacao/2026-1b/t24/g05">Inteli, Álvaro Leme de Toledo Almeida, Heloísa Noda Kadota, Joana Auriemo Racy, Luiz Gustavo Campos Cazelatto, Matheus Viana de Almeida, Pablo Marchina,  Rafael Morgado Ferreira</a> is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 
-Is licensed under 
-<a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a>
-<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
-<img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+
+<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/Intelihub/Template_M2/">MODELO GIT INTELI</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://www.yggbrasil.com.br/vr">Inteli, Álvaro Leme de Toledo Almeida, Heloísa Noda Kadota, Joana Auriemo Racy, Luiz Gustavo Campos Cazelatto, Matheus Viana de Almeida, Pablo Marchina , Rafael Morgado Ferreira</a> is licensed under <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Attribution 4.0 International</a>.</p>
+
