@@ -9,7 +9,8 @@ import {
   reorderQuestaoInProva,
 } from "../provas/provas.api";
 import { mapProvaQuestaoToQuestion } from "../provas/provas.mappers";
-import { mapQuestaoToQuestion } from "../questoes/questoes.mappers";
+import { updateQuestao } from "../questoes/questoes.api";
+import { mapQuestionToCreateQuestaoPayload, mapQuestaoToQuestion } from "../questoes/questoes.mappers";
 import type { Question } from "../questoes/questao.types";
 import type { CreateQuestaoPayload } from "../questoes/questoes.types";
 import type { QuestaoBancoDto } from "../questoes/questoes.types";
@@ -23,6 +24,7 @@ import {
 
 type UseProvaQuestoesParams = {
   selectedExamId: string | null;
+  selectedExamMateriaId?: string;
   examQuestions: Question[];
   setExamQuestions: Dispatch<SetStateAction<Question[]>>;
   createQuestao: (payload: CreateQuestaoPayload) => Promise<QuestaoBancoDto>;
@@ -44,6 +46,7 @@ function reorderQuestionsLocally(questions: Question[], questionId: string, targ
 
 export function useProvaQuestoes({
   selectedExamId,
+  selectedExamMateriaId,
   examQuestions,
   setExamQuestions,
   createQuestao,
@@ -118,6 +121,25 @@ export function useProvaQuestoes({
     },
   });
 
+  const updateQuestaoProvaMutation = useMutation({
+    mutationFn: ({ question, materiaId }: { question: Question; materiaId: string }) =>
+      updateQuestao(question.id, mapQuestionToCreateQuestaoPayload(question, materiaId)),
+    onSuccess: (_questao, variables) => {
+      setExamQuestions((prev) => prev.map((question) => (
+        question.id === variables.question.id ? variables.question : question
+      )));
+      void queryClient.invalidateQueries({ queryKey: ["questoes"] });
+      if (selectedExamId) {
+        void queryClient.invalidateQueries({ queryKey: ["provas", selectedExamId, "questoes"] });
+      }
+      toastSuccess("Questao atualizada com sucesso.");
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : "Erro ao atualizar questao.";
+      toast.error(message);
+    },
+  });
+
   useEffect(() => {
     if (provaQuestoesQuery.data) {
       setExamQuestions(provaQuestoesQuery.data);
@@ -164,10 +186,20 @@ export function useProvaQuestoes({
     setExamQuestions((prev) => prev.filter((q) => q.id !== id));
   }
 
-  function updateQuestion(question: Question) {
+  async function updateQuestion(question: Question) {
+    if (selectedExamId && isPersistedId(question.id)) {
+      if (!selectedExamMateriaId) {
+        toast.error("Nao foi possivel identificar a materia da prova para atualizar a questao.");
+        return;
+      }
+      await updateQuestaoProvaMutation.mutateAsync({ question, materiaId: selectedExamMateriaId });
+      return;
+    }
+
     setExamQuestions((prev) =>
       prev.map((q) => (q.id === question.id ? question : q))
     );
+    toastSuccess("Questao atualizada com sucesso.");
   }
 
   function reorderQuestion(questionId: string, targetOrder: number) {
@@ -229,6 +261,7 @@ export function useProvaQuestoes({
     addQuestaoProvaMutation,
     removeQuestaoProvaMutation,
     reorderQuestaoProvaMutation,
+    updateQuestaoProvaMutation,
     addQuestion,
     addQuestions,
     deleteQuestion,

@@ -8,7 +8,7 @@ import { SelecionarProvaModal } from "./SelecionarProvaModal";
 interface Props {
   onNavigate?: (tab: string) => void;
   bancoQuestoes?: BancoQuestion[];
-  onUpdateQuestion?: (questao: BancoQuestion) => void;
+  onUpdateQuestion?: (questao: BancoQuestion) => void | Promise<void>;
   onDeleteQuestion?: (id: BancoQuestion["id"]) => void;
   provas?: Exam[];
   onAddToProva?: (provaId: Exam["id"], questao: BancoQuestion) => void | Promise<void>;
@@ -35,8 +35,8 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
     const matchDificuldade = !dificuldadeFilter || q.dificuldade === dificuldadeFilter;
     return matchSearch && matchMateria && matchType && matchDificuldade;
   });
-  const handleSaveEdit = (questao: BancoQuestion) => {
-    onUpdateQuestion?.(questao);
+  const handleSaveEdit = async (questao: BancoQuestion) => {
+    await onUpdateQuestion?.(questao);
     setEditingQuestao(null);
   };
 

@@ -22,6 +22,7 @@ export function useDashboard() {
 
   const provaQuestoes = useProvaQuestoes({
     selectedExamId: provaSelecionada.selectedExamId,
+    selectedExamMateriaId: provaSelecionada.selectedExam?.materiaId,
     examQuestions: provaSelecionada.examQuestions,
     setExamQuestions: provaSelecionada.setExamQuestions,
     createQuestao: banco.createQuestaoMutation.mutateAsync,

@@ -38,6 +38,8 @@ const mapAluno = (row: AlunoRow): Aluno => ({
   atualizadoEm: row.atualizado_em.toISOString(),
 });
 
+let alunoSchemaReady = false;
+
 /**
  * Repositório de alunos cadastrados.
  *
@@ -45,6 +47,13 @@ const mapAluno = (row: AlunoRow): Aluno => ({
  * O campo aceitou_termos_em registra a aceitação dos termos de uso.
  */
 export class AlunoRepository {
+  private async ensureSchema() {
+    if (alunoSchemaReady) return;
+    await pool.query('ALTER TABLE "aluno" ADD COLUMN IF NOT EXISTS "turma" TEXT NULL');
+    await pool.query('ALTER TABLE "aluno" ADD COLUMN IF NOT EXISTS "cpf_hash" TEXT NULL');
+    alunoSchemaReady = true;
+  }
+
   /**
    * Lista todos os alunos com paginação.
    *
@@ -52,6 +61,7 @@ export class AlunoRepository {
    * @returns Lista paginada de alunos com total de registros.
    */
   async findAll(options?: { page?: number; limit?: number }) {
+    await this.ensureSchema();
     const page = options?.page ?? 1;
     const limit = options?.limit ?? 20;
     const offset = (page - 1) * limit;
@@ -71,6 +81,7 @@ export class AlunoRepository {
    * @returns Aluno encontrado ou null.
    */
   async findById(id: string) {
+    await this.ensureSchema();
     const result = await pool.query<AlunoRow>(
       'SELECT * FROM "aluno" WHERE "id" = $1',
       [id],
@@ -85,6 +96,7 @@ export class AlunoRepository {
    * @returns Aluno encontrado ou null.
    */
   async findByEmail(email: string) {
+    await this.ensureSchema();
     const result = await pool.query<AlunoRow>(
       'SELECT * FROM "aluno" WHERE "email" = $1',
       [email],
@@ -99,6 +111,7 @@ export class AlunoRepository {
    * @returns Aluno encontrado ou null.
    */
   async findByCpf(cpf: string) {
+    await this.ensureSchema();
     const cpfHash = hashCpf(cpf);
     const result = await pool.query<AlunoRow>(
       'SELECT * FROM "aluno" WHERE "cpf_hash" = $1 OR ("cpf_hash" IS NULL AND "cpf" = $2)',
@@ -118,6 +131,7 @@ export class AlunoRepository {
     id: string,
     input: { nome?: string; email?: string; cpf?: string | null; turma?: string | null },
   ) {
+    await this.ensureSchema();
     const fields: string[] = [];
     const values: unknown[] = [];
     let index = 1;
@@ -162,6 +176,7 @@ export class AlunoRepository {
    * @returns true se removido, false se não encontrado.
    */
   async delete(id: string) {
+    await this.ensureSchema();
     const result = await pool.query(
       'DELETE FROM "aluno" WHERE "id" = $1',
       [id],

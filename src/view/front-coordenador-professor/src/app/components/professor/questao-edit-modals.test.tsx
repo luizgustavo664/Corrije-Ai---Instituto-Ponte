@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { BancoQuestion } from "../../../../../src/features/dashboard/dashboard.types";
 import type { Question } from "../../../../../src/features/questoes/questao.types";
@@ -46,7 +46,7 @@ describe("questao edit modals", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("edita alternativa do banco, marca correta, salva e fecha", () => {
+  it("edita alternativa do banco, marca correta, salva e fecha", async () => {
     const onClose = vi.fn();
     const onSave = vi.fn();
 
@@ -68,7 +68,7 @@ describe("questao edit modals", () => {
         ],
       }),
     );
-    expect(onClose).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
   });
 
   it("edita questao verdadeiro/falso do banco", () => {
@@ -89,7 +89,7 @@ describe("questao edit modals", () => {
     expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ answer: "Falso" }));
   });
 
-  it("edita questao discursiva da prova", () => {
+  it("edita questao discursiva da prova", async () => {
     const onClose = vi.fn();
     const onSave = vi.fn();
 
@@ -99,7 +99,7 @@ describe("questao edit modals", () => {
     fireEvent.click(screen.getByRole("button", { name: /salvar/i }));
 
     expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ answer: "Gabarito novo" }));
-    expect(onClose).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
   });
 
   it("edita alternativa de questao da prova e fecha pelo overlay", () => {

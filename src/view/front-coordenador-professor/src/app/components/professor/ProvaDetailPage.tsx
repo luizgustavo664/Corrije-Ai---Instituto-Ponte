@@ -24,7 +24,7 @@ interface Props {
   onNavigate?: (tab: string) => void;
   questions: Question[];
   onDeleteQuestion?: (id: Question["id"]) => void;
-  onUpdateQuestion?: (question: Question) => void;
+  onUpdateQuestion?: (question: Question) => void | Promise<void>;
   onReorderQuestion?: (id: Question["id"], targetOrder: number) => void;
   onAddQuestions?: (questions: Question[]) => void | Promise<void>;
   bancoQuestoes?: BancoQuestion[];
@@ -602,8 +602,8 @@ export function ProvaDetailPage({
     setEditEmbaralharAlternativas(localExam.embaralharAlternativas ?? false);
   }, [localExam]);
 
-  const handleUpdateQuestion = (updatedQuestion: Question) => {
-    onUpdateQuestion?.(updatedQuestion);
+  const handleUpdateQuestion = async (updatedQuestion: Question) => {
+    await onUpdateQuestion?.(updatedQuestion);
     setEditingQuestion(null);
   };
 

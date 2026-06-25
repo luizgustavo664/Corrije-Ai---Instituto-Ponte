@@ -21,6 +21,7 @@ import {
 import type { ProvaDto, ProvaQuestaoDto, QuestaoDto } from "../provas/provas.types";
 import { createQuestao, deleteQuestao, listQuestoes, updateQuestao } from "../questoes/questoes.api";
 import { listMaterias } from "../materias/materias.api";
+import { listarQuestoesCorrecao } from "../correcao/correcao.api";
 import { useBancoQuestoes } from "./useBancoQuestoes";
 import { useDashboard } from "./useDashboard";
 import { useProvaQuestoes } from "./useProvaQuestoes";
@@ -58,6 +59,10 @@ vi.mock("../provas/provas.api", () => ({
   reorderQuestaoInProva: vi.fn(),
   updateProva: vi.fn(),
   updateProvaConfiguracoes: vi.fn(),
+}));
+
+vi.mock("../correcao/correcao.api", () => ({
+  listarQuestoesCorrecao: vi.fn(),
 }));
 
 const PROVA_ID = "11111111-1111-4111-8111-111111111111";
@@ -174,6 +179,7 @@ describe("dashboard hooks", () => {
     vi.mocked(listProvaQuestoes).mockResolvedValue([provaQuestaoDto]);
     vi.mocked(addQuestaoToProva).mockResolvedValue(provaQuestaoDto);
     vi.mocked(removeQuestaoFromProva).mockResolvedValue(undefined);
+    vi.mocked(listarQuestoesCorrecao).mockResolvedValue([]);
   });
 
   it("carrega banco de questoes e executa mutacoes com invalidacao", async () => {
@@ -196,7 +202,9 @@ describe("dashboard hooks", () => {
         alternativas: [],
       });
     });
-    act(() => result.current.updateBancoQuestion(bancoQuestion));
+    await act(async () => {
+      await result.current.updateBancoQuestion(bancoQuestion);
+    });
     act(() => result.current.deleteBancoQuestion(QUESTAO_ID));
 
     expect(createQuestao).toHaveBeenCalledTimes(1);
@@ -214,6 +222,7 @@ describe("dashboard hooks", () => {
       ({ examQuestions }) =>
         useProvaQuestoes({
           selectedExamId: PROVA_ID,
+          selectedExamMateriaId: "materia-1",
           examQuestions,
           setExamQuestions,
           createQuestao: vi.mocked(createQuestao),
@@ -245,7 +254,7 @@ describe("dashboard hooks", () => {
       });
     });
     act(() => result.current.deleteQuestion(QUESTAO_ID));
-    act(() =>
+    await act(async () =>
       result.current.updateQuestion({
         id: QUESTAO_ID,
         type: "Discursiva",
@@ -254,6 +263,9 @@ describe("dashboard hooks", () => {
     );
 
     expect(createQuestao).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(updateQuestao).toHaveBeenCalledWith(QUESTAO_ID, expect.objectContaining({
+      enunciado: expect.objectContaining({ conteudoLatex: "Atualizada" }),
+    })));
     await waitFor(() => expect(removeQuestaoFromProva).toHaveBeenCalledWith(PROVA_ID, QUESTAO_ID));
     expect(setExamQuestions).toHaveBeenCalledWith(expect.any(Function));
   });

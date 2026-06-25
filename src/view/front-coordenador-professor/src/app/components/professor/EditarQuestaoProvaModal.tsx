@@ -6,7 +6,7 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   questao: Question | null;
-  onSave: (questao: Question) => void;
+  onSave: (questao: Question) => void | Promise<void>;
 }
 
 const inputStyle: React.CSSProperties = {
@@ -33,11 +33,20 @@ const labelStyle: React.CSSProperties = {
 };
 
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const maxImageSizeBytes = 2 * 1024 * 1024;
+const maxTotalImageBytes = 6 * 1024 * 1024;
+
+function dataUrlSize(url?: string | null) {
+  if (!url?.startsWith("data:")) return 0;
+  const [, data = ""] = url.split(",");
+  return Math.ceil((data.length * 3) / 4);
+}
 
 export function EditarQuestaoProvaModal({ isOpen, onClose, questao, onSave }: Props) {
   const [text, setText] = useState("");
   const [alternatives, setAlternatives] = useState<{ letter: string; text: string; correct: boolean; imageUrl?: string | null }[]>([]);
   const [answer, setAnswer] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (questao) {
@@ -53,15 +62,20 @@ export function EditarQuestaoProvaModal({ isOpen, onClose, questao, onSave }: Pr
 
   if (!isOpen || !questao) return null;
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    setError("");
     const updatedQuestao: Question = {
       ...questao,
       text,
       ...(questao.type === "Alternativa" ? { options: alternatives } : {}),
       ...(questao.type === "V/F" || questao.type === "Discursiva" ? { answer } : {}),
     };
-    onSave(updatedQuestao);
-    onClose();
+    try {
+      await onSave(updatedQuestao);
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao salvar alteracoes da questao.");
+    }
   };
 
   const markCorrect = (letter: string) => {
@@ -98,7 +112,23 @@ export function EditarQuestaoProvaModal({ isOpen, onClose, questao, onSave }: Pr
   };
 
   const handleAlternativeImage = (letter: string, file?: File) => {
-    if (!file || !file.type.startsWith("image/")) return;
+    setError("");
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("Escolha um arquivo de imagem valido.");
+      return;
+    }
+    if (file.size > maxImageSizeBytes) {
+      setError("Cada imagem deve ter ate 2 MB.");
+      return;
+    }
+    const currentTotal = alternatives.reduce((total, alt) => (
+      total + (alt.letter === letter ? 0 : dataUrlSize(alt.imageUrl))
+    ), 0);
+    if (currentTotal + file.size > maxTotalImageBytes) {
+      setError("O total de imagens da questao deve ter ate 6 MB.");
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
@@ -127,6 +157,9 @@ export function EditarQuestaoProvaModal({ isOpen, onClose, questao, onSave }: Pr
             </h2>
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "#6A7181", marginTop: "4px" }}>
               Tipo: {questao.type}
+            </p>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181", marginTop: "4px" }}>
+              Imagens: ate 2 MB por arquivo e 6 MB no total da questao.
             </p>
           </div>
           <button
@@ -259,6 +292,11 @@ export function EditarQuestaoProvaModal({ isOpen, onClose, questao, onSave }: Pr
                 placeholder="Digite o gabarito ou resposta esperada..."
               />
             </div>
+          )}
+          {error && (
+            <p role="alert" style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "#9A3412" }}>
+              {error}
+            </p>
           )}
         </div>
 

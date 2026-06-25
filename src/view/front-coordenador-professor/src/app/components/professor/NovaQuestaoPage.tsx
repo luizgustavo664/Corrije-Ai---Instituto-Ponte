@@ -451,6 +451,9 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9FA3AC" }}>
               Suporta LaTeX entre <code>$$</code> — ex: <code>$$f'(x) = 2x$$</code>
             </p>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#6A7181" }}>
+              Imagens: ate 2 MB por arquivo e 6 MB no total da questao.
+            </p>
             {imageUrls.length > 0 && (
               <div className="grid grid-cols-2 gap-3">
                 {imageUrls.map((url, index) => (
@@ -687,6 +690,9 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
                 <PhotoIcon className="w-6 h-6" style={{ color: "#B1B4BD" }} />
                 <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9FA3AC" }}>
                   Escolher arquivo do computador
+                </span>
+                <span style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#9FA3AC" }}>
+                  Max. 2 MB por imagem, 6 MB no total
                 </span>
               </label>
             </div>

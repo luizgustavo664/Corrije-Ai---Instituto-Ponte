@@ -48,6 +48,7 @@ const validationDetails = (error: Error & { validation?: unknown }) => {
 export function buildApp() {
   const app = Fastify({
     logger: process.env.NODE_ENV !== "test",
+    bodyLimit: 10 * 1024 * 1024,
   });
 
   app.setValidatorCompiler(validatorCompiler);
@@ -121,6 +122,19 @@ export function buildApp() {
     }
 
     const maybeValidationError = error as Error & { validation?: unknown };
+
+    const errorCode = (error as { code?: string }).code;
+
+    if (errorCode === "FST_ERR_CTP_BODY_TOO_LARGE") {
+      return reply.status(413).send({
+        success: false,
+        error: {
+          code: "PAYLOAD_TOO_LARGE",
+          message: "O envio excede o limite de 6 MB de imagens por questao.",
+          details: [],
+        },
+      });
+    }
 
     if (error instanceof ZodError || maybeValidationError.validation) {
       return reply.status(422).send({

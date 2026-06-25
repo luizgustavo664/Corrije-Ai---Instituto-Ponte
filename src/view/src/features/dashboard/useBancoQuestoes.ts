@@ -71,8 +71,8 @@ export function useBancoQuestoes({ selectedExamId }: UseBancoQuestoesParams) {
     await createQuestaoMutation.mutateAsync(payload);
   }
 
-  function updateBancoQuestion(questao: BancoQuestion) {
-    updateQuestaoMutation.mutate(questao);
+  async function updateBancoQuestion(questao: BancoQuestion) {
+    await updateQuestaoMutation.mutateAsync(questao);
   }
 
   function deleteBancoQuestion(id: string) {
