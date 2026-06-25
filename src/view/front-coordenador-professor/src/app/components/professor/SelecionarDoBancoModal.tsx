@@ -25,6 +25,8 @@ export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQ
   const [filterTipo, setFilterTipo] = useState<string>("");
   const [filterDificuldade, setFilterDificuldade] = useState<string>("");
   const [filterSemestre, setFilterSemestre] = useState<string>("");
+  const [addError, setAddError] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   if (!isOpen) return null;
 
@@ -45,23 +47,32 @@ export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQ
   });
 
   const toggleSelection = (id: BancoQuestion["id"]) => {
+    setAddError(null);
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((qid) => qid !== id) : [...prev, id]
     );
   };
 
   const handleAdd = async () => {
+    setAddError(null);
+    setIsAdding(true);
     const selected = bancoQuestoes
       .filter((q) => selectedIds.includes(q.id))
       .map(convertBancoToQuestion);
-    await onAddQuestions(selected);
-    setSelectedIds([]);
-    setSearchTerm("");
-    setFilterMateria("");
-    setFilterTipo("");
-    setFilterDificuldade("");
-    setFilterSemestre("");
-    onClose();
+    try {
+      await onAddQuestions(selected);
+      setSelectedIds([]);
+      setSearchTerm("");
+      setFilterMateria("");
+      setFilterTipo("");
+      setFilterDificuldade("");
+      setFilterSemestre("");
+      onClose();
+    } catch (error) {
+      setAddError(error instanceof Error ? error.message : "Nao foi possivel adicionar a questao a esta prova.");
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const clearFilters = () => {
@@ -250,6 +261,12 @@ export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQ
         </div>
 
         {/* Lista de questões */}
+        {addError && (
+          <div className="mb-3 rounded-lg px-4 py-3" style={{ backgroundColor: "#FCE8E6", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: "13px" }}>
+            {addError}
+          </div>
+        )}
+
         <div className="flex-1 overflow-y-auto mb-4 space-y-3">
           {filteredQuestions.map((question) => {
             const isSelected = selectedIds.includes(question.id);
@@ -378,7 +395,7 @@ export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQ
             </button>
             <button
               onClick={handleAdd}
-              disabled={selectedIds.length === 0}
+              disabled={selectedIds.length === 0 || isAdding}
               className="px-6 py-2.5 rounded-full transition-opacity hover:opacity-85 disabled:opacity-50"
               style={{
                 backgroundColor: "#F9B233",
@@ -386,9 +403,10 @@ export function SelecionarDoBancoModal({ isOpen, onClose, onAddQuestions, bancoQ
                 fontFamily: "Poppins, sans-serif",
                 fontWeight: 600,
                 fontSize: "14px",
+                cursor: selectedIds.length === 0 || isAdding ? "not-allowed" : "pointer",
               }}
             >
-              Adicionar ({selectedIds.length})
+              {isAdding ? "Adicionando..." : `Adicionar (${selectedIds.length})`}
             </button>
           </div>
         </div>

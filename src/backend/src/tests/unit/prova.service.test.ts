@@ -6,6 +6,7 @@ const mockHasAccess = jest.fn<any>();
 const mockProfessorExists = jest.fn<any>();
 const mockMateriaExists = jest.fn<any>();
 const mockProfessorMateriaVinculados = jest.fn<any>();
+const mockFindFirstProfessorIdByMateria = jest.fn<any>();
 const mockCreate = jest.fn<any>();
 const mockFindMany = jest.fn<any>();
 const mockUpdate = jest.fn<any>();
@@ -25,6 +26,7 @@ jest.unstable_mockModule("../../repositories/prova.repository.js", () => ({
     professorExists: mockProfessorExists,
     materiaExists: mockMateriaExists,
     professorMateriaVinculados: mockProfessorMateriaVinculados,
+    findFirstProfessorIdByMateria: mockFindFirstProfessorIdByMateria,
     create: mockCreate,
     findMany: mockFindMany,
     update: mockUpdate,
@@ -88,6 +90,7 @@ beforeEach(async () => {
   mockProfessorExists.mockReset();
   mockMateriaExists.mockReset();
   mockProfessorMateriaVinculados.mockReset();
+  mockFindFirstProfessorIdByMateria.mockReset();
   mockCreate.mockReset();
   mockFindMany.mockReset();
   mockUpdate.mockReset();
@@ -120,11 +123,18 @@ describe("ProvaService - unitário", () => {
       expect(result.status).toBe("rascunho");
     });
 
-    it("deve lançar forbidden quando perfil não é professor", async () => {
+    it("deve criar prova como coordenador usando professor vinculado a materia", async () => {
+      mockFindFirstProfessorIdByMateria.mockResolvedValue("prof-1");
+      mockProfessorExists.mockResolvedValue(true);
+      mockMateriaExists.mockResolvedValue(true);
+      mockProfessorMateriaVinculados.mockResolvedValue(true);
+      mockCreate.mockResolvedValue(makeProva());
+
       const service = new ProvaService();
       await expect(
         service.create({ materiaId: "mat-1", titulo: "Prova", turma: "3A", semestre: "2025.1" }, coordenador),
-      ).rejects.toThrow("Somente professores podem criar provas.");
+      ).resolves.toMatchObject({ professorId: "prof-1", status: "rascunho" });
+      expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({ professorId: "prof-1" }));
     });
 
     it("deve lançar forbidden quando professorId difere do user.id", async () => {

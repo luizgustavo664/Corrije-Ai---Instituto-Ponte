@@ -28,6 +28,7 @@ function toApiType(t: FormQuestionType): CreateQuestaoPayload["tipo"] {
 
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
 const maxImageSizeBytes = 2 * 1024 * 1024;
+const maxQuestionImages = 3;
 
 interface Alternative {
   id: string;
@@ -123,6 +124,10 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
   function handleImageChange(file?: File) {
     setImageError("");
     if (!file) return;
+    if (imageUrls.length >= maxQuestionImages) {
+      setImageError(`Adicione no maximo ${maxQuestionImages} imagens por questao.`);
+      return;
+    }
     if (!file.type.startsWith("image/")) {
       setImageError("Escolha um arquivo de imagem válido.");
       return;
@@ -660,12 +665,12 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
               </p>
               <label
                 className="flex flex-col items-center justify-center gap-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity"
-                style={{ height: 100, backgroundColor: "#F7F8FA", border: "2px dashed #D7D7D9" }}
+                style={{ height: 100, backgroundColor: "#F7F8FA", border: "2px dashed #D7D7D9", opacity: imageUrls.length >= maxQuestionImages ? 0.55 : 1, cursor: imageUrls.length >= maxQuestionImages ? "not-allowed" : "pointer" }}
               >
-                <input type="file" accept="image/*" className="hidden" onChange={(event) => handleImageChange(event.target.files?.[0])} />
+                <input type="file" accept="image/*" className="hidden" disabled={imageUrls.length >= maxQuestionImages} onChange={(event) => handleImageChange(event.target.files?.[0])} />
                 <PhotoIcon className="w-6 h-6" style={{ color: "#B1B4BD" }} />
                 <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9FA3AC" }}>
-                  Escolher arquivo do computador
+                  {imageUrls.length >= maxQuestionImages ? "Limite de imagens atingido" : "Escolher arquivo do computador"}
                 </span>
               </label>
             </div>

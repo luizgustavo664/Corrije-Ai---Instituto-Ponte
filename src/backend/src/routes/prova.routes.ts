@@ -31,7 +31,7 @@ export async function provaRoutes(app: FastifyInstance) {
   app.withTypeProvider().post(
     "/provas",
     {
-      preHandler: requireRole("professor"),
+      preHandler: requireRole("professor", "coordenador"),
       schema: {
         tags: ["Provas"],
         summary: "Criar prova em rascunho",
@@ -164,7 +164,7 @@ export async function provaRoutes(app: FastifyInstance) {
   app.withTypeProvider().patch(
     "/provas/:provaId/configuracoes",
     {
-      preHandler: requireRole("professor"),
+      preHandler: requireRole("professor", "coordenador"),
       schema: {
         tags: ["Provas"],
         summary: "Atualizar configurações da prova",
@@ -188,7 +188,7 @@ export async function provaRoutes(app: FastifyInstance) {
   app.withTypeProvider().post(
     "/provas/:provaId/publicar",
     {
-      preHandler: requireRole("professor"),
+      preHandler: requireRole("professor", "coordenador"),
       schema: {
         tags: ["Publicação"],
         summary: "Publicar prova",
@@ -281,7 +281,7 @@ export async function provaRoutes(app: FastifyInstance) {
   app.withTypeProvider().post(
     "/provas/:provaId/questoes",
     {
-      preHandler: requireRole("professor"),
+      preHandler: requireRole("professor", "coordenador"),
       schema: {
         tags: ["Questões"],
         summary: "Adicionar questão à prova",
@@ -327,7 +327,7 @@ export async function provaRoutes(app: FastifyInstance) {
   app.withTypeProvider().delete(
     "/provas/:provaId/questoes/:questaoId",
     {
-      preHandler: requireRole("professor"),
+      preHandler: requireRole("professor", "coordenador"),
       schema: {
         tags: ["Questões"],
         summary: "Remover questão da prova",

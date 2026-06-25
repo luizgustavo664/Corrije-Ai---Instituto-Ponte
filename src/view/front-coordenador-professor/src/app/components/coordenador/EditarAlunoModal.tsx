@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: { nome: string; email: string; cpf: string | null }) => void;
+  onSave: (data: { nome: string; email: string; cpf: string | null; turma: string | null }) => void;
   isSaving?: boolean;
   initialData?: {
     nome: string;
     email: string;
     cpf: string | null;
+    turma: string | null;
   };
 }
 
@@ -16,11 +17,20 @@ export function EditarAlunoModal({ isOpen, onClose, onSave, isSaving, initialDat
   const [nome, setNome] = useState(initialData?.nome ?? "");
   const [email, setEmail] = useState(initialData?.email ?? "");
   const [cpf, setCpf] = useState(initialData?.cpf ?? "");
+  const [turma, setTurma] = useState(initialData?.turma ?? "");
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setNome(initialData?.nome ?? "");
+    setEmail(initialData?.email ?? "");
+    setCpf(initialData?.cpf ?? "");
+    setTurma(initialData?.turma ?? "");
+  }, [initialData, isOpen]);
 
   if (!isOpen) return null;
 
   const handleSave = () => {
-    onSave({ nome, email, cpf: cpf || null });
+    onSave({ nome, email, cpf: cpf || null, turma: turma.trim() || null });
     onClose();
   };
 
@@ -113,6 +123,29 @@ export function EditarAlunoModal({ isOpen, onClose, onSave, isSaving, initialDat
               placeholder="00000000000"
             />
           </div>
+
+          <div>
+            <label
+              htmlFor="turma"
+              style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181", display: "block", marginBottom: "8px" }}
+            >
+              Turma:
+            </label>
+            <input
+              id="turma"
+              type="text"
+              value={turma}
+              onChange={(e) => setTurma(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg"
+              style={{
+                border: "2px solid #D9D9D9",
+                fontFamily: "Inter, sans-serif",
+                fontSize: "16px",
+                color: "#6B6FA3",
+              }}
+              placeholder="3A"
+            />
+          </div>
         </div>
 
         <div className="flex gap-4">
@@ -125,6 +158,7 @@ export function EditarAlunoModal({ isOpen, onClose, onSave, isSaving, initialDat
               fontFamily: "Poppins, sans-serif",
               fontWeight: 600,
               fontSize: "16px",
+              cursor: "pointer",
             }}
           >
             CANCELAR
@@ -139,6 +173,7 @@ export function EditarAlunoModal({ isOpen, onClose, onSave, isSaving, initialDat
               fontFamily: "Poppins, sans-serif",
               fontWeight: 600,
               fontSize: "16px",
+              cursor: canSave && !isSaving ? "pointer" : "not-allowed",
             }}
           >
             {isSaving ? "SALVANDO..." : "SALVAR"}

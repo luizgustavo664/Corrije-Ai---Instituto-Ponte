@@ -8,6 +8,7 @@ type AlunoRow = {
   nome: string;
   email: string;
   cpf: string | null;
+  turma: string | null;
   aceitou_termos_em: Date | null;
   criado_em: Date;
   atualizado_em: Date;
@@ -31,6 +32,7 @@ const mapAluno = (row: AlunoRow): Aluno => ({
   nome: row.nome,
   email: row.email,
   cpf: safeDecodeCpf(row.cpf),
+  turma: row.turma,
   aceitouTermosEm: row.aceitou_termos_em?.toISOString() ?? null,
   criadoEm: row.criado_em.toISOString(),
   atualizadoEm: row.atualizado_em.toISOString(),
@@ -114,7 +116,7 @@ export class AlunoRepository {
    */
   async update(
     id: string,
-    input: { nome?: string; email?: string; cpf?: string | null },
+    input: { nome?: string; email?: string; cpf?: string | null; turma?: string | null },
   ) {
     const fields: string[] = [];
     const values: unknown[] = [];
@@ -133,6 +135,10 @@ export class AlunoRepository {
       values.push(input.cpf === null ? null : encryptCpf(input.cpf));
       fields.push(`"cpf_hash" = $${index++}`);
       values.push(input.cpf === null ? null : hashCpf(input.cpf));
+    }
+    if (input.turma !== undefined) {
+      fields.push(`"turma" = $${index++}`);
+      values.push(input.turma);
     }
 
     if (fields.length === 0) {

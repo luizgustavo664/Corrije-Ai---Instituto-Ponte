@@ -20,7 +20,7 @@ export function PerfilAlunoPage({ onBack, alunoId }: Props): JSX.Element {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: { nome: string; email: string; cpf: string | null }) =>
+    mutationFn: (data: { nome: string; email: string; cpf: string | null; turma: string | null }) =>
       updateAluno(alunoId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["alunos"] });
@@ -28,7 +28,7 @@ export function PerfilAlunoPage({ onBack, alunoId }: Props): JSX.Element {
     },
   });
 
-  const handleSaveEdit = (data: { nome: string; email: string; cpf: string | null }) => {
+  const handleSaveEdit = (data: { nome: string; email: string; cpf: string | null; turma: string | null }) => {
     updateMutation.mutate(data);
   };
 
@@ -71,7 +71,7 @@ export function PerfilAlunoPage({ onBack, alunoId }: Props): JSX.Element {
         onClose={() => setShowEditModal(false)}
         onSave={handleSaveEdit}
         isSaving={updateMutation.isPending}
-        initialData={{ nome: aluno.nome, email: aluno.email, cpf: aluno.cpf }}
+        initialData={{ nome: aluno.nome, email: aluno.email, cpf: aluno.cpf, turma: aluno.turma }}
       />
       <div className="p-8" style={{ backgroundColor: "#F2F2F2", minHeight: "100vh" }}>
         {onBack && (
@@ -160,6 +160,14 @@ export function PerfilAlunoPage({ onBack, alunoId }: Props): JSX.Element {
                 </p>
                 <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "16px", color: "#6B6FA3", fontWeight: 500 }}>
                   {aluno.cpf ?? "Não informado"}
+                </p>
+              </div>
+              <div>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181", marginBottom: "4px" }}>
+                  Turma:
+                </p>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "16px", color: "#6B6FA3", fontWeight: 500 }}>
+                  {aluno.turma ?? "Nao vinculada"}
                 </p>
               </div>
               <div>

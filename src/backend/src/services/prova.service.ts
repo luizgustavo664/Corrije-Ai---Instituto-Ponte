@@ -50,12 +50,20 @@ export class ProvaService {
    * @throws forbidden - Se o professor não estiver vinculado à matéria.
    */
   async create(input: CreateProvaInput, user: AuthUser) {
-    if (user.perfil !== "professor") {
-      throw forbidden("Somente professores podem criar provas.");
+    if (user.perfil !== "professor" && user.perfil !== "coordenador") {
+      throw forbidden("Somente professores e coordenadores podem criar provas.");
     }
 
-    const professorId = input.professorId ?? user.id;
-    if (professorId !== user.id) {
+    const professorId =
+      input.professorId ??
+      (user.perfil === "professor"
+        ? user.id
+        : await this.provaRepository.findFirstProfessorIdByMateria(input.materiaId));
+    if (!professorId) {
+      throw businessRule("Vincule ao menos um professor a esta materia antes de criar a prova.");
+    }
+
+    if (user.perfil === "professor" && professorId !== user.id) {
       throw forbidden("Professor não pode criar prova para outro professor.");
     }
 

@@ -31,6 +31,7 @@ interface Props {
   examSubject?: string;
   examSemester?: string;
   examTurma?: string;
+  turmas?: string[];
   examModalidade?: string;
   examTempoProva?: number;
   examDataInicio?: string;
@@ -68,6 +69,7 @@ const typeColors: Record<QuestionType, { bg: string; color: string }> = {
 };
 
 const modalidades = ["Prova", "Trabalho", "Atividade", "Simulado"];
+const turmasPadrao = ["3A", "3B", "Extensivo", "Turma 2026"];
 const semestres = ["1º Semestre 2026", "2º Semestre 2025", "1º Semestre 2025", "2º Semestre 2024"];
 const duracoes = [
   { label: "30 minutos", value: 30 },
@@ -236,13 +238,14 @@ function QuestionCard({
 
 interface EditModalProps {
   exam: Exam;
+  turmas?: string[];
   onClose: () => void;
   onSave: (exam: Exam) => void | Promise<void>;
   isSaving?: boolean;
   errorMessage?: string;
 }
 
-function EditarDadosProvaModal({ exam, onClose, onSave, isSaving = false, errorMessage }: EditModalProps) {
+function EditarDadosProvaModal({ exam, turmas = [], onClose, onSave, isSaving = false, errorMessage }: EditModalProps) {
   const [nome, setNome] = useState(exam.title);
   const [modalidade, setModalidade] = useState(exam.modalidade || "");
   const [disciplina, setDisciplina] = useState(exam.discipline || "");
@@ -252,6 +255,7 @@ function EditarDadosProvaModal({ exam, onClose, onSave, isSaving = false, errorM
   const [orientacoes, setOrientacoes] = useState(exam.orientacoes || "");
   const [embaralharQuestoes, setEmbaralharQuestoes] = useState(exam.embaralharQuestoes ?? false);
   const [embaralharAlternativas, setEmbaralharAlternativas] = useState(exam.embaralharAlternativas ?? false);
+  const turmaOptions = Array.from(new Set([exam.turma, ...turmas, ...turmasPadrao].map((item) => item?.trim()).filter(Boolean) as string[])).sort();
 
   const canSave = nome.trim() !== "" && !isSaving;
   const hasUnsavedChanges =
@@ -341,9 +345,15 @@ function EditarDadosProvaModal({ exam, onClose, onSave, isSaving = false, errorM
           <div className="flex gap-4">
             <div className="flex flex-col gap-1 w-full">
               <label style={labelStyle}>Turma</label>
-              <input type="text" value={turma} onChange={(e) => setTurma(e.target.value)} placeholder="Ex: 3ºA" style={inputStyle}
-                onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
-                onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }} />
+              <div className="relative w-full">
+                <select value={turma} onChange={(e) => setTurma(e.target.value)} style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#05245F"; e.target.style.backgroundColor = "#fff"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}>
+                  <option value="">Selecionar turma</option>
+                  {turmaOptions.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+                {chevron}
+              </div>
             </div>
             <div className="flex flex-col gap-1 w-full">
               <label style={labelStyle}>Semestre</label>
@@ -502,7 +512,7 @@ function PublicarProvaModal({
 export function ProvaDetailPage({
   onBack, onNavigate, questions, onDeleteQuestion, onUpdateQuestion, onReorderQuestion, onAddQuestions,
   bancoQuestoes = [], examTitle = "Título da Prova", examSubject = "", examSemester = "",
-  examTurma, examModalidade, examTempoProva, examDataInicio, examDataLimite, examOrientacoes,
+  examTurma, turmas = [], examModalidade, examTempoProva, examDataInicio, examDataLimite, examOrientacoes,
   selectedExam, onUpdateExam, onPublish, onUnpublish, showPublishModal = false, onClosePublishModal,
   isLoading = false, errorMessage, isUpdatingExam = false, updateExamErrorMessage, isPublishing = false, isUnpublishing = false,
 }: Props) {
@@ -649,6 +659,7 @@ export function ProvaDetailPage({
       {showEditExam && (
         <EditarDadosProvaModal
           exam={localExam}
+          turmas={turmas}
           onClose={() => setShowEditExam(false)}
           isSaving={isUpdatingExam}
           errorMessage={updateExamErrorMessage}

@@ -90,15 +90,15 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
   }, [initialTab]);
 
   const setActiveTab = (tab: ProfessorTab) => {
-    createProvaMutation.reset();
-    updateProvaMutation.reset();
-    publicarProvaMutation.reset();
-    despublicarProvaMutation.reset();
-    createQuestaoMutation.reset();
-    updateQuestaoMutation.reset();
-    deleteQuestaoMutation.reset();
-    addQuestaoProvaMutation.reset();
-    removeQuestaoProvaMutation.reset();
+    createProvaMutation.reset?.();
+    updateProvaMutation.reset?.();
+    publicarProvaMutation.reset?.();
+    despublicarProvaMutation?.reset?.();
+    createQuestaoMutation.reset?.();
+    updateQuestaoMutation.reset?.();
+    deleteQuestaoMutation.reset?.();
+    addQuestaoProvaMutation.reset?.();
+    removeQuestaoProvaMutation.reset?.();
     setActiveTabState(tab);
     onNavigateTab?.(tab);
   };
@@ -142,6 +142,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             examSubject={selectedExam?.subject || "Matéria"}
             examSemester={selectedExam?.semester || "Semestre"}
             examTurma={selectedExam?.turma}
+            turmas={[...new Set(exams.map((exam) => exam.turma).filter(Boolean))]}
             examModalidade={selectedExam?.modalidade}
             examTempoProva={selectedExam?.tempoProva}
             examDataInicio={selectedExam?.dataInicio}
@@ -165,12 +166,12 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
                       ? removeQuestaoProvaMutation.error.message
                       : publicarProvaMutation.isError
                         ? publicarProvaMutation.error.message
-                        : despublicarProvaMutation.isError
+                        : despublicarProvaMutation?.isError
                           ? despublicarProvaMutation.error.message
                           : undefined
             }
             isPublishing={publicarProvaMutation.isPending}
-            isUnpublishing={despublicarProvaMutation.isPending}
+            isUnpublishing={despublicarProvaMutation?.isPending ?? false}
             isUpdatingExam={updateProvaMutation.isPending}
             updateExamErrorMessage={
               updateProvaMutation.isError ? updateProvaMutation.error.message : undefined

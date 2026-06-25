@@ -32,6 +32,18 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
   const alunosComCadastroPendente = (alunos ?? []).filter((aluno) => !aluno.cpf).length;
   const visibleAlunos = showAllAlunos ? alunos ?? [] : (alunos ?? []).slice(0, 10);
   const hasHiddenAlunos = (alunos?.length ?? 0) > visibleAlunos.length;
+  const turmasResumo = Array.from(
+    new Set([
+      ...(alunos ?? []).map((aluno) => aluno.turma).filter(Boolean),
+      ...provas.map((prova) => prova.turma).filter(Boolean),
+    ] as string[]),
+  )
+    .sort()
+    .map((turma) => ({
+      turma,
+      alunos: (alunos ?? []).filter((aluno) => aluno.turma === turma).length,
+      provas: provas.filter((prova) => prova.turma === turma).length,
+    }));
 
   const deleteMutation = useMutation({
     mutationFn: deleteAluno,
@@ -213,6 +225,7 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                   }
                 }}
                 className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4 w-full text-left hover:bg-gray-50 transition-colors group"
+                style={{ cursor: "pointer" }}
               >
                 <div
                   className="flex items-center justify-center rounded-full shrink-0"
@@ -224,6 +237,9 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                   <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "14px", color: "#6B6FA3", fontWeight: 600 }}>
                     {aluno.nome}
                   </p>
+                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181", marginTop: 2 }}>
+                    {aluno.turma ? `Turma: ${aluno.turma}` : "Sem turma vinculada"}
+                  </p>
                   <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181" }}>
                     {aluno.email}{aluno.cpf ? ` • CPF: ${aluno.cpf}` : ""}
                   </p>
@@ -232,7 +248,7 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                   type="button"
                   onClick={(e) => handleDeleteAluno(e, aluno.id)}
                   className="p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
-                  style={{ color: "#FF6B6B" }}
+                  style={{ color: "#FF6B6B", cursor: "pointer" }}
                   title="Remover aluno"
                 >
                   <TrashIcon className="w-5 h-5" />
@@ -245,11 +261,37 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
               type="button"
               onClick={() => setShowAllAlunos(true)}
               className="mt-4 px-4 py-2 rounded-lg transition-opacity hover:opacity-85"
-              style={{ backgroundColor: "#05245F", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px" }}
+              style={{ backgroundColor: "#05245F", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px", cursor: "pointer" }}
             >
               Ver todos os alunos
             </button>
           )}
+        </div>
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "18px", color: "#6B6FA3" }}>
+              Turmas
+            </h2>
+          </div>
+          <div className="space-y-3">
+            {turmasResumo.map((item) => (
+              <div key={item.turma} className="bg-white rounded-lg p-4 shadow-sm">
+                <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "14px", color: "#6B6FA3", fontWeight: 600 }}>
+                  {item.turma}
+                </p>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181", marginTop: 4 }}>
+                  {item.alunos} alunos vinculados - {item.provas} provas cadastradas
+                </p>
+              </div>
+            ))}
+            {turmasResumo.length === 0 && (
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#6A7181" }}>
+                  Nenhuma turma vinculada ainda.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       </div>

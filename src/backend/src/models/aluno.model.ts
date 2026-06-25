@@ -23,6 +23,7 @@ export type Aluno = {
   nome: string;
   email: string;
   cpf: string | null;
+  turma: string | null;
   aceitouTermosEm: string | null;
   criadoEm: string;
   atualizadoEm: string;

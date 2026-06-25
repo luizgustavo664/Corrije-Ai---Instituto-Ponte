@@ -119,6 +119,20 @@ export class ProvaRepository {
     return result.rows[0]?.exists ?? false;
   }
 
+  async findFirstProfessorIdByMateria(materiaId: string) {
+    const result = await pool.query<{ professor_id: string }>(
+      `
+        SELECT "professor_id"
+        FROM "materia_professor"
+        WHERE "materia_id" = $1
+        ORDER BY "professor_id" ASC
+        LIMIT 1
+      `,
+      [materiaId],
+    );
+    return result.rows[0]?.professor_id ?? null;
+  }
+
   /**
    * Cria uma nova prova com status "rascunho".
    *
