@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Squares2X2Icon,
   DocumentTextIcon,
@@ -25,6 +26,7 @@ import { GestaoAlunosPage } from "./GestaoAlunosPage";
 import { PerfilAlunoPage } from "./PerfilAlunoPage";
 import { PerfilProfessorPage } from "./PerfilProfessorPage";
 import { useDashboard } from "../../../../../src/features/dashboard/useDashboard";
+import { listTurmas } from "../../../../../src/features/turmas/turmas.api";
 
 export type CoordenadorTab =
   | "painel"
@@ -96,6 +98,13 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
     deleteBancoQuestion,
     addQuestionToExam,
   } = useDashboard();
+  const turmasQuery = useQuery({ queryKey: ["turmas"], queryFn: listTurmas });
+  const turmaOptions = [
+    ...new Set([
+      ...(turmasQuery.data ?? []).map((turma) => turma.nome),
+      ...exams.map((exam) => exam.turma).filter(Boolean),
+    ]),
+  ];
 
   useEffect(() => {
     setActiveTabState(initialTab);
@@ -141,7 +150,7 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
             examSubject={selectedExam?.subject || "Matéria"}
             examSemester={selectedExam?.semester || "Semestre"}
             examTurma={selectedExam?.turma}
-            turmas={[...new Set(exams.map((exam) => exam.turma).filter(Boolean))]}
+            turmas={turmaOptions}
             examModalidade={selectedExam?.modalidade}
             examTempoProva={selectedExam?.tempoProva}
             examDataInicio={selectedExam?.dataInicio}
@@ -205,7 +214,7 @@ export function CoordenadorDashboard({ onLogout, initialTab = "painel", onNaviga
           professorId={selectedProfessorId ?? ""}
         />;
       case "nova-prova":
-        return <NovaProvaPage onBack={() => setActiveTab("provas")} onSave={addExam} materias={materiasQuery.data ?? []} turmas={[...new Set(exams.map((exam) => exam.turma).filter(Boolean))]} />;
+        return <NovaProvaPage onBack={() => setActiveTab("provas")} onSave={addExam} materias={materiasQuery.data ?? []} turmas={turmaOptions} />;
       case "nova-questao":
         return (
           <NovaQuestaoPage

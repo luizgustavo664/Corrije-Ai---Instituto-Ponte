@@ -15,6 +15,7 @@ export function SelecionarProvaModal({ isOpen, onClose, questao, provas, onAddTo
   const [isAdding, setIsAdding] = useState(false);
 
   if (!isOpen || !questao) return null;
+  const provasDisponiveis = provas.filter((prova) => !prova.urlAcesso);
 
   const handleSelectProva = async (provaId: Exam["id"]) => {
     setErrorMessage(null);
@@ -82,14 +83,14 @@ export function SelecionarProvaModal({ isOpen, onClose, questao, provas, onAddTo
               {errorMessage}
             </div>
           )}
-          {provas.length === 0 ? (
+          {provasDisponiveis.length === 0 ? (
             <div className="text-center py-8">
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#B1B4BD" }}>
                 Nenhuma prova disponível. Crie uma prova primeiro.
               </p>
             </div>
           ) : (
-            provas.map((prova) => (
+            provasDisponiveis.map((prova) => (
               <button
                 key={prova.id}
                 onClick={() => handleSelectProva(prova.id)}

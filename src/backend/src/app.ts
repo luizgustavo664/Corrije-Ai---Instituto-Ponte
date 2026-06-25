@@ -26,6 +26,7 @@ import { questaoRoutes } from "./routes/questao.routes.js";
 import { respostaAnexoRoutes } from "./routes/resposta-anexo.routes.js";
 import { respostaAlunoRoutes } from "./routes/resposta-aluno.routes.js";
 import { resultadoRoutes } from "./routes/resultado.routes.js";
+import { turmaRoutes } from "./routes/turma.routes.js";
 import { registerIdempotency } from "./middlewares/idempotency.js";
 
 const validationDetails = (error: Error & { validation?: unknown }) => {
@@ -91,6 +92,7 @@ export function buildApp() {
       api.register(professorRoutes);
       api.register(materiaRoutes);
       api.register(temaRoutes);
+      api.register(turmaRoutes);
     },
     { prefix: "/api/v1" },
   );

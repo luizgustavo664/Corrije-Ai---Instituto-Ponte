@@ -985,6 +985,7 @@ BEGIN
     IF TG_OP = 'UPDATE' AND NEW."status" <> OLD."status" THEN
         IF NOT (
             (OLD."status" = 'rascunho' AND NEW."status" = 'publicada')
+            OR (OLD."status" = 'publicada' AND NEW."status" = 'rascunho')
             OR (OLD."status" = 'publicada' AND NEW."status" = 'encerrada')
             OR (OLD."status" = 'encerrada' AND NEW."status" = 'antiga')
         ) THEN

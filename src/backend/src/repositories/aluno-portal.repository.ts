@@ -253,6 +253,51 @@ export class AlunoPortalRepository {
   private async upsertAluno(client: PoolClient, input: IniciarProvaInput) {
     const encryptedCpf = encryptCpf(input.cpf);
     const cpfHash = hashCpf(input.cpf);
+    const existingByEmail = await client.query<{ id: string }>(
+      'SELECT "id" FROM "aluno" WHERE lower("email") = lower($1) LIMIT 1',
+      [input.email],
+    );
+    const existingByCpf = await client.query<{ id: string }>(
+      'SELECT "id" FROM "aluno" WHERE "cpf_hash" = $1 LIMIT 1',
+      [cpfHash],
+    );
+
+    if (existingByEmail.rows[0]) {
+      const sameCpfOwner = !existingByCpf.rows[0] || existingByCpf.rows[0].id === existingByEmail.rows[0].id;
+      const updated = await client.query<{ id: string }>(
+        `
+          UPDATE "aluno"
+          SET "nome" = $1,
+              "cpf" = CASE WHEN $2::boolean THEN $3 ELSE "cpf" END,
+              "cpf_hash" = CASE WHEN $2::boolean THEN $4 ELSE "cpf_hash" END,
+              "aceitou_termos_em" = CURRENT_TIMESTAMP,
+              "atualizado_em" = CURRENT_TIMESTAMP
+          WHERE "id" = $5
+          RETURNING "id"
+        `,
+        [input.nome, sameCpfOwner, encryptedCpf, cpfHash, existingByEmail.rows[0].id],
+      );
+      return updated.rows[0].id;
+    }
+
+    if (existingByCpf.rows[0]) {
+      const updated = await client.query<{ id: string }>(
+        `
+          UPDATE "aluno"
+          SET "nome" = $1,
+              "email" = $2,
+              "cpf" = $3,
+              "cpf_hash" = $4,
+              "aceitou_termos_em" = CURRENT_TIMESTAMP,
+              "atualizado_em" = CURRENT_TIMESTAMP
+          WHERE "id" = $5
+          RETURNING "id"
+        `,
+        [input.nome, input.email, encryptedCpf, cpfHash, existingByCpf.rows[0].id],
+      );
+      return updated.rows[0].id;
+    }
+
     const result = await client.query<{ id: string }>(
       `
         INSERT INTO "aluno" ("nome", "email", "cpf", "cpf_hash", "aceitou_termos_em")

@@ -220,22 +220,17 @@ export class ProvaService {
   }
 
   /**
-   * Tira uma prova publicada do ar quando ainda nao houve tentativa de aluno.
+   * Tira uma prova publicada do ar.
    *
    * @param provaId - Identificador unico da prova.
    * @param user - Usuario autenticado (deve ter permissao de acesso).
    * @returns A prova de volta ao status "rascunho".
-   * @throws conflict - Se a prova nao estiver publicada ou se ja tiver submissoes.
+   * @throws conflict - Se a prova nao estiver publicada.
    */
   async despublicar(provaId: string, user: AuthUser) {
     const prova = await this.buscarPorId(provaId, user);
     if (prova.status !== "publicada") {
       throw conflict("Apenas provas publicadas podem ser tiradas da publicacao.");
-    }
-
-    const hasSubmissions = await this.provaRepository.hasSubmissions(provaId);
-    if (hasSubmissions) {
-      throw conflict("Nao e possivel tirar da publicacao uma prova com submissoes de alunos.");
     }
 
     const unpublished = await this.provaRepository.unpublish(provaId);

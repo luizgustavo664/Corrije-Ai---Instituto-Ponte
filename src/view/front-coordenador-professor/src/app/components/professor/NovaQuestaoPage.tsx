@@ -28,13 +28,14 @@ function toApiType(t: FormQuestionType): CreateQuestaoPayload["tipo"] {
 
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
 const maxImageSizeBytes = 2 * 1024 * 1024;
-const maxQuestionImages = 3;
+const maxTotalImageBytes = 6 * 1024 * 1024;
 
 interface Alternative {
   id: string;
   text: string;
   correct: boolean;
   imageUrl?: string | null;
+  imageSize?: number;
 }
 
 const inputStyle: React.CSSProperties = {
@@ -70,6 +71,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
   const [theme, setTheme] = useState("");
   const [enunciado, setEnunciado] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageSizes, setImageSizes] = useState<number[]>([]);
   const [imageError, setImageError] = useState("");
   const [allowPhotos, setAllowPhotos] = useState(false);
   const [vfAnswer, setVfAnswer] = useState<"Verdadeiro" | "Falso">("Verdadeiro");
@@ -124,8 +126,10 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
   function handleImageChange(file?: File) {
     setImageError("");
     if (!file) return;
-    if (imageUrls.length >= maxQuestionImages) {
-      setImageError(`Adicione no maximo ${maxQuestionImages} imagens por questao.`);
+    const alternativesSize = alternatives.reduce((total, alternative) => total + (alternative.imageSize ?? 0), 0);
+    const currentTotal = imageSizes.reduce((total, size) => total + size, 0) + alternativesSize;
+    if (currentTotal + file.size > maxTotalImageBytes) {
+      setImageError("O total de imagens da questao deve ter ate 6 MB.");
       return;
     }
     if (!file.type.startsWith("image/")) {
@@ -139,7 +143,10 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
 
     const reader = new FileReader();
     reader.onload = () => {
-      if (typeof reader.result === "string") setImageUrls((prev) => [...prev, reader.result as string]);
+      if (typeof reader.result === "string") {
+        setImageUrls((prev) => [...prev, reader.result as string]);
+        setImageSizes((prev) => [...prev, file.size]);
+      }
     };
     reader.onerror = () => setImageError("Não foi possível carregar a imagem escolhida.");
     reader.readAsDataURL(file);
@@ -148,6 +155,14 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
   function handleAlternativeImageChange(id: string, file?: File) {
     setImageError("");
     if (!file) return;
+    const questionImagesSize = imageSizes.reduce((total, size) => total + size, 0);
+    const alternativesSize = alternatives.reduce((total, alternative) => (
+      total + (alternative.id === id ? 0 : alternative.imageSize ?? 0)
+    ), 0);
+    if (questionImagesSize + alternativesSize + file.size > maxTotalImageBytes) {
+      setImageError("O total de imagens da questao deve ter ate 6 MB.");
+      return;
+    }
     if (!file.type.startsWith("image/")) {
       setImageError("Escolha um arquivo de imagem valido.");
       return;
@@ -161,7 +176,7 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
     reader.onload = () => {
       if (typeof reader.result === "string") {
         setAlternatives((prev) => prev.map((alternative) => (
-          alternative.id === id ? { ...alternative, imageUrl: reader.result as string } : alternative
+          alternative.id === id ? { ...alternative, imageUrl: reader.result as string, imageSize: file.size } : alternative
         )));
       }
     };
@@ -171,11 +186,12 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
 
   function removeQuestionImage(index: number) {
     setImageUrls((prev) => prev.filter((_, imageIndex) => imageIndex !== index));
+    setImageSizes((prev) => prev.filter((_, imageIndex) => imageIndex !== index));
   }
 
   function removeAlternativeImage(id: string) {
     setAlternatives((prev) => prev.map((alternative) => (
-      alternative.id === id ? { ...alternative, imageUrl: null } : alternative
+      alternative.id === id ? { ...alternative, imageUrl: null, imageSize: undefined } : alternative
     )));
   }
 
@@ -665,12 +681,12 @@ export function NovaQuestaoPage({ onBack, onSave, materias = [], defaultMateriaI
               </p>
               <label
                 className="flex flex-col items-center justify-center gap-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity"
-                style={{ height: 100, backgroundColor: "#F7F8FA", border: "2px dashed #D7D7D9", opacity: imageUrls.length >= maxQuestionImages ? 0.55 : 1, cursor: imageUrls.length >= maxQuestionImages ? "not-allowed" : "pointer" }}
+                style={{ height: 100, backgroundColor: "#F7F8FA", border: "2px dashed #D7D7D9", cursor: "pointer" }}
               >
-                <input type="file" accept="image/*" className="hidden" disabled={imageUrls.length >= maxQuestionImages} onChange={(event) => handleImageChange(event.target.files?.[0])} />
+                <input type="file" accept="image/*" className="hidden" onChange={(event) => handleImageChange(event.target.files?.[0])} />
                 <PhotoIcon className="w-6 h-6" style={{ color: "#B1B4BD" }} />
                 <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9FA3AC" }}>
-                  {imageUrls.length >= maxQuestionImages ? "Limite de imagens atingido" : "Escolher arquivo do computador"}
+                  Escolher arquivo do computador
                 </span>
               </label>
             </div>

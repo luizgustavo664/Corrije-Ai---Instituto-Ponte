@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "../../../../../src/components/feedback/ConfirmDialog";
 import { listAlunos, deleteAluno } from "../../../../../src/features/alunos/alunos.api";
 import { listProvas } from "../../../../../src/features/provas/provas.api";
+import { createTurma, deleteTurma, listTurmas, updateTurma } from "../../../../../src/features/turmas/turmas.api";
+import type { TurmaDto } from "../../../../../src/features/turmas/turmas.types";
 import { useAnalyticsSummary } from "../../../../../src/features/analytics/useAnalyticsSummary";
 
 interface Props {
@@ -15,6 +17,9 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
   const queryClient = useQueryClient();
   const [alunoToDelete, setAlunoToDelete] = useState<string | null>(null);
   const [showAllAlunos, setShowAllAlunos] = useState(false);
+  const [turmaNome, setTurmaNome] = useState("");
+  const [turmaDescricao, setTurmaDescricao] = useState("");
+  const [editingTurma, setEditingTurma] = useState<TurmaDto | null>(null);
 
   const { data: alunos, isLoading, isError } = useQuery({
     queryKey: ["alunos"],
@@ -28,12 +33,18 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
     select: (result) => result.data,
   });
 
+  const { data: turmas = [] } = useQuery({
+    queryKey: ["turmas"],
+    queryFn: listTurmas,
+  });
+
   const analytics = useAnalyticsSummary(provas);
   const alunosComCadastroPendente = (alunos ?? []).filter((aluno) => !aluno.cpf).length;
   const visibleAlunos = showAllAlunos ? alunos ?? [] : (alunos ?? []).slice(0, 10);
   const hasHiddenAlunos = (alunos?.length ?? 0) > visibleAlunos.length;
   const turmasResumo = Array.from(
     new Set([
+      ...turmas.map((turma) => turma.nome),
       ...(alunos ?? []).map((aluno) => aluno.turma).filter(Boolean),
       ...provas.map((prova) => prova.turma).filter(Boolean),
     ] as string[]),
@@ -57,6 +68,40 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
       toast.error(message);
     },
   });
+
+  const saveTurmaMutation = useMutation({
+    mutationFn: () => {
+      const payload = { nome: turmaNome.trim(), descricao: turmaDescricao.trim() || null };
+      return editingTurma ? updateTurma(editingTurma.id, payload) : createTurma(payload);
+    },
+    onSuccess: () => {
+      toast.success(editingTurma ? "Turma atualizada com sucesso." : "Turma criada com sucesso.");
+      setTurmaNome("");
+      setTurmaDescricao("");
+      setEditingTurma(null);
+      void queryClient.invalidateQueries({ queryKey: ["turmas"] });
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : "Erro ao salvar turma.");
+    },
+  });
+
+  const deleteTurmaMutation = useMutation({
+    mutationFn: deleteTurma,
+    onSuccess: () => {
+      toast.success("Turma removida com sucesso.");
+      void queryClient.invalidateQueries({ queryKey: ["turmas"] });
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : "Erro ao remover turma.");
+    },
+  });
+
+  const startEditTurma = (turma: TurmaDto) => {
+    setEditingTurma(turma);
+    setTurmaNome(turma.nome);
+    setTurmaDescricao(turma.descricao ?? "");
+  };
 
   const handleDeleteAluno = (e: React.MouseEvent, alunoId: string) => {
     e.stopPropagation();
@@ -273,15 +318,74 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
               Turmas
             </h2>
           </div>
+          <div className="bg-white rounded-lg p-4 shadow-sm mb-4">
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={turmaNome}
+                onChange={(event) => setTurmaNome(event.target.value)}
+                placeholder="Nome da turma"
+                className="w-full px-4 py-3 rounded-lg"
+                style={{ border: "1px solid #D7D7D9", fontFamily: "Inter, sans-serif", fontSize: 14 }}
+              />
+              <input
+                type="text"
+                value={turmaDescricao}
+                onChange={(event) => setTurmaDescricao(event.target.value)}
+                placeholder="Descricao opcional"
+                className="w-full px-4 py-3 rounded-lg"
+                style={{ border: "1px solid #D7D7D9", fontFamily: "Inter, sans-serif", fontSize: 14 }}
+              />
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  disabled={!turmaNome.trim() || saveTurmaMutation.isPending}
+                  onClick={() => saveTurmaMutation.mutate()}
+                  className="px-4 py-2 rounded-lg disabled:opacity-50"
+                  style={{ backgroundColor: "#F9B233", color: "#6B6FA3", fontFamily: "Poppins, sans-serif", fontWeight: 600, cursor: !turmaNome.trim() || saveTurmaMutation.isPending ? "not-allowed" : "pointer" }}
+                >
+                  {editingTurma ? "Atualizar turma" : "Criar turma"}
+                </button>
+                {editingTurma && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingTurma(null);
+                      setTurmaNome("");
+                      setTurmaDescricao("");
+                    }}
+                    className="px-4 py-2 rounded-lg"
+                    style={{ backgroundColor: "#F2F2F2", color: "#6A7181", fontFamily: "Poppins, sans-serif", fontWeight: 600, cursor: "pointer" }}
+                  >
+                    Cancelar edicao
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
           <div className="space-y-3">
             {turmasResumo.map((item) => (
               <div key={item.turma} className="bg-white rounded-lg p-4 shadow-sm">
-                <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "14px", color: "#6B6FA3", fontWeight: 600 }}>
-                  {item.turma}
-                </p>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181", marginTop: 4 }}>
-                  {item.alunos} alunos vinculados - {item.provas} provas cadastradas
-                </p>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "14px", color: "#6B6FA3", fontWeight: 600 }}>
+                      {item.turma}
+                    </p>
+                    <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181", marginTop: 4 }}>
+                      {item.alunos} alunos vinculados - {item.provas} provas cadastradas
+                    </p>
+                  </div>
+                  {turmas.find((turma) => turma.nome === item.turma) && (
+                    <div className="flex gap-2">
+                      <button type="button" onClick={() => startEditTurma(turmas.find((turma) => turma.nome === item.turma)!)} className="px-3 py-1.5 rounded-lg" style={{ border: "1px solid #D7D7D9", color: "#05245F", fontFamily: "Inter, sans-serif", fontSize: 12, cursor: "pointer" }}>
+                        Editar
+                      </button>
+                      <button type="button" onClick={() => deleteTurmaMutation.mutate(turmas.find((turma) => turma.nome === item.turma)!.id)} className="px-3 py-1.5 rounded-lg" style={{ border: "1px solid #F4B4A8", color: "#9A3412", fontFamily: "Inter, sans-serif", fontSize: 12, cursor: "pointer" }}>
+                        Remover
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
             {turmasResumo.length === 0 && (

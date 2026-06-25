@@ -721,11 +721,16 @@ export function ProvaDetailPage({
                 {isUnpublishing ? "Cancelando..." : "Cancelar publicacao"}
               </button>
             )}
-            <button onClick={() => setShowOrigemModal(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
-              style={{ backgroundColor: "#F9B233", color: "#6B6FA3", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 14 }}>
-              <PlusIcon className="w-4 h-4" />
-              Adicionar questão
-            </button>
+            {!localExam.urlAcesso && (
+              <button
+                onClick={() => setShowOrigemModal(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
+                style={{ backgroundColor: "#F9B233", color: "#6B6FA3", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: 14, cursor: "pointer" }}
+              >
+                <PlusIcon className="w-4 h-4" />
+                Adicionar questao
+              </button>
+            )}
           </div>
         </div>
 

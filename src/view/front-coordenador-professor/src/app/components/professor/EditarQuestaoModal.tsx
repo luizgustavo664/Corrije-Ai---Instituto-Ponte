@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { XMarkIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, CheckCircleIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import type { BancoQuestion } from "../../../../../src/features/dashboard/dashboard.types";
 
 interface Props {
@@ -32,12 +32,14 @@ const labelStyle: React.CSSProperties = {
   marginBottom: 8,
 };
 
+const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
 export function EditarQuestaoModal({ isOpen, onClose, questao, onSave }: Props) {
   const [text, setText] = useState("");
   const [materia, setMateria] = useState("");
   const [semestre, setSemestre] = useState("");
   const [dificuldade, setDificuldade] = useState("");
-  const [alternatives, setAlternatives] = useState<{ letter: string; text: string; correct: boolean }[]>([]);
+  const [alternatives, setAlternatives] = useState<{ letter: string; text: string; correct: boolean; imageUrl?: string | null }[]>([]);
   const [answer, setAnswer] = useState("");
 
   useEffect(() => {
@@ -81,6 +83,38 @@ export function EditarQuestaoModal({ isOpen, onClose, questao, onSave }: Props) 
     setAlternatives((prev) =>
       prev.map((a) => (a.letter === letter ? { ...a, text: newText } : a))
     );
+  };
+
+  const addAlternative = () => {
+    if (alternatives.length >= letters.length) return;
+    setAlternatives((prev) => [...prev, { letter: letters[prev.length], text: "", correct: false }]);
+  };
+
+  const removeAlternative = (letter: string) => {
+    if (alternatives.length <= 2) return;
+    setAlternatives((prev) => prev.filter((alt) => alt.letter !== letter).map((alt, index) => ({ ...alt, letter: letters[index] })));
+  };
+
+  const moveAlternative = (letter: string, direction: -1 | 1) => {
+    setAlternatives((prev) => {
+      const index = prev.findIndex((alt) => alt.letter === letter);
+      const target = index + direction;
+      if (index < 0 || target < 0 || target >= prev.length) return prev;
+      const copy = [...prev];
+      [copy[index], copy[target]] = [copy[target], copy[index]];
+      return copy.map((alt, nextIndex) => ({ ...alt, letter: letters[nextIndex] }));
+    });
+  };
+
+  const handleAlternativeImage = (letter: string, file?: File) => {
+    if (!file || !file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setAlternatives((prev) => prev.map((alt) => alt.letter === letter ? { ...alt, imageUrl: reader.result as string } : alt));
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -173,7 +207,7 @@ export function EditarQuestaoModal({ isOpen, onClose, questao, onSave }: Props) 
             <div>
               <label style={labelStyle}>Alternativas</label>
               <div className="space-y-3">
-                {alternatives.map((alt) => (
+                {alternatives.map((alt, index) => (
                   <div key={alt.letter} className="flex items-center gap-3">
                     <button
                       onClick={() => markCorrect(alt.letter)}
@@ -200,9 +234,20 @@ export function EditarQuestaoModal({ isOpen, onClose, questao, onSave }: Props) 
                       style={{ ...inputStyle, flex: 1 }}
                       placeholder={`Texto da alternativa ${alt.letter}`}
                     />
+                    <label className="px-3 py-2 rounded-lg cursor-pointer hover:opacity-80 transition-opacity" style={{ border: "1px solid #D7D7D9", fontFamily: "Inter, sans-serif", fontSize: 12, color: "#05245F" }}>
+                      <input type="file" accept="image/*" className="hidden" onChange={(event) => handleAlternativeImage(alt.letter, event.target.files?.[0])} />
+                      <PhotoIcon className="w-4 h-4" />
+                    </label>
+                    <button type="button" disabled={index === 0} onClick={() => moveAlternative(alt.letter, -1)} className="px-3 py-2 rounded-lg disabled:opacity-40" style={{ border: "1px solid #D7D7D9", cursor: index === 0 ? "not-allowed" : "pointer" }}>↑</button>
+                    <button type="button" disabled={index === alternatives.length - 1} onClick={() => moveAlternative(alt.letter, 1)} className="px-3 py-2 rounded-lg disabled:opacity-40" style={{ border: "1px solid #D7D7D9", cursor: index === alternatives.length - 1 ? "not-allowed" : "pointer" }}>↓</button>
+                    {alt.imageUrl && <button type="button" onClick={() => setAlternatives((prev) => prev.map((item) => item.letter === alt.letter ? { ...item, imageUrl: null } : item))} className="px-3 py-2 rounded-lg" style={{ border: "1px solid #D7D7D9", color: "#6A7181", cursor: "pointer" }}>Remover imagem</button>}
+                    <button type="button" disabled={alternatives.length <= 2} onClick={() => removeAlternative(alt.letter)} className="px-3 py-2 rounded-lg disabled:opacity-40" style={{ border: "1px solid #F4B4A8", color: "#9A3412", cursor: alternatives.length <= 2 ? "not-allowed" : "pointer" }}>Remover</button>
                   </div>
                 ))}
               </div>
+              <button type="button" onClick={addAlternative} disabled={alternatives.length >= letters.length} className="mt-3 px-4 py-2 rounded-lg disabled:opacity-50" style={{ backgroundColor: "#EEF1F8", color: "#05245F", fontFamily: "Inter, sans-serif", fontWeight: 600, cursor: alternatives.length >= letters.length ? "not-allowed" : "pointer" }}>
+                Adicionar alternativa
+              </button>
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#6A7181", marginTop: "8px" }}>
                 Clique no círculo para marcar a alternativa correta
               </p>

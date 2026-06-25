@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Squares2X2Icon,
   DocumentTextIcon,
@@ -20,6 +21,7 @@ import { QuestaoCorrecaoPage } from "./QuestaoCorrecaoPage";
 import { ProvaQuestoesCorrecaoPage } from "./ProvaQuestoesCorrecaoPage";
 import { CorrecaoAlunoPage } from "./CorrecaoAlunoPage";
 import { useDashboard } from "../../../../../src/features/dashboard/useDashboard";
+import { listTurmas } from "../../../../../src/features/turmas/turmas.api";
 
 export type ProfessorTab = "painel" | "provas" | "banco" | "correcao" | "liberacao" | "nova-prova" | "prova-detail" | "nova-questao" | "nova-questao-banco" | "questao-correcao" | "prova-questoes-correcao" | "correcao-aluno";
 
@@ -84,6 +86,13 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
     deleteBancoQuestion,
     addQuestionToExam,
   } = useDashboard();
+  const turmasQuery = useQuery({ queryKey: ["turmas"], queryFn: listTurmas });
+  const turmaOptions = [
+    ...new Set([
+      ...(turmasQuery.data ?? []).map((turma) => turma.nome),
+      ...exams.map((exam) => exam.turma).filter(Boolean),
+    ]),
+  ];
 
   useEffect(() => {
     setActiveTabState(initialTab);
@@ -142,7 +151,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             examSubject={selectedExam?.subject || "Matéria"}
             examSemester={selectedExam?.semester || "Semestre"}
             examTurma={selectedExam?.turma}
-            turmas={[...new Set(exams.map((exam) => exam.turma).filter(Boolean))]}
+            turmas={turmaOptions}
             examModalidade={selectedExam?.modalidade}
             examTempoProva={selectedExam?.tempoProva}
             examDataInicio={selectedExam?.dataInicio}
@@ -214,7 +223,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
             onBack={() => setActiveTab("provas")}
             onSave={addExam}
             materias={materiasQuery.data ?? []}
-            turmas={[...new Set(exams.map((exam) => exam.turma).filter(Boolean))]}
+            turmas={turmaOptions}
             isSaving={createProvaMutation.isPending}
             errorMessage={
               createProvaMutation.isError
