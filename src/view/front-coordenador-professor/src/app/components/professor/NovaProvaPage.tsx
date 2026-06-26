@@ -12,6 +12,7 @@ interface Props {
   onSave: (input: NovaProvaInput) => Promise<void> | void;
   materias: MateriaDto[];
   professores?: ProfessorDto[];
+  professorMaterias?: Record<string, string[]>;
   turmas?: string[];
   isSaving?: boolean;
   errorMessage?: string;
@@ -60,7 +61,7 @@ const chevron = (
   </svg>
 );
 
-export function NovaProvaPage({ onBack, onSave, materias, professores = [], turmas = [], isSaving = false, errorMessage }: Props) {
+export function NovaProvaPage({ onBack, onSave, materias, professores = [], professorMaterias, turmas = [], isSaving = false, errorMessage }: Props) {
   const [nome, setNome] = useState("");
   const [modalidade, setModalidade] = useState("");
   const [materiaId, setMateriaId] = useState("");
@@ -75,6 +76,10 @@ export function NovaProvaPage({ onBack, onSave, materias, professores = [], turm
     () => [...new Set([...turmas, ...turmasPadrao].map((item) => item.trim()).filter(Boolean))].sort(),
     [turmas],
   );
+  const filteredProfessores = useMemo(() => {
+    if (!materiaId || !professorMaterias || Object.keys(professorMaterias).length === 0) return professores;
+    return professores.filter((professor) => professorMaterias[professor.id]?.includes(materiaId));
+  }, [materiaId, professorMaterias, professores]);
 
   const canSave =
     nome.trim() !== "" &&
@@ -96,6 +101,12 @@ export function NovaProvaPage({ onBack, onSave, materias, professores = [], turm
     embaralharAlternativas;
 
   useUnsavedChangesWarning(hasUnsavedChanges && !isSaving);
+
+  useEffect(() => {
+    if (professorId && materiaId && professorMaterias && !filteredProfessores.some((professor) => professor.id === professorId)) {
+      setProfessorId("");
+    }
+  }, [filteredProfessores, materiaId, professorId, professorMaterias]);
 
   useEffect(() => {
     const rawDraft = window.localStorage.getItem(draftStorageKey);
@@ -288,12 +299,17 @@ export function NovaProvaPage({ onBack, onSave, materias, professores = [], turm
                   onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#F2F3F5"; }}
                 >
                   <option value="">Selecionar professor</option>
-                  {professores.map((professor) => (
+                  {filteredProfessores.map((professor) => (
                     <option key={professor.id} value={professor.id}>{professor.nome}</option>
                   ))}
                 </select>
                 {chevron}
               </div>
+              {materiaId && filteredProfessores.length === 0 && (
+                <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#9B9B9B" }}>
+                  Nenhum professor vinculado a esta disciplina.
+                </span>
+              )}
             </div>
           )}
 

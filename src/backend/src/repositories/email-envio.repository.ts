@@ -39,6 +39,7 @@ const mapEnvio = (row: EmailEnvioRow) => ({
   ...(row.prova_id ? { provaId: row.prova_id } : {}),
   destinatario: row.destinatario,
   assunto: row.assunto,
+  corpo: row.corpo ?? null,
   status: row.status,
   erro: row.erro ?? null,
   enviadoEm: toIsoString(row.enviado_em),
@@ -255,7 +256,7 @@ export class EmailEnvioRepository {
    */
   async findById(id: string) {
     const result = await pool.query<EmailEnvioRow>(
-      `SELECT ee."id", ee."prova_aluno_id", pa."prova_id", ee."destinatario", ee."assunto", ee."status",
+      `SELECT ee."id", ee."prova_aluno_id", pa."prova_id", ee."destinatario", ee."assunto", ee."corpo", ee."status",
               ee."erro", ee."enviado_em", ee."criado_em"
        FROM "email_envio" ee
        JOIN "prova_aluno" pa ON pa."id" = ee."prova_aluno_id"

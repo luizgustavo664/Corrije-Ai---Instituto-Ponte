@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, jest } from "@jest/globals";
-import { createEmailAdapter, FakeEmailAdapter, HttpEmailAdapter, ResendEmailAdapter } from "../../services/email-adapter.js";
+import {
+  BrevoEmailAdapter,
+  createEmailAdapter,
+  FakeEmailAdapter,
+  HttpEmailAdapter,
+} from "../../services/email-adapter.js";
 
 describe("EmailAdapter - unitario", () => {
   afterEach(() => {
@@ -75,47 +80,47 @@ describe("EmailAdapter - unitario", () => {
     });
   });
 
-  describe("ResendEmailAdapter", () => {
+  describe("BrevoEmailAdapter", () => {
     it("deve exigir API key", () => {
-      expect(() => new ResendEmailAdapter("")).toThrow("EMAIL_API_KEY is required");
+      expect(() => new BrevoEmailAdapter("")).toThrow("EMAIL_API_KEY is required");
     });
 
-    it("deve enviar payload no formato da Resend", async () => {
+    it("deve enviar payload no formato da Brevo", async () => {
       const fetchMock = jest.spyOn(globalThis, "fetch").mockResolvedValue({
         ok: true,
-        status: 200,
+        status: 201,
       } as Response);
 
-      const adapter = new ResendEmailAdapter("re_secret", "Corrije Ai <noreply@example.com>");
+      const adapter = new BrevoEmailAdapter("xkeysib-secret", "Corrije Ai <noreply@example.com>");
 
       await expect(adapter.send("a@b.com", "Assunto", "Corpo")).resolves.toEqual({ success: true });
-      expect(fetchMock).toHaveBeenCalledWith("https://api.resend.com/emails", {
+      expect(fetchMock).toHaveBeenCalledWith("https://api.brevo.com/v3/smtp/email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer re_secret",
+          "api-key": "xkeysib-secret",
         },
         body: JSON.stringify({
-          from: "Corrije Ai <noreply@example.com>",
-          to: ["a@b.com"],
+          sender: { email: "noreply@example.com", name: "Corrije Ai" },
+          to: [{ email: "a@b.com" }],
           subject: "Assunto",
-          text: "Corpo",
+          textContent: "Corpo",
         }),
       });
     });
 
-    it("deve retornar mensagem da Resend quando provider rejeita", async () => {
+    it("deve retornar mensagem da Brevo quando provider rejeita", async () => {
       jest.spyOn(globalThis, "fetch").mockResolvedValue({
         ok: false,
-        status: 403,
-        json: async () => ({ message: "domain not verified" }),
+        status: 401,
+        json: async () => ({ message: "Key not found" }),
       } as Response);
 
-      const adapter = new ResendEmailAdapter("re_secret", "Corrije Ai <noreply@example.com>");
+      const adapter = new BrevoEmailAdapter("xkeysib-secret", "Corrije Ai <noreply@example.com>");
 
       await expect(adapter.send("a@b.com", "Assunto", "Corpo")).resolves.toEqual({
         success: false,
-        error: "Resend returned 403: domain not verified",
+        error: "Brevo returned 401: Key not found",
       });
     });
   });
@@ -137,21 +142,21 @@ describe("EmailAdapter - unitario", () => {
       ).toBeInstanceOf(HttpEmailAdapter);
     });
 
-    it("deve usar Resend quando provider for resend", () => {
+    it("deve usar Brevo quando provider for brevo", () => {
       expect(
         createEmailAdapter({
-          EMAIL_PROVIDER: "resend",
-          EMAIL_API_KEY: "re_secret",
+          EMAIL_PROVIDER: "brevo",
+          EMAIL_API_KEY: "xkeysib-secret",
           EMAIL_FROM: "Corrije Ai <noreply@example.com>",
         } as NodeJS.ProcessEnv),
-      ).toBeInstanceOf(ResendEmailAdapter);
+      ).toBeInstanceOf(BrevoEmailAdapter);
       expect(
         createEmailAdapter({
-          EMAIL_ADAPTER: "resend",
-          EMAIL_API_KEY: "re_secret",
+          EMAIL_ADAPTER: "brevo",
+          EMAIL_API_KEY: "xkeysib-secret",
           EMAIL_FROM: "Corrije Ai <noreply@example.com>",
         } as NodeJS.ProcessEnv),
-      ).toBeInstanceOf(ResendEmailAdapter);
+      ).toBeInstanceOf(BrevoEmailAdapter);
     });
 
     it("deve falhar claramente sem adapter configurado", () => {

@@ -172,7 +172,8 @@ describe("professor correction and release pages", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /resultados/i }));
     await waitFor(() => expect(exportarResultados).toHaveBeenCalledWith(PROVA_ID, { formato: "xlsx" }));
-    expect(window.open).toHaveBeenCalledWith("https://example.com/resultados.xlsx", "_blank", "noopener,noreferrer");
+    expect(window.open).not.toHaveBeenCalled();
+    expect(HTMLAnchorElement.prototype.click).toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole("button", { name: /zip anexos/i }));
     await waitFor(() => expect(exportarAnexosProva).toHaveBeenCalled());

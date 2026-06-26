@@ -96,6 +96,8 @@ export type QuestaoDto = {
     urlImagem: string | null;
     correta: boolean;
   }>;
+  timesUsed?: number;
+  successRate?: number;
 };
 
 export type ProvaQuestaoDto = {

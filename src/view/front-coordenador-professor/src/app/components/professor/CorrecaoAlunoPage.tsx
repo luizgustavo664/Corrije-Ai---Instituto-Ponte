@@ -66,6 +66,7 @@ export function CorrecaoAlunoPage({ onBack, provaId, examTitle }: Props) {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["correcao", "respostas", provaId] });
       void queryClient.invalidateQueries({ queryKey: ["correcao", "questoes", provaId] });
+      void queryClient.invalidateQueries({ queryKey: ["questoes"] });
     },
     onError: (error) => {
       toast.error(error instanceof Error ? error.message : "Erro ao salvar correcao.");

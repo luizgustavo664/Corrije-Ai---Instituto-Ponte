@@ -81,8 +81,8 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
   ];
 
   return (
-    <div className="p-8 flex flex-col gap-6">
-      <div className="flex items-start justify-between gap-4">
+    <div className="flex flex-col gap-6 p-4 md:p-8">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#000" }}>
             Correção
@@ -91,7 +91,7 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
             {modo === "questao" ? "Corrija questão por questão em todas as submissões" : "Corrija a prova completa de cada aluno"}
           </p>
         </div>
-        <div className="flex gap-1 p-1 rounded-xl shrink-0" style={{ backgroundColor: "#fff", border: "1px solid #D7D7D9" }}>
+        <div className="flex max-w-full gap-1 overflow-x-auto p-1 rounded-xl" style={{ backgroundColor: "#fff", border: "1px solid #D7D7D9" }}>
           <button
             onClick={() => setModo("questao")}
             className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all"
@@ -123,7 +123,7 @@ export function CorrecaoPage({ onNavigate, exams = [] }: Props) {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {statCards.map((card, i) => (
           <div key={i} className="bg-white rounded-xl p-4 flex flex-col gap-1" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
             <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "24px", color: "#6B6FA3" }}>

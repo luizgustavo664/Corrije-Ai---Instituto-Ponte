@@ -192,22 +192,32 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
 
   const reenviarMutation = useMutation({
     mutationFn: reenviarEmailResultado,
-    onSuccess: () => {
+    onSuccess: (row) => {
       realExams.forEach((exam) => {
         void queryClient.invalidateQueries({ queryKey: ["emails", "prova", exam.id] });
       });
+      setExportMessage(
+        row.status === "enviado"
+          ? "Feedback reenviado com sucesso."
+          : row.erro ?? "Reenvio solicitado, mas o e-mail ainda nao foi marcado como enviado.",
+      );
+    },
+    onError: (error) => {
+      setExportMessage(error instanceof Error ? error.message : "Erro ao reenviar feedback.");
     },
   });
 
   const exportarResultadosMutation = useMutation({
     mutationFn: (provaId: string) => exportarResultados(provaId, { formato: "xlsx" }),
-    onSuccess: (data) => {
+    onSuccess: (data, provaId) => {
       setExportMessage(
         data.pendenciasCorrecao > 0
           ? `Exportação gerada com ${data.pendenciasCorrecao} pendência(s) de correção.`
           : "Exportação de resultados gerada.",
       );
-      window.open(data.urlArquivo, "_blank", "noopener,noreferrer");
+      const exam = realExams.find((item) => String(item.id) === provaId);
+      const filename = `${(exam?.title ?? `resultados-${provaId}`).replace(/[^\w.-]+/g, "-")}.xlsx`;
+      downloadUrl(data.urlArquivo, filename);
     },
     onError: (error) => {
       setExportMessage(error instanceof Error ? error.message : "Erro ao exportar resultados.");
@@ -223,6 +233,16 @@ export function LiberacaoNotasPage({ exams = [] }: Props) {
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
+  };
+
+  const downloadUrl = (url: string, filename: string) => {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.rel = "noopener noreferrer";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
 
   const exportarAnexosMutation = useMutation({

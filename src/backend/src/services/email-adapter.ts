@@ -56,43 +56,58 @@ export class HttpEmailAdapter implements EmailAdapter {
   }
 }
 
-export class ResendEmailAdapter implements EmailAdapter {
+const parseSender = (value: string) => {
+  const match = value.match(/^(.*?)\s*<([^>]+)>$/);
+  if (!match) {
+    return { email: value.trim(), name: undefined };
+  }
+
+  const name = match[1].trim();
+  return {
+    email: match[2].trim(),
+    name: name || undefined,
+  };
+};
+
+export class BrevoEmailAdapter implements EmailAdapter {
   constructor(
     private readonly apiKey = process.env.EMAIL_API_KEY,
-    private readonly from = process.env.EMAIL_FROM ?? "Corrije Ai <onboarding@resend.dev>",
-    private readonly url = process.env.EMAIL_WEBHOOK_URL ?? "https://api.resend.com/emails",
+    private readonly from = process.env.EMAIL_FROM ?? "Corrije Ai <noreply@example.com>",
+    private readonly url = process.env.EMAIL_WEBHOOK_URL ?? "https://api.brevo.com/v3/smtp/email",
   ) {
     if (!apiKey) {
-      throw new Error("EMAIL_API_KEY is required for Resend email delivery.");
+      throw new Error("EMAIL_API_KEY is required for Brevo email delivery.");
     }
   }
 
   async send(para: string, assunto: string, corpo: string) {
+    const apiKey = this.apiKey!;
+    const sender = parseSender(this.from);
     const response = await fetch(this.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.apiKey}`,
+        "api-key": apiKey,
       },
       body: JSON.stringify({
-        from: this.from,
-        to: [para],
+        sender,
+        to: [{ email: para }],
         subject: assunto,
-        text: corpo,
+        textContent: corpo,
       }),
     });
 
     if (!response.ok) {
       let details = "";
       try {
-        const body = await response.json() as { message?: string; error?: string };
-        details = body.message ?? body.error ?? "";
+        const body = await response.json() as { message?: string; error?: string; code?: string };
+        details = body.message ?? body.error ?? body.code ?? "";
       } catch {
         details = "";
       }
       return {
         success: false,
-        error: details ? `Resend returned ${response.status}: ${details}` : `Resend returned ${response.status}.`,
+        error: details ? `Brevo returned ${response.status}: ${details}` : `Brevo returned ${response.status}.`,
       };
     }
 
@@ -110,8 +125,8 @@ export const createEmailAdapter = (environment = process.env): EmailAdapter => {
     return new FakeEmailAdapter();
   }
 
-  if (adapter === "resend" || provider === "resend" || environment.EMAIL_WEBHOOK_URL?.includes("api.resend.com")) {
-    return new ResendEmailAdapter(
+  if (adapter === "brevo" || provider === "brevo" || environment.EMAIL_WEBHOOK_URL?.includes("api.brevo.com")) {
+    return new BrevoEmailAdapter(
       environment.EMAIL_API_KEY,
       environment.EMAIL_FROM,
       environment.EMAIL_WEBHOOK_URL,

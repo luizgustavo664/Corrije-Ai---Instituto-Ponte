@@ -29,7 +29,8 @@ export class StorageService {
     const bucket = process.env.SUPABASE_STORAGE_BUCKET ?? "exports";
 
     if (!storageUrl || !serviceKey) {
-      return `/${bucket}/${path}`;
+      const buffer = typeof content === "string" ? Buffer.from(content, "utf8") : content;
+      return `data:${contentType};base64,${buffer.toString("base64")}`;
     }
 
     const baseUrl = normalizeBaseUrl(storageUrl);

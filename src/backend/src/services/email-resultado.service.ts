@@ -196,7 +196,7 @@ export class EmailResultadoService {
     }
 
     try {
-      const result = await this.emailAdapter.send(envio.destinatario, envio.assunto, "Reenvio de resultado");
+      const result = await this.emailAdapter.send(envio.destinatario, envio.assunto, envio.corpo ?? "Reenvio de resultado");
       if (result.success) {
         await this.emailRepository.markAsSent(emailEnvioId);
       } else {

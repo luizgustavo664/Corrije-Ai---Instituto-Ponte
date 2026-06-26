@@ -51,6 +51,7 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
       void queryClient.invalidateQueries({ queryKey: ["professores"] });
     },
     onError: (error) => {
+      setProfessorToDelete(null);
       const message = error instanceof Error ? error.message : "Erro ao remover professor.";
       toast.error(message);
     },
@@ -251,6 +252,7 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
                   }
                 }}
                 className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4 w-full text-left hover:bg-gray-50 transition-colors group"
+                style={{ cursor: "pointer" }}
               >
                 <div
                   className="flex items-center justify-center rounded-full shrink-0"
@@ -270,7 +272,7 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
                   type="button"
                   onClick={(e) => handleDeleteProfessor(e, professor.id)}
                   className="p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
-                  style={{ color: "#FF6B6B" }}
+                  style={{ color: "#FF6B6B", cursor: "pointer" }}
                   title="Remover professor"
                 >
                   <TrashIcon className="w-5 h-5" />
@@ -283,7 +285,7 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
               type="button"
               onClick={() => setShowAllProfessores(true)}
               className="mt-4 px-4 py-2 rounded-lg transition-opacity hover:opacity-85"
-              style={{ backgroundColor: "#05245F", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px" }}
+              style={{ backgroundColor: "#05245F", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px", cursor: "pointer" }}
             >
               Ver todos os professores
             </button>

@@ -73,8 +73,8 @@ export function mapQuestaoToBancoQuestion(
     options: question.options,
     answer: question.answer,
     pontuacaoPadrao: questao.pontuacaoPadrao,
-    timesUsed: 0,
-    successRate: 0,
+    timesUsed: questao.timesUsed ?? 0,
+    successRate: questao.successRate ?? 0,
   };
 }
 

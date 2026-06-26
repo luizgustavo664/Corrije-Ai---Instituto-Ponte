@@ -77,6 +77,7 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
       void queryClient.invalidateQueries({ queryKey: ["analytics"] });
     },
     onError: (error) => {
+      setAlunoToDelete(null);
       const message = error instanceof Error ? error.message : "Erro ao remover aluno.";
       toast.error(message);
     },
@@ -280,7 +281,7 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                     handleAlunoClick(aluno.id);
                   }
                 }}
-                className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4 w-full text-left hover:bg-gray-50 transition-colors group"
+                className="group flex w-full items-center gap-4 rounded-lg bg-white p-4 text-left shadow-sm transition-colors hover:bg-gray-50"
                 style={{ cursor: "pointer" }}
               >
                 <div
@@ -289,7 +290,7 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                 >
                   <UserIcon className="w-6 h-6" style={{ color: "#6B7280" }} />
                 </div>
-                <div className="flex-1">
+                <div className="min-w-0 flex-1">
                   <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "14px", color: "#6B6FA3", fontWeight: 600 }}>
                     {aluno.nome}
                   </p>
@@ -303,7 +304,7 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
                 <button
                   type="button"
                   onClick={(e) => handleDeleteAluno(e, aluno.id)}
-                  className="p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
+                  className="rounded-lg p-2 opacity-100 transition-all hover:bg-red-50 md:opacity-0 md:group-hover:opacity-100"
                   style={{ color: "#FF6B6B", cursor: "pointer" }}
                   title="Remover aluno"
                 >

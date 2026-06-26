@@ -29,6 +29,8 @@ type QuestaoRow = {
     urlImagem: string | null;
     correta: boolean;
   }> | null;
+  times_used?: string | number | null;
+  success_rate?: string | number | null;
   total?: string;
 };
 
@@ -54,6 +56,8 @@ const mapQuestao = (row: QuestaoRow): Questao => ({
     urlImagem: row.enunciado_url_imagem,
   },
   alternativas: row.alternativas ?? [],
+  timesUsed: Number(row.times_used ?? 0),
+  successRate: Math.round(Number(row.success_rate ?? 0)),
 });
 
 /** Fragmento SQL reutilizável que agrega alternativas via json_agg com FILTER.
@@ -77,6 +81,27 @@ const selectQuestaoSql = `
       ) FILTER (WHERE a."id" IS NOT NULL),
       '[]'::json
     ) AS "alternativas"
+    ,
+    (
+      SELECT COUNT(DISTINCT pqm."prova_id")
+      FROM "prova_questao" pqm
+      WHERE pqm."questao_id" = q."id"
+    ) AS "times_used",
+    COALESCE(
+      (
+        SELECT ROUND(
+          (
+            COUNT(ram."id") FILTER (WHERE altm."correta" = TRUE)::numeric
+            / NULLIF(COUNT(ram."id") FILTER (WHERE ram."alternativa_id" IS NOT NULL), 0)
+          ) * 100,
+          0
+        )
+        FROM "resposta_aluno" ram
+        LEFT JOIN "alternativa" altm ON altm."id" = ram."alternativa_id"
+        WHERE ram."questao_id" = q."id"
+      ),
+      0
+    ) AS "success_rate"
   FROM "questao" q
   JOIN "enunciado" e ON e."questao_id" = q."id"
   LEFT JOIN "alternativa" a ON a."questao_id" = q."id"

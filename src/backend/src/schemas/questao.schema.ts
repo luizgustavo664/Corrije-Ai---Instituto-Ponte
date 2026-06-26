@@ -92,6 +92,8 @@ export const questaoResponseSchema = z.object({
       correta: z.boolean().describe("Indica se é a alternativa correta."),
     }),
   ).describe("Lista de alternativas da questão."),
+  timesUsed: z.number().int().nonnegative().describe("Quantidade de provas que usam a questão."),
+  successRate: z.number().min(0).max(100).describe("Taxa de acerto percentual em respostas objetivas."),
 });
 
 export type CreateQuestaoInput = z.infer<typeof createQuestaoBodySchema>;

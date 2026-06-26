@@ -310,16 +310,15 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
   };
 
   return (
-    <div className="h-screen overflow-hidden flex" style={{ backgroundColor: "#F2F2F2" }}>
+    <div className="h-screen overflow-hidden flex flex-col md:flex-row" style={{ backgroundColor: "#F2F2F2" }}>
       <aside
-        className="flex flex-col shrink-0"
+        className="flex shrink-0 flex-col md:w-[240px]"
         style={{
-          width: 240,
           backgroundColor: "#fff",
           borderRight: "1px solid #D7D7D9",
         }}
       >
-        <div className="flex items-center justify-center px-4 py-6">
+        <div className="hidden items-center justify-center px-4 py-6 md:flex">
           <div
             className="flex items-center justify-center rounded-xl"
             style={{ width: 80, height: 80 }}
@@ -330,14 +329,14 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
 
         <div style={{ borderTop: "1px solid #D7D7D9" }} />
 
-        <nav className="flex flex-col gap-1 px-3 py-3 flex-1">
+        <nav className="flex flex-row gap-1 overflow-x-auto px-3 py-3 md:flex-1 md:flex-col md:overflow-y-auto">
           {navItems.map(({ id, label, Icon }) => {
             const isActive = activeTab === id;
             return (
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left transition-all hover:opacity-85"
+                className="flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-all hover:opacity-85 md:w-full"
                 style={{
                   backgroundColor: isActive ? "#F9B233" : "transparent",
                   color: isActive ? "#6B6FA3" : "#6A7181",
@@ -352,9 +351,9 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
           })}
         </nav>
 
-        <div style={{ borderTop: "1px solid #D7D7D9" }} />
+        <div className="hidden md:block" style={{ borderTop: "1px solid #D7D7D9" }} />
 
-        <div className="px-3 py-3">
+        <div className="hidden px-3 py-3 md:block">
           <button
             onClick={onLogout}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left hover:opacity-85 transition-opacity"
@@ -368,7 +367,7 @@ export function ProfessorDashboard({ onLogout, initialTab = "painel", onNavigate
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto">
+      <main className="min-w-0 flex-1 overflow-y-auto">
         {renderPage()}
       </main>
     </div>

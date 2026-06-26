@@ -23,15 +23,9 @@ export const migrateCpfData = async (): Promise<number> => {
       }
       const cpfHash = hashCpf(cpf);
       const encrypted = isEncryptedCpf(row.cpf) ? row.cpf : encryptCpf(cpf);
-      const duplicate = await client.query<{ id: string }>(
-        'SELECT "id" FROM "aluno" WHERE "cpf_hash" = $1 AND "id" <> $2 LIMIT 1',
-        [cpfHash, row.id],
-      );
-      const safeHash = duplicate.rows.length > 0 ? null : cpfHash;
-
       await client.query(
         'UPDATE "aluno" SET "cpf" = $1, "cpf_hash" = $2 WHERE "id" = $3',
-        [encrypted, safeHash, row.id],
+        [encrypted, cpfHash, row.id],
       );
       if (!isEncryptedCpf(row.cpf)) migrated += 1;
     }

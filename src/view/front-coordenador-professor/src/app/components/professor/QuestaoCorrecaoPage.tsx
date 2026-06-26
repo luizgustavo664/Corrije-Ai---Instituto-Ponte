@@ -35,6 +35,7 @@ export function QuestaoCorrecaoPage({ onBack, onAllCorrected, provaId, questaoId
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["correcao", "respostas", provaId, questaoId] });
       void queryClient.invalidateQueries({ queryKey: ["correcao", "questoes", provaId] });
+      void queryClient.invalidateQueries({ queryKey: ["questoes"] });
       toast.success("Correção salva com sucesso.");
     },
     onError: (error) => {

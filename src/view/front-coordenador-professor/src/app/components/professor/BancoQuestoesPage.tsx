@@ -60,15 +60,15 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
         provas={provas}
         onAddToProva={handleAddToProva}
       />
-      <div className="p-8 flex flex-col gap-6">
+      <div className="flex flex-col gap-6 p-4 md:p-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "20px", color: "#000" }}>
             Banco de Questões
           </h1>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#575454" }}>
-            Reutilize questões existentes e detecte duplicatas
+            Reutilize questões existentes em novas provas
           </p>
         </div>
         <div className="flex gap-2">
@@ -78,19 +78,6 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
             style={{ backgroundColor: "#F9B233", color: "#6B6FA3", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "14px" }}
           >
             + Adicionar questão
-          </button>
-          <button
-            className="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-85 transition-opacity"
-            style={{
-              backgroundColor: "#fff",
-              border: "1.5px solid #6B6FA3",
-              color: "#6B6FA3",
-              fontFamily: "Poppins, sans-serif",
-              fontWeight: 600,
-              fontSize: "14px",
-            }}
-          >
-            ⚠ Verificar Duplicatas
           </button>
         </div>
       </div>
@@ -110,8 +97,8 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
       )}
 
       {/* Filter row */}
-      <div className="flex gap-3 items-center">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-wrap gap-3 items-center">
+        <div className="relative w-full md:flex-1 md:max-w-sm">
           <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#9F9F9F" }} />
           <input
             type="text"
@@ -129,11 +116,11 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
           />
         </div>
 
-        <div className="relative">
+        <div className="relative min-w-[140px] flex-1 md:flex-none">
           <select
             value={materiaFilter}
             onChange={(e) => setMateriaFilter(e.target.value)}
-            className="appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
+            className="w-full appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
             style={{
               backgroundColor: "#fff",
               border: "1px solid #D9D9D9",
@@ -147,11 +134,11 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
           </select>
           <ChevronDownIcon className="w-[14px] h-[14px] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#9F9F9F" }} />
         </div>
-        <div className="relative">
+        <div className="relative min-w-[140px] flex-1 md:flex-none">
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
+            className="w-full appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
             style={{
               backgroundColor: "#fff",
               border: "1px solid #D9D9D9",
@@ -165,11 +152,11 @@ export function BancoQuestoesPage({ onNavigate, bancoQuestoes = [], onUpdateQues
           </select>
           <ChevronDownIcon className="w-[14px] h-[14px] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#9F9F9F" }} />
         </div>
-        <div className="relative">
+        <div className="relative min-w-[140px] flex-1 md:flex-none">
           <select
             value={dificuldadeFilter}
             onChange={(e) => setDificuldadeFilter(e.target.value)}
-            className="appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
+            className="w-full appearance-none pl-3 pr-8 py-2.5 rounded-lg outline-none cursor-pointer"
             style={{
               backgroundColor: "#fff",
               border: "1px solid #D9D9D9",

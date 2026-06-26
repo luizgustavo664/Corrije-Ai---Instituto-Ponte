@@ -15,6 +15,7 @@ export function useCorrecaoAutomaticaObjetivas(provaId: string | null) {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["correcao", "questoes", provaId] }),
         queryClient.invalidateQueries({ queryKey: ["correcao", "respostas", provaId] }),
+        queryClient.invalidateQueries({ queryKey: ["questoes"] }),
       ]);
       return result;
     },

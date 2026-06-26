@@ -91,4 +91,6 @@ export type Questao = {
   atualizadoEm: string;
   enunciado: Enunciado;
   alternativas: Alternativa[];
+  timesUsed: number;
+  successRate: number;
 };

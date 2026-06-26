@@ -87,28 +87,30 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 Use valores diferentes para `SUPABASE_JWT_SECRET` e `CPF_ENCRYPTION_KEY`. Em producao, configure as mesmas variaveis no ambiente do servidor em vez de versionar `.env`.
 
-Para enviar e-mails reais pela Resend, troque o bloco de email por:
+Para enviar e-mails reais pela Brevo, troque o bloco de email por:
 
 ```env
 EMAIL_ADAPTER=
-EMAIL_PROVIDER=resend
-EMAIL_API_KEY=re_sua_chave_da_resend
-EMAIL_FROM=Corrije Ai <onboarding@resend.dev>
+EMAIL_PROVIDER=brevo
+EMAIL_API_KEY=xkeysib_sua_chave_da_brevo
+EMAIL_FROM=Corrije Ai <noreply@seudominio.com>
 ```
 
-Em producao, substitua `EMAIL_FROM` por um remetente de dominio verificado na Resend, por exemplo `Corrije Ai <noreply@seudominio.com>`. O endpoint padrao usado pelo sistema e `https://api.resend.com/emails`; `EMAIL_WEBHOOK_URL` so precisa ser preenchido se voce quiser sobrescrever esse endpoint.
+O endpoint padrao usado pelo sistema e `https://api.brevo.com/v3/smtp/email`; `EMAIL_WEBHOOK_URL` so precisa ser preenchido se voce quiser sobrescrever esse endpoint. Em producao, use em `EMAIL_FROM` um remetente validado na Brevo.
+
+Se ainda nao houver dominio proprio, cadastre e valide um remetente individual na Brevo e use esse email em `EMAIL_FROM`, por exemplo `Corrije Ai <seu-email@gmail.com>`. Para uso final com alunos, recomenda-se validar um dominio proprio para melhorar entrega e evitar bloqueios.
 
 ## Configuracao do frontend
 
 Crie `src/view/.env`:
 
 ```env
-VITE_API_URL=http://localhost:3333/api/v1
+VITE_API_BASE_URL=http://localhost:3333/api/v1
 VITE_ALUNO_BASE_URL=http://localhost:5173/aluno/prova
 
 # Apenas se a autenticacao externa/Supabase for usada no ambiente.
 VITE_SUPABASE_URL=
-VITE_SUPABASE_ANON_KEY=
+VITE_SUPABASE_PUBLISHABLE_KEY=
 ```
 
 ## Banco e migrations
@@ -157,6 +159,36 @@ npm --prefix src/view preview
 ```
 
 Em hospedagem real, sirva `src/view/dist` como estatico e mantenha o backend com as variaveis de ambiente acima.
+
+## Deploy do frontend no GitLab Pages
+
+O GitLab Pages publica apenas arquivos estaticos. Portanto, antes do deploy, o backend deve estar em uma URL publica HTTPS e com CORS liberado para a URL do Pages.
+
+O repositorio ja inclui `.gitlab-ci.yml` para publicar o frontend em GitLab Pages. No GitLab, configure em `Settings > CI/CD > Variables`:
+
+```env
+VITE_API_BASE_URL=https://sua-api-publica.example.com/api/v1
+```
+
+Variaveis opcionais:
+
+```env
+VITE_BASE_PATH=/nome-do-projeto/
+VITE_ALUNO_BASE_URL=https://namespace.gitlab.io/nome-do-projeto/aluno/prova
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
+```
+
+Se `VITE_BASE_PATH` nao for definida, o pipeline usa `/${CI_PROJECT_NAME}/`, que atende ao formato padrao `https://namespace.gitlab.io/nome-do-projeto/`. Para dominio proprio ou projeto `namespace.gitlab.io`, use `/`.
+
+Fluxo:
+
+1. Envie o codigo para a branch padrao do GitLab.
+2. O job `frontend-check` instala dependencias, roda typecheck e testes de contrato.
+3. O job `pages` gera `src/view/dist`, copia para `public` e publica no Pages.
+4. Acesse `Deploy > Pages` no GitLab para ver a URL publicada.
+
+O pipeline tambem copia `index.html` para `404.html` para que rotas internas do React, como `/coordenador/provas`, carreguem mesmo quando abertas diretamente.
 
 ## Testes
 
