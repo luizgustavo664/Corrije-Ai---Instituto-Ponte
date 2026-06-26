@@ -5777,7 +5777,91 @@ O mapeamento abaixo conecta os casos de teste às RNs, RFs e endpoints da Matriz
 
 ### 5.2.1. Relatório de testes de guerrilha
 
-*Posicione aqui as tabelas com enunciados de tarefas, etapas e resultados de testes de usabilidade. Ou utilize um link para seu relatório de testes (mantenha o link sempre público para visualização).*
+### Resultados por Tarefa
+
+### 1. Criar uma prova
+
+**Descrição da tarefa:**
+Utilizando uma conta com perfil de professor, crie uma nova prova de sua escolha na plataforma.
+
+### Resultados
+
+| Participante  | Perfil       | Resultado | Observações                                                                                                                                                                                               | Heurística(s) relacionada(s)                                                                                                                                                                                                                                                                                                                                             |
+| ------------- | ------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Matheus Porto | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                                                                                                                                                                | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; eficiência de uso. **Não cumpridas:** não foram observadas violações relevantes no teste.                                                                                                                    |
+| Vanessa       | T29, 18 anos | Sucesso   | Teve dificuldade devido à falta de clareza no feedback de erro. Ao recarregar a página antes de salvar o rascunho, perdeu todas as informações preenchidas. Sugeriu cálculo automático do horário limite. | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões. **Não cumpridas:** visibilidade do status do sistema e prevenção de erros, pois o feedback de erro não foi claro; recuperação de erros/controle e liberdade do usuário, pois foi necessário recarregar a prova e as informações foram perdidas. |
+| Bernardo      | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                                                                                                                                                                | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; eficiência de uso. **Não cumpridas:** não foram observadas violações relevantes no teste.                                                                                                                    |
+| Igor          | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                                                                                                                                                                | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; eficiência de uso. **Não cumpridas:** não foram observadas violações relevantes no teste.                                                                                                                    |
+| Rafaela       | T29, 19 anos | Sucesso   | Relatou que a mensagem de erro para horários de início e término iguais não é clara.                                                                                                                      | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões. **Não cumpridas:** visibilidade do status do sistema e prevenção de erros, pois o erro de horário inicial/final não apresentou feedback suficientemente claro.                                                                                  |
+
+**Taxa de sucesso:** 100%
+
+---
+
+### 2. Resolver uma prova
+
+**Descrição da tarefa:**
+Utilizando um perfil de aluno, acessar e responder uma prova disponibilizada na plataforma.
+
+### Resultados
+
+| Participante  | Perfil       | Resultado | Observações                                | Heurística(s) relacionada(s)                                                                                                                                                                                                                                        |
+| ------------- | ------------ | --------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Matheus Porto | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
+| Vanessa       | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
+| Bernardo      | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
+| Igor          | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
+| Rafaela       | T29, 19 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
+
+**Taxa de sucesso:** 100%
+
+---
+
+### 3. Corrigir uma prova
+
+**Descrição da tarefa:**
+Utilizando um perfil de professor, localizar uma prova pendente de correção, corrigir as respostas dos alunos e finalizar o processo de correção.
+
+### Resultados
+
+| Participante | Perfil       | Resultado                 | Observações                                                                                                                     | Heurística(s) relacionada(s)                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------ | ------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vanessa      | T29, 18 anos | Não conseguiu concluir    | Não conseguiu salvar as notas atribuídas e, consequentemente, finalizar a correção. Relatou ausência de feedback de salvamento. | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização na etapa de acesso. **Não cumpridas:** visibilidade do status do sistema, pois faltou feedback de salvamento; prevenção de erros e recuperação de erros, pois não foi possível salvar as notas; controle e liberdade do usuário, pois o impedimento bloqueou a finalização; consistência e padrões, pois a seleção da prova não foi intuitiva. |
+| Rafaela      | T29, 19 anos | Conseguiu com dificuldade | Encontrou dificuldades para localizar a área de correção e compreender o fluxo de correção individual.                          | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização nas etapas principais; controle e liberdade do usuário ao permitir finalizar. **Não cumpridas:** consistência e padrões e reconhecimento em vez de memorização, pois o acesso/seleção não foi intuitivo; visibilidade do status do sistema parcialmente comprometida pela dificuldade percebida.                                               |
+| Bernardo     | T29, 18 anos | Conseguiu com dificuldade | Teve dificuldade para identificar provas pendentes de correção.                                                                 | **Cumpridas:** visibilidade do status do sistema na conclusão; correspondência entre sistema e mundo real; controle e liberdade do usuário. **Não cumpridas:** consistência e padrões e reconhecimento em vez de memorização, pois encontrar/selecionar a prova pendente não foi intuitivo.                                                                                                                                                    |
+| Igor         | T29, 18 anos | Conseguiu com dificuldade | Encontrou dificuldades para localizar a área de correção e identificar provas pendentes.                                        | **Cumpridas:** correspondência entre sistema e mundo real; controle e liberdade do usuário ao permitir concluir a correção. **Não cumpridas:** consistência e padrões e reconhecimento em vez de memorização, pois o acesso e a seleção da prova geraram dificuldade; visibilidade do status do sistema parcialmente comprometida.                                                                                                             |
+
+**Taxa de sucesso:** 75%
+**Taxa de sucesso sem dificuldades:** 0%
+
+---
+
+### 4. Criar questão no banco e adicionar em uma prova
+
+**Descrição da tarefa:**
+Utilizando um perfil de professor, criar uma nova questão no banco de questões, adicioná-la a uma prova existente e salvar as alterações realizadas.
+
+### Resultados
+
+| Participante | Perfil       | Resultado | Observações                                                      | Heurística(s) relacionada(s)                                                                                                                                                                                                                                                                                    |
+| ------------ | ------------ | --------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vanessa      | T29, 18 anos | Sucesso   | Relatou ausência de feedback após adicionar a questão à prova.   | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização; controle e liberdade do usuário; prevenção de erros nas etapas concluídas. **Não cumpridas:** visibilidade do status do sistema, pois não houve feedback claro de que a questão foi adicionada com sucesso.    |
+| Rafaela      | T29, 19 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                       | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste.                                             |
+| Bernardo     | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                       | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste.                                             |
+| Igor         | T29, 18 anos | Sucesso   | Sugeriu a inclusão de suporte para imagens no banco de questões. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; controle e liberdade do usuário. **Não cumpridas:** consistência e padrões/estética e design minimalista parcialmente, devido à observação sobre foto no banco de questões. |
+
+**Taxa de sucesso:** 100%
+
+---
+
+### Resumo Geral
+
+| Tarefa                            | Taxa de Sucesso | Principais Problemas Encontrados                                                                                |
+| --------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------- |
+| Criar uma prova                   | 100%            | Falta de clareza nas mensagens de erro, perda de dados ao recarregar página e cálculo manual do horário limite. |
+| Resolver uma prova                | 100%            | Nenhum problema relevante identificado.                                                                         |
+| Corrigir uma prova                | 75%             | Dificuldade para localizar provas pendentes, fluxo pouco intuitivo e ausência de feedback ao salvar notas.      |
+| Criar questão e adicionar à prova | 100%            | Ausência de feedback ao adicionar questões e sugestão de suporte a imagens.                                     |
 
 ### 5.2.2. Relatório de testes de guerrilha - listagem coerente e priorizada de pontos de melhoria
 
