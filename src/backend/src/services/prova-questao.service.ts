@@ -1,7 +1,7 @@
 import { businessRule, conflict, forbidden, notFound } from "../errors/api-error.js";
 import type { AuthUser } from "../models/auth.model.js";
 import { ProvaQuestaoRepository } from "../repositories/prova-questao.repository.js";
-import type { AddQuestaoProvaInput } from "../schemas/prova-questao.schema.js";
+import type { AddQuestaoProvaInput, ReorderQuestaoProvaInput } from "../schemas/prova-questao.schema.js";
 
 /**
  * Gerencia a associação de questões a uma prova (tabela `prova_questao`).
@@ -98,6 +98,24 @@ export class ProvaQuestaoService {
   async listar(provaId: string, user: AuthUser) {
     await this.getProvaWithAccess(provaId, user);
     return this.provaQuestaoRepository.findByProva(provaId);
+  }
+
+  async reordenar(provaId: string, questaoId: string, input: ReorderQuestaoProvaInput, user: AuthUser) {
+    const prova = await this.getProvaWithAccess(provaId, user);
+    if (prova.status === "encerrada" || prova.status === "antiga") {
+      throw conflict("Questoes nao podem ser reordenadas em provas encerradas ou arquivadas.");
+    }
+
+    const questaoVinculada = await this.provaQuestaoRepository.hasQuestao(provaId, questaoId);
+    if (!questaoVinculada) {
+      throw notFound("Questao nao esta vinculada a prova.");
+    }
+
+    const updated = await this.provaQuestaoRepository.reorder(provaId, questaoId, input.ordemOriginal);
+    if (!updated) {
+      throw notFound("Questao nao esta vinculada a prova.");
+    }
+    return updated;
   }
 
   /**

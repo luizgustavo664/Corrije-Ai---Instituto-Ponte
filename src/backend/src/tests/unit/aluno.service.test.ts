@@ -67,4 +67,24 @@ describe("AlunoService - unitário", () => {
     await service.remover("aluno-1", user);
     expect(repo.delete).toHaveBeenCalledWith("aluno-1");
   });
+
+  it("cobre validacoes restantes de atualizacao", async () => {
+    const repo = makeRepo();
+    const service = new AlunoService(repo as any);
+
+    repo.findById.mockResolvedValueOnce(null);
+    await expect(service.atualizar("aluno-x", { nome: "Novo" } as any, user)).rejects.toThrow(/Aluno/);
+
+    repo.update.mockResolvedValueOnce(null);
+    await expect(service.atualizar("aluno-1", { nome: "Novo", cpf: null } as any, user)).rejects.toThrow(/Aluno/);
+    expect(repo.findByCpf).not.toHaveBeenCalled();
+  });
+
+  it("deve bloquear remocao de aluno inexistente", async () => {
+    const repo = makeRepo();
+    repo.findById.mockResolvedValueOnce(null);
+    const service = new AlunoService(repo as any);
+
+    await expect(service.remover("aluno-x", user)).rejects.toThrow(/Aluno/);
+  });
 });

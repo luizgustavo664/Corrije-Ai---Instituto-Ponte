@@ -96,6 +96,7 @@ export const createProvaBodySchema = z
 
 export const updateProvaBodySchema = z
   .object({
+    materiaId: createProvaShape.materiaId,
     titulo: createProvaShape.titulo,
     modalidade: createProvaShape.modalidade,
     turma: createProvaShape.turma,
@@ -138,8 +139,13 @@ export const updateProvaConfiguracoesBodySchema = z
 export const publicarProvaBodySchema = z
   .object({
     baseUrlAluno: z.string().url("A baseUrlAluno deve ser uma URL válida.").describe("URL base do frontend para gerar o link de acesso do aluno."),
+    dataFim: z.string().datetime("A data limite deve estar em formato ISO.").describe("Data e hora limite da prova."),
   })
-  .strict();
+  .strict()
+  .refine((data) => new Date(data.dataFim).getTime() > Date.now(), {
+    path: ["dataFim"],
+    message: "A data limite deve ser futura.",
+  });
 
 export const provaParamsSchema = z.object({
   provaId: z.string().uuid("O provaId deve ser um UUID válido.").describe("Identificador único da prova."),

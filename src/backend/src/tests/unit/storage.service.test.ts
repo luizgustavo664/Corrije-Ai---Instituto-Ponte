@@ -21,7 +21,9 @@ describe("StorageService - unitário", () => {
       content: "conteudo",
       contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    expect(result).toBe("/exports/exports/teste.xlsx");
+    expect(result).toBe(
+      "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,Y29udGV1ZG8=",
+    );
   });
 
   it("deve retornar caminho local quando SUPABASE_SERVICE_ROLE_KEY não está configurado mesmo com URL definida", async () => {
@@ -33,7 +35,7 @@ describe("StorageService - unitário", () => {
       content: "conteudo",
       contentType: "text/plain",
     });
-    expect(result).toBe("/exports/exports/teste.xlsx");
+    expect(result).toBe("data:text/plain;base64,Y29udGV1ZG8=");
   });
 
   it("deve fazer upload para Supabase storage quando URL e service role key estão configurados", async () => {

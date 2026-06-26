@@ -55,6 +55,11 @@ export class ProvaService {
     }
 
     const professorId = input.professorId ?? user.id;
+
+    if (!professorId) {
+      throw businessRule("Vincule ao menos um professor a esta materia antes de criar a prova.");
+    }
+
     if (professorId !== user.id) {
       throw forbidden("Professor não pode criar prova para outro professor.");
     }
@@ -134,7 +139,23 @@ export class ProvaService {
       throw conflict("Apenas provas em rascunho podem ser editadas.");
     }
 
-    return this.provaRepository.update(provaId, input);
+    if (input.materiaId && input.materiaId !== prova.materiaId) {
+      const materiaExists = await this.provaRepository.materiaExists(input.materiaId);
+      if (!materiaExists) {
+        throw businessRule("Matéria informada não existe.");
+      }
+
+      const vinculado = await this.provaRepository.professorMateriaVinculados(prova.professorId, input.materiaId);
+      if (!vinculado) {
+        throw forbidden("Professor da prova não está vinculado à matéria informada.");
+      }
+    }
+
+    const updated = await this.provaRepository.update(provaId, input);
+    if (input.materiaId && input.materiaId !== prova.materiaId) {
+      await this.provaRepository.removeQuestoesForaDaMateria(provaId, input.materiaId);
+    }
+    return updated;
   }
 
   /**
@@ -184,8 +205,11 @@ export class ProvaService {
       throw conflict("Apenas provas em rascunho podem ser publicadas.");
     }
 
-    if (!prova.dataInicio || !prova.dataFim) {
-      throw conflict("Prova precisa ter data de início e fim para ser publicada.");
+    const dataInicio = new Date();
+
+    const dataFim = new Date(input.dataFim);
+    if (Number.isNaN(dataFim.getTime()) || dataFim.getTime() <= Date.now()) {
+      throw conflict("A data limite da prova deve ser futura.");
     }
 
     const quantidadeQuestoes = await this.provaRepository.countQuestoes(provaId);
@@ -200,12 +224,34 @@ export class ProvaService {
 
     const baseUrl = input.baseUrlAluno.replace(/\/+$/, "");
     const urlAcesso = `${baseUrl}/${randomUUID()}`;
-    const published = await this.provaRepository.publish(provaId, urlAcesso);
+    const published = await this.provaRepository.publish(provaId, urlAcesso, dataInicio, dataFim);
     if (!published) {
       throw notFound("Prova não encontrada.");
     }
 
     return published;
+  }
+
+  /**
+   * Tira uma prova publicada do ar.
+   *
+   * @param provaId - Identificador unico da prova.
+   * @param user - Usuario autenticado (deve ter permissao de acesso).
+   * @returns A prova de volta ao status "rascunho".
+   * @throws conflict - Se a prova nao estiver publicada.
+   */
+  async despublicar(provaId: string, user: AuthUser) {
+    const prova = await this.buscarPorId(provaId, user);
+    if (prova.status !== "publicada") {
+      throw conflict("Apenas provas publicadas podem ser tiradas da publicacao.");
+    }
+
+    const unpublished = await this.provaRepository.unpublish(provaId);
+    if (!unpublished) {
+      throw notFound("Prova nao encontrada.");
+    }
+
+    return unpublished;
   }
 
   /**

@@ -2,9 +2,9 @@
 
 # WAD - Web Application Document - Módulo 2 - Inteli
 
-<!-- **_Os trechos em itálico servem apenas como guia para o preenchimento da seção. Por esse motivo, não devem fazer parte da documentação final_** -->
-
 ## Nome do Grupo
+
+Corrije Aí - Grupo 05
 
 #### Nomes dos integrantes do grupo
 
@@ -91,7 +91,7 @@ Referências-base: IPEA (2021), UNICEF (2022), Todos Pela Educação (2023).
 ### 2.1.2. Análise SWOT do Instituto Ponte
 
 <div align="center">
-  <img src="/assets/analiseSwot.png">
+  <img src="../assets/analiseSwot.png">
 </div>
 
 <div align="center">
@@ -318,7 +318,7 @@ A plataforma gera benefícios ao:
 #### VPC — Coordenadores
 
 <div align="center">
-  <img src="/assets/vpccoord.png">
+  <img src="../assets/vpccoord.png">
 </div>
 
 <div align="center">
@@ -421,7 +421,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 #### Matriz de riscos
 
 <div align="center">
-  <img src="/assets/matrizRisco.jpg">
+  <img src="../assets/matrizRisco.jpg">
 </div>
 
 <div align="center">
@@ -447,6 +447,8 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
 
 &emsp;Foram elaboradas três proto-personas representando os perfis de usuários do sistema: Edgar Romeo (aluno), estudante com baixo letramento digital que necessita de interface simples e intuitiva; Ronaldo Silva (professor), docente experiente que busca eficiência e organização no processo de correção; e Valéria dos Santos (coordenadora), profissional com alto domínio digital que depende de dados estruturados para apoiar decisões pedagógicas. As personas são hipotéticas e foram construídas a partir do contexto institucional do Instituto Ponte e dos dados do TAPI (INSTITUTO PONTE, 2024).
 
+### 2.2.1 Proto-persona — Aluno (Edgar Romeo)
+
 <div align="center">
   <img src="../assets/personaAluno.png">
 </div>
@@ -456,7 +458,7 @@ A classificação foi definida pela combinação entre probabilidade e impacto, 
       </em>
 </div>
 
-### 2.2.1 Mapa de Empatia — Aluno (Edgar Romeo)
+### 2.2.2 Mapa de Empatia — Aluno (Edgar Romeo)
 
 #### Visão Geral
 Este mapa de empatia representa Edgar Romeo, aluno do Instituto Ponte, e auxilia na compreensão das suas necessidades durante o uso da plataforma de avaliação remota.
@@ -505,6 +507,8 @@ Este mapa de empatia representa Edgar Romeo, aluno do Instituto Ponte, e auxilia
 - Suporte a visualização de fórmulas e imagens no celular.  
 - Orientação passo a passo durante a prova.
 
+### 2.2.3 Proto-persona — Professor do Ensino Médio (Ronaldo Silva)
+
 <div align="center">
   <img src="../assets/personaProfessor.png">
 </div>
@@ -513,6 +517,8 @@ Este mapa de empatia representa Edgar Romeo, aluno do Instituto Ponte, e auxilia
   <strong>Figura 8 — Persona do Professor.</strong><br><em>Foto de <a href="https://unsplash.com/pt-br/@lancereis?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Lance Reis</a> na <a href="https://unsplash.com/pt-br/fotografias/um-homem-com-barba-pp76Y6Fq6xw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
       </em>
 </div>
+
+### 2.2.4 Proto-persona — Coordenadora Pedagógica (Valéria dos Santos)
 
 <div align="center">
   <img src="../assets/personaCoordenadora.png">
@@ -523,16 +529,14 @@ Este mapa de empatia representa Edgar Romeo, aluno do Instituto Ponte, e auxilia
       </em>
 </div>
 
-### 2.2.1 Mapa de Empatia de uma persona
-
-#### Mapa de Empatia — Professor do Ensino Médio (Ronaldo Silva)
+### 2.2.5 Mapa de Empatia — Professor do Ensino Médio (Ronaldo Silva)
 
 <div align="center">
-  <img src="/assets/mapaDeEmpatia.png">
+  <img src="../assets/mapaDeEmpatia.png">
 </div>
 
 <div align="center">
-  <strong>Figura 10 — Mapa de sentimento de persona.</strong><br><em>Fonte: elaboração própria.</em>
+  <strong>Figura 10 — Mapa de empatia da persona do professor.</strong><br><em>Fonte: elaboração própria.</em>
 </div>
 
 #### Visão Geral
@@ -819,7 +823,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
       <strong>Independente:</strong> O editor de questões pode ser construído de forma isolada, sem depender da publicação ou da distribuição da prova, que são histórias separadas.<br><br>
       <strong>Negociável:</strong> A quantidade de tipos de questão, bibliotecas de renderização LaTeX e regras de limite de caracteres são decisões negociáveis conforme viabilidade técnica.<br><br>
       <strong>Valorosa:</strong> Permite criar avaliações ricas e adequadas a disciplinas exatas e humanas, sendo o núcleo funcional da plataforma para o professor.<br><br>
-      <strong>Estimável:</strong> Apesar da complexidade do LaTeX, as bibliotecas existentes (ex.: MathJax/KaTeX) têm comportamento previsível, tornando a história estimável.<br><br>
+      <strong>Estimável:</strong> Apesar da complexidade do LaTeX, a biblioteca adotada (KaTeX) tem comportamento previsível, tornando a história estimável.<br><br>
       <strong>Pequena:</strong> Esta história pode ser dividida caso necessário (ex.: tipos de questão em uma sprint, renderização LaTeX em outra), mas como definida cobre escopo coeso.<br><br>
       <strong>Testável:</strong> Cada critério tem cenário claro: renderização de fórmula, bloqueio de publicação incompleta e respeito ao limite de caracteres são verificáveis objetivamente.
     </td>
@@ -1443,7 +1447,7 @@ Esses pontos são essenciais para orientar o desenvolvimento de uma plataforma d
   </tr>
 </table>
 
-# <a name="c3"></a>3. Projeto da Aplicação Web (sprints 1 a 5)
+# <a name="c3"></a>3. Projeto Técnico da Aplicação Web (sprints 1 a 5)
 
 ## 3.1. Requisitos do Sistema (sprints 1 a 5)
 
@@ -1468,13 +1472,13 @@ Identificou-se que o processo de correção de provas do Instituto Ponte é info
 | RF001 | O sistema deve permitir ao professor gerenciar provas em diferentes estados: rascunho, publicada, encerrada e antiga. | Alta | Implementado |
 | RF002 | O sistema deve autenticar professores e coordenadores via OAuth2 Google, validando o e-mail na lista de usuários autorizados e redirecionando para o painel correspondente ao perfil. | Alta | Implementado |
 | RF003 | O sistema deve manter um banco de questões pesquisável por disciplina, tema e tipo. | Alta | Implementado |
-| RF004 | O sistema deve permitir a inserção de enunciados com suporte nativo a fórmulas matemáticas via LaTeX, renderizadas por KaTeX ou MathJax. | Alta | Implementado |
+| RF004 | O sistema deve permitir a inserção de enunciados com suporte nativo a fórmulas matemáticas via LaTeX, renderizadas por KaTeX. | Alta | Implementado |
 | RF005 | O sistema deve suportar questões de múltipla escolha, Verdadeiro/Falso (V/F) e questões discursivas. | Alta | Implementado |
 | RF006 | O professor deve poder habilitar a opção para que o aluno envie fotos de resoluções manuscritas em questões específicas. | Alta | Implementado |
 | RF007 | O sistema deve permitir a definição de limites de tempo (duração), datas e horários de início e término da prova. | Alta | Implementado |
 | RF008 | O sistema deve gerar URLs únicas e QR Codes para o acesso dos alunos às provas. | Alta | Implementado |
 | RF009 | O sistema deve realizar a identificação do aluno apenas por nome, e-mail e CPF, sem exigência de senhas complexas. | Alta | Implementado |
-| RF010 | O sistema deve permitir que o aluno aplique zoom em imagens contidas nos enunciados para melhor visualização. | Alta | Não implementado |
+| RF010 | O sistema deve permitir que o aluno aplique zoom em imagens contidas nos enunciados para melhor visualização. | Alta | Implementado |
 | RF011 | O ambiente do aluno deve renderizar fórmulas matemáticas de forma legível em qualquer dispositivo. | Alta | Implementado |
 | RF012 | O aluno deve conseguir realizar o upload de múltiplas imagens ou arquivos por questão. | Alta | Implementado |
 | RF013 | O sistema deve realizar a compressão de imagens no lado do cliente (client-side) antes do upload. | Alta | Implementado |
@@ -1489,7 +1493,7 @@ Identificou-se que o processo de correção de provas do Instituto Ponte é info
 | RF022 | O sistema deve permitir a filtragem de avaliações por turma, semestre, disciplina ou nome do professor. | Média | Implementado |
 | RF023 | O sistema deve oferecer opções para embaralhar automaticamente a ordem das questões e das alternativas. | Média | Implementado |
 | RF024 | O sistema deve exibir um portal de instruções com regras, duração e prazos antes do início da avaliação. | Média | Implementado |
-| RF025 | O sistema deve permitir que o aluno escolha exibir ou ocultar o cronômetro (timer) de tempo restante. | Média | Não implementado |
+| RF025 | O sistema deve permitir que o aluno escolha exibir ou ocultar o cronômetro (timer) de tempo restante. | Média | Implementado |
 | RF026 | O sistema deve exibir avisos de questões em branco e um resumo de progresso antes do envio final. | Média | Implementado |
 | RF027 | O sistema deve ser capaz de enviar o resultado individual e o feedback para o e-mail do aluno. | Média | Implementado |
 | RF028 | O sistema deve permitir a exportação de todos os anexos enviados para armazenamento local ou em nuvem. | Baixa | Implementado |
@@ -1529,7 +1533,7 @@ Identificou-se que o processo de correção de provas do Instituto Ponte é info
 | SUP — Suportabilidade    | O sistema deve permitir manutenção e evolução contínua ao longo das sprints, com cobertura de testes que proteja funcionalidades existentes contra regressões. | Cobertura de testes automatizados ≥ 60% nas camadas de serviço ao final da Sprint 4; tempo de onboarding de novo desenvolvedor ≤ 2h seguindo o README; nenhuma alteração em sprint posterior deve quebrar testes existentes aprovados. | Arquitetura modular em camadas (Controller/Service/Repository), versionamento Git com branches por funcionalidade e suite de testes Jest. |
 | SEG — Segurança          | O sistema deve restringir o acesso às provas, proteger dados pessoais dos alunos (CPF, e-mail) em conformidade com a LGPD, e validar todos os dados de entrada. | Acesso de alunos apenas via link UUID válido; 100% dos inputs validados no backend; tráfego obrigatoriamente via HTTPS; dados pessoais não armazenados em texto plano; consentimento LGPD registrado com timestamp por aluno. | URLs únicas por UUID, validação backend em todas as rotas, HTTPS obrigatório, hash de dados sensíveis e registro de consentimento explícito. |
 | CAP — Capacidade         | O sistema deve suportar múltiplos usuários simultâneos sem falhas. | Suportar ≥ 50 usuários simultâneos em testes iniciais; taxa de erros 5xx < 1% e p95 < 1s sob essa carga. | Arquitetura Node.js com I/O não-bloqueante; uploads com compressão client-side reduzem carga no servidor; testável com k6 ou Artillery. |
-| REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Ausência de sistema de login/senha para alunos; ausência de chamadas a WebAPIs externas não autorizadas; verificável por revisão de código. | Fluxo do aluno via link UUID sem senha; OAuth2 apenas para usuários internos; nenhuma dependência de API externa no package.json além das bibliotecas autorizadas (KaTeX, MathJax). |
+| REST — Restrições Design | O sistema deve seguir as restrições definidas pelo projeto. | Ausência de sistema de login/senha para alunos; integrações externas controladas por configuração; verificável por revisão de código. | Fluxo do aluno via link UUID sem senha; OAuth2/Supabase apenas para usuários internos; integrações externas de e-mail e storage configuradas por variáveis de ambiente; renderização matemática feita com KaTeX no frontend. |
 | ORG — Organizacionais    | O sistema deve ser documentado e entregável de forma reproduzível, com README atualizado a cada sprint e instruções de instalação executáveis em ambiente limpo. | README com instruções de instalação executáveis em ambiente limpo Ubuntu/Node.js sem etapas adicionais; documentação sincronizada com o código a cada sprint; todas as variáveis de ambiente externalizadas em `.env.example`. | Documentação versionada junto ao código, variáveis de ambiente separadas e README com passo a passo de instalação verificado por membro externo ao time. |
 
 ---
@@ -1563,6 +1567,17 @@ Relaciona-se com RF012 (upload de múltiplas imagens), RF013 (compressão client
 **Critério de aceite:** taxa de falha < 2% em testes com 50 submissões simultâneas; 100% das submissões com confirmação visual armazenadas no banco.
 
 ---
+
+Fechamento técnico dos RNFs na versão final:
+
+| RNF | Implementação mensurável | Arquivo e função/método | Evidência final |
+|-----|--------------------------|-------------------------|-----------------|
+| DES | Timeout de banco e falha rápida em dependências externas. | `database/pool.ts` (`Pool` com `connectionTimeoutMillis` e `statement_timeout`); `helpers/resilience.ts` (`fetchWithTimeout`, `resilientFetch`). | `webapi-npm-test-coverage.txt`; testes `resilience.test.ts`, `email-adapter.test.ts`, `storage.service.test.ts`. |
+| SUP | Suíte automatizada executável e cobertura real versionada. | `jest.config.ts` e `vite.config.ts` (`coverageThreshold` realista); scripts `npm test` e `npm run coverage`. | `webapi-npm-test.txt` e `webapi-npm-test-coverage.txt`. |
+| SEG | CPF cifrado, busca por hash e autorização server-side. | `security/cpf-crypto.ts` (`encryptCpf`, `hashCpf`); `middlewares/auth.ts` (`requireRole`); `resultado.service.ts` (`exportarPorProva`). | `cpf-crypto.test.ts`, `aluno.integration.test.ts`, `infra-auth.integration.test.ts`. |
+| CAP | Pool configurável e retries em dependências externas para reduzir falhas transitórias. | `database/pool.ts`; `helpers/resilience.ts` (`withRetry`, `CircuitBreaker`). | `resilience.test.ts`; `apiClient.test.ts` no frontend. |
+| REST | Fluxo do aluno sem senha, OAuth/JWT para usuários internos e ausência de API externa obrigatória fora de e-mail/storage configuráveis. | `aluno-portal.service.ts` (`iniciarProva`); `auth.service.ts`; `email-adapter.ts` com fake default em teste. | `aluno-portal.integration.test.ts`, `auth.service.test.ts`, `email-resultado.integration.test.ts`. |
+| ORG | Setup reproduzível por README, docker-compose e migrations numeradas. | `docker-compose.yml`; `database/migrate.ts` (`orderMigrationFiles`, `migrate`). | `migration-order.test.ts`; execução `npm run migrate` registrada no CHANGELOG. |
 
 #### DES — Desempenho
 
@@ -1646,20 +1661,20 @@ Conecta-se ao processo de desenvolvimento e à sustentabilidade do sistema como 
 
 ### 3.1.4. Matriz RF → RN → Endpoint (sprints 3 a 5)
 
-Esta matriz foi atualizada conforme o estado atual da implementação. O backend possui WebAPI Fastify sob o prefixo `/api/v1`, Swagger UI em `/docs`, validação com Zod, autenticação/autorização por middleware, persistência PostgreSQL/Supabase e migrations com tabelas, enums, índices, triggers e políticas RLS. A camada de frontend em `src/frontend` já consome os principais fluxos da WebAPI, incluindo autenticação, gestão de provas, banco de questões, portal do aluno, envio de respostas/anexos, correção, resultados, analytics, e-mails e exportações. Portanto, a situação abaixo diferencia funcionalidades completas de ponta a ponta daquelas que ainda dependem de polimento de interface ou regra complementar.
+Esta matriz foi atualizada conforme o estado atual da implementação. O backend possui WebAPI Fastify sob o prefixo `/api/v1`, Swagger UI em `/docs`, validação com Zod, autenticação/autorização por middleware, persistência PostgreSQL/Supabase e migrations com tabelas, enums, índices, triggers e políticas RLS. A camada de frontend em `src/view` já consome os principais fluxos da WebAPI, incluindo autenticação, gestão de provas, banco de questões, portal do aluno, envio de respostas/anexos, correção, resultados, analytics, e-mails e exportações. Portanto, a situação abaixo diferencia funcionalidades completas de ponta a ponta daquelas que ainda dependem de polimento de interface ou regra complementar.
 
 | RF | RN associadas | Endpoint(s) implementado(s) | Método(s) | Situação atual |
 |----|---------------|----------------------------|-----------|----------------|
-| RF001 | RN01 | `/api/v1/provas`, `/api/v1/provas/:provaId`, `/api/v1/provas/:provaId/status-historico`, `/api/v1/provas/:provaId/encerrar`, `/api/v1/provas/:provaId/arquivar` | GET, POST, PUT, DELETE | Implementado de ponta a ponta para CRUD, consulta, histórico e transições de estado |
+| RF001 | RN01 | `/api/v1/provas`, `/api/v1/provas/:provaId`, `/api/v1/provas/:provaId/status-historico`, `/api/v1/provas/:provaId/publicar`, `/api/v1/provas/:provaId/despublicar`, `/api/v1/provas/:provaId/encerrar`, `/api/v1/provas/:provaId/arquivar` | GET, POST, PUT, DELETE | Implementado de ponta a ponta para CRUD, consulta, histórico e transições de estado |
 | RF002 | RN18, RN19 | `/api/v1/auth/google`, `/api/v1/auth/google/callback`, `/api/v1/auth/me`, `/api/v1/auth/logout` | GET, POST | Implementado de ponta a ponta com OAuth/JWT, sessão autenticada, logout, roteamento por perfil e tratamento de sessão expirada |
 | RF003 | RN20 | `/api/v1/questoes`, `/api/v1/questoes/:questaoId`, `/api/v1/provas/:provaId/questoes`, `/api/v1/provas/:provaId/questoes/:questaoId`, `/api/v1/materias`, `/api/v1/temas` | GET, POST, PUT, DELETE | Implementado de ponta a ponta para banco de questões, filtros, matérias, temas e vínculo questão-prova |
 | RF004 | RN03 | `/api/v1/questoes`, `/api/v1/questoes/:questaoId` | POST, PUT | Implementado de ponta a ponta: backend, formulários e telas de visualização renderizam conteúdo LaTeX com KaTeX |
 | RF005 | RN03 | `/api/v1/questoes`, `/api/v1/questoes/:questaoId` | POST, PUT | Implementado de ponta a ponta para múltipla escolha, verdadeiro/falso e discursiva, com validações de alternativas |
 | RF006 | RN04 | `/api/v1/questoes`, `/api/v1/questoes/:questaoId`, `/api/v1/public/respostas/:respostaId/anexos` | POST, PUT | Implementado de ponta a ponta para habilitar anexos por questão e receber upload público vinculado à resposta |
-| RF007 | RN05 | `/api/v1/provas/:provaId/configuracoes` | PATCH | Implementado de ponta a ponta para tempo limite, data de início e data de fim; encerramento automático server-side ainda pode evoluir |
+| RF007 | RN05 | `/api/v1/provas/:provaId/configuracoes` | PATCH | Implementado de ponta a ponta para tempo limite, data de início, data de fim e validações server-side de expiração |
 | RF008 | RN07 | `/api/v1/provas/:provaId/publicar` | POST | Implementado de ponta a ponta com publicação, URL pública, QR/link de acesso e compartilhamento pela interface |
 | RF009 | RN08 | `/api/v1/public/provas/:urlAcesso`, `/api/v1/public/provas/:urlAcesso/iniciar` | GET, POST | Implementado de ponta a ponta para identificação pública do aluno, criação automática e bloqueio de submissão duplicada |
-| RF010 | RN10 | Dados públicos de imagem retornados por `/api/v1/public/provas/:urlAcesso/iniciar` | GET, POST | Não implementado: backend fornece URLs de imagem, mas não há fluxo confirmado de zoom/ampliação no ambiente do aluno |
+| RF010 | RN10 | Dados públicos de imagem retornados por `/api/v1/public/provas/:urlAcesso/iniciar` | GET, POST | Implementado de ponta a ponta: o ambiente do aluno exibe imagens de enunciados com componente de ampliação em modal, fechamento por botão/Escape e suporte a foco acessível |
 | RF011 | RN10 | Dados retornados por `/api/v1/public/provas/:urlAcesso/iniciar` e rotas de questões/respostas | GET, POST, PUT | Implementado de ponta a ponta: o ambiente do aluno renderiza fórmulas LaTeX com KaTeX em enunciados e alternativas |
 | RF012 | RN04 | `/api/v1/public/respostas/:respostaId/anexos` | POST | Implementado de ponta a ponta: a UI permite seleção múltipla e envia todos os arquivos selecionados |
 | RF013 | RN11 | `/api/v1/public/respostas/:respostaId/anexos` | POST | Implementado de ponta a ponta: imagens JPG/PNG são comprimidas no frontend antes do upload, e o backend valida tipo e tamanho |
@@ -1674,7 +1689,7 @@ Esta matriz foi atualizada conforme o estado atual da implementação. O backend
 | RF022 | RN02 | `/api/v1/provas` com filtros de `status`, `turma`, `semestre`, `materiaId` e `professorId` | GET | Implementado de ponta a ponta: backend e interface cobrem status, turma, semestre, disciplina e professor |
 | RF023 | RN06 | `/api/v1/provas/:provaId/configuracoes` | PATCH | Implementado de ponta a ponta: configuração existe e o portal público aplica embaralhamento determinístico por aluno |
 | RF024 | RN09 | `/api/v1/public/provas/:urlAcesso` | GET | Implementado de ponta a ponta para portal público com instruções, duração e prazos antes do início da prova |
-| RF025 | RN09 | `/api/v1/public/provas/:urlAcesso` | GET | Não implementado: backend retorna tempo/datas e o frontend exibe timer, mas não há opção para o aluno ocultar/exibir o cronômetro |
+| RF025 | RN09 | `/api/v1/public/provas/:urlAcesso` | GET | Implementado de ponta a ponta: o backend retorna tempo/datas e o header do aluno permite ocultar e reexibir o cronômetro durante a prova |
 | RF026 | RN12 | `/api/v1/public/provas-aluno/:provaAlunoId/respostas`, `/api/v1/public/provas-aluno/:provaAlunoId/enviar` | GET, POST | Implementado de ponta a ponta para revisão das respostas, alerta de questões em branco e envio final |
 | RF027 | RN15 | `/api/v1/provas/:provaId/resultados/liberar-email`, `/api/v1/provas/:provaId/emails`, `/api/v1/emails/:emailEnvioId/reenviar` | POST, GET | Implementado de ponta a ponta para liberação, histórico e reenvio de e-mails de resultado |
 | RF028 | RN16 | `/api/v1/provas/:provaId/anexos/exportar` | POST | Implementado de ponta a ponta: backend lista anexos e a interface gera pacote ZIP consolidado com manifesto |
@@ -1689,8 +1704,8 @@ Esta subseção faz a rastreabilidade das Regras de Negócio (RN) para as entida
 
 - RN08 — Identificação do aluno (unicidade / evit. de multi-submissões)
   - Entidade: Aluno
-  - Tabelas: `aluno` (nome, email, cpf, aceitou_termos_em)
-  - Observação LGPD: atualmente o CPF é armazenado como `TEXT` com CHECK de formato. Ver nota de LGPD abaixo.
+  - Tabelas: `aluno` (nome, email, cpf cifrado, cpf_hash, aceitou_termos_em)
+  - Observação LGPD: o CPF não permanece em texto plano. O fluxo usa `src/backend/src/security/cpf-crypto.ts` para normalizar, cifrar com AES-256-GCM e gerar HMAC-SHA256 (`cpf_hash`) para busca e unicidade sem revelar o valor.
 
 - RN04 — Controle de envio de arquivos (anexos)
   - Entidade: RespostaAluno, RespostaAnexo
@@ -1712,12 +1727,12 @@ Esta subseção faz a rastreabilidade das Regras de Negócio (RN) para as entida
   - Entidade: RespostaAnexo, ExportacaoResultado
   - Tabelas: `resposta_anexo`, `exportacao_resultado`
 
-Ação recomendada (LGPD / CPF):
+Ação final aplicada (LGPD / CPF):
 
-- Situação atual: o campo `aluno.cpf` está definido como `TEXT` com constraint de formato (`~ '^[0-9]{11}$'`) e `UNIQUE`.
-- Gap de requisito: o WAD/avaliação exige que dados pessoais sensíveis não sejam mantidos em texto legível em repouso.
-- Recomendação técnica imediata: aplicar pseudonimização/hashing do CPF antes da persistência (por exemplo, `sha256(salt || cpf)`) e armazenar apenas o hash com índice único sobre o hash. Alternativa: usar `pgcrypto` para criptografia simétrica das colunas sensíveis e gerenciar chaves.
-- Tarefas derivadas (próximo sprint): adicionar migration para criar coluna `cpf_hash`, migrar valores atuais para hash encriptado conforme política escolhida, atualizar repository/service para gravar somente hash, revisar índices/uniqueness e documentar o fluxo de acesso/descrifração (se aplicável).
+- Situação final: `004_security_resilience.sql` adiciona `cpf_hash` e remove constraints antigas sobre CPF em texto; `migrate-cpf.ts` converte bases legadas.
+- Estratégia: `cpf` fica cifrado por envelope `v1:iv:ciphertext:tag` com AES-256-GCM; `cpf_hash` usa HMAC-SHA256 derivado da mesma chave para identificação determinística e índice único.
+- Código responsável: `encryptCpf`, `decryptCpf` e `hashCpf` em `src/backend/src/security/cpf-crypto.ts`; persistência em `AlunoRepository.update` e `AlunoPortalRepository.findOrCreateAluno`.
+- Evidência: `cpf-crypto.test.ts`, `aluno.integration.test.ts` e `maintenance.integration.test.ts`; saída final em `documentos/outros/evidencias/webapi-npm-test.txt`.
 
 ---
 
@@ -2026,7 +2041,7 @@ Esse fluxo evita que as rotas executem SQL diretamente. As rotas apenas descreve
 ### 3.2.2. Diagrama de Casos de Uso
 
 <div align="center">
-  <img src="/assets/diagramaCasosDeUso.png">
+  <img src="../assets/diagramaCasosDeUso.png">
 </div>
 
 <div align="center">
@@ -2691,7 +2706,7 @@ Esse fluxo evita que as rotas executem SQL diretamente. As rotas apenas descreve
 
 ### 3.2.3. Diagrama de Classes do Dominio (sprint 2)
 
-O diagrama de dominio abaixo foi alinhado ao backend atual e a migration src/backend/src/database/migrations/migration.sql. Coordenador, professor e aluno sao entidades/tabelas independentes. A composicao da prova usa prova_questao, a tentativa do aluno usa prova_aluno, os anexos usam resposta_anexo e a exportacao/resultado/e-mail usam tabelas proprias.
+O diagrama de dominio abaixo foi alinhado ao backend atual e a migration `src/backend/src/database/migrations/001_initial_schema.sql`. Coordenador, professor e aluno sao entidades/tabelas independentes. A composicao da prova usa prova_questao, a tentativa do aluno usa prova_aluno, os anexos usam resposta_anexo e a exportacao/resultado/e-mail usam tabelas proprias.
 ```plantuml
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
@@ -3261,11 +3276,11 @@ Fonte: Autoria própria.
 
 ### 3.2.5. Diagrama de Atividades ou Estados (sprint 3)
 
-*Ao menos um fluxo relevante em UML ou BPMN. Use a notação da ferramenta escolhida de forma consistente (sem misturar convenções).*
+Não se aplica. Nesta versão do WAD, os fluxos principais da aplicação foram documentados por meio dos diagramas de sequência UML da seção 3.2.4 e das descrições detalhadas de casos de uso da seção 3.2.2. Por esse motivo, não foi mantido um diagrama adicional de atividades ou estados.
 
 ### 3.2.6. Diagrama de Implantação (sprints 4 e 5)
 
-*Diagrama UML de deployment mostrando nós físicos, artefatos e canais de comunicação. Representa a visão Engineering + Technology do RM-ODP.*
+Não se aplica. A entrega final foi validada em ambiente local de desenvolvimento e por build estático do frontend, sem publicação de um ambiente produtivo completo com nós físicos definitivos. A implantação prevista está documentada operacionalmente no README, incluindo backend Fastify, banco PostgreSQL/Supabase, frontend React/Vite e variáveis de ambiente necessárias.
 
 ### 3.2.7. Padroes de Projeto Aplicados (sprints 3 a 5)
 
@@ -3478,7 +3493,7 @@ Esse padrão melhora a consistência da API e facilita a documentação dos reto
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de instrucao.</strong><br> <em>
+  <strong>Figura 3.3.1 — Tela de instrução.</strong><br> <em>
     Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
     <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
       Link
@@ -3491,7 +3506,7 @@ Esse padrão melhora a consistência da API e facilita a documentação dos reto
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de prova.</strong><br> <em>
+  <strong>Figura 3.3.2 — Tela de prova.</strong><br> <em>
     Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
     <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
       Link
@@ -3504,7 +3519,7 @@ Esse padrão melhora a consistência da API e facilita a documentação dos reto
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de revisao.</strong><br> <em>
+  <strong>Figura 3.3.3 — Tela de revisão.</strong><br> <em>
     Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
     <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
       Link
@@ -3517,7 +3532,7 @@ Esse padrão melhora a consistência da API e facilita a documentação dos reto
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de aviso.</strong><br> <em>
+  <strong>Figura 3.3.4 — Tela de aviso.</strong><br> <em>
     Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
     <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
       Link
@@ -3530,7 +3545,7 @@ Esse padrão melhora a consistência da API e facilita a documentação dos reto
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de revisão pré-entrega.</strong><br> <em>
+  <strong>Figura 3.3.5 — Tela de revisão pré-entrega.</strong><br> <em>
     Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
     <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
       Link
@@ -3543,7 +3558,7 @@ Esse padrão melhora a consistência da API e facilita a documentação dos reto
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de entrega.</strong><br> <em>
+  <strong>Figura 3.3.6 — Tela de entrega.</strong><br> <em>
     Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
     <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
       Link
@@ -3556,7 +3571,7 @@ Esse padrão melhora a consistência da API e facilita a documentação dos reto
 </div>
 
 <div align="center">
-  <strong>Figura # — Tela de conclusão.</strong><br> <em>
+  <strong>Figura 3.3.7 — Tela de conclusão.</strong><br> <em>
     Fonte: elaboração própria, feita usando a ferramenta do figma, segue o 
     <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=14-210&p=f&t=ueNC5oJRQc9NjNEb-0">
       Link
@@ -4120,12 +4135,17 @@ A plataforma utiliza ícones lineares da biblioteca **Lucide React** (variante m
 </div>
 
 **Componente `ImageWithFallback`:** todas as imagens devem usar o componente `ImageWithFallback` para garantir tratamento de erros e carregamento progressivo:
+
+```tsx
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
+
 <ImageWithFallback
   src={imageSrc}
   alt="Descrição acessível"
   className="w-full object-contain"
 />
+```
+
 **Diretrizes para imagens:**
 
 - **Aspect ratio:** preservar proporção original.
@@ -4149,7 +4169,7 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
     telas do protótipo
   </a>
   •
-  <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+  <a href="https://corrije-ai.figma.site">
     fluxo (coordenador/professor)
   </a>
   •
@@ -4165,7 +4185,7 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
       telas do protótipo
     </a>
     e o
-    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+    <a href="https://corrije-ai.figma.site">
       fluxo (coordenador/professor)
     </a>.
   </em>
@@ -4182,7 +4202,7 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
       telas do protótipo
     </a>
     e o
-    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+    <a href="https://corrije-ai.figma.site">
       fluxo (coordenador/professor)
     </a>.
   </em>
@@ -4199,7 +4219,7 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
       telas do protótipo
     </a>
     e o
-    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
+    <a href="https://corrije-ai.figma.site">
       fluxo (coordenador/professor)
     </a>.
   </em>
@@ -4583,7 +4603,7 @@ end note
 
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2, atualizado na sprint 5)
 
-O Diagrama Entidade-Relacionamento (DER) abaixo representa a visão física do banco implementado pela migration principal `src/backend/src/database/migrations/migration.sql` e pelas evoluções incrementais `002_unique_case_insensitive.sql` e `003_corrigir_objetivas_batch.sql`. Diferentemente do MER conceitual, esta visão usa os nomes reais das tabelas, colunas, chaves primárias, chaves estrangeiras, restrições `UNIQUE`, restrições `CHECK` mais relevantes e tipos PostgreSQL/Supabase usados pelo sistema.
+O Diagrama Entidade-Relacionamento (DER) abaixo representa a visão física do banco implementado pela migration principal `src/backend/src/database/migrations/001_initial_schema.sql` e pelas evoluções incrementais numeradas em `src/backend/src/database/migrations`. Diferentemente do MER conceitual, esta visão usa os nomes reais das tabelas, colunas, chaves primárias, chaves estrangeiras, restrições `UNIQUE`, restrições `CHECK` mais relevantes e tipos PostgreSQL/Supabase usados pelo sistema.
 
 A modelagem física atual possui 22 tabelas de domínio: `coordenador`, `professor`, `materia`, `materia_professor`, `aluno`, `tema`, `questao`, `enunciado`, `alternativa`, `prova`, `prova_status_historico`, `prova_questao`, `prova_aluno`, `resposta_aluno`, `resposta_anexo`, `correcao`, `feedback`, `relatorio`, `resultado_aluno`, `exportacao_resultado`, `email_envio` e `avaliacao_log`. As tabelas associativas reais são `materia_professor`, `prova_questao` e `prova_aluno`; não existem tabelas físicas chamadas `prova_materia` ou `prova_enunciado`.
 
@@ -5056,12 +5076,22 @@ Além das tabelas-base descritas acima, a migration atual também contempla:
 - `avaliacao_log`: registra ações de auditoria relacionadas à prova ou à aplicação da prova ao aluno.
 #### Complementos da implementação física atual
 
-A fonte de verdade da implementação é `src/backend/src/database/migrations/migration.sql`, que define tipos, tabelas, chaves primárias, chaves estrangeiras, índices, triggers, funções auxiliares e políticas de Row Level Security.
+A fonte de verdade da implementação está em `src/backend/src/database/migrations`. A migration principal `001_initial_schema.sql` define tipos, tabelas, chaves primárias, chaves estrangeiras, índices, triggers, funções auxiliares e políticas de Row Level Security. Além dela, a pasta contém migrations incrementais que ajustam compatibilidade local com Supabase, unicidade, segurança, expiração, despublicação, turmas, dificuldade de questões e exportação de resultados.
 
-Além da migration principal, a pasta `src/backend/src/database/migrations` contém duas evoluções incrementais reais:
+As migrations versionadas na implementação atual são:
 
+- `000_supabase_compat.sql`: cria estruturas mínimas de compatibilidade local com o namespace `auth` do Supabase.
+- `001_initial_schema.sql`: cria o schema principal da aplicação, incluindo entidades de domínio, enums, índices, triggers, funções e políticas RLS.
 - `002_unique_case_insensitive.sql`: adiciona índices únicos case-insensitive para `materia.nome` e para o par `tema.materia_id + tema.nome`.
 - `003_corrigir_objetivas_batch.sql`: adiciona a função SQL `corrigir_objetivas_batch(p_prova_id, p_professor_id)` para correção objetiva em lote por operação set-based.
+- `004_security_resilience.sql`: adiciona `cpf_hash`, índice único parcial para CPF cifrado, tabela `idempotency_request` e estruturas de resiliência/idempotência.
+- `005_expiration_scheduler.sql`: ajusta regras de expiração automática para submissões e encerramento de provas por rotina server-side.
+- `006_restore_aluno_unique_constraints.sql`: restaura constraints/índices únicos de e-mail e `auth_user_id` para alunos.
+- `007_allow_unpublish.sql`: permite a transição controlada de prova publicada para rascunho quando ainda não há tentativas/submissões.
+- `008_aluno_turma.sql`: adiciona o campo `turma` à tabela `aluno`.
+- `009_questao_dificuldade.sql`: adiciona o campo de dificuldade em questões.
+- `009_turma_crud.sql`: cria a tabela `turma` e migra valores distintos já usados em alunos/provas.
+- `010_exportacao_resultado_professor.sql`: adiciona referência de professor responsável em exportações de resultado.
 
 Também foram preservadas as seguintes decisões físicas já documentadas:
 
@@ -5103,9 +5133,18 @@ Os agrupamentos físicos do banco também contemplam:
 #### Migration DDL
 
 ```text
-src/backend/src/database/migrations/migration.sql
+src/backend/src/database/migrations/000_supabase_compat.sql
+src/backend/src/database/migrations/001_initial_schema.sql
 src/backend/src/database/migrations/002_unique_case_insensitive.sql
 src/backend/src/database/migrations/003_corrigir_objetivas_batch.sql
+src/backend/src/database/migrations/004_security_resilience.sql
+src/backend/src/database/migrations/005_expiration_scheduler.sql
+src/backend/src/database/migrations/006_restore_aluno_unique_constraints.sql
+src/backend/src/database/migrations/007_allow_unpublish.sql
+src/backend/src/database/migrations/008_aluno_turma.sql
+src/backend/src/database/migrations/009_questao_dificuldade.sql
+src/backend/src/database/migrations/009_turma_crud.sql
+src/backend/src/database/migrations/010_exportacao_resultado_professor.sql
 ```
 
 ### 3.6.4. Consultas SQL e logica proposicional (sprint 2)
@@ -5160,13 +5199,13 @@ Essa consulta remove registros de e-mails com erro ou pendentes há mais de 7 di
 
 | #5 | --- |
 | --- | --- |
-| **Expressão SQL** | `INSERT INTO questao (titulo, tipo, ativa) VALUES ('Questão sobre lógica', 'multipla_escolha', true);` |
-| **Proposições lógicas** | $A$: O título da questão foi informado (`titulo IS NOT NULL`) <br> $B$: O tipo da questão é múltipla escolha (`tipo = 'multipla_escolha'`) <br> $C$: A questão está ativa (`ativa = true`) |
+| **Expressão SQL** | `INSERT INTO questao (materia_id, tipo, ativa) VALUES ('00000000-0000-0000-0000-000000000001', 'multipla_escolha', true);` |
+| **Proposições lógicas** | $A$: A matéria da questão foi informada (`materia_id IS NOT NULL`) <br> $B$: O tipo da questão é múltipla escolha (`tipo = 'multipla_escolha'`) <br> $C$: A questão está ativa (`ativa = true`) |
 | **Expressão lógica proposicional** | $A \land B \land C$ |
 | **Tabela Verdade** | <table><thead><tr><th>$A$</th><th>$B$</th><th>$C$</th><th>$A \land B$</th><th>$A \land B \land C$</th></tr></thead><tbody><tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>V</td><td>F</td><td>V</td><td>F</td></tr><tr><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td></tr></tbody></table> |
 
 **Descrição:**
-Essa consulta insere uma nova questão ativa de múltipla escolha no banco de dados.
+Essa consulta insere uma nova questão ativa de múltipla escolha vinculada a uma matéria existente, usando colunas reais da tabela `questao`.
 
 ## 3.7. WebAPI e endpoints (sprints 3 a 5)
 
@@ -5215,6 +5254,10 @@ O backend registra `@fastify/swagger` e `@fastify/swagger-ui` em `src/backend/sr
 | Matérias | GET | `/api/v1/materias/:materiaId` | Professor/coordenador | Path `materiaId` | Matéria | 200, 401, 403, 404, 422 | RF018/RF003 |
 | Matérias | PUT | `/api/v1/materias/:materiaId` | Coordenador | Path + body parcial | Matéria atualizada | 200, 401, 403, 404, 409, 422 | RF018/RF003 |
 | Matérias | DELETE | `/api/v1/materias/:materiaId` | Coordenador | Path `materiaId` | Sem conteúdo | 204, 401, 403, 404, 409, 422 | RF018/RF003 |
+| Turmas | GET | `/api/v1/turmas` | Professor/coordenador | Sem entrada | Lista de turmas | 200, 401, 403 | RF018/RF022 |
+| Turmas | POST | `/api/v1/turmas` | Coordenador | Body da turma | Turma criada | 201, 401, 403, 409, 422 | RF018/RF022 |
+| Turmas | PUT | `/api/v1/turmas/:turmaId` | Coordenador | Path + body | Turma atualizada | 200, 401, 403, 404, 409, 422 | RF018/RF022 |
+| Turmas | DELETE | `/api/v1/turmas/:turmaId` | Coordenador | Path `turmaId` | Sem conteúdo | 204, 401, 403, 404, 422 | RF018/RF022 |
 | Temas | POST | `/api/v1/temas` | Professor/coordenador | Body do tema | Tema criado | 201, 401, 403, 404, 409, 422 | RF003 |
 | Temas | GET | `/api/v1/temas` | Professor/coordenador | Filtros/paginação | Lista de temas | 200, 401, 403, 422 | RF003 |
 | Temas | GET | `/api/v1/temas/:temaId` | Professor/coordenador | Path `temaId` | Tema | 200, 401, 403, 404, 422 | RF003 |
@@ -5233,6 +5276,7 @@ O backend registra `@fastify/swagger` e `@fastify/swagger-ui` em `src/backend/sr
 | Provas | GET | `/api/v1/provas/:provaId/status-historico` | Professor/coordenador | Path `provaId` | Histórico de status | 200, 401, 403, 404, 422 | RF001/RF020 |
 | Provas | PATCH | `/api/v1/provas/:provaId/configuracoes` | Professor/coordenador | Tempo, datas, embaralhamento | Configurações atualizadas | 200, 401, 403, 404, 409, 422 | RF007/RF023 |
 | Provas | POST | `/api/v1/provas/:provaId/publicar` | Professor/coordenador | `baseUrlAluno` | URL pública e QR payload | 200, 401, 403, 404, 409, 422 | RF008 |
+| Provas | POST | `/api/v1/provas/:provaId/despublicar` | Professor/coordenador | Path `provaId` | Prova retornada para rascunho | 200, 401, 403, 404, 409, 422 | RF001/RF008 |
 | Provas | POST | `/api/v1/provas/:provaId/encerrar` | Professor/coordenador | Path `provaId` | Prova encerrada | 200, 401, 403, 404, 409, 422 | RF001 |
 | Provas | POST | `/api/v1/provas/:provaId/arquivar` | Professor/coordenador | Path `provaId` | Prova antiga | 200, 401, 403, 404, 409, 422 | RF001 |
 | Prova-questão | POST | `/api/v1/provas/:provaId/questoes` | Professor/coordenador | `questaoId`, ordem, pontuação | Vínculo criado | 201, 401, 403, 404, 409, 422 | RF003 |
@@ -5261,21 +5305,24 @@ O backend registra `@fastify/swagger` e `@fastify/swagger-ui` em `src/backend/sr
 
 ### 3.8.1. Autenticação
 
-*Descreva o fluxo de autenticação implementado: persistência de senha com hash bcrypt/argon2 (parâmetros de custo explícitos e justificados), validação de credenciais e criação de sessão. Senhas em texto plano no banco não são aceitas.*
+Usuários internos (professor e coordenador) autenticam por OAuth/JWT validado no backend em `src/backend/src/middlewares/auth.ts`. O middleware suporta validação Supabase por segredo HMAC (`SUPABASE_JWT_SECRET`) ou JWKS remoto (`SUPABASE_URL`) e, em modo de teste, tokens locais `test-professor`/`test-coordenador` para automação. Não há senha própria persistida pelo sistema; portanto não existem senhas em texto plano no banco. O aluno continua no fluxo público por link único, nome, e-mail, CPF e aceite LGPD, sem login/senha, conforme restrição do TAPI.
 
 ### 3.8.2. Controle de sessão
 
-*Descreva o controle de sessão baseado em `session id` persistido em tabela própria, com expiração. Se optar por JWT, justifique a escolha explicando os trade-offs (stateless, não revogável, payload exposto).*
+O controle de sessão usa JWT stateless emitido/validado pelo provedor de autenticação. A escolha reduz estado no backend e simplifica deploy horizontal, mas implica revogação menos imediata e payload legível; por isso o token carrega apenas identificadores e perfil, enquanto autorização real consulta as tabelas `professor`/`coordenador` por `auth_user_id` ou e-mail. O frontend armazena o token em `sessionStorage` e remove a sessão em 401 via `SessionExpiredHandler`.
 
 ### 3.8.3. Autorização
 
-*Descreva as regras de autorização por rota e por operação, baseadas no perfil do usuário autenticado. A verificação deve ocorrer no backend — o frontend nunca é fonte de verdade para autorização.*
+A autorização ocorre no backend por `requireRole` e por verificações de service/repository. Professores criam provas e questões apenas para matérias vinculadas (`ProvaService.create`, `QuestaoService.validateMateriaAccess`); coordenadores gerenciam cadastros, visualizam dados agregados e exportam resultados (`ResultadoService.exportarPorProva`). O frontend apenas adapta a navegação por perfil; a decisão final fica nas rotas Fastify e nos services.
 
 ### 3.8.4. Estratégias de Resiliência
 
-*Descreva as estratégias aplicadas no tratamento de falhas de rede: timeout, retry com backoff exponencial, circuit breaker e idempotência em operações críticas (`PUT`, `DELETE`, operações de pagamento etc.).*
+As estratégias finais estão centralizadas em `src/backend/src/helpers/resilience.ts`: `fetchWithTimeout` usa `AbortController`, `resilientFetch` repete falhas transitórias com backoff 100/200/400ms por padrão, e `CircuitBreaker` abre após 3 falhas e tenta meio-aberto após 30s. `EmailAdapter` usa timeout/retry/breaker para envio de resultados; `StorageService.upload` usa timeout/retry para exportações e anexos. O banco define `connectionTimeoutMillis` e `statement_timeout` em `src/backend/src/database/pool.ts`. Operações críticas usam idempotência por `Idempotency-Key` em `src/backend/src/middlewares/idempotency.ts` e upserts/constraints nos repositories, por exemplo `RespostaAlunoRepository.upsert` e `ResultadoRepository.createExportacao`.
 
 ## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
+
+Evidências concretas da versão final: `documentos/outros/evidencias/webapi-npm-test.txt` registra `Test Suites: 54 passed, 54 total`, `Tests: 438 passed, 438 total` no backend e `Test Files 31 passed`, `Tests 123 passed` no frontend. `documentos/outros/evidencias/webapi-npm-test-coverage.txt` registra cobertura backend de 88,90% statements/89,87% lines e frontend de 90,84% statements/lines. As linhas abaixo mantêm os arquivos/componentes como rastreabilidade de implementação; os fluxos principais têm confirmação executável nessas duas evidências versionadas.
+
 | Persona | RF | RN | Endpoint real ou suporte técnico | Tela relacionada | Evidência | Status |
 |---------|----|----|----------------------------------|------------------|-----------|--------|
 | Professor, Coordenador | RF001 | RN01 | POST/GET/PUT/DELETE `/api/v1/provas`; GET `/api/v1/provas/:provaId`; GET `/api/v1/provas/:provaId/questoes`; GET `/api/v1/provas/:provaId/status-historico`; POST `/api/v1/provas/:provaId/encerrar`; POST `/api/v1/provas/:provaId/arquivar` | Painel de provas, detalhes da prova e editor | `prova.routes.ts`, `ProvaController`, `ProvaService`, `provas.api.ts`, `ProvasPage`, `ProvaDetailPage` | Implementado de ponta a ponta |
@@ -5284,10 +5331,10 @@ O backend registra `@fastify/swagger` e `@fastify/swagger-ui` em `src/backend/sr
 | Professor | RF004 | RN03 | POST/PUT `/api/v1/questoes` com `enunciado.conteudoLatex` e `alternativas[].conteudoLatex` | Editor de questão | `questao.schema.ts`, `QuestaoService`, `questoes.mappers.ts`, `MathText`, modais de criação/edição de questão | Implementado de ponta a ponta |
 | Professor | RF005 | RN03 | POST/PUT `/api/v1/questoes` com tipo `multipla_escolha`, `verdadeiro_falso` ou `discursiva` | Editor de questão | `questao.schema.ts`, enum `questao_tipo`, `QuestaoService`, modais de questão | Implementado de ponta a ponta |
 | Professor, Aluno | RF006 | RN04 | POST/PUT `/api/v1/questoes` com `permiteAnexo`; POST `/api/v1/public/respostas/:respostaId/anexos` | Configuração da questão e prova do aluno | `questao.schema.ts`, `resposta-anexo.routes.ts`, `RespostaAnexoService`, `aluno.api.ts`, `TelaProva` | Implementado de ponta a ponta |
-| Professor | RF007 | RN05 | PATCH `/api/v1/provas/:provaId/configuracoes` com `tempoLimiteMin`, `dataInicio` e `dataFim` | Configurações da prova | `prova.schema.ts`, `ProvaService.atualizarConfiguracoes`, `provas.api.ts`, `NovaProvaPage`, `ProvaDetailPage` | Implementado de ponta a ponta; encerramento automático server-side ainda pode evoluir |
+| Professor | RF007 | RN05 | PATCH `/api/v1/provas/:provaId/configuracoes` com `tempoLimiteMin`, `dataInicio` e `dataFim` | Configurações da prova | `prova.schema.ts`, `ProvaService.atualizarConfiguracoes`, `provas.api.ts`, `NovaProvaPage`, `ProvaDetailPage`, `ExpirationService`, `ExpirationRepository` | Implementado de ponta a ponta, incluindo validações server-side de expiração |
 | Professor, Aluno | RF008 | RN07 | POST `/api/v1/provas/:provaId/publicar`; GET `/api/v1/public/provas/:urlAcesso` | Compartilhar prova e portal público | `ProvaService.publicar`, `prova.url_acesso`, `prova.qr_code`, `provas.api.ts`, `ProvaDetailPage`, `front-aluno/App.tsx` | Implementado de ponta a ponta |
 | Aluno | RF009 | RN08 | GET `/api/v1/public/provas/:urlAcesso`; POST `/api/v1/public/provas/:urlAcesso/iniciar` | Identificação do aluno e início da prova | `aluno-portal.routes.ts`, `AlunoPortalService`, `AlunoPortalRepository`, `aluno.api.ts`, `TelaAcesso`, `TelaInstrucao` | Implementado de ponta a ponta |
-| Aluno | RF010 | RN10 | Suporte técnico por `urlImagem` em questões retornadas no portal público | Tela de responder prova | `AlunoPortalRepository.findQuestoesPublicas`, `TelaProva`, `ImageWithFallback` | Não implementado: backend fornece imagem, mas zoom/ampliação no ambiente do aluno não foi confirmado |
+| Aluno | RF010 | RN10 | Suporte técnico por `urlImagem` em questões retornadas no portal público | Tela de responder prova | `AlunoPortalRepository.findQuestoesPublicas`, `TelaProva`, `ZoomableImage`, `ZoomableImage.test.tsx` | Implementado de ponta a ponta: imagens de enunciado podem ser ampliadas em modal no ambiente do aluno |
 | Aluno | RF011 | RN10 | Conteúdo LaTeX retornado em enunciados e alternativas pelas rotas públicas de prova e resposta | Tela de responder prova | `enunciado.conteudo_latex`, `alternativa.conteudo_latex`, `aluno.api.ts`, `MathText`, `TelaProva` | Implementado de ponta a ponta |
 | Aluno | RF012 | RN04 | POST `/api/v1/public/respostas/:respostaId/anexos` | Upload de anexos na prova | `resposta-anexo.routes.ts`, `RespostaAnexoService`, `StorageService`, `aluno.api.ts`, `TelaProva` | Implementado de ponta a ponta |
 | Aluno | RF013 | RN11 | POST `/api/v1/public/respostas/:respostaId/anexos` com compressão client-side e validação de JPG, PNG, PDF e limite de 5MB | Upload/compressão | `resposta-anexo.schema.ts`, `multipart.ts`, constraints de `resposta_anexo`, `aluno.api.ts` | Implementado de ponta a ponta |
@@ -5302,7 +5349,7 @@ O backend registra `@fastify/swagger` e `@fastify/swagger-ui` em `src/backend/sr
 | Professor, Coordenador | RF022 | RN02 | GET `/api/v1/provas` com filtros `status`, `turma`, `semestre`, `materiaId` e `professorId` | Listagem de provas e filtros | `listProvasQuerySchema`, `ProvaRepository.findMany`, `provas.api.ts`, `ProvasPage` | Implementado de ponta a ponta |
 | Professor | RF023 | RN06 | PATCH `/api/v1/provas/:provaId/configuracoes` com `embaralharQuestoes` e `embaralharAlternativas` | Configurações da prova | `prova.schema.ts`, `prova.embaralhar_questoes`, `prova.embaralhar_alternativas`, `AlunoPortalRepository`, `ProvaDetailPage` | Implementado de ponta a ponta |
 | Aluno | RF024 | RN09 | GET `/api/v1/public/provas/:urlAcesso` | Portal de instruções do aluno | `aluno-portal.routes.ts`, `AlunoPortalService`, `provaPublicaSchema`, `aluno.api.ts`, `TelaInstrucao` | Implementado de ponta a ponta |
-| Aluno | RF025 | RN09 | GET `/api/v1/public/provas/:urlAcesso` retorna `tempoLimiteMin`, `dataInicio` e `dataFim` | Timer da prova | `aluno-portal.schema.ts`, `front-aluno/App.tsx`, `Header` | Não implementado: timer é exibido, mas não há opção de ocultar/exibir pelo aluno |
+| Aluno | RF025 | RN09 | GET `/api/v1/public/provas/:urlAcesso` retorna `tempoLimiteMin`, `dataInicio` e `dataFim` | Timer da prova | `aluno-portal.schema.ts`, `front-aluno/App.tsx`, `Header`, `Header.test.tsx` | Implementado de ponta a ponta: o aluno pode ocultar e reexibir o cronômetro no header |
 | Aluno | RF026 | RN12 | GET `/api/v1/public/provas-aluno/:provaAlunoId/respostas`; POST `/api/v1/public/provas-aluno/:provaAlunoId/enviar` | Revisão final e conclusão | `resposta-aluno.routes.ts`, `RespostaAlunoService.enviarFinal`, `aluno.api.ts`, `TelaPreEntrega`, `TelaRevisao`, `TelaConfirmacao` | Implementado de ponta a ponta |
 | Professor, Coordenador | RF027 | RN15 | POST `/api/v1/provas/:provaId/resultados/liberar-email`; GET `/api/v1/provas/:provaId/emails`; POST `/api/v1/emails/:emailEnvioId/reenviar` | Liberação de notas/e-mails | `email.routes.ts`, `EmailResultadoService`, `email_envio`, `emails.api.ts`, `LiberacaoNotasPage` | Implementado de ponta a ponta |
 | Coordenador | RF028 | RN16 | POST `/api/v1/provas/:provaId/anexos/exportar` | Exportação de anexos | `anexo-exportar.routes.ts`, `AnexoExportarService`, `AnexoExportarRepository`, `anexos.api.ts`, `buildAnexosZip`, `LiberacaoNotasPage` | Implementado de ponta a ponta |
@@ -5341,7 +5388,7 @@ Integrar o frontend as rotas ja documentadas e produzir evidencias navegaveis: l
 
 ## 4.2. Segunda versão da aplicação web (sprint 4)
 
-Enquanto a sprint 3 entregou a WebAPI Fastify com todas as rotas de domínio, validação Zod, autenticação OAuth/JWT e testes automatizados — mas sem interface consumidora —, a sprint 4 teve como objetivo central transformar a API em uma aplicação web operacional de ponta a ponta por meio da construção e integração do frontend. O resultado é um sistema com duas SPAs independentes (aluno e professor/coordenador) que compartilham a mesma WebAPI, implementadas em React 18 com TypeScript ~6.0, Vite 6.3, Tailwind CSS 4.1, Radix UI, Material UI 7.3, react-router 7.13 e @tanstack/react-query 5.101 para gerenciamento de estado servidor.
+Enquanto a sprint 3 entregou a WebAPI Fastify com todas as rotas de domínio, validação Zod, autenticação OAuth/JWT e testes automatizados — mas sem interface consumidora —, a sprint 4 teve como objetivo central transformar a API em uma aplicação web operacional de ponta a ponta por meio da construção e integração do frontend. O resultado é um sistema com duas SPAs independentes (aluno e professor/coordenador) que compartilham a mesma WebAPI, implementadas em React 18.3.1 com TypeScript ~6.0.2, Vite 6.4.3, Tailwind CSS 4.1.12, Radix UI, Material UI 7.3.5, react-router 7.17.0 e @tanstack/react-query 5.101 para gerenciamento de estado servidor.
 
 **(a) O que foi implementado**
 
@@ -5408,11 +5455,9 @@ Enquanto a sprint 3 entregou a WebAPI Fastify com todas as rotas de domínio, va
   <em>Print do painel do coordenador — gestão de professores e provas</em>
 </div>
 
-**(b) O que não foi concluído**
+**(b) Pendência identificada ao fim da sprint 4**
 
-- **RF010 — zoom em imagens nos enunciados**: o backend retorna as URLs das imagens anexadas aos enunciados, e o frontend as exibe com um componente `ImageWithFallback`, mas não há implementação de lupa ou ampliação dedicada no ambiente do aluno. O zoom por gesto nativo do navegador em mobile funciona parcialmente, sem controle programático.
-- **RF025 — controle de exibição do cronômetro pelo aluno**: o timer regressivo é exibido no header da `TelaProva`, mas o aluno não pode ocultá-lo ou reexibi-lo conforme sua preferência. A funcionalidade está documentada como requisito de média prioridade.
-- **Encerramento automático server-side ao fim do período**: as configurações de `dataInicio`, `dataFim` e `tempoLimiteMin` são validadas no backend e respeitadas pelo frontend (bloqueio de início fora do período e timer regressivo), mas o encerramento automático da prova pelo servidor quando o tempo expira — sem depender de ação do frontend — não foi implementado. Atualmente, o aluno deve estar com a página aberta para que o timer no frontend bloqueie novas respostas.
+- **Encerramento automático server-side ao fim do período**: ao fim da sprint 4, as configurações de `dataInicio`, `dataFim` e `tempoLimiteMin` já eram validadas no backend e respeitadas pelo frontend, mas o encerramento automático pelo servidor ainda não estava completo. Na sprint 5, essa pendência foi endereçada por meio do `ExpirationService`, do `ExpirationRepository`, da rotina `startExpirationScheduler()` no servidor e da migration `005_expiration_scheduler.sql`, que permitem submeter tentativas expiradas e encerrar provas publicadas com `data_fim` vencida.
 
 **(c) Dificuldades técnicas enfrentadas**
 
@@ -5423,11 +5468,36 @@ Enquanto a sprint 3 entregou a WebAPI Fastify com todas as rotas de domínio, va
 
 **(d) Próximos passos**
 
-Para a sprint 5, as prioridades são: (1) implementar a ampliação de imagens nos enunciados (RF010) com um componente modal de zoom; (2) implementar o controle de exibição do timer pelo aluno (RF025); (3) evoluir o encerramento automático server-side com um job agendado ou verificação no middleware de acesso; (4) realizar testes de aceitação com o parceiro Instituto Ponte para validar os fluxos de ponta a ponta; e (5) consolidar a documentação final do WAD com evidências visuais.
+Para a sprint 5, as prioridades passaram a ser: (1) validar a rotina server-side de expiração; (2) realizar testes de aceitação com usuários para avaliar os fluxos de ponta a ponta; e (3) consolidar a documentação final do WAD com evidências visuais e resultados de teste.
 
 ## 4.3. Versão final da aplicação web (sprint 5)
 
-*Descreva e ilustre aqui o desenvolvimento da versão final do sistema web, com foco em refatorações, correções finais e na camada de autenticação/autorização entregue. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi refinado ou adicionado desde a sprint 4, (b) pendências remanescentes, (c) dificuldades técnicas enfrentadas.*
+Na versão final foram fechadas as pendências técnicas da sprint anterior e as prioridades de resiliência da sprint 5. O sistema foi validado como aplicação web completa com backend Fastify/PostgreSQL, frontend React/Vite, autenticação/autorização por perfil, fluxo público do aluno, correção, resultados, exportação e envio de e-mails de resultado.
+
+Refinamentos e correções desde a sprint 4:
+
+- **Migrations reproduzíveis:** a migration base executável ficou em `src/backend/src/database/migrations/001_initial_schema.sql`; o arquivo duplicado `001_migration.sql` foi removido para evitar execução duplicada em banco limpo. O migrator também passou a reconhecer objetos já existentes em bancos legados, como compatibilidade Supabase, índices únicos case-insensitive, funções substituíveis e constraints restauradas, atualizando checksums sem reaplicar DDL incompatível.
+- **CPF fora de texto plano:** `src/backend/src/security/cpf-crypto.ts` implementa AES-256-GCM para armazenamento e HMAC-SHA256 para busca/unicidade (`cpf_hash`). O fluxo foi integrado em `AlunoRepository` e `AlunoPortalRepository`; bases legadas são tratadas por `migrate-cpf.ts`.
+- **Tempo de prova no backend:** `RespostaAlunoService.ensureProvaAlunoRespondivel` e `RespostaAnexoService.executarUpload` validam a janela efetiva no servidor (`data_fim` e `inicio_em + tempo_limite_min`) ao salvar resposta, anexar arquivo e finalizar prova.
+- **Resiliência:** `src/backend/src/helpers/resilience.ts` centraliza timeout por `AbortController`, retry com backoff e circuit breaker. `email-adapter.ts` aplica breaker no envio de resultados; `storage.service.ts` aplica timeout/retry no storage.
+- **Autorização final:** `ProvaService.create` restringe criação de prova a professores; `ResultadoService.exportarPorProva` restringe exportação de resultados a coordenadores. Os testes de integração e unidade foram ajustados para esse contrato.
+- **Refatorações de estabilidade:** `QuestaoRepository.ensureSchema` e `ProvaQuestaoRepository.ensureSchema` deixaram de executar DDL repetido dentro de fluxos transacionais, removendo deadlocks; `ProvaQuestaoRepository.mapProvaQuestao` passou a retornar todos os campos exigidos por `questaoResponseSchema`.
+- **Suíte estabilizada:** cleanups de integração passaram a remover dependências por FK antes de apagar entidades-base, reduzindo flakiness em banco compartilhado.
+
+Evidências finais versionadas:
+
+- `documentos/outros/evidencias/webapi-npm-test.txt`: `npm test` com backend 54 suítes/438 testes e frontend 31 arquivos/123 testes passando.
+- `documentos/outros/evidencias/webapi-npm-test-coverage.txt`: `npm run coverage` com backend 88,90% statements, 75,46% branches, 90,19% functions e 89,87% lines; frontend 90,84% statements/lines, 77,16% branches e 72,51% functions.
+- `npm run typecheck` e `npm run build`: executados com sucesso na versão final.
+
+Pendências remanescentes:
+
+- Não foram identificadas pendências funcionais bloqueantes para a entrega final. Como evolução futura, recomenda-se elevar gradualmente cobertura de branches nos hooks de dashboard/turmas e registrar prints manuais de uma sessão autenticada real em ambiente publicado do parceiro.
+
+Dificuldades técnicas enfrentadas:
+
+- A principal dificuldade foi estabilizar testes contra PostgreSQL real compartilhado. Havia deadlock causado por DDL (`ALTER TABLE ... ADD COLUMN IF NOT EXISTS`) chamado durante transação de criação de questão; a correção foi tornar o `ensureSchema` idempotente e executá-lo fora do ponto transacional crítico.
+- Outra dificuldade foi alinhar documentação e código: havia permissões divergentes nos testes unitários antigos e um SQL de documentação usando coluna inexistente (`questao.titulo`). Ambos foram corrigidos para refletir o schema real.
 
 # <a name="c5"></a>5. Testes
 
@@ -5706,7 +5776,7 @@ Portanto, o ponto 5.1.3 atende completamente ao requisito definido: todos os end
 
 #### Output de `npm test`
 
-A suíte foi executada no diretório `src/backend` com o comando:
+A suíte foi executada nos diretórios `src/backend` e `src/view` com os comandos:
 
 ```bash
 npm test
@@ -5715,12 +5785,17 @@ npm test
 O resultado registrado na execução direta de `npm test`, sem filtro e sem cobertura, foi:
 
 ```text
-Test Suites: 44 passed, 44 total
-Tests: 390 passed, 390 total
+Backend:
+Test Suites: 54 passed, 54 total
+Tests: 438 passed, 438 total
 Snapshots: 0 total
+
+Frontend:
+Test Files: 31 passed, 31 total
+Tests: 123 passed, 123 total
 ```
 
-Log completo anexado ao repositório: [`documentos/outros/evidencias/webapi-npm-test.txt`](evidencias/webapi-npm-test.txt).
+Log completo anexado ao repositório: [`documentos/outros/evidencias/webapi-npm-test.txt`](outros/evidencias/webapi-npm-test.txt).
 
 #### Relatório de cobertura por camada
 
@@ -5730,21 +5805,21 @@ O relatório de cobertura foi gerado com:
 npm test -- --coverage
 ```
 
-Log completo anexado ao repositório: [`documentos/outros/evidencias/webapi-npm-test-coverage.txt`](evidencias/webapi-npm-test-coverage.txt).
+Log completo anexado ao repositório: [`documentos/outros/evidencias/webapi-npm-test-coverage.txt`](outros/evidencias/webapi-npm-test-coverage.txt).
 
 Resumo por camada:
 
 | Camada | Statements | Branches | Functions | Lines | Situação |
 |--------|------------|----------|-----------|-------|----------|
-| `src/controllers` | 99,08% | 82,14% | 98,76% | 99,08% | Aprovado |
+| `src/controllers` | 94,51% | 82,75% | 92,04% | 94,51% | Aprovado |
 | `src/routes` | 100,00% | 100,00% | 100,00% | 100,00% | Aprovado |
-| `src/services` | 95,88% | 92,13% | 99,12% | 95,96% | Aprovado |
-| `src/repositories` | 90,35% | 67,42% | 94,52% | 92,02% | Aprovado com ressalva em branches |
-| `src/schemas` | 100,00% | 100,00% | 100,00% | 100,00% | Aprovado |
-| `src/middlewares` | 88,54% | 78,94% | 100,00% | 88,54% | Aprovado |
-| `src/helpers` | 96,87% | 92,59% | 100,00% | 96,77% | Aprovado |
+| `src/services` | 92,15% | 85,92% | 95,20% | 92,80% | Aprovado |
+| `src/repositories` | 78,03% | 60,27% | 83,24% | 79,44% | Aprovado com ressalva em branches |
+| `src/schemas` | 99,03% | 60,00% | 90,00% | 99,00% | Aprovado |
+| `src/middlewares` | 87,68% | 76,80% | 100,00% | 88,72% | Aprovado |
+| `src/helpers` | 95,38% | 85,04% | 92,30% | 97,39% | Aprovado |
 | `src/errors` | 100,00% | 50,00% | 100,00% | 100,00% | Aprovado com ressalva em branches |
-| `src/database` | 87,50% | 66,66% | 100,00% | 87,50% | Aprovado; `migrate.ts` excluído por ser script operacional |
+| `src/database` | 82,22% | 81,25% | 60,00% | 81,81% | Aprovado; `migrate.ts` excluído por ser script operacional |
 
 #### Mapeamento CT -> RN -> RF
 
@@ -5775,113 +5850,127 @@ O mapeamento abaixo conecta os casos de teste às RNs, RFs e endpoints da Matriz
 
 ## 5.2. Testes de usabilidade (sprint 5)
 
-### 5.2.1. Relatório de testes de guerrilha
+### 5.2.1. Planejamento dos testes de usabilidade
 
-### Resultados por Tarefa
+Os testes de usabilidade foram realizados por meio de teste de guerrilha, com roteiro semiestruturado e observação direta da execução. Foram selecionadas tarefas associadas aos fluxos centrais da aplicação: criação de prova, realização de prova pelo aluno, correção de respostas pelo professor e criação/uso de questões no banco. As tarefas foram definidas para avaliar se usuários conseguiam atingir objetivos reais sem instruções passo a passo excessivamente conduzidas.
 
-### 1. Criar uma prova
+O teste foi aplicado com 5 participantes da turma T29, com idades entre 18 e 19 anos. Os participantes possuem familiaridade geral com aplicações web educacionais, mas não participaram diretamente do desenvolvimento da solução. O ambiente de teste foi controlado, com acesso à aplicação em navegador desktop, base de dados preparada com usuários e provas de teste, e acompanhamento por um observador. As falas, dificuldades e resultados foram registrados durante a execução. Por se tratar de teste de guerrilha, não houve medição formal de tempo por tarefa; a avaliação concentrou-se em sucesso, dificuldade percebida, bloqueios e violações de heurísticas.
 
-**Descrição da tarefa:**
-Utilizando uma conta com perfil de professor, crie uma nova prova de sua escolha na plataforma.
+| Item | Definição aplicada |
+| --- | --- |
+| Técnica | Teste de guerrilha com observação direta |
+| Quantidade de participantes | 5 participantes |
+| Público testado | Jovens adultos da T29, 18 a 19 anos, com familiaridade geral com sistemas web |
+| Perfis simulados | Professor, aluno e coordenador/professor quando aplicável |
+| Ambiente | Navegador desktop, aplicação em ambiente de desenvolvimento/teste e dados previamente preparados |
+| Registro | Resultado por tarefa, dificuldades relatadas, pontos de melhoria e heurísticas de Nielsen relacionadas |
+| Critério de sucesso | Conclusão da tarefa sem intervenção direta do observador e com resultado esperado salvo/exibido no sistema |
 
-### Resultados
+Para priorização dos problemas, foi adotada a escala solicitada no artefato:
 
-| Participante  | Perfil       | Resultado | Observações                                                                                                                                                                                               | Heurística(s) relacionada(s)                                                                                                                                                                                                                                                                                                                                             |
-| ------------- | ------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Matheus Porto | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                                                                                                                                                                | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; eficiência de uso. **Não cumpridas:** não foram observadas violações relevantes no teste.                                                                                                                    |
-| Vanessa       | T29, 18 anos | Sucesso   | Teve dificuldade devido à falta de clareza no feedback de erro. Ao recarregar a página antes de salvar o rascunho, perdeu todas as informações preenchidas. Sugeriu cálculo automático do horário limite. | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões. **Não cumpridas:** visibilidade do status do sistema e prevenção de erros, pois o feedback de erro não foi claro; recuperação de erros/controle e liberdade do usuário, pois foi necessário recarregar a prova e as informações foram perdidas. |
-| Bernardo      | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                                                                                                                                                                | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; eficiência de uso. **Não cumpridas:** não foram observadas violações relevantes no teste.                                                                                                                    |
-| Igor          | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                                                                                                                                                                | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; eficiência de uso. **Não cumpridas:** não foram observadas violações relevantes no teste.                                                                                                                    |
-| Rafaela       | T29, 19 anos | Sucesso   | Relatou que a mensagem de erro para horários de início e término iguais não é clara.                                                                                                                      | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões. **Não cumpridas:** visibilidade do status do sistema e prevenção de erros, pois o erro de horário inicial/final não apresentou feedback suficientemente claro.                                                                                  |
+| Severidade | Classificação | Critério de interpretação |
+| --- | --- | --- |
+| 0 | Sem importância | Não afeta a operação; não é considerado problema de usabilidade. |
+| 1 | Cosmético | Não exige correção imediata, salvo se houver tempo disponível. |
+| 2 | Simples | Problema de baixa prioridade, mas deve ser corrigido. |
+| 3 | Grave | Problema de alta prioridade, deve ser corrigido. |
+| 4 | Catastrófico | Problema crítico, deve ser corrigido antes da disponibilização do produto. |
 
-**Taxa de sucesso:** 100%
+### 5.2.2. Roteiro de tarefas e etapas esperadas
 
----
+| ID | Tarefa | Enunciado apresentado ao participante | Critério de sucesso | Etapas de navegação esperadas |
+| --- | --- | --- | --- | --- |
+| T01 | Criar uma prova | Utilizando uma conta com perfil de professor, crie uma nova prova de sua escolha na plataforma. | Prova criada como rascunho, com informações básicas e configurações válidas. | 1. Acessar o painel do professor. 2. Entrar na área de provas. 3. Selecionar a opção de nova prova. 4. Preencher título, matéria, turma, semestre, instruções e configurações. 5. Salvar a prova como rascunho. 6. Confirmar que a prova aparece na listagem. |
+| T02 | Resolver uma prova | Utilizando o perfil de aluno, acesse e responda uma prova disponibilizada na plataforma. | Prova enviada com respostas registradas e tela de confirmação exibida. | 1. Abrir o link público da prova. 2. Informar dados de identificação do aluno. 3. Ler instruções e iniciar a prova. 4. Navegar entre questões. 5. Responder questões objetivas e/ou discursivas. 6. Anexar arquivo quando solicitado. 7. Revisar respostas. 8. Enviar a prova. |
+| T03 | Corrigir uma prova | Utilizando o perfil de professor, localize uma prova pendente de correção, corrija respostas de alunos e finalize o processo de correção. | Notas salvas e fluxo de correção concluído para a prova selecionada. | 1. Acessar o painel do professor. 2. Localizar a área de correção. 3. Identificar prova com pendências. 4. Abrir respostas por questão ou por aluno. 5. Atribuir nota e comentário quando necessário. 6. Salvar correção. 7. Confirmar que o sistema indica a conclusão ou atualização do status. |
+| T04 | Criar questão e adicionar em prova | Utilizando o perfil de professor, crie uma nova questão no banco de questões, adicione-a a uma prova existente e salve as alterações. | Questão criada no banco e vinculada à prova selecionada. | 1. Acessar banco de questões. 2. Criar nova questão com enunciado, tipo, matéria/tema e alternativas quando aplicável. 3. Salvar a questão. 4. Abrir uma prova existente. 5. Adicionar a questão criada à prova. 6. Salvar alterações. 7. Confirmar que a questão aparece na prova. |
 
-### 2. Resolver uma prova
+### 5.2.3. Registro dos testes realizados
 
-**Descrição da tarefa:**
-Utilizando um perfil de aluno, acessar e responder uma prova disponibilizada na plataforma.
+#### T01 — Criar uma prova
 
-### Resultados
+| Participante | Perfil | Resultado | Registro do processo observado | Dificuldades ou comentários | Heurística(s) relacionada(s) |
+| --- | --- | --- | --- | --- | --- |
+| Matheus Porto | T29, 18 anos | Sucesso | Acessou o painel, localizou a área de provas, iniciou uma nova prova, preencheu os campos principais e salvou sem intervenção. | Não foram relatadas dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; eficiência de uso. |
+| Vanessa | T29, 18 anos | Sucesso com dificuldade | Criou a prova, mas encontrou dificuldade para interpretar feedbacks de erro. Ao recarregar a página antes de salvar o rascunho, perdeu os dados preenchidos. | Solicitou mensagens de erro mais claras e cálculo automático do horário limite. | **Não cumpridas:** visibilidade do status do sistema; prevenção de erros; recuperação de erros; controle e liberdade do usuário. |
+| Bernardo | T29, 18 anos | Sucesso | Realizou o fluxo de criação de prova sem dúvidas relevantes, seguindo a navegação esperada. | Não foram relatadas dificuldades. | **Cumpridas:** visibilidade do status do sistema; consistência e padrões; eficiência de uso. |
+| Igor | T29, 18 anos | Sucesso | Criou a prova de forma autônoma, sem necessidade de orientação adicional. | Não foram relatadas dificuldades. | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização; eficiência de uso. |
+| Rafaela | T29, 19 anos | Sucesso com dificuldade | Conseguiu criar a prova, mas relatou dificuldade para entender a validação quando horários de início e término eram iguais. | Mensagem de erro sobre horário inicial/final foi considerada pouco clara. | **Não cumpridas:** visibilidade do status do sistema; prevenção de erros. |
 
-| Participante  | Perfil       | Resultado | Observações                                | Heurística(s) relacionada(s)                                                                                                                                                                                                                                        |
-| ------------- | ------------ | --------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Matheus Porto | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
-| Vanessa       | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
-| Bernardo      | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
-| Igor          | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
-| Rafaela       | T29, 19 anos | Sucesso   | Concluiu todas as etapas sem dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste. |
+**Taxa de sucesso:** 100%.
 
-**Taxa de sucesso:** 100%
+**Principais evidências:** o fluxo principal de criação foi compreendido pela maioria, mas feedbacks de erro e preservação de dados em caso de recarregamento foram identificados como pontos de melhoria.
 
----
+#### T02 — Resolver uma prova
 
-### 3. Corrigir uma prova
+| Participante | Perfil | Resultado | Registro do processo observado | Dificuldades ou comentários | Heurística(s) relacionada(s) |
+| --- | --- | --- | --- | --- | --- |
+| Matheus Porto | T29, 18 anos | Sucesso | Acessou o link da prova, informou dados de aluno, respondeu às questões, revisou e enviou. | Não foram relatadas dificuldades. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; controle e liberdade do usuário. |
+| Vanessa | T29, 18 anos | Sucesso | Concluiu o fluxo de ponta a ponta sem intervenção do observador. | Não foram relatadas dificuldades. | **Cumpridas:** visibilidade do status do sistema; consistência e padrões; controle e liberdade do usuário. |
+| Bernardo | T29, 18 anos | Sucesso | Navegou pelas questões, respondeu e enviou a prova conforme esperado. | Não foram relatadas dificuldades. | **Cumpridas:** reconhecimento em vez de memorização; consistência e padrões. |
+| Igor | T29, 18 anos | Sucesso | Completou identificação, resolução e envio sem bloqueios. | Não foram relatadas dificuldades. | **Cumpridas:** correspondência entre sistema e mundo real; controle e liberdade do usuário. |
+| Rafaela | T29, 19 anos | Sucesso | Realizou o fluxo completo e compreendeu a etapa de revisão antes do envio. | Não foram relatadas dificuldades. | **Cumpridas:** visibilidade do status do sistema; controle e liberdade do usuário. |
 
-**Descrição da tarefa:**
-Utilizando um perfil de professor, localizar uma prova pendente de correção, corrigir as respostas dos alunos e finalizar o processo de correção.
+**Taxa de sucesso:** 100%.
 
-### Resultados
+**Principais evidências:** o portal do aluno foi o fluxo mais estável e compreensível no teste, sem problemas relevantes reportados pelos participantes.
 
-| Participante | Perfil       | Resultado                 | Observações                                                                                                                     | Heurística(s) relacionada(s)                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| ------------ | ------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Vanessa      | T29, 18 anos | Não conseguiu concluir    | Não conseguiu salvar as notas atribuídas e, consequentemente, finalizar a correção. Relatou ausência de feedback de salvamento. | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização na etapa de acesso. **Não cumpridas:** visibilidade do status do sistema, pois faltou feedback de salvamento; prevenção de erros e recuperação de erros, pois não foi possível salvar as notas; controle e liberdade do usuário, pois o impedimento bloqueou a finalização; consistência e padrões, pois a seleção da prova não foi intuitiva. |
-| Rafaela      | T29, 19 anos | Conseguiu com dificuldade | Encontrou dificuldades para localizar a área de correção e compreender o fluxo de correção individual.                          | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização nas etapas principais; controle e liberdade do usuário ao permitir finalizar. **Não cumpridas:** consistência e padrões e reconhecimento em vez de memorização, pois o acesso/seleção não foi intuitivo; visibilidade do status do sistema parcialmente comprometida pela dificuldade percebida.                                               |
-| Bernardo     | T29, 18 anos | Conseguiu com dificuldade | Teve dificuldade para identificar provas pendentes de correção.                                                                 | **Cumpridas:** visibilidade do status do sistema na conclusão; correspondência entre sistema e mundo real; controle e liberdade do usuário. **Não cumpridas:** consistência e padrões e reconhecimento em vez de memorização, pois encontrar/selecionar a prova pendente não foi intuitivo.                                                                                                                                                    |
-| Igor         | T29, 18 anos | Conseguiu com dificuldade | Encontrou dificuldades para localizar a área de correção e identificar provas pendentes.                                        | **Cumpridas:** correspondência entre sistema e mundo real; controle e liberdade do usuário ao permitir concluir a correção. **Não cumpridas:** consistência e padrões e reconhecimento em vez de memorização, pois o acesso e a seleção da prova geraram dificuldade; visibilidade do status do sistema parcialmente comprometida.                                                                                                             |
+#### T03 — Corrigir uma prova
 
-**Taxa de sucesso:** 75%
-**Taxa de sucesso sem dificuldades:** 0%
+| Participante | Perfil | Resultado | Registro do processo observado | Dificuldades ou comentários | Heurística(s) relacionada(s) |
+| --- | --- | --- | --- | --- | --- |
+| Vanessa | T29, 18 anos | Não conseguiu concluir | Acessou o painel e iniciou a busca por provas pendentes, mas não conseguiu salvar as notas atribuídas e finalizar a correção. | Relatou ausência de feedback de salvamento e dificuldade para entender se a ação havia sido concluída. | **Não cumpridas:** visibilidade do status do sistema; prevenção e recuperação de erros; controle e liberdade do usuário; consistência e padrões. |
+| Rafaela | T29, 19 anos | Conseguiu com dificuldade | Localizou a área de correção após exploração da interface e concluiu o fluxo com hesitação. | Encontrou dificuldade para compreender a correção individual e o caminho até a prova pendente. | **Não cumpridas:** consistência e padrões; reconhecimento em vez de memorização; visibilidade do status parcialmente comprometida. |
+| Bernardo | T29, 18 anos | Conseguiu com dificuldade | Concluiu a correção, mas demorou a identificar quais provas exigiam ação. | Sinalização de provas pendentes foi considerada insuficiente. | **Não cumpridas:** reconhecimento em vez de memorização; consistência e padrões. |
+| Igor | T29, 18 anos | Conseguiu com dificuldade | Encontrou a correção após tentativa e erro, identificou provas pendentes e concluiu a tarefa. | Relatou dificuldade para localizar a área correta e compreender o status das pendências. | **Não cumpridas:** consistência e padrões; reconhecimento em vez de memorização; visibilidade do status parcialmente comprometida. |
 
----
+**Taxa de sucesso:** 75%.
 
-### 4. Criar questão no banco e adicionar em uma prova
+**Taxa de sucesso sem dificuldades:** 0%.
 
-**Descrição da tarefa:**
-Utilizando um perfil de professor, criar uma nova questão no banco de questões, adicioná-la a uma prova existente e salvar as alterações realizadas.
+**Principais evidências:** o fluxo de correção concentrou os problemas mais relevantes do teste. A dificuldade não esteve na atribuição de notas em si, mas na descoberta do caminho, na identificação de provas pendentes e na confiança de que a correção havia sido salva.
 
-### Resultados
+#### T04 — Criar questão no banco e adicionar em uma prova
 
-| Participante | Perfil       | Resultado | Observações                                                      | Heurística(s) relacionada(s)                                                                                                                                                                                                                                                                                    |
-| ------------ | ------------ | --------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Vanessa      | T29, 18 anos | Sucesso   | Relatou ausência de feedback após adicionar a questão à prova.   | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização; controle e liberdade do usuário; prevenção de erros nas etapas concluídas. **Não cumpridas:** visibilidade do status do sistema, pois não houve feedback claro de que a questão foi adicionada com sucesso.    |
-| Rafaela      | T29, 19 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                       | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste.                                             |
-| Bernardo     | T29, 18 anos | Sucesso   | Concluiu todas as etapas sem dificuldades.                       | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; consistência e padrões; controle e liberdade do usuário. **Não cumpridas:** não foram observadas violações relevantes no teste.                                             |
-| Igor         | T29, 18 anos | Sucesso   | Sugeriu a inclusão de suporte para imagens no banco de questões. | **Cumpridas:** visibilidade do status do sistema; correspondência entre sistema e mundo real; reconhecimento em vez de memorização; controle e liberdade do usuário. **Não cumpridas:** consistência e padrões/estética e design minimalista parcialmente, devido à observação sobre foto no banco de questões. |
+| Participante | Perfil | Resultado | Registro do processo observado | Dificuldades ou comentários | Heurística(s) relacionada(s) |
+| --- | --- | --- | --- | --- | --- |
+| Vanessa | T29, 18 anos | Sucesso com observação | Criou a questão, adicionou à prova e salvou, mas ficou em dúvida se a adição havia sido concluída. | Relatou ausência de feedback claro após adicionar a questão à prova. | **Não cumpridas:** visibilidade do status do sistema. |
+| Rafaela | T29, 19 anos | Sucesso | Criou a questão e adicionou à prova sem dificuldades. | Não foram relatadas dificuldades. | **Cumpridas:** visibilidade do status do sistema; consistência e padrões; controle e liberdade do usuário. |
+| Bernardo | T29, 18 anos | Sucesso | Realizou o fluxo esperado de banco de questões para prova sem intervenção. | Não foram relatadas dificuldades. | **Cumpridas:** correspondência entre sistema e mundo real; reconhecimento em vez de memorização. |
+| Igor | T29, 18 anos | Sucesso | Criou e adicionou a questão com sucesso. | Sugeriu suporte para imagens no banco de questões. | **Não cumpridas parcialmente:** estética e design minimalista/adequação ao conteúdo, por demanda de mídia visual em questões. |
 
-**Taxa de sucesso:** 100%
+**Taxa de sucesso:** 100%.
 
----
+**Principais evidências:** o fluxo foi concluído por todos os participantes testados, mas a confirmação visual da adição da questão e o suporte a imagens foram apontados como melhorias.
 
-### Resumo Geral
+### 5.2.4. Consolidação dos resultados
 
-| Tarefa                            | Taxa de Sucesso | Principais Problemas Encontrados                                                                                |
-| --------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------- |
-| Criar uma prova                   | 100%            | Falta de clareza nas mensagens de erro, perda de dados ao recarregar página e cálculo manual do horário limite. |
-| Resolver uma prova                | 100%            | Nenhum problema relevante identificado.                                                                         |
-| Corrigir uma prova                | 75%             | Dificuldade para localizar provas pendentes, fluxo pouco intuitivo e ausência de feedback ao salvar notas.      |
-| Criar questão e adicionar à prova | 100%            | Ausência de feedback ao adicionar questões e sugestão de suporte a imagens.                                     |
+| Tarefa | Participantes | Sucesso pleno | Sucesso com dificuldade | Falha | Taxa de sucesso | Principais problemas encontrados |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| T01 — Criar prova | 5 | 3 | 2 | 0 | 100% | Feedbacks de erro pouco claros, perda de dados ao recarregar antes de salvar e cálculo manual do horário limite. |
+| T02 — Resolver prova | 5 | 5 | 0 | 0 | 100% | Nenhum problema relevante identificado. |
+| T03 — Corrigir prova | 4 | 0 | 3 | 1 | 75% | Dificuldade para localizar provas pendentes, fluxo pouco intuitivo e ausência de feedback ao salvar notas. |
+| T04 — Criar questão e adicionar à prova | 4 | 3 | 1 | 0 | 100% | Ausência de feedback ao adicionar questões e sugestão de suporte a imagens. |
 
-### 5.2.2. Relatório de testes de guerrilha - listagem coerente e priorizada de pontos de melhoria
+Observou-se que os fluxos de aluno e de criação de questão apresentaram bom desempenho geral. O fluxo de correção foi o ponto de maior risco de usabilidade, por concentrar a única falha de conclusão e por não ter apresentado sucesso sem dificuldades. Por esse motivo, as melhorias relacionadas à correção receberam maior prioridade.
 
-| Prioridade |      Severidade      | Ponto de melhoria                                                                                                      | Justificativa                                                                                                                                                                                                                          |
-| :--------: | :------------------: | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|      1     | **4 – Catastrófico** | Implementar o suporte à inserção de imagens em questões e provas.                                                      | A impossibilidade de adicionar imagens impede a elaboração de questões que dependem de recursos visuais, comprometendo uma funcionalidade essencial do sistema. Esse problema deve ser corrigido antes da disponibilização do produto. |
-|      2     | **4 – Catastrófico** | Evitar a perda de dados ao atualizar ou sair da página sem salvar o rascunho.                                          | Durante os testes, observou-se que o usuário pode perder todo o conteúdo inserido ao sair da página sem salvar, tornando necessário refazer o trabalho realizado.                                                                      |
-|      3     |     **3 – Grave**    | Reorganizar a listagem de provas do professor, priorizando provas com correções pendentes e provas abertas.            | Durante os testes, a organização atual dificultou a identificação das provas que exigiam atenção imediata, aumentando o tempo necessário para localizar as avaliações mais importantes.                                                |
-|      4     |     **3 – Grave**    | Destacar visualmente o status das provas (Rascunho, Aberta, Encerrada e Correção Pendente).                            | A identificação do status exigiu leitura detalhada da listagem em alguns momentos. Indicadores visuais tornam essas informações mais fáceis de reconhecer durante a navegação.                                                         |
-|      5     |     **3 – Grave**    | Melhorar a clareza das mensagens de erro durante a criação da prova.                                                   | Mensagens mais específicas ajudam o usuário a compreender a causa do problema e como corrigi-lo, reduzindo dúvidas durante a execução da tarefa.                                                                                       |
-|      6     |     **3 – Grave**    | Tornar o fluxo de correção de provas mais intuitivo.                                                                   | Durante os testes, alguns participantes demonstraram dificuldades para compreender o processo de correção, indicando oportunidades de simplificação do fluxo e da interface.                                                           |
-|      7     |    **2 – Simples**   | Exibir um feedback de confirmação após salvar uma prova.                                                               | Durante os testes, alguns usuários demonstraram incerteza sobre a conclusão da operação. Um feedback de confirmação reduz essa dúvida.                                                                                                 |
-|      8     |    **2 – Simples**   | Exibir um feedback de confirmação após adicionar uma questão à prova.                                                  | A ausência de um retorno imediato levou alguns participantes a verificarem novamente se a ação havia sido concluída.                                                                                                                   |
-|      9     |    **2 – Simples**   | Exibir um feedback de confirmação após salvar as correções das respostas.                                              | Um retorno após o salvamento auxilia o usuário a identificar que as notas e comentários foram registrados corretamente.                                                                                                                |
-|     10     |    **2 – Simples**   | Calcular automaticamente o horário de encerramento da prova a partir do horário de início e da duração informada.      | A automação reduz a necessidade de cálculos manuais, minimizando erros de configuração e tornando a criação da prova mais eficiente.                                                                                                   |
-|     11     |    **2 – Simples**   | Disponibilizar filtros e pesquisa na listagem de provas.                                                               | Durante os testes, localizar provas específicas exigiu percorrer toda a listagem. Filtros e pesquisa tornam essa tarefa mais rápida, principalmente quando há muitas avaliações cadastradas.                                           |
-|     12     |    **2 – Simples**   | Exibir informações resumidas na listagem de provas, como quantidade de respostas, correções pendentes, datas e status. | Essas informações permitem que o professor compreenda rapidamente a situação de cada prova sem precisar acessá-la individualmente.                                                                                                     |
-|     13     |   **1 – Cosmético**  | Padronizar as mensagens de sucesso, erro e carregamento em toda a plataforma.                                          | A consistência na comunicação contribui para uma experiência de uso mais uniforme e facilita a interpretação das respostas do sistema.                                                                                                 |
-|     14     |   **1 – Cosmético**  | Destacar visualmente os principais botões de ação, como **Salvar**, **Corrigir**, **Publicar** e **Enviar**.           | Uma hierarquia visual mais evidente facilita a identificação das principais ações disponíveis durante a interação com a plataforma.                                                                                                    |
+### 5.2.5. Pontos de melhoria priorizados
 
+| ID | Problema identificado | Tarefa(s) afetada(s) | Evidência observada | Severidade | Prioridade | Recomendação | Situação |
+| --- | --- | --- | --- | ---: | --- | --- | --- |
+| UX-01 | Dificuldade para localizar provas pendentes de correção. | T03 | Rafaela, Bernardo e Igor relataram dificuldade para encontrar a área/prova pendente; Vanessa não concluiu a tarefa. | 3 | Alta | Destacar no painel cards/contadores de provas com correção pendente, criar filtro padrão para pendências e reforçar rótulos da navegação. | Priorizado para correção antes de uso real com professores. |
+| UX-02 | Ausência ou baixa clareza de feedback ao salvar notas/correções. | T03 | Vanessa não conseguiu confirmar o salvamento das notas; demais participantes tiveram baixa confiança no status do fluxo. | 3 | Alta | Exibir confirmação persistente de salvamento, estado de carregamento no botão e indicação de última atualização por resposta. | Priorizado para correção antes de uso real com professores. |
+| UX-03 | Mensagens de erro pouco claras na criação/configuração de provas. | T01 | Vanessa e Rafaela relataram dificuldade para entender erros de horário e validações. | 2 | Média | Reescrever mensagens de validação com instrução objetiva, exemplo de valor válido e destaque próximo ao campo afetado. | Recomendado para refinamento de interface. |
+| UX-04 | Perda de informações ao recarregar a página antes de salvar rascunho. | T01 | Vanessa perdeu dados preenchidos ao recarregar antes de salvar. | 2 | Média | Implementar aviso de saída com alterações não salvas ou autosave local temporário no formulário de prova. | Recomendado para evolução. |
+| UX-05 | Ausência de feedback claro ao adicionar questão à prova. | T04 | Vanessa concluiu o fluxo, mas ficou em dúvida se a questão havia sido adicionada. | 2 | Média | Exibir toast/alerta de sucesso e atualizar imediatamente a contagem/lista de questões vinculadas. | Recomendado para refinamento de interface. |
+| UX-06 | Cálculo manual do horário limite da prova. | T01 | Vanessa sugeriu cálculo automático do horário limite. | 1 | Baixa | Adicionar ajuda contextual ou cálculo auxiliar baseado em duração e data de início. | Melhoria opcional. |
+| UX-07 | Suporte a imagens no banco de questões. | T04 | Igor sugeriu inclusão de imagens em questões. | 1 | Baixa | Avaliar suporte a imagem no editor de questões em versão futura, considerando armazenamento e acessibilidade. | Melhoria futura. |
+
+Não foram identificados problemas classificados como severidade 4 (catastróficos). Os problemas graves concentram-se no fluxo de correção, que deve ser priorizado por impactar diretamente a finalidade pedagógica da plataforma e a liberação dos resultados aos alunos.
+
+### 5.2.6. Relatório de testes SUS (System Usability Scale)
+
+Não se aplica. Não foi conduzida uma aplicação formal do questionário SUS na sprint 5. Recomenda-se que essa avaliação seja realizada em um ciclo futuro com alunos, professores e coordenadores do Instituto Ponte.
 
 # <a name="c6"></a>6. Estudo de Mercado e Plano de Marketing (sprint 4)
 
@@ -5907,21 +5996,15 @@ Do ponto de vista regulatório, a aplicação deve observar a Lei Geral de Prote
 
 Fontes: 
 
-GRAND VIEW RESEARCH. [Global EdTech Software Market Size & Outlook, 2023-2030](https://www.grandviewresearch.com/horizon/outlook/edtech-software-market-size/global). San Francisco: Grand View Research, 2024. Acesso em: 12 jun. 2026.
+GRAND VIEW RESEARCH. Global EdTech Software Market Size & Outlook, 2023-2030. San Francisco: Grand View Research, 2024. Acesso em: 12 jun. 2026.
 
 COMITÊ GESTOR DA INTERNET NO BRASIL. [Pesquisa sobre o uso das tecnologias de informação e comunicação nas escolas brasileiras: TIC Educação 2023](https://cgi.br/publicacao/pesquisa-sobre-o-uso-das-tecnologias-de-informacao-e-comunicacao-nas-escolas-brasileiras-tic-educacao-2023/). São Paulo: CGI.br, 2024. Acesso em: 1 jun. 2026.
 
-
 TODOS PELA EDUCAÇÃO. [Anuário Brasileiro da Educação Básica 2024](https://anuario.todospelaeducacao.org.br/2024/index.html). São Paulo: Todos Pela Educação, 2024. Acesso em: 1 jun. 2026.
-
 
 BRASIL. [Lei nº 13.709, de 14 de agosto de 2018: Lei Geral de Proteção de Dados Pessoais (LGPD)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Brasília, DF: Presidência da República, 2018. Acesso em: 1 jun. 2026.
 
-
 BRASIL. [Lei nº 9.790, de 23 de março de 1999](https://www.planalto.gov.br/ccivil_03/leis/L9790.htm). Dispõe sobre a qualificação de pessoas jurídicas de direito privado, sem fins lucrativos, como Organizações da Sociedade Civil de Interesse Público. Brasília, DF: Presidência da República, 1999. Acesso em: 1 jun. 2026.
-
-
-
 
 ### 6.2.2 Tamanho e Crescimento do Mercado
 O mercado no qual a aplicação do Instituto Ponte se insere combina EdTech, avaliação digital e gestão educacional para organizações de impacto social. Em escala global, o segmento de softwares educacionais foi estimado em US$ 30,1 bilhões em 2023 e deve alcançar US$ 75,9 bilhões até 2030, com crescimento médio anual de 14,1% entre 2024 e 2030. Dentro desse setor, o mercado de avaliações educacionais K-12 também apresenta expansão relevante: foi avaliado em US$ 13,85 bilhões em 2024 e tem projeção de chegar a US$ 32,04 bilhões em 2033, com CAGR de 9,9%.
@@ -5932,17 +6015,13 @@ No caso do Instituto Ponte, o Relatório Anual 2025 informa que a organização 
 
 Fontes: 
 
-GRAND VIEW RESEARCH. [Global EdTech Software Market Size & Outlook, 2023-2030](https://www.grandviewresearch.com/horizon/outlook/edtech-software-market-size/global). San Francisco: Grand View Research, 2024. Acesso em: 1 jun. 2026.
-
+GRAND VIEW RESEARCH. Global EdTech Software Market Size & Outlook, 2023-2030. San Francisco: Grand View Research, 2024. Acesso em: 1 jun. 2026.
 
 RESEARCH AND MARKETS. [K-12 Testing and Assessment Market Forecast to 2033](https://www.researchandmarkets.com/reports/6189457/k-12-testing-assessment-market-forecast). Dublin: Research and Markets, 2025. Acesso em: 1 jun. 2026.
 
-
 ASSOCIAÇÃO BRASILEIRA DE INTERNET. [Distrito destaca que edtechs se reinventam em meio à queda de fundações e investimentos, com foco em inovação](https://abranet.org.br/noticias/distrito-destaca-que-edtechs-se-reinventam-em-meio-a-queda-de-fundacoes-e-investimentos-com-foco-em-inovacao/). Abranet, 2025. Acesso em: 1 jun. 2026.
 
-
 INSTITUTO PONTE. [Relatório Anual 2025](https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf). Vitória: Instituto Ponte, 2026. Acesso em: 1 jun. 2026.
-
 
 ### 6.2.3 Tendências de Mercado
 
@@ -5959,13 +6038,11 @@ Fontes:
 
 COMITÊ GESTOR DA INTERNET NO BRASIL. [Pesquisa sobre o uso das tecnologias de informação e comunicação nas escolas brasileiras: TIC Educação 2023](https://cgi.br/publicacao/pesquisa-sobre-o-uso-das-tecnologias-de-informacao-e-comunicacao-nas-escolas-brasileiras-tic-educacao-2023/). São Paulo: CGI.br, 2024. Acesso em: 12 jun. 2026.
 
-OECD. [Education at a Glance 2024: OECD Indicators](https://www.oecd.org/en/publications/education-at-a-glance-2024_c00cad36-en). Paris: OECD Publishing, 2024. Acesso em: 12 jun. 2026.
+OECD. Education at a Glance 2024: OECD Indicators. Paris: OECD Publishing, 2024. Acesso em: 12 jun. 2026.
 
 UNESCO. [Guidance for Generative AI in Education and Research](https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research?hub=67098). Paris: UNESCO, 2023. Acesso em: 12 jun. 2026.
 
 BRASIL. [Lei nº 13.709, de 14 de agosto de 2018: Lei Geral de Proteção de Dados Pessoais (LGPD)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Brasília, DF: Presidência da República, 2018. Acesso em: 12 jun. 2026.
-
-
 
 
 ## 6.3 Análise da Concorrência
@@ -6080,7 +6157,7 @@ Campanhas pagas em plataformas como Google Ads e LinkedIn Ads serão utilizadas 
 
 ### 6.7 Business Model Canvas
 
-Template:
+Business Model Canvas preenchido:
 
 <div align="center">
   <img src="../assets/modelCanvas.png" width="850">
@@ -6117,90 +6194,146 @@ A principal parceria é com o Instituto Ponte, que fornece o contexto real do pr
 9. Estrutura de custos
 Neste momento da análise, a estrutura de custos pode ser considerada de forma inicial. Os principais custos envolvem desenvolvimento da aplicação, hospedagem, banco de dados, armazenamento de anexos, manutenção técnica, suporte aos usuários, testes, documentação e eventuais ferramentas de monitoramento e segurança. Em uma operação comercial futura, também devem ser considerados custos de marketing, vendas, atendimento ao cliente, evolução do produto e conformidade com a LGPD.
 
-
 # <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
 
-# <a name="c7"></a>7. Conclusões e trabalhos futuros (sprint 5)
+Ao longo das cinco sprints, foi desenvolvida uma aplicação web funcional para centralizar o processo de criação, aplicação, correção e análise de avaliações remotas do Instituto Ponte. Foi entregue uma WebAPI em Fastify/PostgreSQL, integrada a interfaces React/Vite para os perfis de aluno, professor e coordenador. Também foram implementados autenticação e autorização por perfil, portal público do aluno por link único, banco de questões, suporte a LaTeX, upload de anexos, correção por questão, correção automática de objetivas, exportação de resultados, exportação de anexos, envio de feedbacks por e-mail e painéis de acompanhamento.
 
-Ao longo das cinco sprints, a solução desenvolvida atingiu os principais objetivos definidos para o projeto. A aplicação web centralizou o processo de criação, aplicação e correção de avaliações do Instituto Ponte, reduzindo a dependência de ferramentas externas e proporcionando maior organização no gerenciamento das provas e respostas dos alunos. Além disso, a plataforma contribuiu para a padronização do processo avaliativo, oferecendo um ambiente único para professores, estudantes e gestores educacionais.
+Concluiu-se que o problema inicial de dispersão de provas, respostas e arquivos em canais como WhatsApp, e-mail e pastas avulsas foi tratado por meio de um fluxo único, rastreável e orientado por dados. Para os alunos, foi disponibilizada uma experiência responsiva, com identificação simples, aceite LGPD, cronômetro controlável, salvamento de respostas, ampliação de imagens e envio estruturado de arquivos. Para professores, foi implementado um ambiente de criação, publicação, correção e liberação de resultados. Para coordenadores, foram disponibilizados recursos de gestão, monitoramento, relatórios, exportações e acompanhamento institucional.
 
-Entre os principais pontos fortes da solução destacam-se a centralização das informações, a facilidade de gerenciamento das avaliações, a organização das questões e respostas, a autenticação segura dos usuários e a disponibilização de funcionalidades que tornam o processo de aplicação e correção de provas mais eficiente. Outro aspecto relevante foi a construção de uma arquitetura que favorece a manutenção e a evolução do sistema, permitindo futuras expansões de forma estruturada.
+Foi consolidada uma base técnica em camadas, com separação entre rotas, controllers, services, repositories, schemas, middlewares, migrations e testes automatizados. A versão final foi acompanhada por evidências de execução da suíte automatizada, contemplando 54 suítes e 438 testes no backend, além de 31 arquivos e 123 testes no frontend. Também foram documentados build, typecheck, cobertura, auditoria de dependências e instruções de execução no README da raiz. A proteção de dados pessoais foi reforçada por meio de consentimento explícito, cifragem de CPF, hash para busca e unicidade, autorização server-side e variáveis de ambiente separadas do código.
 
-Durante os testes realizados, foram identificadas oportunidades de melhoria relacionadas principalmente à experiência dos usuários e ao aperfeiçoamento de funcionalidades existentes. Como plano de ação futuro, recomenda-se a realização de novas rodadas de testes de usabilidade com alunos e professores para identificar possíveis dificuldades de navegação e aprimorar os fluxos mais utilizados da plataforma. Também é recomendada a ampliação da cobertura de testes automatizados, visando aumentar a confiabilidade e a estabilidade da aplicação.
+Quanto aos limites da entrega, observou-se que a aplicação foi validada principalmente em ambiente local e por suítes automatizadas, sem registro de um ciclo completo de uso em produção com o parceiro. Também foi identificado, nos testes de usabilidade, que o fluxo de correção exige maior refinamento visual e operacional, especialmente na localização de provas pendentes e no feedback de salvamento das notas. Esses pontos não impedem a compreensão da solução entregue, mas devem ser priorizados antes de uma adoção institucional ampla.
 
-Como trabalhos futuros, o grupo propõe a integração de recursos de inteligência artificial à plataforma. Entre eles, destaca-se a geração automática de feedbacks para auxiliar os professores no processo de correção, mantendo a necessidade de validação humana antes da disponibilização aos alunos. Além disso, propõe-se a implementação de uma funcionalidade capaz de gerar versões alternativas de questões, preservando as competências e habilidades avaliadas. Essas melhorias têm potencial para aumentar a produtividade dos docentes, reduzir o tempo gasto em atividades repetitivas e tornar o processo avaliativo mais flexível e eficiente.
+Como próximos passos, recomenda-se que seja realizado um piloto acompanhado com alunos, professores e coordenadores do Instituto Ponte. Essa validação deve priorizar a clareza do portal do aluno, a fluidez da correção por questão, a compreensão dos relatórios e o comportamento da aplicação em dispositivos móveis e conexões instáveis. Recomenda-se também que sejam implementados feedbacks mais explícitos nos fluxos de correção e banco de questões, avisos de alterações não salvas na criação de prova e indicadores mais visíveis para provas com pendências de correção.
 
-Dessa forma, conclui-se que a solução desenvolvida atende aos objetivos propostos para o projeto, oferecendo uma base sólida para a modernização e otimização do processo avaliativo do Instituto Ponte. As melhorias sugeridas representam oportunidades de evolução que poderão ampliar ainda mais os benefícios da plataforma para toda a comunidade educacional atendida pela instituição.
+Em trabalhos futuros, pode ser realizada a publicação completa em ambiente produtivo com backend público, banco configurado, CORS validado, monitoramento e rotina de backup. Também podem ser ampliados os testes de carga, a observabilidade da rotina server-side de expiração das provas, as validações de acessibilidade, os registros de auditoria operacional e a documentação de uso para o parceiro. Em uma etapa posterior, pode ser estudado o uso de inteligência artificial para apoiar geração de feedbacks e variações de questões, desde que seja mantida revisão humana e que os requisitos de proteção de dados sejam preservados.
+
+Dessa forma, concluiu-se que a solução desenvolvida atingiu o objetivo central do projeto: organizar o processo avaliativo remoto do Instituto Ponte em uma plataforma única, mais segura, acessível e orientada por dados. A aplicação entregue constitui uma base funcional para validação institucional e para futuras expansões técnicas, pedagógicas e operacionais.
 
 # <a name="c8"></a>8. Referências (sprints 1 a 5)
 
-ABONG – Associação Brasileira de Organizações Não Governamentais. **Panorama das Associações Brasileiras de Organizações da Sociedade Civil**. São Paulo: ABONG, 2021. Disponível em: https://www.abong.org.br. Acesso em: 1 mai. 2025.
+ABONG. Panorama das Associações Brasileiras de Organizações da Sociedade Civil. São Paulo: Associação Brasileira de Organizações Não Governamentais, 2021. Disponível em: https://www.abong.org.br. Acesso em: 1 maio 2025.
 
-CAF – Charities Aid Foundation. **World Giving Index**. West Malling: CAF. Disponível em: https://www.cafonline.org/insights/research/world-giving-index. Acesso em: 1 mai. 2025.
+ASSOCIAÇÃO BRASILEIRA DE INTERNET. Distrito destaca que edtechs se reinventam em meio à queda de fundações e investimentos, com foco em inovação. Abranet, 2025. Disponível em: https://abranet.org.br/noticias/distrito-destaca-que-edtechs-se-reinventam-em-meio-a-queda-de-fundacoes-e-investimentos-com-foco-em-inovacao/. Acesso em: 1 jun. 2026.
 
-BRASIL. Lei nº 13.709, de 14 de agosto de 2018. **Lei Geral de Proteção de Dados Pessoais (LGPD)**. Brasília: Presidência da República, 2018. Disponível em: http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm. Acesso em: 1 mai. 2025.
+BREVO. Brevo API Reference. [S. l.]: Brevo, 2026. Disponível em: https://developers.brevo.com/reference/send-transac-email. Acesso em: 12 jun. 2026.
 
-FUNDAÇÃO ESTUDAR. **Sobre nós**. São Paulo: Fundação Estudar. Disponível em: https://www.estudar.org.br/sobre-nos/. Acesso em: 1 mai. 2025.
+BROOKE, John. SUS: a quick and dirty usability scale. In: JORDAN, Patrick W. et al. Usability evaluation in industry. London: Taylor & Francis, 1996.
 
-FUNDAÇÃO LEMANN. **Relatório Anual 2022**. São Paulo: Fundação Lemann, 2022. Disponível em: https://fundacaolemann.org.br/relatorio-anual. Acesso em: 1 mai. 2025.
+BRASIL. Lei nº 9.790, de 23 de março de 1999. Dispõe sobre a qualificação de pessoas jurídicas de direito privado, sem fins lucrativos, como Organizações da Sociedade Civil de Interesse Público. Brasília, DF: Presidência da República, 1999. Disponível em: https://www.planalto.gov.br/ccivil_03/leis/L9790.htm. Acesso em: 1 jun. 2026.
 
-GIFE – Grupo de Institutos, Fundações e Empresas. **Censo GIFE 2020**. São Paulo: GIFE, 2021. Disponível em: https://sinapse.gife.org.br/download/censo-gife-2020. Acesso em: 1 mai. 2025.
+BRASIL. Lei nº 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais (LGPD). Brasília, DF: Presidência da República, 2018. Disponível em: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm. Acesso em: 1 jun. 2026.
 
-IDIS – Instituto para o Desenvolvimento do Investimento Social. **Doação Brasil 2022**. São Paulo: IDIS, 2022. Disponível em: https://idis.org.br/pesquisa/doacao-brasil. Acesso em: 1 mai. 2025.
+CAF. World Giving Index 2022. West Malling: Charities Aid Foundation, 2022. Disponível em: https://www.cafonline.org/docs/default-source/about-us-publications/caf_world_giving_index_2022_210922-final.pdf. Acesso em: 1 maio 2025.
 
-IDIS – Instituto para o Desenvolvimento do Investimento Social. **Censo GIFE 2020**. São Paulo: IDIS/GIFE, 2020. Disponível em: https://idis.org.br. Acesso em: 1 mai. 2025.
+COMITÊ GESTOR DA INTERNET NO BRASIL. Pesquisa sobre o uso das tecnologias de informação e comunicação nas escolas brasileiras: TIC Educação 2023. São Paulo: CGI.br, 2024. Disponível em: https://cgi.br/publicacao/pesquisa-sobre-o-uso-das-tecnologias-de-informacao-e-comunicacao-nas-escolas-brasileiras-tic-educacao-2023/. Acesso em: 1 jun. 2026.
 
-INSTITUTO PONTE. **TAPI – Termo de Abertura do Projeto Inteli**. Vitória: Instituto Ponte, 2024. (Documento interno fornecido pelo parceiro ao Inteli.)
+DOCKER. Docker Docs. [S. l.]: Docker, 2026. Disponível em: https://docs.docker.com/. Acesso em: 12 jun. 2026.
 
-IPEA – Instituto de Pesquisa Econômica Aplicada. **Desigualdades socioeducacionais no Brasil: acesso, permanência e aprendizado**. Brasília: IPEA, 2021. (Texto para Discussão, n. 2644). Disponível em: https://repositorio.ipea.gov.br. Acesso em: 1 mai. 2025.
+FASTIFY. Fastify Documentation. [S. l.]: Fastify, 2026. Disponível em: https://fastify.dev/docs/latest/. Acesso em: 12 jun. 2026.
 
-ISO/IEC 25010:2011. **Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models**. Geneva: ISO, 2011.
+FIGMA. Figma Help Center. [S. l.]: Figma, 2026. Disponível em: https://help.figma.com/hc/en-us. Acesso em: 12 jun. 2026.
 
-ITAÚ SOCIAL. **Biblioteca Itaú Social**. São Paulo: Fundação Itaú Social. Disponível em: https://www.itausocial.org.br/biblioteca/. Acesso em: 1 mai. 2025.
+FUNDAÇÃO ESTUDAR. Fundação Estudar. São Paulo: Fundação Estudar, 2026. Disponível em: https://www.estudar.org.br/. Acesso em: 1 maio 2025.
 
-MCKINSEY & COMPANY. **Public Sector Insights**. Nova York: McKinsey. Disponível em: https://www.mckinsey.com/industries/public-sector/our-insights. Acesso em: 1 mai. 2025.
+FUNDAÇÃO LEMANN. Relatório Anual 2022. São Paulo: Fundação Lemann, 2022. Relatório institucional.
 
-MINISTÉRIO DA EDUCAÇÃO. **Programa Universidade para Todos (ProUni)**. Brasília: MEC, 2023. Disponível em: http://prouniportal.mec.gov.br. Acesso em: 1 mai. 2025.
+GIFE. Grupo de Institutos, Fundações e Empresas. São Paulo: GIFE, 2026. Disponível em: https://gife.org.br/. Acesso em: 1 maio 2025.
 
-OECD. **Education at a Glance 2023: OECD Indicators**. Paris: OECD Publishing, 2023. Disponível em: https://doi.org/10.1787/e13bef63-en. Acesso em: 1 mai. 2025.
+GOOGLE. Google Classroom. [S. l.]: Google, 2026. Disponível em: https://edu.google.com/workspace-for-education/products/classroom/. Acesso em: 12 jun. 2026.
 
-OECD. [Education at a Glance 2024: OECD Indicators](https://www.oecd.org/en/publications/education-at-a-glance-2024_c00cad36-en). Paris: OECD Publishing, 2024. Acesso em: 12 jun. 2026.
+GOOGLE. Google Forms. [S. l.]: Google, 2026. Disponível em: https://www.google.com/forms/about/. Acesso em: 12 jun. 2026.
 
-OECD. **Private Philanthropy for Development – Second Edition: Data for Action**. Paris: OECD Publishing, 2021. Disponível em: https://www.oecd.org/en/publications/private-philanthropy-for-development-second-edition_cdf37f1e-en.html. Acesso em: 1 mai. 2025.
+GRAND VIEW RESEARCH. Global EdTech Software Market Size & Outlook, 2023-2030. San Francisco: Grand View Research, 2024. Relatório setorial.
 
-TODOS PELA EDUCAÇÃO. **Anuário Brasileiro da Educação Básica 2024**. São Paulo: Todos Pela Educação, 2024. Disponível em: https://anuario.todospelaeducacao.org.br/2024/index.html. Acesso em: 1 mai. 2025.
+IDIS. Censo GIFE 2020. São Paulo: Instituto para o Desenvolvimento do Investimento Social; GIFE, 2020. Disponível em: https://idis.org.br. Acesso em: 1 maio 2025.
 
-TRANSPARÊNCIA BRASIL. **Organizações da Sociedade Civil: dados e transparência**. São Paulo: Transparência Brasil, 2022. Disponível em: https://www.transparencia.org.br. Acesso em: 1 mai. 2025.
+IDIS. Doação Brasil 2022. São Paulo: Instituto para o Desenvolvimento do Investimento Social, 2022. Disponível em: https://idis.org.br/pesquisa/doacao-brasil. Acesso em: 1 maio 2025.
 
-UNICEF – United Nations Children's Fund. **Cenário da Exclusão Escolar no Brasil**. Brasília: UNICEF Brasil; Cenpec Educação, 2021. Disponível em: https://www.unicef.org/brazil/relatorios/cenario-da-exclusao-escolar-no-brasil. Acesso em: 1 mai. 2025.
+INSTITUTO PONTE. Relatório Anual 2025. Vitória: Instituto Ponte, 2026. Disponível em: https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf. Acesso em: 1 jun. 2026.
 
-UNESCO. [Guidance for Generative AI in Education and Research](https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research?hub=67098). Paris: UNESCO, 2023. Acesso em: 12 jun. 2026.
+INSTITUTO PONTE. TAPI: Termo de Abertura do Projeto Inteli. Vitória: Instituto Ponte, 2024. Documento interno fornecido pelo parceiro ao Inteli.
 
-W3C – World Wide Web Consortium. **Web Content Accessibility Guidelines (WCAG) 2.1**. W3C Recommendation, 5 June 2018. Disponível em: https://www.w3.org/TR/WCAG21. Acesso em: 1 mai. 2025.
+IPEA. Desigualdades socioeducacionais no Brasil: acesso, permanência e aprendizado. Brasília, DF: Instituto de Pesquisa Econômica Aplicada, 2021. (Texto para Discussão, n. 2644). Disponível em: https://repositorio.ipea.gov.br. Acesso em: 1 maio 2025.
 
-COMITÊ GESTOR DA INTERNET NO BRASIL. [Pesquisa sobre o uso das tecnologias de informação e comunicação nas escolas brasileiras: TIC Educação 2023](https://cgi.br/publicacao/pesquisa-sobre-o-uso-das-tecnologias-de-informacao-e-comunicacao-nas-escolas-brasileiras-tic-educacao-2023/). São Paulo: CGI.br, 2024. Acesso em: 1 jun. 2026.
+ISO. ISO/IEC 25010:2011: systems and software engineering: systems and software Quality Requirements and Evaluation (SQuaRE): system and software quality models. Geneva: International Organization for Standardization, 2011.
 
+ITAÚ SOCIAL. Avaliação de Impacto em Educação: desafios e perspectivas. São Paulo: Fundação Itaú Social, 2020. Disponível em: https://www.itausocial.org.br/publicacoes. Acesso em: 1 maio 2025.
 
-TODOS PELA EDUCAÇÃO. [Anuário Brasileiro da Educação Básica 2024](https://anuario.todospelaeducacao.org.br/2024/index.html). São Paulo: Todos Pela Educação, 2024. Acesso em: 1 jun. 2026.
+JEST. Jest Documentation. [S. l.]: Jest, 2026. Disponível em: https://jestjs.io/docs/getting-started. Acesso em: 12 jun. 2026.
 
+KAHOOT!. Kahoot! for schools. [S. l.]: Kahoot!, 2026. Disponível em: https://kahoot.com/schools/. Acesso em: 12 jun. 2026.
 
-BRASIL. [Lei nº 13.709, de 14 de agosto de 2018: Lei Geral de Proteção de Dados Pessoais (LGPD)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Brasília, DF: Presidência da República, 2018. Acesso em: 1 jun. 2026.
+KATEX. KaTeX Documentation. [S. l.]: KaTeX, 2026. Disponível em: https://katex.org/docs/api. Acesso em: 12 jun. 2026.
 
+LUCIDE. Lucide Guide. [S. l.]: Lucide, 2026. Disponível em: https://lucide.dev/guide/. Acesso em: 12 jun. 2026.
 
-BRASIL. [Lei nº 9.790, de 23 de março de 1999](https://www.planalto.gov.br/ccivil_03/leis/L9790.htm). Dispõe sobre a qualificação de pessoas jurídicas de direito privado, sem fins lucrativos, como Organizações da Sociedade Civil de Interesse Público. Brasília, DF: Presidência da República, 1999. Acesso em: 1 jun. 2026.
+MCKINSEY & COMPANY. High-performing NGOs: unlocking their potential. Nova York: McKinsey & Company, 2022. Relatório técnico.
 
+MICROSOFT. Microsoft Forms. [S. l.]: Microsoft, 2026. Disponível em: https://www.microsoft.com/pt-br/microsoft-365/online-surveys-polls-quizzes. Acesso em: 12 jun. 2026.
 
-GRAND VIEW RESEARCH. [Global EdTech Software Market Size & Outlook, 2023-2030](https://www.grandviewresearch.com/horizon/outlook/edtech-software-market-size/global). San Francisco: Grand View Research, 2024. Acesso em: 1 jun. 2026.
+MINISTÉRIO DA EDUCAÇÃO. Programa Universidade para Todos (ProUni). Brasília, DF: MEC, 2026. Disponível em: https://acessounico.mec.gov.br/prouni. Acesso em: 1 maio 2025.
 
+MOODLE. Moodle. [S. l.]: Moodle, 2026. Disponível em: https://moodle.org/. Acesso em: 12 jun. 2026.
 
-RESEARCH AND MARKETS. [K-12 Testing and Assessment Market Forecast to 2033](https://www.researchandmarkets.com/reports/6189457/k-12-testing-assessment-market-forecast). Dublin: Research and Markets, 2025. Acesso em: 1 jun. 2026.
+MUI. Material UI Documentation. [S. l.]: MUI, 2026. Disponível em: https://mui.com/material-ui/getting-started/. Acesso em: 12 jun. 2026.
 
+NIELSEN, Jakob. 10 usability heuristics for user interface design. Fremont: Nielsen Norman Group, 2024. Disponível em: https://www.nngroup.com/articles/ten-usability-heuristics/. Acesso em: 12 jun. 2026.
 
-ASSOCIAÇÃO BRASILEIRA DE INTERNET. [Distrito destaca que edtechs se reinventam em meio à queda de fundações e investimentos, com foco em inovação](https://abranet.org.br/noticias/distrito-destaca-que-edtechs-se-reinventam-em-meio-a-queda-de-fundacoes-e-investimentos-com-foco-em-inovacao/). Abranet, 2025. Acesso em: 1 jun. 2026.
+NODE.JS. Node.js Documentation. [S. l.]: OpenJS Foundation, 2026. Disponível em: https://nodejs.org/docs/latest/api/. Acesso em: 12 jun. 2026.
 
+NPM. npm Docs. [S. l.]: npm, 2026. Disponível em: https://docs.npmjs.com/. Acesso em: 12 jun. 2026.
 
-INSTITUTO PONTE. [Relatório Anual 2025](https://www.institutoponte.org.br/wp-content/uploads/2026/04/relatorio-anual-2025-1.pdf). Vitória: Instituto Ponte, 2026. Acesso em: 1 jun. 2026.
+OECD. Education at a Glance 2023: OECD Indicators. Paris: OECD Publishing, 2023. Relatório técnico.
+
+OECD. Education at a Glance 2024: OECD Indicators. Paris: OECD Publishing, 2024. Relatório técnico.
+
+OECD. Philanthropy and Education: Harnessing the Potential for Learning. Paris: OECD Publishing, 2019. Relatório técnico.
+
+POSTGRESQL GLOBAL DEVELOPMENT GROUP. PostgreSQL 15 Documentation. [S. l.]: PostgreSQL Global Development Group, 2026. Disponível em: https://www.postgresql.org/docs/15/. Acesso em: 12 jun. 2026.
+
+PROVA FÁCIL. Prova Fácil. [S. l.]: Prova Fácil, 2026. Disponível em: https://www.provafacilnaweb.com.br/. Acesso em: 12 jun. 2026.
+
+QUIZIZZ. Quizizz. [S. l.]: Quizizz, 2026. Disponível em: https://quizizz.com/. Acesso em: 12 jun. 2026.
+
+RADIX UI. Radix Primitives Documentation. [S. l.]: Radix UI, 2026. Disponível em: https://www.radix-ui.com/primitives/docs/overview/introduction. Acesso em: 12 jun. 2026.
+
+REACT. React Documentation. [S. l.]: React, 2026. Disponível em: https://react.dev/learn. Acesso em: 12 jun. 2026.
+
+RESEARCH AND MARKETS. K-12 Testing and Assessment Market Forecast to 2033. Dublin: Research and Markets, 2025. Disponível em: https://www.researchandmarkets.com/reports/6189457/k-12-testing-assessment-market-forecast. Acesso em: 1 jun. 2026.
+
+SOCRATIVE. Socrative. [S. l.]: Socrative, 2026. Disponível em: https://www.socrative.com/. Acesso em: 12 jun. 2026.
+
+SUPABASE. Supabase Documentation. [S. l.]: Supabase, 2026. Disponível em: https://supabase.com/docs. Acesso em: 12 jun. 2026.
+
+SUPERTEST. SuperTest. [S. l.]: SuperTest, 2026. Disponível em: https://github.com/ladjs/supertest. Acesso em: 12 jun. 2026.
+
+SWAGGER. Swagger UI. [S. l.]: Swagger, 2026. Disponível em: https://swagger.io/tools/swagger-ui/. Acesso em: 12 jun. 2026.
+
+TAILWIND LABS. Tailwind CSS Documentation. [S. l.]: Tailwind Labs, 2026. Disponível em: https://tailwindcss.com/docs. Acesso em: 12 jun. 2026.
+
+TANSTACK. TanStack Query Documentation. [S. l.]: TanStack, 2026. Disponível em: https://tanstack.com/query/latest/docs/framework/react/overview. Acesso em: 12 jun. 2026.
+
+TESTING LIBRARY. React Testing Library. [S. l.]: Testing Library, 2026. Disponível em: https://testing-library.com/docs/react-testing-library/intro/. Acesso em: 12 jun. 2026.
+
+TODOS PELA EDUCAÇÃO. Anuário Brasileiro da Educação Básica 2024. São Paulo: Todos Pela Educação, 2024. Disponível em: https://anuario.todospelaeducacao.org.br/2024/index.html. Acesso em: 1 jun. 2026.
+
+TRANSPARÊNCIA BRASIL. Organizações da Sociedade Civil: dados e transparência. São Paulo: Transparência Brasil, 2022. Disponível em: https://www.transparencia.org.br. Acesso em: 1 maio 2025.
+
+TYPESCRIPT. TypeScript Documentation. [S. l.]: Microsoft, 2026. Disponível em: https://www.typescriptlang.org/docs/. Acesso em: 12 jun. 2026.
+
+UNESCO. Guidance for Generative AI in Education and Research. Paris: UNESCO, 2023. Disponível em: https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research?hub=67098. Acesso em: 12 jun. 2026.
+
+UNICEF. UNICEF Brasil. Brasília, DF: United Nations Children's Fund, 2026. Disponível em: https://www.unicef.org/brazil/. Acesso em: 1 maio 2025.
+
+VITE. Vite Guide. [S. l.]: Vite, 2026. Disponível em: https://vite.dev/guide/. Acesso em: 12 jun. 2026.
+
+VITEST. Vitest Guide. [S. l.]: Vitest, 2026. Disponível em: https://vitest.dev/guide/. Acesso em: 12 jun. 2026.
+
+W3C. Web Content Accessibility Guidelines (WCAG) 2.1. W3C Recommendation, 5 June 2018. Disponível em: https://www.w3.org/TR/WCAG21. Acesso em: 1 maio 2025.
+
+ZOD. Zod Documentation. [S. l.]: Zod, 2026. Disponível em: https://zod.dev/. Acesso em: 12 jun. 2026.
 
 # <a name="c9"></a>Anexos
 
-*Inclua aqui quaisquer complementos para seu projeto, como diagramas, imagens, tabelas etc. Organize em sub-tópicos utilizando headings menores (use ## ou ### para isso)*
+Não se aplica. Os diagramas, tabelas, evidências de teste e demais materiais complementares foram organizados nas seções correspondentes do WAD e na pasta `documentos/outros`.

@@ -78,6 +78,7 @@ describe("ResultadoService - unitário", () => {
     }));
     const uploadInput = storage.upload.mock.calls[0][0] as { content: string | Buffer };
     expect(String(uploadInput.content)).toContain("\"Aluno A\"");
+    expect(String(uploadInput.content)).toContain("\"Media geral\"");
     expect(repo.createExportacao).toHaveBeenCalledWith("prova-1", "coord-1", "csv", "/exports/a.csv", 1);
   });
 
@@ -91,9 +92,20 @@ describe("ResultadoService - unitário", () => {
     }));
   });
 
-  it("deve rejeitar exportação por professor", async () => {
+  it("deve bloquear exportacao por professor mesmo com acesso", async () => {
     await expect(service.exportarPorProva("prova-1", { formato: "csv" } as any, professor)).rejects.toThrow(
       "Somente coordenadores podem exportar resultados.",
+    );
+
+    expect(storage.upload).not.toHaveBeenCalled();
+    expect(repo.createExportacao).not.toHaveBeenCalled();
+  });
+
+  it("deve rejeitar exportacao sem acesso", async () => {
+    repo.hasAccessToProva.mockResolvedValue(false);
+
+    await expect(service.exportarPorProva("prova-1", { formato: "csv" } as any, coordenador)).rejects.toThrow(
+      "Usuario sem permissao para exportar resultados desta prova.",
     );
   });
 

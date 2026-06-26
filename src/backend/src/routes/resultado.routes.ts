@@ -38,7 +38,7 @@ export async function resultadoRoutes(app: FastifyInstance) {
   app.withTypeProvider().post(
     "/provas/:provaId/resultados/exportar",
     {
-      preHandler: requireRole("coordenador"),
+      preHandler: requireRole("professor", "coordenador"),
       schema: {
         tags: ["Resultados"],
         summary: "Exportar resultados",

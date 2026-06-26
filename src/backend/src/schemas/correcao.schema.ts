@@ -32,14 +32,29 @@ export const correcaoQuestaoSchema = z.object({
   ordemOriginal: z.number().int().positive().describe("Ordem da questão na prova."),
   pontuacaoMax: z.number().positive().describe("Pontuação máxima da questão."),
   tipo: z.string().describe("Tipo da questão (multipla_escolha, verdadeiro_falso, discursiva)."),
+  enunciado: z.string().nullable().describe("Enunciado da questão."),
+  imagemUrl: z.string().nullable().describe("Imagem associada ao enunciado da questão."),
   respostas: z.object({
     total: z.number().int().nonnegative().describe("Total de respostas enviadas para esta questão."),
     corrigidas: z.number().int().nonnegative().describe("Quantidade de respostas já corrigidas."),
   }).describe("Resumo das respostas da questão."),
 });
 
+const alternativaCorrecaoSchema = z.object({
+  id: z.string().uuid().describe("Identificador único da alternativa."),
+  ordemOriginal: z.number().int().positive().describe("Ordem da alternativa."),
+  conteudoLatex: z.string().describe("Texto/LaTeX da alternativa."),
+  urlImagem: z.string().nullable().describe("Imagem associada à alternativa."),
+  correta: z.boolean().describe("Indica se a alternativa é correta."),
+});
+
 export const correcaoRespostaSchema = z.object({
   respostaId: z.string().uuid().describe("Identificador único da resposta."),
+  questaoId: z.string().uuid().describe("Identificador único da questão."),
+  questaoTipo: z.string().describe("Tipo da questão."),
+  questaoEnunciado: z.string().nullable().describe("Enunciado da questão."),
+  questaoImagemUrl: z.string().nullable().describe("Imagem do enunciado."),
+  pontuacaoMax: z.number().describe("Pontuação máxima da questão na prova."),
   aluno: z.object({
     id: z.string().uuid().describe("Identificador único do aluno."),
     nome: z.string().describe("Nome do aluno."),
@@ -52,6 +67,8 @@ export const correcaoRespostaSchema = z.object({
       mimeType: z.string().describe("Tipo MIME do arquivo."),
     }),
   ).describe("Lista de anexos enviados com a resposta."),
+  alternativaSelecionada: alternativaCorrecaoSchema.nullable().describe("Alternativa marcada pelo aluno."),
+  alternativaCorreta: alternativaCorrecaoSchema.nullable().describe("Alternativa correta da questão objetiva."),
   correcao: z
     .object({
       id: z.string().uuid().describe("Identificador único da correção."),
@@ -72,7 +89,7 @@ export const correcaoRespostaSchema = z.object({
 export const correcaoSalvaSchema = z.object({
   id: z.string().uuid().describe("Identificador único da correção."),
   nota: z.number().describe("Nota atribuída."),
-  tipo: z.literal("manual").describe("Tipo da correção (sempre 'manual')."),
+  tipo: z.enum(["manual", "automatica"]).describe("Tipo da correção."),
   corrigidaEm: z.string().datetime().describe("Data e hora da correção."),
 });
 

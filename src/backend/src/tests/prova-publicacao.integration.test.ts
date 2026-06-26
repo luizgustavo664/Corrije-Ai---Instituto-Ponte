@@ -54,6 +54,11 @@ const createProva = async (professorId: string, materiaId: string, titulo: strin
   return result.rows[0].id;
 };
 
+const publicarPayload = () => ({
+  baseUrlAluno: "https://app.test/prova",
+  dataFim: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+});
+
 const createDiscursiva = async (materiaId: string, conteudoLatex: string) => {
   const questao = await pool.query<{ id: string }>(
     'INSERT INTO "questao" ("materia_id", "tipo") VALUES ($1, $2) RETURNING "id"',
@@ -247,7 +252,7 @@ describe("ProvaPublicacaoController - integração", () => {
     const response = await request(app.server)
       .post(`/api/v1/provas/${seed.provaId}/publicar`)
       .set("Authorization", seed.tokenProfessor)
-      .send({ baseUrlAluno: "https://app.test/prova" });
+      .send(publicarPayload());
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toMatchObject({
@@ -259,13 +264,15 @@ describe("ProvaPublicacaoController - integração", () => {
     });
     expect(response.body.data.urlAcesso).toMatch(/^https:\/\/app\.test\/prova\/.+/);
     expect(response.body.data.qrCode).toBe(response.body.data.urlAcesso);
+    expect(new Date(response.body.data.dataInicio).getTime()).not.toBeNaN();
+    expect(new Date(response.body.data.dataFim).getTime()).toBeGreaterThan(Date.now());
   });
 
   it("deve rejeitar com 409 publicação de prova que não possui questões vinculadas", async () => {
     const response = await request(app.server)
       .post(`/api/v1/provas/${seed.provaSemQuestoesId}/publicar`)
       .set("Authorization", seed.tokenProfessor)
-      .send({ baseUrlAluno: "https://app.test/prova" });
+      .send(publicarPayload());
 
     expect(response.statusCode).toBe(409);
     expect(response.body.error.message).toContain("sem questões");
@@ -275,7 +282,7 @@ describe("ProvaPublicacaoController - integração", () => {
     const response = await request(app.server)
       .post(`/api/v1/provas/${seed.provaObjetivaInvalidaId}/publicar`)
       .set("Authorization", seed.tokenProfessor)
-      .send({ baseUrlAluno: "https://app.test/prova" });
+      .send(publicarPayload());
 
     expect(response.statusCode).toBe(409);
     expect(response.body.error.message).toContain("objetivas");
@@ -285,7 +292,7 @@ describe("ProvaPublicacaoController - integração", () => {
     const response = await request(app.server)
       .post(`/api/v1/provas/${randomUUID()}/publicar`)
       .set("Authorization", seed.tokenProfessor)
-      .send({ baseUrlAluno: "https://app.test/prova" });
+      .send(publicarPayload());
 
     expect(response.statusCode).toBe(404);
     expect(response.body.error.code).toBe("NOT_FOUND");

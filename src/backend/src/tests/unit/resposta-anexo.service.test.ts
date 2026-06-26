@@ -8,6 +8,8 @@ const context = {
   provaStatus: "publicada",
   dataInicio: new Date("2026-06-01T11:00:00Z").toISOString(),
   dataFim: new Date("2026-06-01T13:00:00Z").toISOString(),
+  inicioEm: new Date("2026-06-01T11:30:00Z").toISOString(),
+  tempoLimiteMin: 90,
   permiteAnexo: true,
 };
 
@@ -77,6 +79,21 @@ describe("RespostaAnexoService - unitário", () => {
     dateSpy.mockReturnValue(new Date("2026-06-01T12:00:00Z").getTime());
     repo.findRespostaContext.mockResolvedValueOnce({ ...context, permiteAnexo: false });
     await expect(service.salvarAnexo("resp-1", file as any)).rejects.toThrow("A questão respondida não permite anexo.");
+  });
+
+  it("deve bloquear upload depois do limite individual da tentativa", async () => {
+    const repo = makeRepo();
+    repo.findRespostaContext.mockResolvedValue({
+      ...context,
+      dataFim: new Date("2026-06-01T15:00:00Z").toISOString(),
+      inicioEm: new Date("2026-06-01T11:00:00Z").toISOString(),
+      tempoLimiteMin: 30,
+    });
+    dateSpy.mockReturnValue(new Date("2026-06-01T11:31:00Z").getTime());
+    const service = new RespostaAnexoService(repo as any, makeLog() as any);
+
+    await expect(service.salvarAnexo("resp-1", file as any)).rejects.toThrow("Prova fora do período de resposta.");
+    expect(repo.create).not.toHaveBeenCalled();
   });
 
   it("deve rejeitar MIME inválido e tamanho inválido", async () => {

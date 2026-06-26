@@ -25,6 +25,7 @@ type ProvaQuestaoRow = {
   pontuacao_max: string | number;
   criado_em: Date | string;
   questao_tipo?: string;
+  questao_dificuldade?: string | null;
   questao_materia_id?: string;
   questao_tema_id?: string | null;
   questao_limite_caracteres?: number | null;
@@ -54,6 +55,7 @@ const mapProvaQuestao = (row: ProvaQuestaoRow) => ({
         materiaId: row.questao_materia_id ?? "",
         temaId: row.questao_tema_id ?? null,
         tipo: row.questao_tipo,
+        dificuldade: row.questao_dificuldade ?? "Media",
         limiteCaracteres: row.questao_limite_caracteres ?? null,
         limitePalavras: row.questao_limite_palavras ?? null,
         permiteAnexo: row.questao_permite_anexo ?? false,
@@ -66,6 +68,8 @@ const mapProvaQuestao = (row: ProvaQuestaoRow) => ({
           urlImagem: row.enunciado_url_imagem ?? null,
         },
         alternativas: [],
+        timesUsed: 0,
+        successRate: 0,
       }
     : undefined,
 });
@@ -81,6 +85,7 @@ const selectProvaQuestaoSql = `
     pq."pontuacao_max",
     pq."criado_em",
     q."tipo" AS "questao_tipo",
+    q."dificuldade" AS "questao_dificuldade",
     q."materia_id" AS "questao_materia_id",
     q."tema_id" AS "questao_tema_id",
     q."limite_caracteres" AS "questao_limite_caracteres",
@@ -97,6 +102,8 @@ const selectProvaQuestaoSql = `
   JOIN "enunciado" e ON e."questao_id" = q."id"
 `;
 
+let provaQuestaoSchemaEnsured = false;
+
 /**
  * Repositório da associação entre provas e questões (tabela `prova_questao`).
  *
@@ -104,6 +111,12 @@ const selectProvaQuestaoSql = `
  * A consulta principal usa JOIN com questao e enunciado para evitar N+1.
  */
 export class ProvaQuestaoRepository {
+  private async ensureSchema() {
+    if (provaQuestaoSchemaEnsured) return;
+    await pool.query('ALTER TABLE "questao" ADD COLUMN IF NOT EXISTS "dificuldade" TEXT NULL');
+    provaQuestaoSchemaEnsured = true;
+  }
+
   /**
    * Busca dados resumidos da prova para validação de existência.
    *
@@ -111,6 +124,7 @@ export class ProvaQuestaoRepository {
    * @returns Dados resumidos da prova ou null.
    */
   async findProva(provaId: string) {
+    await this.ensureSchema();
     const result = await pool.query<ProvaResumoRow>(
       'SELECT "id", "materia_id", "status" FROM "prova" WHERE "id" = $1',
       [provaId],
@@ -156,6 +170,7 @@ export class ProvaQuestaoRepository {
    * @returns Dados resumidos da questão ou null.
    */
   async findQuestao(questaoId: string) {
+    await this.ensureSchema();
     const result = await pool.query<QuestaoResumoRow>(
       `
         SELECT q."id", q."materia_id", EXISTS (
@@ -225,6 +240,7 @@ export class ProvaQuestaoRepository {
    * @returns Lista de associações com dados completos das questões.
    */
   async findByProva(provaId: string) {
+    await this.ensureSchema();
     const result = await pool.query<ProvaQuestaoRow>(
       `
         ${selectProvaQuestaoSql}
@@ -234,6 +250,62 @@ export class ProvaQuestaoRepository {
       [provaId],
     );
     return result.rows.map(mapProvaQuestao);
+  }
+
+  /**
+   * Reordena uma questao e recompata as posicoes da prova.
+   *
+   * @param provaId - ID da prova.
+   * @param questaoId - ID da questao movida.
+   * @param ordemOriginal - Nova posicao desejada.
+   * @returns Lista atualizada de vinculos.
+   */
+  async reorder(provaId: string, questaoId: string, ordemOriginal: number) {
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+
+      const current = await client.query<ProvaQuestaoRow>(
+        `
+          SELECT *
+          FROM "prova_questao"
+          WHERE "prova_id" = $1
+          ORDER BY "ordem_original" ASC
+        `,
+        [provaId],
+      );
+
+      const rows = current.rows;
+      const currentIndex = rows.findIndex((row) => row.questao_id === questaoId);
+      if (currentIndex === -1) {
+        await client.query("ROLLBACK");
+        return null;
+      }
+
+      const [moved] = rows.splice(currentIndex, 1);
+      const nextIndex = Math.min(Math.max(ordemOriginal - 1, 0), rows.length);
+      rows.splice(nextIndex, 0, moved);
+
+      await client.query(
+        'UPDATE "prova_questao" SET "ordem_original" = "ordem_original" + 10000 WHERE "prova_id" = $1',
+        [provaId],
+      );
+
+      for (const [index, row] of rows.entries()) {
+        await client.query(
+          'UPDATE "prova_questao" SET "ordem_original" = $1 WHERE "prova_id" = $2 AND "questao_id" = $3',
+          [index + 1, provaId, row.questao_id],
+        );
+      }
+
+      await client.query("COMMIT");
+      return this.findByProva(provaId);
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   /**

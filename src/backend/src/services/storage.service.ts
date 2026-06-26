@@ -1,3 +1,5 @@
+import { numberFromEnv, resilientFetch } from "../helpers/resilience.js";
+
 type UploadInput = {
   path: string;
   content: string | Buffer;
@@ -29,14 +31,15 @@ export class StorageService {
     const bucket = process.env.SUPABASE_STORAGE_BUCKET ?? "exports";
 
     if (!storageUrl || !serviceKey) {
-      return `/${bucket}/${path}`;
+      const buffer = typeof content === "string" ? Buffer.from(content, "utf8") : content;
+      return `data:${contentType};base64,${buffer.toString("base64")}`;
     }
 
     const baseUrl = normalizeBaseUrl(storageUrl);
     const objectPath = path.replace(/^\/+/, "");
     const uploadUrl = `${baseUrl}/storage/v1/object/${bucket}/${objectPath}`;
 
-    const response = await fetch(uploadUrl, {
+    const response = await resilientFetch(uploadUrl, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${serviceKey}`,
@@ -45,6 +48,10 @@ export class StorageService {
         "x-upsert": "true",
       },
       body: content as unknown as BodyInit,
+    }, {
+      timeoutMs: numberFromEnv(process.env, "STORAGE_TIMEOUT_MS", 8_000),
+      retries: numberFromEnv(process.env, "STORAGE_RETRY_ATTEMPTS", 2),
+      backoffMs: numberFromEnv(process.env, "STORAGE_RETRY_BACKOFF_MS", 100),
     });
 
     if (!response.ok) {

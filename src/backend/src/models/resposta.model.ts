@@ -66,6 +66,8 @@ export type ProvaAlunoContext = {
   provaStatus: string;
   dataInicio: string | null;
   dataFim: string | null;
+  inicioEm: string | null;
+  tempoLimiteMin: number | null;
 };
 
 /**

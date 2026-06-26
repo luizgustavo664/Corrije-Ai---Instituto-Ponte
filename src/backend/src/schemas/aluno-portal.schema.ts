@@ -32,6 +32,7 @@ export const questaoPublicaSchema = z.object({
   id: z.string().uuid().describe("Identificador único da questão."),
   ordem: z.number().int().positive().describe("Ordem da questão na prova."),
   tipo: z.enum(["multipla_escolha", "verdadeiro_falso", "discursiva"]).describe("Tipo da questão."),
+  permiteAnexo: z.boolean().describe("Indica se a questão permite envio de anexos pelo aluno."),
   enunciado: z.object({
     conteudoLatex: z.string().describe("Conteúdo do enunciado em LaTeX."),
     urlImagem: z.string().nullable().describe("URL de imagem do enunciado."),
@@ -54,6 +55,8 @@ export const questaoPublicaSchema = z.object({
 export const provaIniciadaSchema = z.object({
   provaAlunoId: z.string().uuid().describe("Identificador único da relação prova-aluno."),
   status: z.enum(["em_andamento", "enviada", "corrigida"]).describe("Status atual da prova para este aluno."),
+  inicioEm: z.string().datetime().describe("Horario do servidor em que a tentativa foi iniciada."),
+  expiraEm: z.string().datetime().describe("Prazo final efetivo calculado pelo servidor."),
   questoes: z.array(questaoPublicaSchema).describe("Lista de questões da prova."),
 });
 

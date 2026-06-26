@@ -70,8 +70,28 @@ export class AlunoPortalService {
     return {
       provaAlunoId: inicio.provaAluno.id,
       status: inicio.provaAluno.status,
+      inicioEm: inicio.provaAluno.inicio_em
+        ? new Date(inicio.provaAluno.inicio_em).toISOString()
+        : new Date().toISOString(),
+      expiraEm: this.calculateExpiration(
+        inicio.provaAluno.inicio_em,
+        prova.dataFim,
+        prova.tempoLimiteMin,
+      ),
       questoes,
     };
+  }
+
+  private calculateExpiration(
+    inicioEm: Date | string | null,
+    dataFim: string | null,
+    tempoLimiteMin: number | null,
+  ) {
+    if (!dataFim) throw conflict("Prova ainda não disponível ou encerrada.");
+    const windowEnd = new Date(dataFim).getTime();
+    if (!inicioEm || tempoLimiteMin === null) return new Date(windowEnd).toISOString();
+    const attemptEnd = new Date(inicioEm).getTime() + tempoLimiteMin * 60_000;
+    return new Date(Math.min(windowEnd, attemptEnd)).toISOString();
   }
 
   /**

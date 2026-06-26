@@ -63,6 +63,30 @@ export class MateriaRepository {
     return { data: result.rows.map(mapMateria), total };
   }
 
+  async findAllByProfessor(professorId: string, options?: { page?: number; limit?: number }) {
+    const page = options?.page ?? 1;
+    const limit = options?.limit ?? 20;
+    const offset = (page - 1) * limit;
+    const countResult = await pool.query(
+      `SELECT COUNT(*) AS "count"
+       FROM "materia" m
+       JOIN "materia_professor" mp ON mp."materia_id" = m."id"
+       WHERE mp."professor_id" = $1`,
+      [professorId],
+    );
+    const total = parseInt(countResult.rows[0].count, 10);
+    const result = await pool.query<MateriaRow>(
+      `SELECT m.*
+       FROM "materia" m
+       JOIN "materia_professor" mp ON mp."materia_id" = m."id"
+       WHERE mp."professor_id" = $1
+       ORDER BY m."nome" ASC
+       LIMIT $2 OFFSET $3`,
+      [professorId, limit, offset],
+    );
+    return { data: result.rows.map(mapMateria), total };
+  }
+
   /**
    * Busca matéria por nome, ignorando capitalização.
    *

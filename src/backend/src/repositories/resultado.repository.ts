@@ -189,7 +189,7 @@ export class ResultadoRepository {
    * Registra uma exportação de resultados (XLSX ou CSV) no banco.
    *
    * @param provaId - ID da prova exportada.
-   * @param coordenadorId - ID do coordenador que solicitou.
+   * @param coordenadorId - ID do coordenador que solicitou, quando aplicavel.
    * @param formato - Formato do arquivo: "xlsx" ou "csv".
    * @param urlArquivo - URL do arquivo gerado.
    * @param pendenciasCorrecao - Número de pendências no momento da exportação.
@@ -197,7 +197,7 @@ export class ResultadoRepository {
    */
   async createExportacao(
     provaId: string,
-    coordenadorId: string,
+    coordenadorId: string | null,
     formato: "xlsx" | "csv",
     urlArquivo: string,
     pendenciasCorrecao: number,

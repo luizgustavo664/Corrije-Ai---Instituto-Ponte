@@ -81,6 +81,7 @@ export type Questao = {
   materiaId: string;
   temaId: string | null;
   tipo: QuestaoTipo;
+  dificuldade: string;
   limiteCaracteres: number | null;
   limitePalavras: number | null;
   permiteAnexo: boolean;
@@ -90,4 +91,6 @@ export type Questao = {
   atualizadoEm: string;
   enunciado: Enunciado;
   alternativas: Alternativa[];
+  timesUsed: number;
+  successRate: number;
 };

@@ -118,7 +118,10 @@ export class ProfessorService {
     if (!existing) {
       throw notFound("Professor não encontrado.");
     }
-    await this.repository.delete(id);
+    const removed = await this.repository.delete(id);
+    if (!removed) {
+      throw conflict("Professor possui vínculos ou provas associadas e não pode ser removido.");
+    }
   }
 
   /**

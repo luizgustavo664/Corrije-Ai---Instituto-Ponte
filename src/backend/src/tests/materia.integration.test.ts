@@ -82,7 +82,7 @@ describe("MateriaController - integração", () => {
 
     const response = await request(app.server)
       .get("/api/v1/materias")
-      .set("Authorization", professorToken);
+      .set("Authorization", coordenadorToken);
 
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);

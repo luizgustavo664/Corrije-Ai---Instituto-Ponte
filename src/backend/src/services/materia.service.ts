@@ -41,7 +41,10 @@ export class MateriaService {
    * @param _user - Usuário autenticado (ignorado, autorização externa).
    * @returns Lista paginada de matérias.
    */
-  async listar(query: { page?: number; limit?: number }, _user: AuthUser) {
+  async listar(query: { page?: number; limit?: number }, user: AuthUser) {
+    if (user.perfil === "professor") {
+      return this.materiaRepository.findAllByProfessor(user.id, { page: query.page, limit: query.limit });
+    }
     return this.materiaRepository.findAll({ page: query.page, limit: query.limit });
   }
 

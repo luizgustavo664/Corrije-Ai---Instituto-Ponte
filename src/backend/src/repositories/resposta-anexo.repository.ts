@@ -11,6 +11,8 @@ type RespostaContextRow = {
   prova_status: string;
   data_inicio: Date | string | null;
   data_fim: Date | string | null;
+  inicio_em: Date | string | null;
+  tempo_limite_min: number | null;
 };
 
 /** Linha bruta da tabela `resposta_anexo`. Campos em snake_case. */
@@ -55,7 +57,9 @@ export class RespostaAnexoRepository {
           pa."status" AS "prova_aluno_status",
           p."status" AS "prova_status",
           p."data_inicio",
-          p."data_fim"
+          p."data_fim",
+          pa."inicio_em",
+          p."tempo_limite_min"
         FROM "resposta_aluno" ra
         JOIN "prova_aluno" pa ON pa."id" = ra."prova_aluno_id"
         JOIN "prova" p ON p."id" = pa."prova_id"
@@ -76,6 +80,8 @@ export class RespostaAnexoRepository {
           provaStatus: result.rows[0].prova_status,
           dataInicio: result.rows[0].data_inicio,
           dataFim: result.rows[0].data_fim,
+          inicioEm: result.rows[0].inicio_em,
+          tempoLimiteMin: result.rows[0].tempo_limite_min,
         }
       : null;
   }

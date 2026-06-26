@@ -1,4 +1,5 @@
 import { pool } from "../database/pool.js";
+import { withTransaction } from "../database/transaction.js";
 import type { Professor } from "../models/professor.model.js";
 
 /** Linha bruta da tabela `professor`. Campos em snake_case mapeados do PostgreSQL. */
@@ -169,8 +170,20 @@ export class ProfessorRepository {
    * @returns true se removido, false se não encontrado.
    */
   async delete(id: string) {
-    const result = await pool.query('DELETE FROM "professor" WHERE "id" = $1', [id]);
-    return (result.rowCount ?? 0) > 0;
+    const usage = await pool.query<{ provas: string }>(
+      'SELECT COUNT(*) AS "provas" FROM "prova" WHERE "professor_id" = $1',
+      [id],
+    );
+
+    if (Number(usage.rows[0]?.provas ?? 0) > 0) {
+      return false;
+    }
+
+    return withTransaction(async (client) => {
+      await client.query('DELETE FROM "materia_professor" WHERE "professor_id" = $1', [id]);
+      const result = await client.query('DELETE FROM "professor" WHERE "id" = $1', [id]);
+      return (result.rowCount ?? 0) > 0;
+    });
   }
 
   /**
