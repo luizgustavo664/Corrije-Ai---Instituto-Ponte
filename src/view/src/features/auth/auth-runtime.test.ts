@@ -18,6 +18,7 @@ vi.mock("./auth.storage", () => ({
 
 describe("auth runtime helpers", () => {
   beforeEach(() => {
+    vi.unstubAllEnvs();
     vi.clearAllMocks();
     getSupabaseClient.mockReturnValue({
       auth: {
@@ -82,6 +83,40 @@ describe("auth runtime helpers", () => {
       },
     });
     await expect(startGoogleLogin()).rejects.toThrow("OAuth recusado");
+  });
+
+  it("usa modo avaliador local sem cliente Supabase", async () => {
+    vi.stubEnv("VITE_AUTH_MODE", "test");
+    vi.stubEnv("VITE_TEST_PROFESSOR_EMAIL", "professor.avaliador@corrije.ai");
+    const { startGoogleLogin, finishGoogleLogin, logout } = await import("./auth.api");
+
+    await expect(startGoogleLogin("professor")).resolves.toEqual({
+      redirectUrl: "http://localhost:3000/auth/callback?code=professor.avaliador%40corrije.ai&state=professor",
+    });
+    expect(getSupabaseClient).not.toHaveBeenCalled();
+
+    apiRequest.mockResolvedValueOnce({
+      accessToken: "test-professor:prof-1:professor.avaliador@corrije.ai:Professor Avaliador",
+      usuario: { id: "prof-1", perfil: "professor" },
+      redirectTo: "/professor",
+    });
+    window.history.pushState({}, "", "/auth/callback?code=professor.avaliador%40corrije.ai&state=professor");
+
+    await expect(finishGoogleLogin("professor")).resolves.toEqual({
+      accessToken: "test-professor:prof-1:professor.avaliador@corrije.ai:Professor Avaliador",
+      usuario: { id: "prof-1", perfil: "professor" },
+      redirectTo: "/professor",
+    });
+    expect(apiRequest).toHaveBeenCalledWith(
+      "/auth/google/callback?code=professor.avaliador%40corrije.ai&state=professor",
+    );
+
+    await logout("test-professor:prof-1:professor.avaliador@corrije.ai:Professor Avaliador");
+    expect(apiRequest).toHaveBeenCalledWith("/auth/logout", {
+      method: "POST",
+      token: "test-professor:prof-1:professor.avaliador@corrije.ai:Professor Avaliador",
+    });
+    expect(getSupabaseClient).not.toHaveBeenCalled();
   });
 
   it("finaliza callback Google, busca usuario atual e define redirecionamento", async () => {

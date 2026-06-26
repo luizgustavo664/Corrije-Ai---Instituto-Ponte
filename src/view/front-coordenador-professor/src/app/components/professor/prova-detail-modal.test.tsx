@@ -104,7 +104,7 @@ describe("prova detail and bank modal", () => {
     const onUpdateExam = vi.fn().mockResolvedValue(undefined);
     const onPublish = vi.fn();
 
-    const { container } = render(
+    render(
       <ProvaDetailPage
         onBack={onBack}
         onNavigate={onNavigate}

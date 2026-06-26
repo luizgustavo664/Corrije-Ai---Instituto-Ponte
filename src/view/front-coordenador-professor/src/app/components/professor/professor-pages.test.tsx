@@ -104,7 +104,7 @@ describe("professor large pages", () => {
     const onUpdateQuestion = vi.fn();
     const onAddToProva = vi.fn();
 
-    const { container } = render(
+    render(
       <BancoQuestoesPage
         bancoQuestoes={[bancoQuestion, { ...bancoQuestion, id: "draft-question-1", text: "Integral", materia: "Fisica" }]}
         provas={[exam]}

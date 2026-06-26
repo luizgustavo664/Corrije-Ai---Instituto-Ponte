@@ -8,13 +8,11 @@ import {
   arquivarProva,
   createProva,
   deleteProva,
-  despublicarProva,
   getProva,
   listProvaQuestoes,
   listProvas,
   publicarProva,
   removeQuestaoFromProva,
-  reorderQuestaoInProva,
   updateProva,
   updateProvaConfiguracoes,
 } from "../provas/provas.api";

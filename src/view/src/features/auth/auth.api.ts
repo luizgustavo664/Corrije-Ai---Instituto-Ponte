@@ -6,7 +6,32 @@ type GoogleStartResult = {
   redirectUrl: string;
 };
 
-export async function startGoogleLogin() {
+const isEvaluatorMode = () => import.meta.env.VITE_AUTH_MODE === "test";
+
+const getEvaluatorEmail = (role: AuthRole) => {
+  const email = role === "coordenador"
+    ? import.meta.env.VITE_TEST_COORDENADOR_EMAIL
+    : import.meta.env.VITE_TEST_PROFESSOR_EMAIL;
+
+  if (!email) {
+    throw new Error(`E-mail de avaliador não configurado para o perfil ${role}.`);
+  }
+
+  return email;
+};
+
+export async function startGoogleLogin(role: AuthRole = "professor") {
+  if (isEvaluatorMode()) {
+    const params = new URLSearchParams({
+      code: getEvaluatorEmail(role),
+      state: role,
+    });
+
+    return {
+      redirectUrl: `${window.location.origin}/auth/callback?${params.toString()}`,
+    } satisfies GoogleStartResult;
+  }
+
   const supabase = getSupabaseClient();
   const redirectTo = `${window.location.origin}/auth/callback`;
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -35,6 +60,21 @@ export async function startGoogleLogin() {
 }
 
 export async function finishGoogleLogin(role?: AuthRole) {
+  if (isEvaluatorMode()) {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const state = role ?? (params.get("state") as AuthRole | null) ?? undefined;
+
+    if (!code) {
+      throw new Error("Callback local sem e-mail de avaliador.");
+    }
+
+    const query = new URLSearchParams({ code });
+    if (state) query.set("state", state);
+
+    return apiRequest<GoogleCallbackResult>(`/auth/google/callback?${query.toString()}`);
+  }
+
   const supabase = getSupabaseClient();
   const code = new URLSearchParams(window.location.search).get("code");
 
@@ -73,8 +113,10 @@ export function getCurrentUser(accessToken: string, role?: AuthRole | null) {
 }
 
 export async function logout(accessToken?: string) {
-  const supabase = getSupabaseClient();
-  await supabase.auth.signOut();
+  if (!isEvaluatorMode()) {
+    const supabase = getSupabaseClient();
+    await supabase.auth.signOut();
+  }
 
   if (!accessToken) {
     return { message: "Sessão encerrada com sucesso." };

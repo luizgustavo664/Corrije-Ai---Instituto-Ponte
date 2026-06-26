@@ -114,7 +114,7 @@ function AuthLayout({ mode }: { mode: "login" | "cadastro" }) {
             onRoleChange={setSelectedRole}
             onGoogleLogin={() => {
               storePendingAuthRole(selectedRole);
-              googleLoginMutation.mutate();
+              googleLoginMutation.mutate(selectedRole);
             }}
           />
         ) : (

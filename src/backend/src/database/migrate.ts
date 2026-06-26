@@ -95,6 +95,14 @@ export const hasExistingSecurityResilienceSchema = async (): Promise<boolean> =>
   return result.rows[0]?.exists === true;
 };
 
+export const hasExistingCaseInsensitiveIndexes = async (): Promise<boolean> => {
+  const result = await pool.query(
+    `SELECT to_regclass('public.materia_nome_lower_unique') IS NOT NULL
+      AND to_regclass('public.tema_materia_nome_lower_unique') IS NOT NULL AS "exists"`,
+  );
+  return result.rows[0]?.exists === true;
+};
+
 export const hasExistingAlunoUniqueIndexes = async (): Promise<boolean> => {
   const result = await pool.query(
     `SELECT to_regclass('public.aluno_email_unique') IS NOT NULL
@@ -135,6 +143,19 @@ export async function migrate(options: { closePool?: boolean } = {}) {
       if (previousChecksum && previousChecksum !== checksum) {
         if (file === "000_supabase_compat.sql" && await hasExistingSupabaseAuth()) {
           console.log('Auth nativo do Supabase detectado; atualizando checksum de "000_supabase_compat.sql" sem reaplicar.');
+          await updateMigrationChecksum(file, checksum);
+          continue;
+        }
+
+        if (file === "002_unique_case_insensitive.sql" && await hasExistingCaseInsensitiveIndexes()) {
+          console.log('Indices de "002_unique_case_insensitive.sql" detectados; atualizando checksum sem reaplicar.');
+          await updateMigrationChecksum(file, checksum);
+          continue;
+        }
+
+        if (file === "003_corrigir_objetivas_batch.sql") {
+          console.log('Reaplicando funcao substituivel de "003_corrigir_objetivas_batch.sql" e atualizando checksum.');
+          await pool.query(sql);
           await updateMigrationChecksum(file, checksum);
           continue;
         }
@@ -208,4 +229,3 @@ if (isDirectExecution) {
     process.exitCode = 1;
   });
 }
-
