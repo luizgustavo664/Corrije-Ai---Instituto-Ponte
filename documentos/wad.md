@@ -4149,7 +4149,7 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
     telas do protótipo
   </a>
   •
-  <a href="https://spool-cobalt-21834134.figma.site">
+  <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
     fluxo (coordenador/professor)
   </a>
   •
@@ -4165,7 +4165,7 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
       telas do protótipo
     </a>
     e o
-    <a href="https://spool-cobalt-21834134.figma.site">
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
       fluxo (coordenador/professor)
     </a>.
   </em>
@@ -4182,7 +4182,7 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
       telas do protótipo
     </a>
     e o
-    <a href="https://spool-cobalt-21834134.figma.site">
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
       fluxo (coordenador/professor)
     </a>.
   </em>
@@ -4199,7 +4199,7 @@ As telas a seguir apresentam recortes do protótipo de alta fidelidade do Corrij
       telas do protótipo
     </a>
     e o
-    <a href="https://spool-cobalt-21834134.figma.site">
+    <a href="https://www.figma.com/design/hT0ZlGn9DAz64Y1gIwFVrM/corrije-ai?node-id=372-2092&p=f&t=KHZxl8QX36lqNdaW-0">
       fluxo (coordenador/professor)
     </a>.
   </em>
@@ -6052,15 +6052,15 @@ Dessa forma, conclui-se que a solução desenvolvida atende aos objetivos propos
 
 ABONG – Associação Brasileira de Organizações Não Governamentais. **Panorama das Associações Brasileiras de Organizações da Sociedade Civil**. São Paulo: ABONG, 2021. Disponível em: https://www.abong.org.br. Acesso em: 1 mai. 2025.
 
-CAF – Charities Aid Foundation. **World Giving Index 2022**. West Malling: CAF, 2022. Disponível em: https://www.cafonline.org/docs/default-source/about-us-publications/caf_world_giving_index_2022_210922-final.pdf. Acesso em: 1 mai. 2025.
+CAF – Charities Aid Foundation. **World Giving Index**. West Malling: CAF. Disponível em: https://www.cafonline.org/insights/research/world-giving-index. Acesso em: 1 mai. 2025.
 
 BRASIL. Lei nº 13.709, de 14 de agosto de 2018. **Lei Geral de Proteção de Dados Pessoais (LGPD)**. Brasília: Presidência da República, 2018. Disponível em: http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm. Acesso em: 1 mai. 2025.
 
-FUNDAÇÃO ESTUDAR. **Relatório de Impacto 2023**. São Paulo: Fundação Estudar, 2023. Disponível em: https://www.estudar.org.br/relatorio-de-impacto. Acesso em: 1 mai. 2025.
+FUNDAÇÃO ESTUDAR. **Sobre nós**. São Paulo: Fundação Estudar. Disponível em: https://www.estudar.org.br/sobre-nos/. Acesso em: 1 mai. 2025.
 
 FUNDAÇÃO LEMANN. **Relatório Anual 2022**. São Paulo: Fundação Lemann, 2022. Disponível em: https://fundacaolemann.org.br/relatorio-anual. Acesso em: 1 mai. 2025.
 
-GIFE – Grupo de Institutos, Fundações e Empresas. **Mapeamento do Investimento Social Privado no Brasil**. São Paulo: GIFE, 2021. Disponível em: https://gife.org.br/publicacoes. Acesso em: 1 mai. 2025.
+GIFE – Grupo de Institutos, Fundações e Empresas. **Censo GIFE 2020**. São Paulo: GIFE, 2021. Disponível em: https://sinapse.gife.org.br/download/censo-gife-2020. Acesso em: 1 mai. 2025.
 
 IDIS – Instituto para o Desenvolvimento do Investimento Social. **Doação Brasil 2022**. São Paulo: IDIS, 2022. Disponível em: https://idis.org.br/pesquisa/doacao-brasil. Acesso em: 1 mai. 2025.
 
@@ -6072,9 +6072,9 @@ IPEA – Instituto de Pesquisa Econômica Aplicada. **Desigualdades socioeducaci
 
 ISO/IEC 25010:2011. **Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models**. Geneva: ISO, 2011.
 
-ITAÚ SOCIAL. **Avaliação de Impacto em Educação: desafios e perspectivas**. São Paulo: Fundação Itaú Social, 2020. Disponível em: https://www.itausocial.org.br/publicacoes. Acesso em: 1 mai. 2025.
+ITAÚ SOCIAL. **Biblioteca Itaú Social**. São Paulo: Fundação Itaú Social. Disponível em: https://www.itausocial.org.br/biblioteca/. Acesso em: 1 mai. 2025.
 
-MCKINSEY & COMPANY. **High-performing NGOs: unlocking their potential**. Nova York: McKinsey, 2022. Disponível em: https://www.mckinsey.com/featured-insights/social-sector. Acesso em: 1 mai. 2025.
+MCKINSEY & COMPANY. **Public Sector Insights**. Nova York: McKinsey. Disponível em: https://www.mckinsey.com/industries/public-sector/our-insights. Acesso em: 1 mai. 2025.
 
 MINISTÉRIO DA EDUCAÇÃO. **Programa Universidade para Todos (ProUni)**. Brasília: MEC, 2023. Disponível em: http://prouniportal.mec.gov.br. Acesso em: 1 mai. 2025.
 
@@ -6082,13 +6082,13 @@ OECD. **Education at a Glance 2023: OECD Indicators**. Paris: OECD Publishing, 2
 
 OECD. [Education at a Glance 2024: OECD Indicators](https://www.oecd.org/en/publications/education-at-a-glance-2024_c00cad36-en). Paris: OECD Publishing, 2024. Acesso em: 12 jun. 2026.
 
-OECD. **Philanthropy and Education: Harnessing the Potential for Learning**. Paris: OECD Publishing, 2019. Disponível em: https://doi.org/10.1787/000e0c1e-en. Acesso em: 1 mai. 2025.
+OECD. **Private Philanthropy for Development – Second Edition: Data for Action**. Paris: OECD Publishing, 2021. Disponível em: https://www.oecd.org/en/publications/private-philanthropy-for-development-second-edition_cdf37f1e-en.html. Acesso em: 1 mai. 2025.
 
-TODOS PELA EDUCAÇÃO. **Anuário Brasileiro da Educação Básica 2023**. São Paulo: Todos Pela Educação, 2023. Disponível em: https://todospelaeducacao.org.br/anuario. Acesso em: 1 mai. 2025.
+TODOS PELA EDUCAÇÃO. **Anuário Brasileiro da Educação Básica 2024**. São Paulo: Todos Pela Educação, 2024. Disponível em: https://anuario.todospelaeducacao.org.br/2024/index.html. Acesso em: 1 mai. 2025.
 
 TRANSPARÊNCIA BRASIL. **Organizações da Sociedade Civil: dados e transparência**. São Paulo: Transparência Brasil, 2022. Disponível em: https://www.transparencia.org.br. Acesso em: 1 mai. 2025.
 
-UNICEF – United Nations Children's Fund. **Relatório Situação da Infância e Adolescência Brasileira 2022**. Brasília: UNICEF, 2022. Disponível em: https://www.unicef.org/brazil/relatorios. Acesso em: 1 mai. 2025.
+UNICEF – United Nations Children's Fund. **Cenário da Exclusão Escolar no Brasil**. Brasília: UNICEF Brasil; Cenpec Educação, 2021. Disponível em: https://www.unicef.org/brazil/relatorios/cenario-da-exclusao-escolar-no-brasil. Acesso em: 1 mai. 2025.
 
 UNESCO. [Guidance for Generative AI in Education and Research](https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research?hub=67098). Paris: UNESCO, 2023. Acesso em: 12 jun. 2026.
 
