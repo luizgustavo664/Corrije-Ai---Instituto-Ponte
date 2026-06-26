@@ -35,6 +35,7 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
   const provasPublicadas = provas.filter((prova) => prova.status === "publicada").length;
   const visibleProfessores = showAllProfessores ? professores ?? [] : (professores ?? []).slice(0, 10);
   const hasHiddenProfessores = (professores?.length ?? 0) > visibleProfessores.length;
+  const selectedProfessorToDelete = professores?.find((professor) => professor.id === professorToDelete);
 
   const createMutation = useMutation({
     mutationFn: createProfessor,
@@ -91,9 +92,23 @@ export function GestaoProfessoresPage({ onNavigateToProfile }: Props): JSX.Eleme
       <ConfirmDialog
         open={!!professorToDelete}
         title="Remover professor?"
-        description="Esta ação remove o professor da gestão. Confirme apenas se ele não deve mais acessar o sistema."
-        confirmLabel="Remover"
+        description={
+          <div className="flex flex-col gap-3">
+            <p>Esta ação remove o professor da gestão e ele deixa de aparecer nas seleções da plataforma.</p>
+            {selectedProfessorToDelete && (
+              <div className="rounded-lg border border-red-100 bg-red-50 p-3">
+                <p className="font-semibold text-red-900">{selectedProfessorToDelete.nome}</p>
+                <p className="break-all text-red-800">{selectedProfessorToDelete.email}</p>
+              </div>
+            )}
+            <p className="text-red-700">
+              Se houver provas vinculadas, a remoção será bloqueada para preservar o histórico.
+            </p>
+          </div>
+        }
+        confirmLabel="Remover professor"
         isLoading={deleteMutation.isPending}
+        tone="danger"
         onOpenChange={(open) => {
           if (!open && !deleteMutation.isPending) {
             setProfessorToDelete(null);

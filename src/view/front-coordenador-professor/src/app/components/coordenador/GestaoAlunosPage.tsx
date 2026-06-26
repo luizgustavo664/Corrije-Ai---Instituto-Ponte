@@ -57,6 +57,7 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
     }));
   const selectedTurmaAlunos = (alunos ?? []).filter((aluno) => aluno.turma === selectedTurma);
   const selectedTurmaProvas = provas.filter((prova) => prova.turma === selectedTurma);
+  const selectedAlunoToDelete = alunos?.find((aluno) => aluno.id === alunoToDelete);
 
   const deleteMutation = useMutation({
     mutationFn: deleteAluno,
@@ -131,9 +132,26 @@ export function GestaoAlunosPage({ onNavigateToProfile }: Props): JSX.Element {
       <ConfirmDialog
         open={!!alunoToDelete}
         title="Remover aluno?"
-        description="Alunos são gerados automaticamente quando iniciam uma prova. Remova apenas registros indevidos ou duplicados."
-        confirmLabel="Remover"
+        description={
+          <div className="flex flex-col gap-3">
+            <p>Alunos são cadastrados automaticamente quando iniciam uma prova pelo portal público.</p>
+            {selectedAlunoToDelete && (
+              <div className="rounded-lg border border-red-100 bg-red-50 p-3">
+                <p className="font-semibold text-red-900">{selectedAlunoToDelete.nome}</p>
+                <p className="break-all text-red-800">{selectedAlunoToDelete.email}</p>
+                <p className="text-red-800">
+                  Turma: {selectedAlunoToDelete.turma ?? "sem turma vinculada"}
+                </p>
+              </div>
+            )}
+            <p className="text-red-700">
+              Remova apenas registros indevidos ou duplicados. O histórico acadêmico associado pode impedir a exclusão.
+            </p>
+          </div>
+        }
+        confirmLabel="Remover aluno"
         isLoading={deleteMutation.isPending}
+        tone="danger"
         onOpenChange={(open) => {
           if (!open && !deleteMutation.isPending) {
             setAlunoToDelete(null);

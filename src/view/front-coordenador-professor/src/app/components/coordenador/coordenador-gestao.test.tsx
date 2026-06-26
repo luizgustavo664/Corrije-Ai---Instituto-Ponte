@@ -129,7 +129,7 @@ describe("coordenador gestao pages", () => {
 
     await user.click(screen.getAllByTitle("Remover aluno")[0]);
     expect(screen.getByRole("alertdialog")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Remover" }));
+    await user.click(screen.getByRole("button", { name: "Remover aluno" }));
 
     await waitFor(() => expect(deleteAluno).toHaveBeenCalledWith("aluno-1", expect.anything()));
     expect(toastSuccess).toHaveBeenCalledWith("Aluno removido com sucesso.");
@@ -168,7 +168,7 @@ describe("coordenador gestao pages", () => {
     ));
 
     await user.click(screen.getByTitle("Remover professor"));
-    await user.click(screen.getByRole("button", { name: "Remover" }));
+    await user.click(screen.getByRole("button", { name: "Remover professor" }));
 
     await waitFor(() => expect(deleteProfessor).toHaveBeenCalledWith("prof-1", expect.anything()));
     expect(toastError).toHaveBeenCalledWith("Professor possui provas vinculadas.");

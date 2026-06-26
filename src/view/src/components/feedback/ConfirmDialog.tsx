@@ -8,13 +8,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
+import type { ReactNode } from "react";
 
 type ConfirmDialogProps = {
   open: boolean;
   title: string;
-  description: string;
+  description: ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
+  tone?: "default" | "danger";
   isLoading?: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
@@ -26,6 +28,7 @@ export function ConfirmDialog({
   description,
   confirmLabel = "Confirmar",
   cancelLabel = "Cancelar",
+  tone = "default",
   isLoading = false,
   onOpenChange,
   onConfirm,
@@ -41,6 +44,11 @@ export function ConfirmDialog({
           <AlertDialogCancel disabled={isLoading}>{cancelLabel}</AlertDialogCancel>
           <AlertDialogAction
             disabled={isLoading}
+            className={
+              tone === "danger"
+                ? "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-200"
+                : undefined
+            }
             onClick={(event) => {
               event.preventDefault();
               onConfirm();

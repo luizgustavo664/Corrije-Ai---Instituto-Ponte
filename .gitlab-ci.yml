@@ -21,12 +21,16 @@ frontend-check:
   rules:
     - if: $CI_COMMIT_BRANCH
 
-pages:
+deploy-pages:
   stage: deploy
   needs:
     - frontend-check
   script:
-    - test -n "$VITE_API_BASE_URL" || (echo "Configure VITE_API_BASE_URL em Settings > CI/CD > Variables apontando para a WebAPI publica, ex. https://api.seudominio.com/api/v1" && exit 1)
+    - |
+      if [ -z "$VITE_API_BASE_URL" ]; then
+        echo "AVISO: VITE_API_BASE_URL nao foi configurada. O Pages sera publicado, mas o app so funcionara quando a variavel apontar para uma WebAPI publica."
+        export VITE_API_BASE_URL="http://localhost:3333/api/v1"
+      fi
     - |
       if [ -z "$VITE_BASE_PATH" ]; then
         if [ "$CI_PROJECT_NAME" = "${CI_PROJECT_ROOT_NAMESPACE}.gitlab.io" ]; then
@@ -43,9 +47,10 @@ pages:
     - cd ../..
     - rm -rf public
     - cp -a src/view/dist public
+  pages:
+    publish: public
   artifacts:
     paths:
       - public
-  pages: true
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

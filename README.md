@@ -164,7 +164,7 @@ Em hospedagem real, sirva `src/view/dist` como estatico e mantenha o backend com
 
 O GitLab Pages publica apenas arquivos estaticos. Portanto, antes do deploy, o backend deve estar em uma URL publica HTTPS e com CORS liberado para a URL do Pages.
 
-O repositorio ja inclui `.gitlab-ci.yml` para publicar o frontend em GitLab Pages. No GitLab, configure em `Settings > CI/CD > Variables`:
+O repositorio ja inclui `.gitlab-ci.yml` para publicar o frontend em GitLab Pages. No GitLab, configure em `Settings > CI/CD > Variables` para a aplicacao ficar funcional fora da maquina local:
 
 ```env
 VITE_API_BASE_URL=https://sua-api-publica.example.com/api/v1
@@ -179,13 +179,15 @@ VITE_SUPABASE_URL=
 VITE_SUPABASE_PUBLISHABLE_KEY=
 ```
 
+Se `VITE_API_BASE_URL` nao for definida, o pipeline ainda publica o Pages para liberar a URL, mas o app gerado tentara chamar `localhost` e nao conseguira usar os fluxos reais fora do ambiente local. Configure a variavel antes da entrega final.
+
 Se `VITE_BASE_PATH` nao for definida, o pipeline usa `/${CI_PROJECT_NAME}/`, que atende ao formato padrao `https://namespace.gitlab.io/nome-do-projeto/`. Para dominio proprio ou projeto `namespace.gitlab.io`, use `/`.
 
 Fluxo:
 
 1. Envie o codigo para a branch padrao do GitLab.
 2. O job `frontend-check` instala dependencias, roda typecheck e testes de contrato.
-3. O job `pages` gera `src/view/dist`, copia para `public` e publica no Pages.
+3. O job `deploy-pages` gera `src/view/dist`, copia para `public` e publica no Pages.
 4. Acesse `Deploy > Pages` no GitLab para ver a URL publicada.
 
 O pipeline tambem copia `index.html` para `404.html` para que rotas internas do React, como `/coordenador/provas`, carreguem mesmo quando abertas diretamente.
