@@ -11,6 +11,8 @@
   </a>
 </div>
 
+# Grupo 05  
+
 
 ## Integrantes: 
 <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; margin-top:1rem;">
@@ -90,6 +92,10 @@ O projeto Corrije aí é uma aplicação web desenvolvida para o Instituto Ponte
 A proposta resolve a atual dispersão do processo avaliativo, que é feito por WhatsApp, e-mail e outras ferramentas não estruturadas. Com o Corrije aí, as submissões de avaliações ficam organizadas em um único ambiente, o envio de arquivos é feito por questão, e a correção é padronizada para garantir mais equidade e transparência.
 
 Além de tornar o processo mais eficiente para professores e coordenadores, o aplicativo gera relatórios automáticos de desempenho e permite acompanhar resultados com maior segurança. A plataforma valoriza acessibilidade, usabilidade e justiça no processo avaliativo, reduzindo perdas de arquivos, sobrecarga administrativa e dificuldades técnicas dos usuários.
+
+## 📝 Link de demonstração
+
+- [Demonstração do Corrije aí ▶️](https://www.youtube.com/watch?v=qNYkW6TVNxA&feature=youtu.be)
 
 ## Demonstração e documentação da API
 
@@ -215,7 +221,7 @@ Os testes unitários de Service seguem a nomenclatura `*.service.test.ts`; os te
     * 
 * 0.2.0 - XX/XX/2024
     *  -->
-* 0.1.0 - 26/06/2026 (planejado)
+* 0.1.0 - 26/06/2026
     Versão final do MVP
 
 ## 📋 Licença/License
