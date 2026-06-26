@@ -72,11 +72,19 @@ EMAIL_PROVIDER=
 EMAIL_WEBHOOK_URL=
 EMAIL_API_KEY=
 EMAIL_FROM=
+EMAIL_TIMEOUT_MS=5000
+EMAIL_RETRY_ATTEMPTS=2
+EMAIL_RETRY_BACKOFF_MS=100
+EMAIL_CIRCUIT_FAILURE_THRESHOLD=3
+EMAIL_CIRCUIT_RESET_MS=30000
 
 # Storage opcional para exportacoes/anexos.
 SUPABASE_STORAGE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 SUPABASE_STORAGE_BUCKET=exports
+STORAGE_TIMEOUT_MS=8000
+STORAGE_RETRY_ATTEMPTS=2
+STORAGE_RETRY_BACKOFF_MS=100
 ```
 
 Gere segredos localmente:
@@ -115,6 +123,12 @@ VITE_SUPABASE_PUBLISHABLE_KEY=
 
 ## Banco e migrations
 
+Para subir PostgreSQL local por Docker:
+
+```sh
+docker compose up -d postgres
+```
+
 Com `DATABASE_URL` apontando para um banco vazio:
 
 ```sh
@@ -127,7 +141,7 @@ Se existir base legada com CPF em texto plano, execute a migracao especifica dep
 npm run migrate:cpf
 ```
 
-As migrations ficam em `src/backend/src/database/migrations` e rodam em ordem numerica. O schema inicial cria tabelas, enums, triggers, RLS compativel com Supabase e regras de janela de prova.
+As migrations ficam em `src/backend/src/database/migrations` e rodam em ordem numerica. O schema inicial canonico e `001_initial_schema.sql`; o runner ignora o legado `migration.sql` quando ja registrado em bases antigas, evitando duplicidade em banco limpo. O schema inicial cria tabelas, enums, triggers, RLS compativel com Supabase e regras de janela de prova.
 
 ## Executar em desenvolvimento
 
@@ -207,6 +221,11 @@ Cobertura:
 npm run coverage
 ```
 
+Evidencias versionadas da versao final:
+
+- `documentos/outros/evidencias/webapi-npm-test.txt`: `npm test` com backend 54 suites/438 testes e frontend 31 arquivos/122 testes passando.
+- `documentos/outros/evidencias/webapi-npm-test-coverage.txt`: `npm run coverage` com backend em 88,90% statements/89,87% linhas e frontend em 90,85% statements/linhas.
+
 Executar por modulo:
 
 ```sh
@@ -234,9 +253,11 @@ Os testes de integracao do backend usam PostgreSQL real. Antes de roda-los, apon
 ## Resiliencia e qualidade
 
 - Timeout de banco configurado em `src/backend/src/database/pool.ts` por `DB_CONNECTION_TIMEOUT_MS`, `DB_IDLE_TIMEOUT_MS` e `DB_STATEMENT_TIMEOUT_MS`.
-- Regras de periodo da prova sao validadas no backend ao iniciar, salvar resposta e finalizar.
-- Operacoes criticas usam constraints, upserts, status condicionais e chaves idempotentes onde aplicavel.
+- Timeout, retry com backoff e circuit breaker de email ficam em `src/backend/src/helpers/resilience.ts` e `src/backend/src/services/email-adapter.ts`; storage usa o mesmo helper em `src/backend/src/services/storage.service.ts`.
+- Regras de periodo da prova sao validadas no backend ao iniciar, salvar resposta, salvar anexo e finalizar.
+- Operacoes criticas usam constraints, upserts, status condicionais e chaves idempotentes onde aplicavel (`Idempotency-Key` para mutacoes criticas).
 - Cliente HTTP do frontend aplica retry/backoff em falhas transitorias, mantendo erros de validacao sem retry.
+- CPF e cifrado com AES-256-GCM e indexado por HMAC-SHA256 em `src/backend/src/security/cpf-crypto.ts`, `aluno.repository.ts` e `aluno-portal.repository.ts`; `migrate:cpf` converte bases legadas.
 - Fluxos de professor possuem filtros, busca, status visual, priorizacao de provas abertas/com correcao pendente, aviso de alteracoes nao salvas e feedbacks padronizados.
 - Publicacao de prova e reversao para rascunho sao controladas no backend; provas com tentativas/submissoes nao podem ser tiradas da publicacao.
 

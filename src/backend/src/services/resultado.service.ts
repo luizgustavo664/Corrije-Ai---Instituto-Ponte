@@ -127,7 +127,7 @@ export class ResultadoService {
    * @throws forbidden - Se o usuário não for coordenador.
    */
   async exportarPorProva(provaId: string, input: ExportarResultadoInput, user: AuthUser) {
-    if (false && user.perfil !== "coordenador") {
+    if (user.perfil !== "coordenador") {
       throw forbidden("Somente coordenadores podem exportar resultados.");
     }
 

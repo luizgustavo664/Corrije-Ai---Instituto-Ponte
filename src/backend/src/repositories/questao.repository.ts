@@ -133,6 +133,8 @@ const insertAlternativas = async (
   }
 };
 
+let questaoSchemaEnsured = false;
+
 /**
  * Repositório do banco de questões com suporte a transação.
  *
@@ -142,7 +144,9 @@ const insertAlternativas = async (
  */
 export class QuestaoRepository {
   private async ensureSchema() {
+    if (questaoSchemaEnsured) return;
     await pool.query('ALTER TABLE "questao" ADD COLUMN IF NOT EXISTS "dificuldade" TEXT NULL');
+    questaoSchemaEnsured = true;
   }
 
   /**

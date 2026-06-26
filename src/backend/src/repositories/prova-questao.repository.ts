@@ -68,6 +68,8 @@ const mapProvaQuestao = (row: ProvaQuestaoRow) => ({
           urlImagem: row.enunciado_url_imagem ?? null,
         },
         alternativas: [],
+        timesUsed: 0,
+        successRate: 0,
       }
     : undefined,
 });
@@ -100,6 +102,8 @@ const selectProvaQuestaoSql = `
   JOIN "enunciado" e ON e."questao_id" = q."id"
 `;
 
+let provaQuestaoSchemaEnsured = false;
+
 /**
  * Repositório da associação entre provas e questões (tabela `prova_questao`).
  *
@@ -108,7 +112,9 @@ const selectProvaQuestaoSql = `
  */
 export class ProvaQuestaoRepository {
   private async ensureSchema() {
+    if (provaQuestaoSchemaEnsured) return;
     await pool.query('ALTER TABLE "questao" ADD COLUMN IF NOT EXISTS "dificuldade" TEXT NULL');
+    provaQuestaoSchemaEnsured = true;
   }
 
   /**

@@ -126,18 +126,12 @@ describe("ProvaService - unitário", () => {
       expect(result.status).toBe("rascunho");
     });
 
-    it("deve criar prova como coordenador usando professor vinculado a materia", async () => {
-      mockFindProfessorIdsByMateria.mockResolvedValue(["prof-1"]);
-      mockProfessorExists.mockResolvedValue(true);
-      mockMateriaExists.mockResolvedValue(true);
-      mockProfessorMateriaVinculados.mockResolvedValue(true);
-      mockCreate.mockResolvedValue(makeProva());
-
+    it("deve bloquear criacao de prova por coordenador", async () => {
       const service = new ProvaService();
       await expect(
         service.create({ materiaId: "mat-1", titulo: "Prova", turma: "3A", semestre: "2025.1" }, coordenador),
-      ).resolves.toMatchObject({ professorId: "prof-1", status: "rascunho" });
-      expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({ professorId: "prof-1" }));
+      ).rejects.toThrow("Somente professores podem criar provas.");
+      expect(mockCreate).not.toHaveBeenCalled();
     });
 
     it("deve lançar forbidden quando professorId difere do user.id", async () => {

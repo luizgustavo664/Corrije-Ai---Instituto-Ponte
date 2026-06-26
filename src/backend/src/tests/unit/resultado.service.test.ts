@@ -92,17 +92,19 @@ describe("ResultadoService - unitário", () => {
     }));
   });
 
-  it("deve exportar CSV para professor com acesso", async () => {
-    const result = await service.exportarPorProva("prova-1", { formato: "csv" } as any, professor);
+  it("deve bloquear exportacao por professor mesmo com acesso", async () => {
+    await expect(service.exportarPorProva("prova-1", { formato: "csv" } as any, professor)).rejects.toThrow(
+      "Somente coordenadores podem exportar resultados.",
+    );
 
-    expect(result).toEqual({ id: "exp-1", urlArquivo: "/exports/a.csv" });
-    expect(repo.createExportacao).toHaveBeenCalledWith("prova-1", null, "csv", "/exports/a.csv", 1);
+    expect(storage.upload).not.toHaveBeenCalled();
+    expect(repo.createExportacao).not.toHaveBeenCalled();
   });
 
   it("deve rejeitar exportacao sem acesso", async () => {
     repo.hasAccessToProva.mockResolvedValue(false);
 
-    await expect(service.exportarPorProva("prova-1", { formato: "csv" } as any, professor)).rejects.toThrow(
+    await expect(service.exportarPorProva("prova-1", { formato: "csv" } as any, coordenador)).rejects.toThrow(
       "Usuario sem permissao para exportar resultados desta prova.",
     );
   });

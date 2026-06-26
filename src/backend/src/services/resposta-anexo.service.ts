@@ -80,7 +80,12 @@ export class RespostaAnexoService {
     }
 
     const now = Date.now();
-    if (now < new Date(context.dataInicio).getTime() || now > new Date(context.dataFim).getTime()) {
+    const windowEnd = new Date(context.dataFim).getTime();
+    const attemptEnd = context.inicioEm && context.tempoLimiteMin !== null
+      ? new Date(context.inicioEm).getTime() + context.tempoLimiteMin * 60_000
+      : windowEnd;
+    const effectiveEnd = Math.min(windowEnd, attemptEnd);
+    if (now < new Date(context.dataInicio).getTime() || now > effectiveEnd) {
       throw conflict("Prova fora do período de resposta.");
     }
 

@@ -1,5 +1,6 @@
 /** Contrato para envio de emails. Pode ser substituído por um adaptador real (ex.: Resend, SendGrid). */
 import dotenv from "dotenv";
+import { CircuitBreaker, numberFromEnv, resilientFetch } from "../helpers/resilience.js";
 
 dotenv.config();
 
@@ -29,24 +30,42 @@ export class FakeEmailAdapter implements EmailAdapter {
 }
 
 export class HttpEmailAdapter implements EmailAdapter {
+  private readonly breaker: CircuitBreaker;
+
   constructor(
     private readonly url = process.env.EMAIL_WEBHOOK_URL,
     private readonly apiKey = process.env.EMAIL_API_KEY,
+    private readonly environment = process.env,
   ) {
     if (!url) {
       throw new Error("EMAIL_WEBHOOK_URL is required for real email delivery.");
     }
+    this.breaker = new CircuitBreaker({
+      failureThreshold: numberFromEnv(environment, "EMAIL_CIRCUIT_FAILURE_THRESHOLD", 3),
+      resetTimeoutMs: numberFromEnv(environment, "EMAIL_CIRCUIT_RESET_MS", 30_000),
+    });
   }
 
   async send(para: string, assunto: string, corpo: string) {
-    const response = await fetch(this.url!, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {}),
-      },
-      body: JSON.stringify({ to: para, subject: assunto, body: corpo }),
-    });
+    const response = await this.breaker.execute(
+      () => resilientFetch(this.url!, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {}),
+        },
+        body: JSON.stringify({ to: para, subject: assunto, body: corpo }),
+      }, {
+        timeoutMs: numberFromEnv(this.environment, "EMAIL_TIMEOUT_MS", 5_000),
+        retries: numberFromEnv(this.environment, "EMAIL_RETRY_ATTEMPTS", 2),
+        backoffMs: numberFromEnv(this.environment, "EMAIL_RETRY_BACKOFF_MS", 100),
+      }),
+      () => undefined,
+    );
+
+    if (!response) {
+      return { success: false, error: "Circuit breaker de email aberto; envio adiado." };
+    }
 
     if (!response.ok) {
       return { success: false, error: `Email provider returned ${response.status}.` };
@@ -70,32 +89,50 @@ const parseSender = (value: string) => {
 };
 
 export class BrevoEmailAdapter implements EmailAdapter {
+  private readonly breaker: CircuitBreaker;
+
   constructor(
     private readonly apiKey = process.env.EMAIL_API_KEY,
     private readonly from = process.env.EMAIL_FROM ?? "Corrije Ai <noreply@example.com>",
     private readonly url = process.env.EMAIL_WEBHOOK_URL ?? "https://api.brevo.com/v3/smtp/email",
+    private readonly environment = process.env,
   ) {
     if (!apiKey) {
       throw new Error("EMAIL_API_KEY is required for Brevo email delivery.");
     }
+    this.breaker = new CircuitBreaker({
+      failureThreshold: numberFromEnv(environment, "EMAIL_CIRCUIT_FAILURE_THRESHOLD", 3),
+      resetTimeoutMs: numberFromEnv(environment, "EMAIL_CIRCUIT_RESET_MS", 30_000),
+    });
   }
 
   async send(para: string, assunto: string, corpo: string) {
     const apiKey = this.apiKey!;
     const sender = parseSender(this.from);
-    const response = await fetch(this.url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": apiKey,
-      },
-      body: JSON.stringify({
-        sender,
-        to: [{ email: para }],
-        subject: assunto,
-        textContent: corpo,
+    const response = await this.breaker.execute(
+      () => resilientFetch(this.url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": apiKey,
+        },
+        body: JSON.stringify({
+          sender,
+          to: [{ email: para }],
+          subject: assunto,
+          textContent: corpo,
+        }),
+      }, {
+        timeoutMs: numberFromEnv(this.environment, "EMAIL_TIMEOUT_MS", 5_000),
+        retries: numberFromEnv(this.environment, "EMAIL_RETRY_ATTEMPTS", 2),
+        backoffMs: numberFromEnv(this.environment, "EMAIL_RETRY_BACKOFF_MS", 100),
       }),
-    });
+      () => undefined,
+    );
+
+    if (!response) {
+      return { success: false, error: "Circuit breaker de email aberto; envio adiado." };
+    }
 
     if (!response.ok) {
       let details = "";
@@ -130,11 +167,12 @@ export const createEmailAdapter = (environment = process.env): EmailAdapter => {
       environment.EMAIL_API_KEY,
       environment.EMAIL_FROM,
       environment.EMAIL_WEBHOOK_URL,
+      environment,
     );
   }
 
   if (environment.EMAIL_WEBHOOK_URL) {
-    return new HttpEmailAdapter(environment.EMAIL_WEBHOOK_URL, environment.EMAIL_API_KEY);
+    return new HttpEmailAdapter(environment.EMAIL_WEBHOOK_URL, environment.EMAIL_API_KEY, environment);
   }
 
   throw new Error("Configure EMAIL_WEBHOOK_URL or set EMAIL_ADAPTER=fake for non-production test/dev runs.");

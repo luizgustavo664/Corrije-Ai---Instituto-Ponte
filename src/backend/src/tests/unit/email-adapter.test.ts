@@ -55,14 +55,15 @@ describe("EmailAdapter - unitario", () => {
       const adapter = new HttpEmailAdapter("https://email.local/send", "secret");
 
       await expect(adapter.send("a@b.com", "Assunto", "Corpo")).resolves.toEqual({ success: true });
-      expect(fetchMock).toHaveBeenCalledWith("https://email.local/send", {
+      expect(fetchMock).toHaveBeenCalledWith("https://email.local/send", expect.objectContaining({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer secret",
         },
         body: JSON.stringify({ to: "a@b.com", subject: "Assunto", body: "Corpo" }),
-      });
+        signal: expect.any(AbortSignal),
+      }));
     });
 
     it("deve retornar erro controlado quando provider rejeita", async () => {
@@ -77,6 +78,41 @@ describe("EmailAdapter - unitario", () => {
         success: false,
         error: "Email provider returned 503.",
       });
+    });
+
+    it("deve repetir status transitorio antes de confirmar envio", async () => {
+      const fetchMock = jest.spyOn(globalThis, "fetch")
+        .mockResolvedValueOnce({ ok: false, status: 503 } as Response)
+        .mockResolvedValueOnce({ ok: true, status: 200 } as Response);
+
+      const adapter = new HttpEmailAdapter("https://email.local/send", undefined, {
+        EMAIL_RETRY_ATTEMPTS: "1",
+        EMAIL_RETRY_BACKOFF_MS: "0",
+      } as NodeJS.ProcessEnv);
+
+      await expect(adapter.send("a@b.com", "Assunto", "Corpo")).resolves.toEqual({ success: true });
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+    });
+
+    it("deve abrir circuit breaker apos falha transitoria de rede", async () => {
+      const fetchMock = jest.spyOn(globalThis, "fetch")
+        .mockRejectedValue(new Error("fetch failed"));
+
+      const adapter = new HttpEmailAdapter("https://email.local/send", undefined, {
+        EMAIL_RETRY_ATTEMPTS: "0",
+        EMAIL_CIRCUIT_FAILURE_THRESHOLD: "1",
+        EMAIL_CIRCUIT_RESET_MS: "30000",
+      } as NodeJS.ProcessEnv);
+
+      await expect(adapter.send("a@b.com", "Assunto", "Corpo")).resolves.toEqual({
+        success: false,
+        error: "Circuit breaker de email aberto; envio adiado.",
+      });
+      await expect(adapter.send("a@b.com", "Assunto", "Corpo")).resolves.toEqual({
+        success: false,
+        error: "Circuit breaker de email aberto; envio adiado.",
+      });
+      expect(fetchMock).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -94,7 +130,7 @@ describe("EmailAdapter - unitario", () => {
       const adapter = new BrevoEmailAdapter("xkeysib-secret", "Corrije Ai <noreply@example.com>");
 
       await expect(adapter.send("a@b.com", "Assunto", "Corpo")).resolves.toEqual({ success: true });
-      expect(fetchMock).toHaveBeenCalledWith("https://api.brevo.com/v3/smtp/email", {
+      expect(fetchMock).toHaveBeenCalledWith("https://api.brevo.com/v3/smtp/email", expect.objectContaining({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +142,8 @@ describe("EmailAdapter - unitario", () => {
           subject: "Assunto",
           textContent: "Corpo",
         }),
-      });
+        signal: expect.any(AbortSignal),
+      }));
     });
 
     it("deve retornar mensagem da Brevo quando provider rejeita", async () => {

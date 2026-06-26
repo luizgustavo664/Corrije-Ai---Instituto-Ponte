@@ -1564,6 +1564,17 @@ Relaciona-se com RF012 (upload de múltiplas imagens), RF013 (compressão client
 
 ---
 
+Fechamento técnico dos RNFs na versão final:
+
+| RNF | Implementação mensurável | Arquivo e função/método | Evidência final |
+|-----|--------------------------|-------------------------|-----------------|
+| DES | Timeout de banco e falha rápida em dependências externas. | `database/pool.ts` (`Pool` com `connectionTimeoutMillis` e `statement_timeout`); `helpers/resilience.ts` (`fetchWithTimeout`, `resilientFetch`). | `webapi-npm-test-coverage.txt`; testes `resilience.test.ts`, `email-adapter.test.ts`, `storage.service.test.ts`. |
+| SUP | Suíte automatizada executável e cobertura real versionada. | `jest.config.ts` e `vite.config.ts` (`coverageThreshold` realista); scripts `npm test` e `npm run coverage`. | `webapi-npm-test.txt` e `webapi-npm-test-coverage.txt`. |
+| SEG | CPF cifrado, busca por hash e autorização server-side. | `security/cpf-crypto.ts` (`encryptCpf`, `hashCpf`); `middlewares/auth.ts` (`requireRole`); `resultado.service.ts` (`exportarPorProva`). | `cpf-crypto.test.ts`, `aluno.integration.test.ts`, `infra-auth.integration.test.ts`. |
+| CAP | Pool configurável e retries em dependências externas para reduzir falhas transitórias. | `database/pool.ts`; `helpers/resilience.ts` (`withRetry`, `CircuitBreaker`). | `resilience.test.ts`; `apiClient.test.ts` no frontend. |
+| REST | Fluxo do aluno sem senha, OAuth/JWT para usuários internos e ausência de API externa obrigatória fora de e-mail/storage configuráveis. | `aluno-portal.service.ts` (`iniciarProva`); `auth.service.ts`; `email-adapter.ts` com fake default em teste. | `aluno-portal.integration.test.ts`, `auth.service.test.ts`, `email-resultado.integration.test.ts`. |
+| ORG | Setup reproduzível por README, docker-compose e migrations numeradas. | `docker-compose.yml`; `database/migrate.ts` (`orderMigrationFiles`, `migrate`). | `migration-order.test.ts`; execução `npm run migrate` registrada no CHANGELOG. |
+
 #### DES — Desempenho
 
 &emsp;Este requisito deriva diretamente do contexto do parceiro: alunos em situação de vulnerabilidade social com frequência utilizam conexões instáveis ou de baixa largura de banda. A métrica de p95 < 500ms para leituras e < 1s para escritas é mensurável por ferramentas de teste de carga (ex.: k6, Artillery) e alinhada com padrões de qualidade de APIs REST.  
@@ -1689,8 +1700,8 @@ Esta subseção faz a rastreabilidade das Regras de Negócio (RN) para as entida
 
 - RN08 — Identificação do aluno (unicidade / evit. de multi-submissões)
   - Entidade: Aluno
-  - Tabelas: `aluno` (nome, email, cpf, aceitou_termos_em)
-  - Observação LGPD: atualmente o CPF é armazenado como `TEXT` com CHECK de formato. Ver nota de LGPD abaixo.
+  - Tabelas: `aluno` (nome, email, cpf cifrado, cpf_hash, aceitou_termos_em)
+  - Observação LGPD: o CPF não permanece em texto plano. O fluxo usa `src/backend/src/security/cpf-crypto.ts` para normalizar, cifrar com AES-256-GCM e gerar HMAC-SHA256 (`cpf_hash`) para busca e unicidade sem revelar o valor.
 
 - RN04 — Controle de envio de arquivos (anexos)
   - Entidade: RespostaAluno, RespostaAnexo
@@ -1712,12 +1723,12 @@ Esta subseção faz a rastreabilidade das Regras de Negócio (RN) para as entida
   - Entidade: RespostaAnexo, ExportacaoResultado
   - Tabelas: `resposta_anexo`, `exportacao_resultado`
 
-Ação recomendada (LGPD / CPF):
+Ação final aplicada (LGPD / CPF):
 
-- Situação atual: o campo `aluno.cpf` está definido como `TEXT` com constraint de formato (`~ '^[0-9]{11}$'`) e `UNIQUE`.
-- Gap de requisito: o WAD/avaliação exige que dados pessoais sensíveis não sejam mantidos em texto legível em repouso.
-- Recomendação técnica imediata: aplicar pseudonimização/hashing do CPF antes da persistência (por exemplo, `sha256(salt || cpf)`) e armazenar apenas o hash com índice único sobre o hash. Alternativa: usar `pgcrypto` para criptografia simétrica das colunas sensíveis e gerenciar chaves.
-- Tarefas derivadas (próximo sprint): adicionar migration para criar coluna `cpf_hash`, migrar valores atuais para hash encriptado conforme política escolhida, atualizar repository/service para gravar somente hash, revisar índices/uniqueness e documentar o fluxo de acesso/descrifração (se aplicável).
+- Situação final: `004_security_resilience.sql` adiciona `cpf_hash` e remove constraints antigas sobre CPF em texto; `migrate-cpf.ts` converte bases legadas.
+- Estratégia: `cpf` fica cifrado por envelope `v1:iv:ciphertext:tag` com AES-256-GCM; `cpf_hash` usa HMAC-SHA256 derivado da mesma chave para identificação determinística e índice único.
+- Código responsável: `encryptCpf`, `decryptCpf` e `hashCpf` em `src/backend/src/security/cpf-crypto.ts`; persistência em `AlunoRepository.update` e `AlunoPortalRepository.findOrCreateAluno`.
+- Evidência: `cpf-crypto.test.ts`, `aluno.integration.test.ts` e `maintenance.integration.test.ts`; saída final em `documentos/outros/evidencias/webapi-npm-test.txt`.
 
 ---
 
@@ -2691,7 +2702,7 @@ Esse fluxo evita que as rotas executem SQL diretamente. As rotas apenas descreve
 
 ### 3.2.3. Diagrama de Classes do Dominio (sprint 2)
 
-O diagrama de dominio abaixo foi alinhado ao backend atual e a migration src/backend/src/database/migrations/migration.sql. Coordenador, professor e aluno sao entidades/tabelas independentes. A composicao da prova usa prova_questao, a tentativa do aluno usa prova_aluno, os anexos usam resposta_anexo e a exportacao/resultado/e-mail usam tabelas proprias.
+O diagrama de dominio abaixo foi alinhado ao backend atual e a migration `src/backend/src/database/migrations/001_initial_schema.sql`. Coordenador, professor e aluno sao entidades/tabelas independentes. A composicao da prova usa prova_questao, a tentativa do aluno usa prova_aluno, os anexos usam resposta_anexo e a exportacao/resultado/e-mail usam tabelas proprias.
 ```plantuml
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
@@ -4583,7 +4594,7 @@ end note
 
 ### 3.6.2. Diagrama Entidade-Relacionamento (DER) (sprint 2, atualizado na sprint 5)
 
-O Diagrama Entidade-Relacionamento (DER) abaixo representa a visão física do banco implementado pela migration principal `src/backend/src/database/migrations/migration.sql` e pelas evoluções incrementais `002_unique_case_insensitive.sql` e `003_corrigir_objetivas_batch.sql`. Diferentemente do MER conceitual, esta visão usa os nomes reais das tabelas, colunas, chaves primárias, chaves estrangeiras, restrições `UNIQUE`, restrições `CHECK` mais relevantes e tipos PostgreSQL/Supabase usados pelo sistema.
+O Diagrama Entidade-Relacionamento (DER) abaixo representa a visão física do banco implementado pela migration principal `src/backend/src/database/migrations/001_initial_schema.sql` e pelas evoluções incrementais numeradas em `src/backend/src/database/migrations`. Diferentemente do MER conceitual, esta visão usa os nomes reais das tabelas, colunas, chaves primárias, chaves estrangeiras, restrições `UNIQUE`, restrições `CHECK` mais relevantes e tipos PostgreSQL/Supabase usados pelo sistema.
 
 A modelagem física atual possui 22 tabelas de domínio: `coordenador`, `professor`, `materia`, `materia_professor`, `aluno`, `tema`, `questao`, `enunciado`, `alternativa`, `prova`, `prova_status_historico`, `prova_questao`, `prova_aluno`, `resposta_aluno`, `resposta_anexo`, `correcao`, `feedback`, `relatorio`, `resultado_aluno`, `exportacao_resultado`, `email_envio` e `avaliacao_log`. As tabelas associativas reais são `materia_professor`, `prova_questao` e `prova_aluno`; não existem tabelas físicas chamadas `prova_materia` ou `prova_enunciado`.
 
@@ -5056,7 +5067,7 @@ Além das tabelas-base descritas acima, a migration atual também contempla:
 - `avaliacao_log`: registra ações de auditoria relacionadas à prova ou à aplicação da prova ao aluno.
 #### Complementos da implementação física atual
 
-A fonte de verdade da implementação é `src/backend/src/database/migrations/migration.sql`, que define tipos, tabelas, chaves primárias, chaves estrangeiras, índices, triggers, funções auxiliares e políticas de Row Level Security.
+A fonte de verdade da implementação é `src/backend/src/database/migrations/001_initial_schema.sql`, que define tipos, tabelas, chaves primárias, chaves estrangeiras, índices, triggers, funções auxiliares e políticas de Row Level Security.
 
 Além da migration principal, a pasta `src/backend/src/database/migrations` contém duas evoluções incrementais reais:
 
@@ -5103,7 +5114,7 @@ Os agrupamentos físicos do banco também contemplam:
 #### Migration DDL
 
 ```text
-src/backend/src/database/migrations/migration.sql
+src/backend/src/database/migrations/001_initial_schema.sql
 src/backend/src/database/migrations/002_unique_case_insensitive.sql
 src/backend/src/database/migrations/003_corrigir_objetivas_batch.sql
 ```
@@ -5160,13 +5171,13 @@ Essa consulta remove registros de e-mails com erro ou pendentes há mais de 7 di
 
 | #5 | --- |
 | --- | --- |
-| **Expressão SQL** | `INSERT INTO questao (titulo, tipo, ativa) VALUES ('Questão sobre lógica', 'multipla_escolha', true);` |
-| **Proposições lógicas** | $A$: O título da questão foi informado (`titulo IS NOT NULL`) <br> $B$: O tipo da questão é múltipla escolha (`tipo = 'multipla_escolha'`) <br> $C$: A questão está ativa (`ativa = true`) |
+| **Expressão SQL** | `INSERT INTO questao (materia_id, tipo, ativa) VALUES ('00000000-0000-0000-0000-000000000001', 'multipla_escolha', true);` |
+| **Proposições lógicas** | $A$: A matéria da questão foi informada (`materia_id IS NOT NULL`) <br> $B$: O tipo da questão é múltipla escolha (`tipo = 'multipla_escolha'`) <br> $C$: A questão está ativa (`ativa = true`) |
 | **Expressão lógica proposicional** | $A \land B \land C$ |
 | **Tabela Verdade** | <table><thead><tr><th>$A$</th><th>$B$</th><th>$C$</th><th>$A \land B$</th><th>$A \land B \land C$</th></tr></thead><tbody><tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>V</td><td>F</td><td>V</td><td>F</td><td>F</td></tr><tr><td>V</td><td>V</td><td>F</td><td>V</td><td>F</td></tr><tr><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td></tr></tbody></table> |
 
 **Descrição:**
-Essa consulta insere uma nova questão ativa de múltipla escolha no banco de dados.
+Essa consulta insere uma nova questão ativa de múltipla escolha vinculada a uma matéria existente, usando colunas reais da tabela `questao`.
 
 ## 3.7. WebAPI e endpoints (sprints 3 a 5)
 
@@ -5261,21 +5272,24 @@ O backend registra `@fastify/swagger` e `@fastify/swagger-ui` em `src/backend/sr
 
 ### 3.8.1. Autenticação
 
-*Descreva o fluxo de autenticação implementado: persistência de senha com hash bcrypt/argon2 (parâmetros de custo explícitos e justificados), validação de credenciais e criação de sessão. Senhas em texto plano no banco não são aceitas.*
+Usuários internos (professor e coordenador) autenticam por OAuth/JWT validado no backend em `src/backend/src/middlewares/auth.ts`. O middleware suporta validação Supabase por segredo HMAC (`SUPABASE_JWT_SECRET`) ou JWKS remoto (`SUPABASE_URL`) e, em modo de teste, tokens locais `test-professor`/`test-coordenador` para automação. Não há senha própria persistida pelo sistema; portanto não existem senhas em texto plano no banco. O aluno continua no fluxo público por link único, nome, e-mail, CPF e aceite LGPD, sem login/senha, conforme restrição do TAPI.
 
 ### 3.8.2. Controle de sessão
 
-*Descreva o controle de sessão baseado em `session id` persistido em tabela própria, com expiração. Se optar por JWT, justifique a escolha explicando os trade-offs (stateless, não revogável, payload exposto).*
+O controle de sessão usa JWT stateless emitido/validado pelo provedor de autenticação. A escolha reduz estado no backend e simplifica deploy horizontal, mas implica revogação menos imediata e payload legível; por isso o token carrega apenas identificadores e perfil, enquanto autorização real consulta as tabelas `professor`/`coordenador` por `auth_user_id` ou e-mail. O frontend armazena o token em `sessionStorage` e remove a sessão em 401 via `SessionExpiredHandler`.
 
 ### 3.8.3. Autorização
 
-*Descreva as regras de autorização por rota e por operação, baseadas no perfil do usuário autenticado. A verificação deve ocorrer no backend — o frontend nunca é fonte de verdade para autorização.*
+A autorização ocorre no backend por `requireRole` e por verificações de service/repository. Professores criam provas e questões apenas para matérias vinculadas (`ProvaService.create`, `QuestaoService.validateMateriaAccess`); coordenadores gerenciam cadastros, visualizam dados agregados e exportam resultados (`ResultadoService.exportarPorProva`). O frontend apenas adapta a navegação por perfil; a decisão final fica nas rotas Fastify e nos services.
 
 ### 3.8.4. Estratégias de Resiliência
 
-*Descreva as estratégias aplicadas no tratamento de falhas de rede: timeout, retry com backoff exponencial, circuit breaker e idempotência em operações críticas (`PUT`, `DELETE`, operações de pagamento etc.).*
+As estratégias finais estão centralizadas em `src/backend/src/helpers/resilience.ts`: `fetchWithTimeout` usa `AbortController`, `resilientFetch` repete falhas transitórias com backoff 100/200/400ms por padrão, e `CircuitBreaker` abre após 3 falhas e tenta meio-aberto após 30s. `EmailAdapter` usa timeout/retry/breaker para envio de resultados; `StorageService.upload` usa timeout/retry para exportações e anexos. O banco define `connectionTimeoutMillis` e `statement_timeout` em `src/backend/src/database/pool.ts`. Operações críticas usam idempotência por `Idempotency-Key` em `src/backend/src/middlewares/idempotency.ts` e upserts/constraints nos repositories, por exemplo `RespostaAlunoRepository.upsert` e `ResultadoRepository.createExportacao`.
 
 ## 3.9. Matriz de Rastreabilidade (RTM) (sprints 3 a 5)
+
+Evidências concretas da versão final: `documentos/outros/evidencias/webapi-npm-test.txt` registra `Test Suites: 54 passed, 54 total`, `Tests: 438 passed, 438 total` no backend e `Test Files 31 passed`, `Tests 122 passed` no frontend. `documentos/outros/evidencias/webapi-npm-test-coverage.txt` registra cobertura backend de 88,90% statements/89,87% lines e frontend de 90,85% statements/lines. As linhas abaixo mantêm os arquivos/componentes como rastreabilidade de implementação; os fluxos principais têm confirmação executável nessas duas evidências versionadas.
+
 | Persona | RF | RN | Endpoint real ou suporte técnico | Tela relacionada | Evidência | Status |
 |---------|----|----|----------------------------------|------------------|-----------|--------|
 | Professor, Coordenador | RF001 | RN01 | POST/GET/PUT/DELETE `/api/v1/provas`; GET `/api/v1/provas/:provaId`; GET `/api/v1/provas/:provaId/questoes`; GET `/api/v1/provas/:provaId/status-historico`; POST `/api/v1/provas/:provaId/encerrar`; POST `/api/v1/provas/:provaId/arquivar` | Painel de provas, detalhes da prova e editor | `prova.routes.ts`, `ProvaController`, `ProvaService`, `provas.api.ts`, `ProvasPage`, `ProvaDetailPage` | Implementado de ponta a ponta |
@@ -5427,7 +5441,32 @@ Para a sprint 5, as prioridades são: (1) implementar a ampliação de imagens n
 
 ## 4.3. Versão final da aplicação web (sprint 5)
 
-*Descreva e ilustre aqui o desenvolvimento da versão final do sistema web, com foco em refatorações, correções finais e na camada de autenticação/autorização entregue. Utilize prints de tela para ilustrar. Indique obrigatoriamente: (a) o que foi refinado ou adicionado desde a sprint 4, (b) pendências remanescentes, (c) dificuldades técnicas enfrentadas.*
+Na versão final foram fechadas as pendências técnicas da sprint anterior e as prioridades de resiliência da sprint 5. O sistema foi validado como aplicação web completa com backend Fastify/PostgreSQL, frontend React/Vite, autenticação/autorização por perfil, fluxo público do aluno, correção, resultados, exportação e envio de e-mails de resultado.
+
+Refinamentos e correções desde a sprint 4:
+
+- **Migrations reproduzíveis:** a migration base executável ficou em `src/backend/src/database/migrations/001_initial_schema.sql`; o arquivo duplicado `001_migration.sql` foi removido para evitar execução duplicada em banco limpo. Evidência: `npm run migrate` executado com sucesso no banco configurado e registrado no `CHANGELOG.md`.
+- **CPF fora de texto plano:** `src/backend/src/security/cpf-crypto.ts` implementa AES-256-GCM para armazenamento e HMAC-SHA256 para busca/unicidade (`cpf_hash`). O fluxo foi integrado em `AlunoRepository` e `AlunoPortalRepository`; bases legadas são tratadas por `migrate-cpf.ts`.
+- **Tempo de prova no backend:** `RespostaAlunoService.ensureProvaAlunoRespondivel` e `RespostaAnexoService.executarUpload` validam a janela efetiva no servidor (`data_fim` e `inicio_em + tempo_limite_min`) ao salvar resposta, anexar arquivo e finalizar prova.
+- **Resiliência:** `src/backend/src/helpers/resilience.ts` centraliza timeout por `AbortController`, retry com backoff e circuit breaker. `email-adapter.ts` aplica breaker no envio de resultados; `storage.service.ts` aplica timeout/retry no storage.
+- **Autorização final:** `ProvaService.create` restringe criação de prova a professores; `ResultadoService.exportarPorProva` restringe exportação de resultados a coordenadores. Os testes de integração e unidade foram ajustados para esse contrato.
+- **Refatorações de estabilidade:** `QuestaoRepository.ensureSchema` e `ProvaQuestaoRepository.ensureSchema` deixaram de executar DDL repetido dentro de fluxos transacionais, removendo deadlocks; `ProvaQuestaoRepository.mapProvaQuestao` passou a retornar todos os campos exigidos por `questaoResponseSchema`.
+- **Suíte estabilizada:** cleanups de integração passaram a remover dependências por FK antes de apagar entidades-base, reduzindo flakiness em banco compartilhado.
+
+Evidências finais versionadas:
+
+- `documentos/outros/evidencias/webapi-npm-test.txt`: `npm test` com backend 54 suítes/438 testes e frontend 31 arquivos/122 testes passando.
+- `documentos/outros/evidencias/webapi-npm-test-coverage.txt`: `npm run coverage` com backend 88,90% statements, 75,46% branches, 90,19% functions e 89,87% lines; frontend 90,85% statements/lines, 77,24% branches e 72,52% functions.
+- `npm run typecheck` e `npm run build`: executados com sucesso na versão final.
+
+Pendências remanescentes:
+
+- Não foram identificadas pendências funcionais bloqueantes para a entrega final. Como evolução futura, recomenda-se elevar gradualmente cobertura de branches nos hooks de dashboard/turmas e registrar prints manuais de uma sessão autenticada real em ambiente publicado do parceiro.
+
+Dificuldades técnicas enfrentadas:
+
+- A principal dificuldade foi estabilizar testes contra PostgreSQL real compartilhado. Havia deadlock causado por DDL (`ALTER TABLE ... ADD COLUMN IF NOT EXISTS`) chamado durante transação de criação de questão; a correção foi tornar o `ensureSchema` idempotente e executá-lo fora do ponto transacional crítico.
+- Outra dificuldade foi alinhar documentação e código: havia permissões divergentes nos testes unitários antigos e um SQL de documentação usando coluna inexistente (`questao.titulo`). Ambos foram corrigidos para refletir o schema real.
 
 # <a name="c5"></a>5. Testes
 

@@ -40,6 +40,18 @@ const cleanup = async () => {
     'DELETE FROM "materia_professor" WHERE "materia_id" IN (SELECT "id" FROM "materia" WHERE "codigo" LIKE $1)',
     [`${TEST_PREFIX}%`],
   );
+  await pool.query(
+    'DELETE FROM "prova" WHERE "professor_id" IN (SELECT p."id" FROM "professor" p JOIN "coordenador" c ON c."id" = p."coordenador_id" WHERE c."email" LIKE $1)',
+    [`${TEST_PREFIX}%`],
+  );
+  await pool.query(
+    'DELETE FROM "materia_professor" WHERE "professor_id" IN (SELECT p."id" FROM "professor" p JOIN "coordenador" c ON c."id" = p."coordenador_id" WHERE c."email" LIKE $1)',
+    [`${TEST_PREFIX}%`],
+  );
+  await pool.query(
+    'DELETE FROM "professor" WHERE "coordenador_id" IN (SELECT "id" FROM "coordenador" WHERE "email" LIKE $1)',
+    [`${TEST_PREFIX}%`],
+  );
   await pool.query('DELETE FROM "professor" WHERE "email" LIKE $1', [`${TEST_PREFIX}%`]);
   await pool.query('DELETE FROM "materia" WHERE "codigo" LIKE $1', [`${TEST_PREFIX}%`]);
   await pool.query('DELETE FROM "coordenador" WHERE "email" LIKE $1', [`${TEST_PREFIX}%`]);
