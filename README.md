@@ -9,7 +9,7 @@
 # Corrije Aí
 
 <div style="width: 500px; text-align: center; margin: 0 auto;">
-  <a href="https://git.inteli.edu.br/graduacao/2026-1b/t24/g05/">
+  <a href="https://github.com/luizgustavo664/Corrije-Ai---Instituto-Ponte">
     <img src="./assets/logo.png" alt="Corrije Aí" style="border: none; display: inline-block;">
   </a>
 </div>
@@ -142,8 +142,8 @@ A organização em camadas está em `src`: apresentação em `src/view`; control
 ### 1. Clonar o repositório
 
 ```sh
-git clone https://git.inteli.edu.br/graduacao/2026-1b/t24/g05.git
-cd g05
+git clone https://github.com/luizgustavo664/Corrije-Ai---Instituto-Ponte.git
+cd Corrije-Ai---Instituto-Ponte
 ```
 
 ### 2. Instalar dependências
@@ -483,7 +483,7 @@ Evidências versionadas da versão final:
 
 ## Licença/License
 
-<a href="https://git.inteli.edu.br/graduacao/2026-1b/t24/g05">Corrije Aí</a> © 2026 by
+<a href="https://github.com/luizgustavo664/Corrije-Ai---Instituto-Ponte">Corrije Aí</a> © 2026 by
 <a href="https://www.inteli.edu.br/">Inteli</a>,
 <a href="https://www.linkedin.com/in/%C3%A1lvaro-leme-de-toledo-almeida-aa88503bb/recent-activity/all/">Álvaro Leme de Toledo Almeida</a>,
 <a href="https://www.linkedin.com/in/heloisa-kadota/">Heloísa Noda Kadota</a>,
